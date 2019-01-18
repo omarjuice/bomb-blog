@@ -215,9 +215,9 @@ module.exports = function () {
                     INNER JOIN posts
                         ON users.id = posts.user_id;
             `).then((posts) => {
-                    expect(posts.length).toBe(3)
-                    done()
-                }).catch(e => done(e))
+                expect(posts.length).toBe(3)
+                done()
+            }).catch(e => done(e))
         })
         it('Should SELECT a post and its writer', done => {
             const post_id = 2
@@ -230,12 +230,12 @@ module.exports = function () {
                         ON posts.user_id = users.id
                     WHERE posts.id = ${post_id}
             `).then(([res]) => {
-                    expect(res).toMatchObject({
-                        username: seedDB.users[user_id - 1][1],
-                        title, post_content, caption
-                    })
-                    done()
-                }).catch(e => done(e))
+                expect(res).toMatchObject({
+                    username: seedDB.users[user_id - 1][1],
+                    title, post_content, caption
+                })
+                done()
+            }).catch(e => done(e))
         })
     })
     describe('DATABASE: QUERY likes', () => {

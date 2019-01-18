@@ -15,32 +15,46 @@ module.exports = gql`
       updateProfile(id: Int, input: ProfileDetails): Boolean!
       createPost(input: PostDetails): Post
       deletePost(id: Int!): Boolean!
-      updatePost(id: Int, input: PostDetails): Post
+      updatePost(id: Int!, input: PostDetails): Post
+      addLike(post_id: Int!): Boolean!
+      deleteLike(post_id: Int!): Boolean!
+      createComment(post_id: Int!): Comment
   }
   type User{
-      id: Int
-      username: String
-      email: String
-      created_at: String
-      profile(id: Int): Profile
+      id: Int!
+      username: String!
+      email: String!
+      created_at: String!
+      profile(id: Int): Profile!
       posts: [Post]
   }
   type Profile{
-      user_id: Int
-      about: String
-      photo_path: String
+      user_id: Int!
+      about: String!
+      photo_path: String!
       last_updated: String
   }
   
   type Post{
-      id: Int
-      user_id: Int
-      author: User
-      created_at: String
+      id: Int!
+      user_id: Int!
+      author: User!
+      created_at: String!
       last_updated: String
-      title: String
-      caption: String
-      post_content: String
+      title: String!
+      caption: String!
+      post_content: String!
+      numLikes: Int!
+      numComments: Int!
+      comments: [Comment]
+  }
+  type Comment{
+      id: Int!
+      user_id: Int!
+      post_id: Int!
+      comment_text: String!
+      created_at: String!
+      last_updated: String
   }
   input ProfileDetails {
       about: String
@@ -51,5 +65,6 @@ module.exports = gql`
       caption: String
       post_content: String
   }
+
 
 `;

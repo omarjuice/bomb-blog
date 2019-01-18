@@ -1,6 +1,6 @@
 module.exports = {
-    login: {
-        success: [`
+  login: {
+    success: [`
         mutation{
             login(username:"alpha", password:"1234567")
           }
@@ -9,27 +9,27 @@ module.exports = {
             login(username:"beta", password:"password")
           }
         `,
-            `
+      `
         mutation{
             login(username:"gamma", password:"english")
           }
         `
-        ],
-        fail: `
+    ],
+    fail: `
         mutation{
             login(username:"beta", password:"1234567")
           }
         `
-    },
-    logout: `mutation { logout }`,
-    user: {
-        notFound: `mutation{
+  },
+  logout: `mutation { logout }`,
+  user: {
+    notFound: `mutation{
             login(username:"delta", password:"1234567")
           }`
-    },
-    authenticate: `query { authenticated }`,
-    profile: {
-        get: `query($id: Int){
+  },
+  authenticate: `query { authenticated }`,
+  profile: {
+    get: `query($id: Int){
         user(id: $id){
           id
           username
@@ -41,12 +41,12 @@ module.exports = {
           }
         }
       }`,
-        update: `mutation($input: ProfileDetails){
+    update: `mutation($input: ProfileDetails){
             updateProfile(input: $input)
       }`
-    },
-    posts: {
-        all: `query ($limit: Int, $order: Boolean, $orderBy: String){
+  },
+  posts: {
+    all: `query ($limit: Int, $order: Boolean, $orderBy: String){
             posts(limit: $limit, order: $order, orderBy: $orderBy){
                   id
                   user_id
@@ -56,9 +56,10 @@ module.exports = {
                   author{
                     username
                   }
+                  numLikes
             }
           }`,
-        byId: `query ($id: Int){
+    byId: `query ($id: Int){
               post(id: $id){
                   id
                   title
@@ -70,9 +71,10 @@ module.exports = {
                   post_content
                   created_at
                   last_updated
+                  numLikes
               }
           }`,
-        byUserID: `query ($id: Int){
+    byUserID: `query ($id: Int){
             user(id: $id){
               username
               profile{
@@ -80,10 +82,11 @@ module.exports = {
               }
               posts{
                 title
+                numLikes
               }
             }
           }`,
-        create: `mutation ($input: PostDetails){
+    create: `mutation ($input: PostDetails){
             createPost(input: $input){
               id
               user_id
@@ -94,12 +97,13 @@ module.exports = {
               caption
               post_content
               created_at
+              numLikes
             }
           }`,
-        delete: `mutation ($id: Int!){
+    delete: `mutation ($id: Int!){
               deletePost(id: $id)
           }`,
-        update: `mutation ($input: PostDetails, $id: Int){
+    update: `mutation ($input: PostDetails, $id: Int!){
             updatePost(id: $id, input: $input){
                 id
                 user_id
@@ -110,8 +114,42 @@ module.exports = {
                 caption
                 post_content
                 last_updated
+                numLikes
             }
-        }`
-
+        }`,
+    withComments: {
+      bare: `query ($post_id: Int){
+        post(id: $post_id){
+          id
+          title
+          caption
+          user_id
+          author{
+              username
+          }
+          post_content
+          created_at
+          last_updated
+          numLikes
+          numComments
+          comments{
+            id
+            user_id
+            post_id
+            comment_text
+            created_at
+          }
+        }
+    }`
     }
+  },
+  likes: {
+    add: `mutation($post_id: Int!){
+      addLike(post_id:$post_id)
+    }`,
+    delete: `mutation($post_id: Int!){
+      deleteLike(post_id:$post_id)
+    }`
+  },
+
 }

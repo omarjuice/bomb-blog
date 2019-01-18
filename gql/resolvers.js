@@ -41,11 +41,11 @@ const resolvers = {
                 id, created_at, last_updated, title, caption, user_id
             FROM posts
             ORDER BY 
-                ${args.orderBy}
-                ${args.order ? 'DESC' : 'ASC'}
-            LIMIT ${args.limit}
+                ?
+                ?
+            LIMIT ?
             `
-            const posts = await queryDB(query)
+            const posts = await queryDB(query, [args.orderBy, args.order ? 'DESC' : 'ASC', args.limit]).catch(e => { throw Errors.database })
             if (posts) {
                 return posts
             }
@@ -55,7 +55,7 @@ const resolvers = {
     },
     Mutation: {
         login: async (_, { username, password }, { req }) => {
-            const [user] = await queryDB(`SELECT * FROM users WHERE username='${username}'`)
+            const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username]).catch(e => { throw Errors.database })
             if (user) {
 
                 const { username, pswd, id, email, created_at } = user
@@ -69,13 +69,13 @@ const resolvers = {
             throw Errors.user.notFound
         },
         register: async (_, { username, password, email }, { req }) => {
-            const [user] = await queryDB(`SELECT * FROM users WHERE username='${username}'`)
+            const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username])
             if (!user) {
-                await queryDB(`INSERT INTO users (username, email, pswd) VALUES ?`, [[[username, email, password]]], hashUser)
+                await queryDB(`INSERT INTO users (username, email, pswd) VALUES ?`, [[[username, email, password]]], hashUser).catch(e => { throw Errors.database })
                     .catch(e => {
                         throw (e)
                     })
-                const [newUser] = await queryDB(`SELECT username, email, id, created_at FROM users WHERE username='${username}'`)
+                const [newUser] = await queryDB(`SELECT username, email, id, created_at FROM users WHERE username= ?`, [username]).catch(e => { throw Errors.database })
                 req.session.user = { ...newUser }
                 return true
             }
@@ -88,7 +88,7 @@ const resolvers = {
             req.session.user = null;
             return true
         },
-        updateProfile: async (parent, args, { req }) => {
+        updateProfile: async (parent, args, { req, Loaders }) => {
             let id = authenticate(req.session)
             if (!id) {
                 throw Errors.authentication.notLoggedIn
@@ -96,16 +96,18 @@ const resolvers = {
             if (!args.input) {
                 return false
             }
-            const { about, photo_path } = args.input
-            const set_about = about ? `about='${about}',` : 'about=profiles.about,'
-            const set_photo = photo_path ? `photo_path='${photo_path}',` : 'photo_path=profiles.photo_path,'
+            const profile = await Loaders.profile.byId.load(id)
+            if (!profile.user_id) {
+                throw Errors.profile.notFound
+            }
+            const { about, photo_path } = profile
             const { affectedRows } = await queryDB(`
                 UPDATE profiles
                 SET 
-                    ${set_about}
-                    ${set_photo}
+                    about= ?,
+                    photo_path= ?,
                     last_updated = NOW() 
-                WHERE user_id = ${id}`)
+                WHERE user_id = ?`, [args.input.about || about, args.input.photo_path || photo_path, id]).catch(e => { throw Errors.database })
             if (affectedRows > 0) {
                 return true
             } else {
@@ -121,7 +123,7 @@ const resolvers = {
             if (!title || !post_content || !caption) {
                 throw Errors.posts.missingField
             }
-            const { rowsAffected } = await queryDB(`INSERT INTO posts (user_id, title, caption, post_content) VALUES ?`, [[[sessionUser, title, caption, post_content]]])
+            const { rowsAffected } = await queryDB(`INSERT INTO posts (user_id, title, caption, post_content) VALUES ?`, [[[sessionUser, title, caption, post_content]]]).catch(e => { throw Errors.database })
             if (rowsAffected < 1) {
                 return null
             }
@@ -129,10 +131,10 @@ const resolvers = {
             SELECT
                 *
             FROM posts 
-            WHERE user_id = ${sessionUser}
+            WHERE user_id = ?
             ORDER BY created_at DESC
             LIMIT 1
-            `)
+            `, [sessionUser])
             if (newPost) {
                 return newPost
             }
@@ -143,13 +145,13 @@ const resolvers = {
             if (!sessionUser) {
                 throw Errors.authentication.notLoggedIn
             }
-            const { affectedRows } = await queryDB(`DELETE FROM posts WHERE id=${args.id} AND user_id=${sessionUser}`)
+            const { affectedRows } = await queryDB(`DELETE FROM posts WHERE id= ? AND user_id= ?`, [args.id, sessionUser]).catch(e => { throw Errors.database })
             if (affectedRows > 0) {
                 return true
             }
             return false
         },
-        updatePost: async (_, args, { req }) => {
+        updatePost: async (_, args, { req, Loaders }) => {
             let sessionUser = authenticate(req.session)
             if (!sessionUser) {
                 throw Errors.authentication.notLoggedIn
@@ -160,29 +162,61 @@ const resolvers = {
             if (!args.input) {
                 throw Errors.posts.missingField
             }
-            const { title, caption, post_content } = args.input;
-            const set_title = title ? `title='${title}'` : `title=posts.title`;
-            const set_caption = caption ? `caption='${caption}'` : `caption=posts.caption`;
-            const set_post_content = post_content ? `post_content='${post_content}'` : `post_content=posts.post_content`
+            ;
+            const post = await Loaders.post.byId.load(args.id)
+            if (!post) {
+                throw Errors.posts.notFound
+            }
+            const { title, caption, post_content } = post
 
             const { affectedRows } =
                 await queryDB(`
                 UPDATE posts
                 SET
-                    ${set_title},
-                    ${set_caption},
-                    ${set_post_content},
+                    title= ?,
+                    caption= ?,
+                    post_content= ?,
                     last_updated=NOW()
-                WHERE id=${args.id} AND user_id=${sessionUser}
-            `)
+                WHERE id= ? AND user_id= ?
+            `, [args.input.title || title, args.input.caption || caption, args.input.post_content || post_content, args.id, sessionUser]).catch(e => { throw Errors.database })
             if (affectedRows < 1) {
                 throw Errors.authorization.notAuthorized
             }
-            const [post] = await queryDB(`SELECT * FROM posts WHERE id=${args.id}`)
-            if (post) {
-                return post
+            const [newPost] = await queryDB(`SELECT * FROM posts WHERE id= ? `, [args.id]).catch(e => { throw Errors.database })
+            if (newPost) {
+                return newPost
             }
             throw Errors.posts.notFound
+        },
+        addLike: async (_, args, { req }) => {
+            let sessionUser = authenticate(req.session)
+            let { post_id } = args
+            if (!sessionUser) {
+                throw Errors.authentication.notLoggedIn
+            }
+            if (!post_id) {
+                throw Errors.posts.notSpecified
+            }
+            const { affectedRows } = await queryDB(`INSERT INTO likes (user_id, post_id) VALUES ?`, [[[sessionUser, post_id]]]).catch(e => 0)
+            if (affectedRows > 0) {
+                return true
+            }
+            return false
+        },
+        deleteLike: async (_, args, { req }) => {
+            const { post_id } = args
+            const sessionUser = authenticate(req.session)
+            if (!sessionUser) {
+                throw Errors.authentication.notLoggedIn
+            }
+            if (!post_id) {
+                throw Errors.posts.notSpecified
+            }
+            const { affectedRows } = await queryDB(`DELETE FROM likes WHERE user_id= ? AND post_id = ?`, [sessionUser, post_id]).catch(e => false)
+            if (affectedRows > 0) {
+                return true
+            }
+            return false
         }
 
     },
@@ -218,6 +252,23 @@ const resolvers = {
                 throw Errors.user.notFound
             }
             return author
+        },
+        numLikes: async ({ id }, _, { Loaders }) => {
+            return await Loaders.post.numLikes.load(id)
+        },
+        comments: async ({ id }, _, { Loaders }) => {
+            if (!id) {
+                throw Errors.posts.notSpecified
+            }
+            const comments = await Loaders.post.comments.load(id)
+            return comments;
+        },
+        numComments: async ({ id }, _, { Loaders }) => {
+            if (!id) {
+                throw Errors.posts.notSpecified
+            }
+            const comments = await Loaders.post.comments.load(id)
+            return comments.length
         }
 
     }

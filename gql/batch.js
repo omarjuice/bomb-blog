@@ -18,7 +18,7 @@ const batchPosts = async keys => {
         acc[post.id] = post
         return acc
     }, {})
-    return keys.map(key => Posts[key] || {})
+    return keys.map(key => Posts[key] ? Posts[key] : null)
 }
 const batchProfiles = async (keys) => {
     const profiles = await queryDB(`SELECT * FROM profiles WHERE user_id IN (?)
@@ -42,7 +42,42 @@ const batchPosts_user_id = async keys => {
     }, {})
     return keys.map(key => userPosts[key] || [])
 }
-
+const batchPostLikes = async keys => {
+    const likes =
+        await queryDB(`
+        SELECT 
+            posts.id as post_id, COUNT(likes.created_at) as numLikes
+        FROM posts
+        LEFT JOIN likes
+        ON likes.post_id = posts.id
+        WHERE posts.id IN (?)
+        GROUP BY posts.id
+        `, [keys])
+    const Likes = likes.reduce((acc, { post_id, numLikes }) => {
+        if (!post_id) return acc;
+        acc[post_id] = numLikes
+        return acc
+    }, {})
+    return keys.map(key => Likes[key] ? Likes[key] : 0)
+}
+const batchComments = async keys => {
+    const comments =
+        await queryDB(`
+        SELECT 
+            * 
+        FROM comments
+        WHERE post_id IN (?)
+        `, [keys])
+    const postComments = comments.reduce((acc, comment) => {
+        if (!comment) return acc;
+        if (!acc[comment.post_id]) {
+            acc[comment.post_id] = [];
+        }
+        acc[comment.post_id].push(comment)
+        return acc
+    }, {})
+    return keys.map(key => postComments[key] || [])
+}
 const applyLoaders = (context) => {
     context.Loaders = {
         user: {
@@ -50,7 +85,9 @@ const applyLoaders = (context) => {
         },
         post: {
             byId: new DataLoader(keys => batchPosts(keys)),
-            byUserId: new DataLoader(keys => batchPosts_user_id(keys))
+            byUserId: new DataLoader(keys => batchPosts_user_id(keys)),
+            numLikes: new DataLoader(keys => batchPostLikes(keys)),
+            comments: new DataLoader(keys => batchComments(keys))
         },
         profile: {
             byId: new DataLoader(keys => batchProfiles(keys))

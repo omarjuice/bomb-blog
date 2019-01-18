@@ -14,7 +14,6 @@ module.exports = function () {
     const { queryDB } = require('../db/connect')
     const applyLoaders = require('../gql/batch')
 
-
     const apollo = new ApolloServer({ typeDefs, resolvers, context: (ctx) => applyLoaders(ctx), uploads: true })
     let agent;
     before(done => {
@@ -180,6 +179,16 @@ module.exports = function () {
             )
 
         })
+        it('Should update the profile if at least on field is given', done => {
+            const about = "Not actually a developer";
+            chainReqGQL(done, { query: queries.login.success[0] },
+                { query: queries.profile.update, variables: { input: { about } } },
+                (finished) => reqGQL({ query: queries.profile.get })
+                    .expect(({ body }) => {
+                        expect(body.data.user.profile).toMatchObject({ about, photo_path: seedDB.profiles[0][2] })
+                    }).end(finished))
+
+        })
         it('Should not update a profile if the user is not authenticated', done => {
             const about = "I suck";
             const photo_path = "trashy/photo";
@@ -195,19 +204,20 @@ module.exports = function () {
         it('Should get all posts and the author', done => {
             queryDB(`INSERT INTO posts (user_id, title, caption, created_at, post_content) VALUES ?`, [seedDB.manyPosts(100)])
                 .then(() => {
-                    const limit = 3;
+                    const limit = 103;
                     const order = true;
                     const orderBy = 'created_at';
                     reqGQL({ query: queries.posts.all, variables: { limit, order, orderBy } })
                         .expect(({ body }) => {
-                            body.data.posts.forEach(({ id, title, caption, user_id, author }) => {
+                            body.data.posts.forEach(({ id, title, caption, user_id, author, numLikes }) => {
                                 expect(typeof id).toBe('number')
                                 expect(typeof user_id).toBe('number')
                                 expect(typeof title).toBe('string')
                                 expect(typeof caption).toBe('string')
                                 expect(typeof author.username).toBe('string')
+                                expect(typeof numLikes).toBe('number')
                             })
-                            expect(body.data.posts.length).toBe(3)
+                            expect(body.data.posts.length).toBe(103)
                         }).end(done)
                 }).catch(e => done(e))
         })
@@ -223,7 +233,8 @@ module.exports = function () {
                             "author": {
                                 "username": "gamma"
                             },
-                            "post_content": expect.any(String)
+                            "post_content": expect.any(String),
+                            "numLikes": 2
                         }
                     })
                 }).end(done)
@@ -235,10 +246,12 @@ module.exports = function () {
                     expect(user.posts).toBeTruthy()
                     expect(user.posts).toEqual(expect.arrayContaining([
                         {
-                            "title": "My blog"
+                            "title": "My blog",
+                            "numLikes": 3
                         },
                         {
-                            "title": "My other blog"
+                            "title": "My other blog",
+                            "numLikes": 1
                         }
                     ]))
                 }).end(done)
@@ -266,6 +279,7 @@ module.exports = function () {
                                     "author": {
                                         "username": "beta"
                                     },
+                                    "numLikes": 0,
                                     ...input
                                 }
                             }
@@ -351,6 +365,7 @@ module.exports = function () {
                     }).end(finished)
             )
         })
+
         it('Should not update a post that does not belong to the user', done => {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.posts.update, variables: { id: 1, input: { caption: 'Horrible caption' } } })
@@ -361,7 +376,83 @@ module.exports = function () {
                     }).end(finished))
         })
     })
+    describe('GQL: CREATE likes', () => {
+        it('Should add a new like', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.likes.add, variables: { post_id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.addLike).toBe(true)
+                    }).end(finished))
+        })
+        it('Should not add a duplicate like', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.likes.add, variables: { post_id: 1 } })
+                    .expect(({ body }) => {
+                        expect(body.data.addLike).toBe(false)
+                    }).end(finished))
+        })
+        it('Should not add a like if not authenticated', done => {
+            reqGQL({ query: queries.likes.add, variables: { post_id: 2 } })
+                .expect(({ body }) => {
+                    expect(body.errors).toBeTruthy()
+                    const [error] = body.errors
+                    expect(error.message).toBe(Errors.authentication.notLoggedIn.message)
+                }).end(done)
+        })
+    })
+    describe('GQL: DELETE likes', () => {
+        it('Should delete a like', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.likes.delete, variables: { post_id: 1 } })
+                    .expect(({ body }) => {
+                        expect(body.data.deleteLike).toBe(true)
+                    }).end(finished),
+            )
+        })
+        it('Should not return false for a like that does not exist', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.likes.delete, variables: { post_id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.deleteLike).toBe(false)
+                    }).end(finished),
+            )
+        })
+        it('Should not delete a like for a user not logged in', done => {
+            reqGQL({ query: queries.likes.delete, variables: { post_id: 2 } })
+                .expect(({ body }) => {
+                    expect(body.errors).toBeTruthy()
+                    const [error] = body.errors
+                    expect(error.message).toBe(Errors.authentication.notLoggedIn.message)
+                }).end(done)
+        })
+    })
+    describe('GQL: GET post with comments', () => {
+        it('Should get a post and all comments', done => {
+            reqGQL({ query: queries.posts.withComments.bare, variables: { post_id: 3 } })
+                .expect(({ body }) => {
+                    expect(body.data.post.numComments).toBe(2)
+                    for (let comment of body.data.post.comments) {
+                        expect(typeof comment.id).toBe('number');
+                        expect(typeof comment.user_id).toBe('number');
+                        expect(typeof comment.post_id).toBe('number');
+                        expect(typeof comment.comment_text).toBe('string');
+                        expect(typeof comment.created_at).toBe('string');
 
+                    }
+                }).end(done)
+        })
+        it('Should return empty array for post with no comments', done => {
+            const input = { title: "my only post", caption: "balaaaaallalalala", post_content: "dftgukgjghkgiykgfviykgiykuvykuvukvikyvgij" }
+            chainReqGQL(done, { query: queries.login.success[2] },
+                { query: queries.posts.create, variables: { input } },
+                (finished) => reqGQL({ query: queries.posts.withComments.bare, variables: { post_id: 4 } })
+                    .expect(({ body }) => {
+                        expect(body.data.post.comments).toEqual([])
+                        expect(body.data.post.numComments).toBe(0)
+                    }).end(finished))
+        })
+    })
+    // describe('GQL: ')
 
 
 }
