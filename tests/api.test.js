@@ -452,7 +452,80 @@ module.exports = function () {
                     }).end(finished))
         })
     })
-    // describe('GQL: ')
+    describe('GQL: CREATE comments', () => {
+        const comment_text = 'Cool post!'
+        it('Should create a new comment', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.comments.create, variables: { post_id: 2, comment_text } })
+                    .expect(({ body }) => {
+                        expect(body.data.createComment[0]).toMatchObject({
+                            id: 4,
+                            user_id: 2,
+                            post_id: 2,
+                            comment_text,
+                            created_at: expect.any(String)
+                        })
+                    }).end(finished)
+            )
+        })
+        it('Should not create a new comment from inauthenticated user', done => {
+            chainReqGQL(done, { query: queries.login.fail },
+                (finished) => reqGQL({ query: queries.comments.create, variables: { post_id: 2, comment_text } })
+                    .expect(({ body }) => {
+                        expect(body.errors).toBeTruthy()
+                        const [error] = body.errors
+                        expect(error.message).toBe(Errors.authentication.notLoggedIn.message)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: UPDATE comments', () => {
+        it('Should update a comment', done => {
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', post_id: 1 } })
+                    .expect(({ body }) => {
+                        expect(body.data.updateComment[0]).toMatchObject(
+                            {
+                                id: 1,
+                                user_id: 3,
+                                post_id: 1,
+                                comment_text: 'Cool post',
+                                last_updated: expect.any(String)
+                            })
+                    }).end(finished)
+            )
+        })
+        it('Should not update a comment if the user is not the owner', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, post_id: 1, comment_text: 'Cool post' } })
+                    .expect(({ body }) => {
+                        expect(body.errors).toBeTruthy()
+                        const [error] = body.errors
+                        expect(error.message).toBe(Errors.database.message)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: DELETE comments', () => {
+        it('Should delete a comment', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.comments.delete, variables: { comment_id: 2, post_id: 3 } })
+                    .expect(({ body }) => {
+                        expect(body.data.deleteComment.length).toBe(1)
+                    }).end(finished)
+            )
+        })
+        it('Should not delete a comment that does not belong to the user', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.comments.delete, variables: { comment_id: 2, post_id: 3 } })
+                    .expect(({ body }) => {
+                        expect(body.errors).toBeTruthy()
+                        const [error] = body.errors
+                        expect(error.message).toBe(Errors.database.message)
+                    }).end(finished)
+            )
+        })
+    })
 
 
 }

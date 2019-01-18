@@ -138,6 +138,7 @@ module.exports = {
             post_id
             comment_text
             created_at
+            last_updated
           }
         }
     }`
@@ -151,5 +152,37 @@ module.exports = {
       deleteLike(post_id:$post_id)
     }`
   },
+  comments: {
+    create: `mutation($post_id: Int!, $comment_text: String!){
+      createComment(post_id: $post_id, comment_text: $comment_text){
+            id
+            user_id
+            post_id
+            comment_text
+            created_at
+            last_updated
+      }
+    }`,
+    update: `mutation($comment_id: Int!, $comment_text: String!, $post_id: Int!){
+      updateComment(post_id: $post_id, comment_text: $comment_text, comment_id: $comment_id){
+        id
+        user_id
+        post_id
+        comment_text
+        created_at
+        last_updated
+      }
+    }`,
+    delete: `mutation($comment_id: Int!, $post_id: Int!){
+      deleteComment(post_id: $post_id, comment_id: $comment_id){
+        id
+        user_id
+        post_id
+        comment_text
+        created_at
+        last_updated
+      }
+    }`
+  }
 
 }

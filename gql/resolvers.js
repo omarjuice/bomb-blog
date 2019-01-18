@@ -217,6 +217,51 @@ const resolvers = {
                 return true
             }
             return false
+        },
+        createComment: async (_, args, { req, Loaders }) => {
+            const sessionUser = authenticate(req.session)
+            if (!sessionUser) {
+                throw Errors.authentication.notLoggedIn
+            }
+            const { post_id, comment_text } = args;
+            const { affectedRows } = await queryDB(`INSERT INTO comments (user_id, post_id, comment_text) VALUES ?`, [[[sessionUser, post_id, comment_text]]]).catch(e => { throw Errors.database })
+            if (affectedRows < 0) {
+                throw Errors.database
+            }
+            return await Loaders.post.comments.load(post_id)
+        },
+        updateComment: async (_, args, { req, Loaders }) => {
+            const sessionUser = authenticate(req.session)
+            if (!sessionUser) {
+                throw Errors.authentication.notLoggedIn
+            }
+
+            const { comment_id, comment_text, post_id } = args;
+            const { affectedRows } =
+                await queryDB(`
+                    UPDATE comments 
+                    SET 
+                        comment_text= ?, 
+                        last_updated= NOW()
+                    WHERE id = ? AND user_id= ? AND post_id= ?`, [comment_text, comment_id, sessionUser, post_id])
+                    .catch(e => { throw Errors.database })
+            if (affectedRows < 1) {
+                throw Errors.database
+            }
+            return await Loaders.post.comments.load(post_id)
+        },
+        deleteComment: async (_, args, { req, Loaders }) => {
+            const sessionUser = authenticate(req.session)
+            if (!sessionUser) {
+                throw Errors.authentication.notLoggedIn
+            }
+            const { comment_id, post_id } = args
+            const { affectedRows } = await queryDB(`DELETE FROM comments WHERE id= ? AND post_id= ? AND user_id= ? `, [comment_id, post_id, sessionUser]).catch(e => { throw Errors.database })
+            if (affectedRows < 1) {
+                throw Errors.database
+            }
+            return await Loaders.post.comments.load(post_id)
+
         }
 
     },
