@@ -1,0 +1,34 @@
+{
+  "name": "glob",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "build": "next build",
+    "start": "next start",
+    "test": "export NODE_ENV=test && mocha **/*.test.js"
+  },
+  "author": "Omar Juice",
+  "license": "ISC",
+  "devDependencies": {
+    "expect": "^23.6.0",
+    "mocha": "^5.2.0",
+    "supertest": "^3.3.0"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.3.1",
+    "bcryptjs": "^2.4.3",
+    "dataloader": "^1.4.0",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "faker": "^4.1.0",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.10.0",
+    "mysql": "^2.16.0",
+    "next": "^7.0.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  }
+}
