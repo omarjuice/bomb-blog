@@ -45,7 +45,7 @@ module.exports = gql`
       caption: String!
       post_content: String!
       numLikes: Int!
-      numComments: Int!
+      numComments: Int
       comments: [Comment]
   }
   type Comment{
