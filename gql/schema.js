@@ -53,6 +53,7 @@ module.exports = gql`
   type Comment{
       id: Int!
       user_id: Int!
+      writer: User!
       post_id: Int!
       comment_text: String!
       created_at: String!

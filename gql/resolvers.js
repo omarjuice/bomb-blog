@@ -315,7 +315,15 @@ const resolvers = {
             const comments = await Loaders.post.comments.load(id)
             return comments.length
         }
-
+    },
+    Comment: {
+        writer: async ({ user_id }, _, { Loaders }) => {
+            const writer = await Loaders.user.byId.load(user_id)
+            if (!writer || !writer.username) {
+                throw Errors.user.notFound
+            }
+            return writer
+        }
     }
 
 };

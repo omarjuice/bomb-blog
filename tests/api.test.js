@@ -436,8 +436,9 @@ module.exports = function () {
                         expect(typeof comment.user_id).toBe('number');
                         expect(typeof comment.post_id).toBe('number');
                         expect(typeof comment.comment_text).toBe('string');
-                        expect(typeof comment.created_at).toBe('string');
-
+                        expect(typeof comment.created_at).toBe('string')
+                        expect(comment.writer).toBeTruthy()
+                        expect(typeof comment.writer.username).toBe('string')
                     }
                 }).end(done)
         })
@@ -462,6 +463,9 @@ module.exports = function () {
                             id: 4,
                             user_id: 2,
                             post_id: 2,
+                            writer: {
+                                id: 2
+                            },
                             comment_text,
                             created_at: expect.any(String)
                         })
@@ -490,6 +494,9 @@ module.exports = function () {
                                 user_id: 3,
                                 post_id: 1,
                                 comment_text: 'Cool post',
+                                writer: {
+                                    id: 3
+                                },
                                 last_updated: expect.any(String)
                             })
                     }).end(finished)

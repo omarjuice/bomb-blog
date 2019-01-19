@@ -135,6 +135,10 @@ module.exports = {
           comments{
             id
             user_id
+            writer{
+              id
+              username
+            }
             post_id
             comment_text
             created_at
@@ -157,6 +161,10 @@ module.exports = {
       createComment(post_id: $post_id, comment_text: $comment_text){
             id
             user_id
+            writer{
+              id
+              username
+            }
             post_id
             comment_text
             created_at
@@ -167,6 +175,10 @@ module.exports = {
       updateComment(post_id: $post_id, comment_text: $comment_text, comment_id: $comment_id){
         id
         user_id
+        writer{
+          id
+          username
+        }
         post_id
         comment_text
         created_at
@@ -177,6 +189,10 @@ module.exports = {
       deleteComment(post_id: $post_id, comment_id: $comment_id){
         id
         user_id
+        writer{
+          id
+          username
+        }
         post_id
         comment_text
         created_at

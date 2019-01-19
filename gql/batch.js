@@ -78,6 +78,23 @@ const batchComments = async keys => {
     }, {})
     return keys.map(key => postComments[key] || [])
 }
+const batchCommentLikes = async keys => {
+    const commentLikes =
+        await queryDB(`
+        SELECT 
+            comments.id as comment_id, COUNT(comment_likes.created_at) as numLikes
+        FROM comments
+        INNER JOIN comment_likes
+            ON comments.id = comment_likes.comment_id
+        WHERE comments.id IN (?)
+        `, [keys])
+    const commentNumLikes = commentLikes.reduce((acc, { comment_id, numLikes }) => {
+        if (!comment_id) return acc;
+        acc[comment_id] = numLikes
+        return acc
+    })
+    return keys.map(key => commentNumLikes[key] ? commentNumLikes[key] : 0)
+}
 const applyLoaders = (context) => {
     context.Loaders = {
         user: {
