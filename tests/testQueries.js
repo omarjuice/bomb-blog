@@ -141,6 +141,7 @@ module.exports = {
             }
             post_id
             comment_text
+            numLikes
             created_at
             last_updated
           }
@@ -167,6 +168,7 @@ module.exports = {
             }
             post_id
             comment_text
+            numLikes
             created_at
             last_updated
       }
@@ -175,12 +177,14 @@ module.exports = {
       updateComment(post_id: $post_id, comment_text: $comment_text, comment_id: $comment_id){
         id
         user_id
+        
         writer{
           id
           username
         }
         post_id
         comment_text
+        numLikes
         created_at
         last_updated
       }
@@ -195,6 +199,7 @@ module.exports = {
         }
         post_id
         comment_text
+        numLikes
         created_at
         last_updated
       }

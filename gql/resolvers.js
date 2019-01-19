@@ -264,6 +264,7 @@ const resolvers = {
 
         }
 
+
     },
     User: {
         profile: async (parent, args, { req, Loaders }) => {
@@ -298,9 +299,7 @@ const resolvers = {
             }
             return author
         },
-        numLikes: async ({ id }, _, { Loaders }) => {
-            return await Loaders.post.numLikes.load(id)
-        },
+        numLikes: async ({ id }, _, { Loaders }) => await Loaders.post.numLikes.load(id),
         comments: async ({ id }, _, { Loaders }) => {
             if (!id) {
                 throw Errors.posts.notSpecified
@@ -323,7 +322,9 @@ const resolvers = {
                 throw Errors.user.notFound
             }
             return writer
-        }
+        },
+        numLikes: async ({ id }, _, { Loaders }) => await Loaders.comment.numLikes.load(id),
+        replies: async ({ id }, _, { Loaders }) => await Loaders.comment.replies.load(id)
     }
 
 };

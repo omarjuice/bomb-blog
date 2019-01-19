@@ -439,6 +439,7 @@ module.exports = function () {
                         expect(typeof comment.created_at).toBe('string')
                         expect(comment.writer).toBeTruthy()
                         expect(typeof comment.writer.username).toBe('string')
+                        expect(typeof comment.numLikes).toBe('number')
                     }
                 }).end(done)
         })
@@ -467,6 +468,7 @@ module.exports = function () {
                                 id: 2
                             },
                             comment_text,
+                            numLikes: 0,
                             created_at: expect.any(String)
                         })
                     }).end(finished)
@@ -497,6 +499,7 @@ module.exports = function () {
                                 writer: {
                                     id: 3
                                 },
+                                numLikes: expect.any(Number),
                                 last_updated: expect.any(String)
                             })
                     }).end(finished)

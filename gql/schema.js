@@ -56,6 +56,16 @@ module.exports = gql`
       writer: User!
       post_id: Int!
       comment_text: String!
+      numLikes: Int!
+      created_at: String!
+      last_updated: String
+      replies: [Reply]
+  }
+  type Reply{
+      id: Int!
+      user_id: Int!
+      comment_id: Int!
+      reply_text: String!
       created_at: String!
       last_updated: String
   }
