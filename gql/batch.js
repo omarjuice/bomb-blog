@@ -3,7 +3,6 @@ const { queryDB } = require('../db/connect')
 const bool = false
 const batchUsers = async keys => {
     const users = await queryDB(`SELECT id, username, created_at, email FROM users WHERE id IN (?)`, [keys], null, bool)
-
     const Users = users.reduce((acc, user) => {
         if (!user) return acc;
         acc[user.id] = user
@@ -108,25 +107,125 @@ const batchCommentReplies = async keys => {
     }, {})
     return keys.map(key => CommentReplies[key] || [])
 }
+const batchPostLikers = async keys => {
+    const likers =
+        await queryDB(`
+            SELECT 
+                users.id AS user_id, post_id, username, likes.created_at AS liked_at
+            FROM users
+            INNER JOIN likes
+                ON likes.user_id = users.id
+            WHERE likes.post_id IN (?)`, [keys], null, bool);
+    const Likers = likers.reduce((acc, { post_id, ...liker }) => {
+        if (!liker || !post_id) return acc;
+        if (!acc[post_id]) {
+            acc[post_id] = [];
+        }
+        acc[post_id].push(liker)
+        return acc
+    }, {})
+    return keys.map(key => Likers[key] || [])
+}
+const batchCommentLikers = async keys => {
+    const likers =
+        await queryDB(`
+            SELECT 
+                users.id AS user_id, comment_id, username, comment_likes.created_at AS liked_at
+            FROM users
+            INNER JOIN comment_likes
+                ON comment_likes.user_id = users.id
+            WHERE comment_likes.comment_id IN (?)`, [keys], null, bool);
+    const Likers = likers.reduce((acc, { comment_id, ...liker }) => {
+        if (!liker || !comment_id) return acc;
+        if (!acc[comment_id]) {
+            acc[comment_id] = [];
+        }
+        acc[comment_id].push(liker)
+        return acc
+    }, {})
+    return keys.map(key => Likers[key] || [])
+}
+const batchTags = async keys => {
+    const tags = await queryDB(`SELECT * FROM tags WHERE id IN (?)`, [keys], null, true)
+    const Tags = tags.reduce((acc, tag) => {
+        if (!tag) return acc;
+        acc[tag.id] = tag
+        return acc
+    }, {})
+    return keys.map(key => Tags[key] || {})
+}
+const insertBatchOfTags = async keys => {
+    const { affectedRows } = await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [[keys]], null, true)
+    return affectedRows;
+}
+const batchPostTags = async keys => {
+    const tags =
+        await queryDB(`
+            SELECT 
+                tag_name, tags.id as id, post_id, tags.created_at as created_at
+            FROM post_tags
+            INNER JOIN tags
+                ON tags.id = post_tags.tag_id
+            WHERE post_tags.post_id IN (?)`, [keys], null, bool)
+
+    const Tags = tags.reduce((acc, { post_id, id, tag_name }) => {
+        if (!post_id) return acc;
+        if (!acc[post_id]) {
+            acc[post_id] = [];
+        }
+        acc[post_id].push({ id, tag_name })
+        return acc;
+    }, {})
+
+    return keys.map(key => Tags[key] || [])
+}
+const batchCommentTags = async keys => {
+    const tags =
+        await queryDB(`
+        SELECT 
+            tag_name, tags.id as id, comment_id, tags.created_at as created_at
+        FROM comment_tags
+        INNER JOIN tags
+            ON tags.id = comment_tags.tag_id
+        WHERE comment_tags.comment_id IN (?)
+        `, [keys], null, true)
+    const Tags = tags.reduce((acc, { comment_id, id, tag_name }) => {
+        if (!comment_id) return acc;
+        if (!acc[comment_id]) {
+            acc[comment_id] = []
+        }
+        acc[comment_id].push({ id, tag_name })
+        return acc;
+    }, {})
+    return keys.map(key => Tags[key] || [])
+}
 const applyLoaders = (context) => {
     //remove bool when done testing
     context.Loaders = {
-        user: {
+        users: {
             byId: new DataLoader(keys => batchUsers(keys))
         },
-        post: {
+        posts: {
             byId: new DataLoader(keys => batchPosts(keys)),
             byUserId: new DataLoader(keys => batchPosts_user_id(keys)),
             numLikes: new DataLoader(keys => batchPostLikes(keys)),
-            comments: new DataLoader(keys => batchComments(keys))
+            comments: new DataLoader(keys => batchComments(keys)),
+            likers: new DataLoader(keys => batchPostLikers(keys))
         },
-        profile: {
+        profiles: {
             byId: new DataLoader(keys => batchProfiles(keys))
         },
-        comment: {
+        comments: {
             numLikes: new DataLoader(keys => batchCommentLikes(keys)),
-            replies: new DataLoader(keys => batchCommentReplies(keys))
+            replies: new DataLoader(keys => batchCommentReplies(keys)),
+            likers: new DataLoader(keys => batchCommentLikers(keys))
         },
+        tags: {
+            byId: new DataLoader(keys => batchTags(keys)),
+            insert: new DataLoader(keys => insertBatchOfTags(keys)),
+            byPostId: new DataLoader(keys => batchPostTags(keys)),
+            byCommentId: new DataLoader(keys => batchCommentTags(keys))
+        }
 
 
     }

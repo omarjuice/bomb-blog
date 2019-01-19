@@ -31,6 +31,9 @@ module.exports = {
     replies: {
         notFound: new Error('Reply not found'),
         notSpecified: new Error('No comment_id specified')
+    },
+    tags: {
+        notFound: new Error('Tag not found')
     }
 
 

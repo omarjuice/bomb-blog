@@ -198,7 +198,7 @@ module.exports = function () {
         })
     })
     describe('DATABASE: JOIN users and posts', () => {
-        it('Should DELETE associated posts when its writer is deleted', done => {
+        it('Should DELETE associated posts when its commenter is deleted', done => {
             const id = 3
             queryDB(`DELETE FROM users WHERE id=${id}`)
                 .then(() => queryDB(`SELECT * FROM posts WHERE user_id=${id}`))
@@ -219,7 +219,7 @@ module.exports = function () {
                 done()
             }).catch(e => done(e))
         })
-        it('Should SELECT a post and its writer', done => {
+        it('Should SELECT a post and its commenter', done => {
             const post_id = 2
             const [user_id, title, caption, , post_content] = seedDB.posts[post_id - 1]
             queryDB(`

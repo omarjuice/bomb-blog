@@ -18,46 +18,39 @@ const resolvers = {
         user: async (_, args, { req, Loaders }) => {
             let sessionUser = authenticate(req.session)
             let id = args.id || sessionUser
-            if (!id) {
-                throw Errors.user.notSpecified
-            }
-            const user = await Loaders.user.byId.load(id)
-            if (user && user.id) {
-                return user
-            }
+            if (!id) throw Errors.user.notSpecified;
+            const user = await Loaders.users.byId.load(id)
+            if (user && user.id) return user;
             throw Errors.user.notFound
         },
         authenticated: (_, args, { req }) => !!req.session.user,
         post: async (_, args, { Loaders }) => {
-            const post = await Loaders.post.byId.load(args.id)
-            if (post && post.id) {
-                return post
-            }
+            const post = await Loaders.posts.byId.load(args.id)
+            if (post && post.id) return post;
             throw Errors.posts.notFound
         },
         posts: async (_, args) => {
-            const query = `
-            SELECT 
-                id, created_at, last_updated, title, caption, user_id
-            FROM posts
-            ORDER BY 
-                ?
-                ?
-            LIMIT ?
-            `
-            const posts = await queryDB(query, [args.orderBy, args.order ? 'DESC' : 'ASC', args.limit]).catch(e => { throw Errors.database })
-            if (posts) {
-                return posts
-            }
+            const query = `SELECT * FROM posts WHERE title LIKE ? LIMIT ?`
+            const posts = await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
+            if (posts) return posts;
             throw Errors.posts.notFound
+        },
+        tags: async (_, args) => {
+            const query = `SELECT * FROM tags WHERE tag_name LIKE ? LIMIT ?`
+            const tags = await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
+            if (tags) return tags;
+            throw Errors.tags.notFound
+        },
+        tag: async (_, args, { Loaders }) => {
+            const tag = await Loaders.tags.byId.load(args.id)
+            if (tag && tag.id) return tag;
+            throw Errors.tags.notFound;
         }
-
     },
     Mutation: {
         login: async (_, { username, password }, { req }) => {
             const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username]).catch(e => { throw Errors.database })
             if (user) {
-
                 const { username, pswd, id, email, created_at } = user
                 if (await compare(password, pswd)) {
                     req.session.user = { id, username, email, created_at }
@@ -94,7 +87,7 @@ const resolvers = {
             if (!args.input) {
                 return false
             }
-            const profile = await Loaders.profile.byId.load(id)
+            const profile = await Loaders.profiles.byId.load(id)
             if (!profile.user_id) {
                 throw Errors.profile.notFound
             }
@@ -144,7 +137,7 @@ const resolvers = {
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
             if (!args.id) throw Errors.posts.notSpecified
             if (!args.input) throw Errors.posts.missingField;
-            const post = await Loaders.post.byId.load(args.id)
+            const post = await Loaders.posts.byId.load(args.id)
             if (!post) throw Errors.posts.notFound;
             const { title, caption, post_content } = post
             const { affectedRows } =
@@ -186,7 +179,7 @@ const resolvers = {
             const { post_id, comment_text } = args;
             const { affectedRows } = await queryDB(`INSERT INTO comments (user_id, post_id, comment_text) VALUES ?`, [[[sessionUser, post_id, comment_text]]]).catch(e => { throw Errors.database })
             if (affectedRows < 0) throw Errors.database;
-            return await Loaders.post.comments.load(post_id)
+            return await Loaders.posts.comments.load(post_id)
         },
         updateComment: async (_, args, { req, Loaders }) => {
             const sessionUser = authenticate(req.session)
@@ -201,7 +194,7 @@ const resolvers = {
                     WHERE id = ? AND user_id= ?`, [comment_text, comment_id, sessionUser])
                     .catch(e => { throw Errors.database })
             if (affectedRows < 1) throw Errors.database;
-            return await Loaders.post.comments.load(post_id)
+            return await Loaders.posts.comments.load(post_id)
         },
         deleteComment: async (_, args, { req, Loaders }) => {
             const sessionUser = authenticate(req.session)
@@ -209,7 +202,7 @@ const resolvers = {
             const { comment_id, post_id } = args
             const { affectedRows } = await queryDB(`DELETE FROM comments WHERE id= ? AND post_id= ? AND user_id= ? `, [comment_id, post_id, sessionUser]).catch(e => { throw Errors.database })
             if (affectedRows < 1) throw Errors.database;
-            return await Loaders.post.comments.load(post_id)
+            return await Loaders.posts.comments.load(post_id)
 
         },
         addCommentLike: async (_, args, { req }) => {
@@ -232,7 +225,7 @@ const resolvers = {
             const { comment_id, reply_text } = args
             const { affectedRows } = await queryDB(`INSERT INTO replies (comment_id, user_id, reply_text) VALUES ?`, [[[comment_id, sessionUser, reply_text]]]).catch(e => 0)
             if (affectedRows < 1) throw Errors.database;
-            return await Loaders.comment.replies.load(comment_id);
+            return await Loaders.comments.replies.load(comment_id);
         },
         deleteReply: async (_, args, { req, Loaders }) => {
             const sessionUser = authenticate(req.session);
@@ -240,7 +233,7 @@ const resolvers = {
             const { reply_id, comment_id } = args;
             const { affectedRows } = await queryDB(`DELETE FROM replies WHERE id= ? AND user_id= ?`, [reply_id, sessionUser]).catch(e => 0)
             if (affectedRows < 1) throw Errors.database;
-            return await Loaders.comment.replies.load(comment_id)
+            return await Loaders.comments.replies.load(comment_id)
         },
         updateReply: async (_, args, { req, Loaders }) => {
             const sessionUser = authenticate(req.session);
@@ -256,7 +249,7 @@ const resolvers = {
                 WHERE id= ? AND user_id= ?`,
                     [reply_text || oldReply.reply_text, reply_id, sessionUser]).catch(e => 0)
             if (affectedRows < 1) throw Errors.database;
-            return await Loaders.comment.replies.load(comment_id)
+            return await Loaders.comments.replies.load(comment_id)
         }
 
 
@@ -265,14 +258,14 @@ const resolvers = {
         profile: async (parent, args, { req, Loaders }) => {
             const id = args.id || parent.id || req.session.user.id
             if (!id) return null;
-            const profile = await Loaders.profile.byId.load(id)
+            const profile = await Loaders.profiles.byId.load(id)
             if (profile && profile.user_id) return profile
             throw Errors.profile.notFound
         },
         posts: async (parent, args, { req, Loaders }) => {
             const { id } = parent
             if (!id) throw Errors.posts.notFound;
-            const posts = await Loaders.post.byUserId.load(id)
+            const posts = await Loaders.posts.byUserId.load(id)
             if (!posts) throw Errors.posts.notFound;
             return posts
         }
@@ -280,50 +273,65 @@ const resolvers = {
     Post: {
         author: async ({ user_id }, _, { Loaders }) => {
             if (!user_id) throw Errors.user.notSpecified;
-            const author = await Loaders.user.byId.load(user_id)
+            const author = await Loaders.users.byId.load(user_id)
             if (!author || !author.username) throw Errors.user.notFound;
             return author
         },
         numLikes: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.posts.notSpecified;
-            return await Loaders.post.numLikes.load(id)
+            return await Loaders.posts.numLikes.load(id)
         },
         comments: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.posts.notSpecified;
-            const comments = await Loaders.post.comments.load(id)
-            return comments;
+            return await Loaders.posts.comments.load(id)
         },
         numComments: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.posts.notSpecified;
-            const comments = await Loaders.post.comments.load(id)
+            const comments = await Loaders.posts.comments.load(id)
             return comments.length
+        },
+        likers: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.posts.notSpecified;
+            return await Loaders.posts.likers.load(id)
+        },
+        tags: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.posts.notSpecified;
+            return await Loaders.tags.byPostId.load(id);
         }
     },
     Comment: {
-        writer: async ({ user_id }, _, { Loaders }) => {
+        commenter: async ({ user_id }, _, { Loaders }) => {
             if (!user_id) throw Errors.user.notSpecified;
-            const writer = await Loaders.user.byId.load(user_id)
-            if (!writer || !writer.username) throw Errors.user.notFound;
-            return writer
+            const commenter = await Loaders.users.byId.load(user_id)
+            if (!commenter || !commenter.username) throw Errors.user.notFound;
+            return commenter
         },
         numLikes: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.comments.notSpecified
-            return await Loaders.comment.numLikes.load(id)
+            return await Loaders.comments.numLikes.load(id)
         },
         numReplies: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.comments.notSpecified
-            const replies = await Loaders.comment.replies.load(id)
+            const replies = await Loaders.comments.replies.load(id)
             return replies.length
         },
         replies: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.comments.notSpecified;
-            return await Loaders.comment.replies.load(id)
+            return await Loaders.comments.replies.load(id)
+        },
+        likers: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.comments.notSpecified;
+            return await Loaders.comments.likers.load(id)
+        },
+        tags: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.comments.notSpecified;
+            return await Loaders.tags.byCommentId.load(id);
         }
     },
     Reply: {
         replier: async ({ user_id }, _, { Loaders }) => {
             if (!user_id) throw Errors.user.notSpecified;
-            const replier = await Loaders.user.byId.load(user_id)
+            const replier = await Loaders.users.byId.load(user_id)
             if (!replier || !replier.username) throw Errors.user.notFound;
             return replier
         },

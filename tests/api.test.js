@@ -221,6 +221,20 @@ module.exports = function () {
                         }).end(done)
                 }).catch(e => done(e))
         })
+        it('Should search all posts', done => {
+            reqGQL({ query: queries.posts.all, variables: { search: "latin" } })
+                .expect(({ body }) => {
+                    expect(body.data.posts[0]).toMatchObject({
+                        "id": 3,
+                        "user_id": 3,
+                        "author": {
+                            "username": "gamma"
+                        },
+                        "numLikes": 2,
+                        "title": "A blog in Latin"
+                    })
+                }).end(done)
+        })
         it('Should get a post by id', done => {
             reqGQL({ query: queries.posts.byId, variables: { id: 3 } })
                 .expect(({ body }) => {
@@ -437,8 +451,8 @@ module.exports = function () {
                         expect(typeof comment.post_id).toBe('number');
                         expect(typeof comment.comment_text).toBe('string');
                         expect(typeof comment.created_at).toBe('string')
-                        expect(comment.writer).toBeTruthy()
-                        expect(typeof comment.writer.username).toBe('string')
+                        expect(comment.commenter).toBeTruthy()
+                        expect(typeof comment.commenter.username).toBe('string')
                         expect(typeof comment.numLikes).toBe('number')
                     }
                 }).end(done)
@@ -464,7 +478,7 @@ module.exports = function () {
                             id: 4,
                             user_id: 2,
                             post_id: 2,
-                            writer: {
+                            commenter: {
                                 id: 2
                             },
                             comment_text,
@@ -496,7 +510,7 @@ module.exports = function () {
                                 user_id: 3,
                                 post_id: 1,
                                 comment_text: 'Cool post',
-                                writer: {
+                                commenter: {
                                     id: 3
                                 },
                                 numLikes: expect.any(Number),
@@ -660,7 +674,12 @@ module.exports = function () {
                 (finished) => reqGQL({ query: queries.replies.update, variables: { comment_id, reply_text, reply_id } })
                     .expect(({ body }) => {
                         expect(body.data.updateReply.filter(({ id }) => id === reply_id)[0])
-                            .toMatchObject({ comment_id, id: reply_id, reply_text, replier: { username: 'beta' } })
+                            .toMatchObject({
+                                comment_id, reply_text,
+                                id: reply_id,
+                                replier: { username: 'beta' },
+                                last_updated: expect.any(String)
+                            })
                     }).end(finished)
             )
         })
@@ -671,6 +690,86 @@ module.exports = function () {
                         expect(body.errors).toBeTruthy();
                         const [error] = body.errors;
                         expect(error.message).toBe(Errors.database.message)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: GET tags', () => {
+        it('Should get all tags', done => {
+            reqGQL({ query: queries.tags.all, variables: { limit: 20 } })
+                .expect(({ body }) => {
+                    for (let tag of body.data.tags) {
+                        expect(tag).toMatchObject({
+                            id: expect.any(Number),
+                            tag_name: expect.any(String),
+                            created_at: expect.any(String)
+                        })
+                    }
+                }).end(done)
+        })
+        it('Should search all tags', done => {
+            reqGQL({ query: queries.tags.all, variables: { search: 'cool' } })
+                .expect(({ body }) => {
+                    expect(body.data.tags.length).toBe(1)
+                }).end(done)
+        })
+        it('Should get a single tag', done => {
+            reqGQL({ query: queries.tags.byId, variables: { id: 1 } })
+                .expect(({ body }) => {
+                    expect(body.data).toMatchObject({
+                        "tag": {
+                            "id": 1,
+                            "tag_name": "blog",
+                            "created_at": expect.any(String)
+                        }
+                    })
+                }).end(done)
+        })
+    })
+    describe('GQL: GET post_tags', () => {
+        it('Should get all tags for a given post', done => {
+            reqGQL({ query: queries.posts.withTags, variables: { id: 3 } })
+                .expect(({ body }) => {
+                    for (let tag of body.data.post.tags) {
+                        expect(tag).toMatchObject({
+                            id: expect.any(Number),
+                            tag_name: expect.any(String)
+                        })
+                    }
+                }).end(done)
+        })
+        it('Should return empty array for posts with no tags', done => {
+            const input = { title: "my only post", caption: "balaaaaallalalala", post_content: "dftgukgjghkgiykgfviykgiykuvykuvukvikyvgij" }
+            chainReqGQL(done, { query: queries.login.success[1] },
+                { query: queries.posts.create, variables: { input } },
+                (finished) => reqGQL({ query: queries.posts.withTags, variables: { id: 4 } })
+                    .expect(({ body }) => {
+                        expect(body.data.post.tags).toEqual([])
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: GET comment_tags', () => {
+        it('Should get all tags for all comments on a post', done => {
+            reqGQL({ query: queries.posts.withComments.andCommentTags, variables: { post_id: 1 } })
+                .expect(({ body }) => {
+                    for (let tag of body.data.post.comments[0].tags) {
+                        expect(tag).toMatchObject({
+                            id: expect.any(Number),
+                            tag_name: expect.any(String)
+                        })
+                    }
+                }).end(done)
+        })
+        it('Should return empty array for comment with no tags', done => {
+            const post_id = 2;
+            const comment_text = 'Kay.'
+            chainReqGQL(done, { query: queries.login.success[1] },
+                { query: queries.comments.create, variables: { post_id, comment_text } },
+                (finished) => reqGQL({ query: queries.posts.withComments.andCommentTags, variables: { post_id } })
+                    .expect(({ body }) => {
+                        let [comment] = body.data.post.comments
+                        expect(comment.tags).toEqual([])
                     }).end(finished)
             )
         })

@@ -46,8 +46,8 @@ module.exports = {
       }`
   },
   posts: {
-    all: `query ($limit: Int, $order: Boolean, $orderBy: String){
-            posts(limit: $limit, order: $order, orderBy: $orderBy){
+    all: `query ($limit: Int, $search: String){
+            posts(limit: $limit, search: $search){
                   id
                   user_id
                   title
@@ -131,17 +131,19 @@ module.exports = {
           created_at
           last_updated
           numLikes
+          likers{ username }
           numComments
           comments{
             id
             user_id
-            writer{
+            commenter{
               id
               username
             }
             post_id
             comment_text
             numLikes
+            likers{ username }
             created_at
             last_updated
           }
@@ -160,17 +162,19 @@ module.exports = {
           created_at
           last_updated
           numLikes
+          likers{ username }
           numComments
           comments{
             id
             user_id
-            writer{
+            commenter{
               id
               username
             }
             post_id
             comment_text
             numLikes
+            likers{ username }
             created_at
             last_updated
             numReplies
@@ -187,8 +191,62 @@ module.exports = {
             }
           }
         }
+      }`,
+      andCommentTags: `query ($post_id: Int!){
+        post(id: $post_id){
+          id
+          title
+          caption
+          user_id
+          author{
+              username
+          }
+          post_content
+          created_at
+          last_updated
+          numLikes
+          likers{ username }
+          numComments
+          comments{
+            id
+            user_id
+            commenter{
+              id
+              username
+            }
+            post_id
+            comment_text
+            numLikes
+            likers{ username }
+            created_at
+            last_updated
+            tags{
+              id
+              tag_name
+            }
+          }
+        }
       }`
-    }
+    },
+    withTags: `query ($id: Int!){
+      post(id: $id){
+          id
+          title
+          caption
+          user_id
+          author{
+              username
+          }
+          tags{
+            id
+            tag_name
+          }
+          post_content
+          created_at
+          last_updated
+          numLikes
+      }
+    }`
   },
   likes: {
     add: `mutation($post_id: Int!){
@@ -203,7 +261,7 @@ module.exports = {
       createComment(post_id: $post_id, comment_text: $comment_text){
             id
             user_id
-            writer{
+            commenter{
               id
               username
             }
@@ -219,7 +277,7 @@ module.exports = {
         id
         user_id
         
-        writer{
+        commenter{
           id
           username
         }
@@ -234,7 +292,7 @@ module.exports = {
       deleteComment(post_id: $post_id, comment_id: $comment_id){
         id
         user_id
-        writer{
+        commenter{
           id
           username
         }
@@ -292,6 +350,22 @@ module.exports = {
         reply_text
         created_at
         last_updated
+      }
+    }`
+  },
+  tags: {
+    all: `query($search: String, $limit: Int){
+      tags(search: $search, limit: $limit){
+        id
+        tag_name
+        created_at
+      }
+    }`,
+    byId: `query($id: Int!){
+      tag(id: $id){
+        id
+        tag_name
+        created_at
       }
     }`
   }
