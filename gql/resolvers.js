@@ -146,10 +146,7 @@ const resolvers = {
                 throw Errors.authentication.notLoggedIn
             }
             const { affectedRows } = await queryDB(`DELETE FROM posts WHERE id= ? AND user_id= ?`, [args.id, sessionUser]).catch(e => { throw Errors.database })
-            if (affectedRows > 0) {
-                return true
-            }
-            return false
+            return affectedRows > 0;
         },
         updatePost: async (_, args, { req, Loaders }) => {
             let sessionUser = authenticate(req.session)
@@ -198,10 +195,7 @@ const resolvers = {
                 throw Errors.posts.notSpecified
             }
             const { affectedRows } = await queryDB(`INSERT INTO likes (user_id, post_id) VALUES ?`, [[[sessionUser, post_id]]]).catch(e => 0)
-            if (affectedRows > 0) {
-                return true
-            }
-            return false
+            return affectedRows > 0;
         },
         deleteLike: async (_, args, { req }) => {
             const { post_id } = args
@@ -213,10 +207,7 @@ const resolvers = {
                 throw Errors.posts.notSpecified
             }
             const { affectedRows } = await queryDB(`DELETE FROM likes WHERE user_id= ? AND post_id = ?`, [sessionUser, post_id]).catch(e => false)
-            if (affectedRows > 0) {
-                return true
-            }
-            return false
+            return affectedRows > 0;
         },
         createComment: async (_, args, { req, Loaders }) => {
             const sessionUser = authenticate(req.session)
@@ -262,7 +253,26 @@ const resolvers = {
             }
             return await Loaders.post.comments.load(post_id)
 
+        },
+        addCommentLike: async (_, args, { req }) => {
+            const sessionUser = authenticate(req.session)
+            if (!sessionUser) {
+                throw Errors.authentication.notLoggedIn
+            }
+            const { comment_id } = args;
+            const { affectedRows } = await queryDB(`INSERT INTO comment_likes (user_id, comment_id) VALUES ?`, [[[sessionUser, comment_id]]]).catch(e => 0)
+            return affectedRows > 0
+        },
+        deleteCommentLike: async (_, args, { req }) => {
+            const sessionUser = authenticate(req.session)
+            if (!sessionUser) {
+                throw Errors.authentication.notLoggedIn
+            }
+            const { comment_id } = args;
+            const { affectedRows } = await queryDB(`DELETE FROM comment_likes WHERE comment_id= ? AND user_id = ?`, [comment_id, sessionUser]).catch(e => 0)
+            return affectedRows > 0;
         }
+
 
 
     },

@@ -59,7 +59,7 @@ module.exports = {
                   numLikes
             }
           }`,
-    byId: `query ($id: Int){
+    byId: `query ($id: Int!){
               post(id: $id){
                   id
                   title
@@ -118,7 +118,7 @@ module.exports = {
             }
         }`,
     withComments: {
-      bare: `query ($post_id: Int){
+      bare: `query ($post_id: Int!){
         post(id: $post_id){
           id
           title
@@ -146,7 +146,44 @@ module.exports = {
             last_updated
           }
         }
-    }`
+      }`,
+      andReplies: `query ($post_id: Int!){
+        post(id: $post_id){
+          id
+          title
+          caption
+          user_id
+          author{
+              username
+          }
+          post_content
+          created_at
+          last_updated
+          numLikes
+          numComments
+          comments{
+            id
+            user_id
+            writer{
+              id
+              username
+            }
+            post_id
+            comment_text
+            numLikes
+            created_at
+            last_updated
+            replies{
+              id: Int!
+              user_id
+              comment_id
+              reply_text
+              created_at
+              last_updated
+            }
+          }
+        }
+      }`
     }
   },
   likes: {
@@ -203,7 +240,15 @@ module.exports = {
         created_at
         last_updated
       }
-    }`
+    }`,
+    likes: {
+      add: `mutation($comment_id: Int!){
+        addCommentLike(comment_id: $comment_id)
+      }`,
+      delete: `mutation($comment_id: Int!){
+        deleteCommentLike(comment_id: $comment_id)
+      }`
+    }
   }
 
 }

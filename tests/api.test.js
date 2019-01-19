@@ -536,6 +536,42 @@ module.exports = function () {
             )
         })
     })
+    describe('GQL: CREATE comment_likes', () => {
+        it('Should create a new like', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.comments.likes.add, variables: { comment_id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.addCommentLike).toBe(true)
+                    }).end(finished)
+            )
+        })
+        it('Should not create duplicate likes', done => {
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.comments.likes.add, variables: { comment_id: 3 } })
+                    .expect(({ body }) => {
+                        expect(body.data.addCommentLike).toBe(false)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: DELETE comment_likes', () => {
+        it('Should delete a comment_like', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.comments.likes.delete, variables: { comment_id: 3 } })
+                    .expect(({ body }) => {
+                        expect(body.data.deleteCommentLike).toBe(true)
+                    }).end(finished)
+            )
+        })
+        it('Should return false for comment_like that does not exst', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.comments.likes.delete, variables: { comment_id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.deleteCommentLike).toBe(false)
+                    }).end(finished)
+            )
+        })
+    })
 
 
 }

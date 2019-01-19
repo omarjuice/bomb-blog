@@ -5,7 +5,7 @@ module.exports = gql`
     hello: String
     user(id: Int, username: String): User!
     authenticated: Boolean!
-    post(id: Int): Post
+    post(id: Int!): Post
     posts(order: Boolean = true, orderBy: String = "created_at", limit:Int = 3 ): [Post]
   }
   type Mutation {
@@ -21,6 +21,8 @@ module.exports = gql`
       createComment(post_id: Int!, comment_text: String!): [Comment]
       updateComment(comment_id: Int!, comment_text: String!, post_id: Int!): [Comment]
       deleteComment(comment_id: Int!, post_id: Int!): [Comment]
+      addCommentLike(comment_id: Int!): Boolean!
+      deleteCommentLike(comment_id: Int!): Boolean!
   }
   type User{
       id: Int!
@@ -59,7 +61,7 @@ module.exports = gql`
       numLikes: Int!
       created_at: String!
       last_updated: String
-      replies: [Reply]
+      replies: [Reply]!
   }
   type Reply{
       id: Int!
