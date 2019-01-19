@@ -25,6 +25,13 @@ module.exports = {
         missingField: new Error('Missing Field.'),
         notSpecified: new Error('No id specified')
     },
+    comments: {
+        notSpecified: new Error('No post_id specified.')
+    },
+    replies: {
+        notFound: new Error('Reply not found'),
+        notSpecified: new Error('No comment_id specified')
+    }
 
 
 }

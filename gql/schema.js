@@ -23,6 +23,9 @@ module.exports = gql`
       deleteComment(comment_id: Int!, post_id: Int!): [Comment]
       addCommentLike(comment_id: Int!): Boolean!
       deleteCommentLike(comment_id: Int!): Boolean!
+      createReply(comment_id: Int!, reply_text: String!): [Reply]
+      deleteReply(reply_id: Int!, comment_id: Int!): [Reply]
+      updateReply(reply_id: Int!, reply_text: String!, comment_id: Int!): [Reply]
   }
   type User{
       id: Int!
@@ -62,10 +65,12 @@ module.exports = gql`
       created_at: String!
       last_updated: String
       replies: [Reply]!
+      numReplies: Int!
   }
   type Reply{
       id: Int!
       user_id: Int!
+      replier: User!
       comment_id: Int!
       reply_text: String!
       created_at: String!

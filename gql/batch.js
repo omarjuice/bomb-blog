@@ -97,7 +97,7 @@ const batchCommentLikes = async keys => {
     return keys.map(key => commentNumLikes[key] ? commentNumLikes[key] : 0)
 }
 const batchCommentReplies = async keys => {
-    const commentReplies = await queryDB(`SELECT * FROM replies WHERE comment_id IN (?)`, [keys], null, true)
+    const commentReplies = await queryDB(`SELECT * FROM replies WHERE comment_id IN (?)`, [keys], null, bool)
     const CommentReplies = commentReplies.reduce((acc, reply) => {
         if (!reply) return acc;
         if (!acc[reply.comment_id]) {

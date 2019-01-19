@@ -48,7 +48,7 @@ module.exports = function () {
             .set('Accept', 'application/json')
             .send({ query, operationName, variables })
     }
-    const chainReqGQL = function (done, ...reqs) {
+    const chainReqGQL = function (done = () => { }, ...reqs) {
         if (reqs.length === 1) {
             return reqs[0](done)
         }
@@ -572,6 +572,107 @@ module.exports = function () {
             )
         })
     })
+    describe('GQL: GET posts with comments and replies', () => {
+        it('Should get a post with all comments and replies', done => {
+            reqGQL({ query: queries.posts.withComments.andReplies, variables: { post_id: 1 } })
+                .expect(({ body }) => {
+                    expect(body.data.post.comments[0].numReplies).toBe(3)
+                    for (let reply of body.data.post.comments[0].replies) {
+                        expect(reply).toMatchObject({
+                            "id": expect.any(Number),
+                            "user_id": expect.any(Number),
+                            "comment_id": expect.any(Number),
+                            "reply_text": expect.any(String),
+                            "created_at": expect.any(String),
+                            "replier": {
+                                "username": expect.any(String)
+                            },
+                        })
+                    }
+                }).end(done)
+        })
+        it('Should return empty array for comment with no replies', done => {
+            const post_id = 2;
+            const comment_text = 'Kay.'
+            chainReqGQL(done, { query: queries.login.success[1] },
+                { query: queries.comments.create, variables: { post_id, comment_text } },
+                (finished) => reqGQL({ query: queries.posts.withComments.andReplies, variables: { post_id } })
+                    .expect(({ body }) => {
+                        let [comment] = body.data.post.comments
+                        expect(comment.numReplies).toBe(0)
+                        expect(comment.replies).toEqual([])
+                    }).end(finished)
+            )
+        })
+    })
 
-
+    describe('GQL: CREATE replies', () => {
+        const comment_id = 1;
+        const reply_text = "Yeah stop leaving unhelpful comments";
+        it('Should create a new reply', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.replies.create, variables: { comment_id, reply_text } })
+                    .expect(({ body }) => {
+                        expect(body.data.createReply.length).toBe(4)
+                        expect(body.data.createReply.filter(({ id }) => id === 8)[0])
+                            .toMatchObject({ comment_id, reply_text, replier: { username: 'alpha' } })
+                    }).end(finished)
+            )
+        })
+        it('Should not create a new reply if not authenticated', done => {
+            reqGQL({ query: queries.replies.create, variables: { comment_id, reply_text } })
+                .expect(({ body }) => {
+                    expect(body.errors).toBeTruthy()
+                    const [error] = body.errors;
+                    expect(error.message).toBe(Errors.authentication.notLoggedIn.message)
+                }).end(done)
+        })
+    })
+    describe('GQL: DELETE replies', () => {
+        const comment_id = 1
+        const reply_id = 7
+        it('Should delete a reply', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.replies.delete, variables: { comment_id, reply_id } })
+                    .expect(({ body }) => {
+                        expect(body.data.deleteReply.length).toBe(2)
+                        expect(body.data.deleteReply.filter(({ id }) => id === reply_id)[0]).toBeFalsy()
+                    }).end(finished)
+            )
+        })
+        it('Should not delete a reply if the user doesnt own it', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.replies.delete, variables: { comment_id, reply_id } })
+                    .expect(({ body }) => {
+                        expect(body.errors).toBeTruthy();
+                        const [error] = body.errors;
+                        expect(error.message).toBe(Errors.database.message)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: UPDATE replies', () => {
+        const comment_id = 1;
+        const reply_id = 5;
+        const reply_text = 'Its ok.'
+        it('Should update a reply', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.replies.update, variables: { comment_id, reply_text, reply_id } })
+                    .expect(({ body }) => {
+                        expect(body.data.updateReply.filter(({ id }) => id === reply_id)[0])
+                            .toMatchObject({ comment_id, id: reply_id, reply_text, replier: { username: 'beta' } })
+                    }).end(finished)
+            )
+        })
+        it('Should not update a reply not owned by the user', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.replies.update, variables: { comment_id, reply_text, reply_id } })
+                    .expect(({ body }) => {
+                        expect(body.errors).toBeTruthy();
+                        const [error] = body.errors;
+                        expect(error.message).toBe(Errors.database.message)
+                    }).end(finished)
+            )
+        })
+    })
 }

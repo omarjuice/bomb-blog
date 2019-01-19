@@ -173,9 +173,13 @@ module.exports = {
             numLikes
             created_at
             last_updated
+            numReplies
             replies{
-              id: Int!
+              id
               user_id
+              replier{
+                username
+              }
               comment_id
               reply_text
               created_at
@@ -249,6 +253,47 @@ module.exports = {
         deleteCommentLike(comment_id: $comment_id)
       }`
     }
+  },
+  replies: {
+    create: `mutation($comment_id: Int!, $reply_text: String!){
+      createReply(comment_id: $comment_id, reply_text: $reply_text){
+        id
+        user_id
+        replier{
+          username
+        }
+        comment_id
+        reply_text
+        created_at
+        last_updated
+      }      
+    }`,
+    delete: `mutation($reply_id: Int!, $comment_id: Int!){
+      deleteReply(reply_id: $reply_id, comment_id: $comment_id){
+        id
+        user_id
+        replier{
+          username
+        }
+        comment_id
+        reply_text
+        created_at
+        last_updated
+      }
+    }`,
+    update: `mutation($reply_id: Int!, $comment_id: Int!, $reply_text: String!){
+      updateReply(reply_id: $reply_id, comment_id: $comment_id, reply_text: $reply_text){
+        id
+        user_id
+        replier{
+          username
+        }
+        comment_id
+        reply_text
+        created_at
+        last_updated
+      }
+    }`
   }
 
 }
