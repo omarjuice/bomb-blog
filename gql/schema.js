@@ -12,16 +12,16 @@ module.exports = gql`
   }
   type Mutation {
       login (username: String, password: String): Boolean!
-      register (username: String, password: String, email: String): Boolean!
+      register (input: Register!): Boolean!
       logout: Boolean!
-      updateProfile(id: Int, input: ProfileDetails): Boolean!
+      updateProfile(id: Int, input: ProfileDetails): Profile
       createPost(input: PostDetails): Post!
       deletePost(id: Int!): Boolean!
       updatePost(id: Int!, input: PostDetails): Post!
       addLike(post_id: Int!): Boolean!
       deleteLike(post_id: Int!): Boolean!
       createComment(post_id: Int!, comment_text: String!): [Comment]!
-      updateComment(comment_id: Int!, comment_text: String!, post_id: Int!): [Comment]!
+      updateComment(comment_id: Int!, comment_text: String!, post_id: Int!, modTags: ModTags): [Comment]!
       deleteComment(comment_id: Int!, post_id: Int!): [Comment]!
       addCommentLike(comment_id: Int!): Boolean!
       deleteCommentLike(comment_id: Int!): Boolean!
@@ -40,8 +40,9 @@ module.exports = gql`
   }
   type Profile{
       user_id: Int!
-      about: String!
-      photo_path: String!
+      user: User
+      about: String
+      photo_path: String
       last_updated: String
   }
   
@@ -102,11 +103,16 @@ module.exports = gql`
       caption: String
       post_content: String
       tags: [String]
-      modifyTags:{
-          add: [String]
-          delete: [String]
-      }
+      modTags: ModTags
   }
-
+  input ModTags {
+    addTags: [String]!
+    deleteTags: [String]! 
+  }
+  input Register{
+    username: String! 
+    password: String!
+    email: String!
+  }
 
 `;

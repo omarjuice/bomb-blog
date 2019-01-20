@@ -73,6 +73,31 @@ module.exports = function () {
                 }).end(done)
         })
     })
+    describe('GQL: REGISTER', done => {
+        const input = { username: 'delta', password: '1234567', email: 'd@w.com' }
+        it('Should register a new user', done => {
+            reqGQL({ query: queries.register, variables: { input } })
+                .expect(({ body }) => {
+                    expect(body.data.register).toBe(true)
+                }).end(done)
+        })
+        it('Should authenticate the new user', done => {
+            chainReqGQL(done, { query: queries.register, variables: { input } },
+                (finished) => reqGQL({ query: queries.authenticate })
+                    .expect(({ body }) => {
+                        expect(body.data.authenticated).toBe(true)
+                    }).end(finished)
+            )
+        })
+        it('Should create a new profile for the new user', done => {
+            chainReqGQL(done, { query: queries.register, variables: { input } },
+                (finished) => reqGQL({ query: queries.profile.get, variables: { id: 4 } })
+                    .expect(({ body }) => {
+                        expect(body.data.user.profile).toMatchObject({ user_id: 4 })
+                    }).end(finished)
+            )
+        })
+    })
     describe('GQL: LOGIN', () => {
         it('Should log in a user with valid credentials', done => {
             const query = queries.login.success[0]
@@ -166,6 +191,7 @@ module.exports = function () {
             )
         })
     })
+
     describe('GQL: UPDATE profiles', () => {
         it('Should update a profile if the user is logged in', done => {
             const about = "Not actually a developer";
@@ -182,10 +208,9 @@ module.exports = function () {
         it('Should update the profile if at least on field is given', done => {
             const about = "Not actually a developer";
             chainReqGQL(done, { query: queries.login.success[0] },
-                { query: queries.profile.update, variables: { input: { about } } },
-                (finished) => reqGQL({ query: queries.profile.get })
+                (finished) => reqGQL({ query: queries.profile.update, variables: { input: { about } } })
                     .expect(({ body }) => {
-                        expect(body.data.user.profile).toMatchObject({ about, photo_path: seedDB.profiles[0][2] })
+                        expect(body.data.updateProfile).toMatchObject({ about, photo_path: seedDB.profiles[0][2] })
                     }).end(finished))
 
         })
@@ -547,7 +572,7 @@ module.exports = function () {
                     .expect(({ body }) => {
                         expect(body.errors).toBeTruthy()
                         const [error] = body.errors
-                        expect(error.message).toBe(Errors.database.message)
+                        expect(error.message).toBe(Errors.authorization.notAuthorized.message)
                     }).end(finished)
             )
         })
@@ -567,7 +592,7 @@ module.exports = function () {
                     .expect(({ body }) => {
                         expect(body.errors).toBeTruthy()
                         const [error] = body.errors
-                        expect(error.message).toBe(Errors.database.message)
+                        expect(error.message).toBe(Errors.authorization.notAuthorized.message)
                     }).end(finished)
             )
         })
@@ -682,7 +707,7 @@ module.exports = function () {
                     .expect(({ body }) => {
                         expect(body.errors).toBeTruthy();
                         const [error] = body.errors;
-                        expect(error.message).toBe(Errors.database.message)
+                        expect(error.message).toBe(Errors.authorization.notAuthorized.message)
                     }).end(finished)
             )
         })
@@ -711,7 +736,7 @@ module.exports = function () {
                     .expect(({ body }) => {
                         expect(body.errors).toBeTruthy();
                         const [error] = body.errors;
-                        expect(error.message).toBe(Errors.database.message)
+                        expect(error.message).toBe(Errors.authorization.notAuthorized.message)
                     }).end(finished)
             )
         })
@@ -796,34 +821,117 @@ module.exports = function () {
             )
         })
     })
-    describe('GQL: CREATE tags(posts)', () => {
-        it('Should add tags to an existing post', done => {
-            const tags = ['LMAO', 'ChIlL', 'fire']
-            chainReqGQL(done, { query: queries.login.success[1] },
-                (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+    // describe('GQL: CREATE post_tags', () => {
+    //     it('Should add tags to an existing post', done => {
+    //         const tags = ['LMAO', 'ChIlL', 'fire']
+    //         chainReqGQL(done, { query: queries.login.success[1] },
+    //             (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+    //                 .expect(({ body }) => {
+    //                     expect(body.data.addPostTags.map(tag => tag.tag_name))
+    //                         .toEqual(expect.arrayContaining(["funny", "magic", "gr9", ...tags.map(tag => tag.toLowerCase())]))
+    //                 }).end(finished)
+    //         )
+    //     })
+    //     it('Should not throw error if no tags are provided', done => {
+    //         const tags = []
+    //         chainReqGQL(done, { query: queries.login.success[1] },
+    //             (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+    //                 .expect(({ body }) => {
+    //                     expect(body.data.addPostTags.map(tag => tag.tag_name))
+    //                         .toEqual(expect.arrayContaining(["funny", "magic", "gr9"]))
+    //                 }).end(finished)
+    //         )
+    //     })
+    //     it('Should not add a duplicate tag', done => {
+    //         const tags = ['fire', 'fire']
+    //         chainReqGQL(done, { query: queries.login.success[1] },
+    //             (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+    //                 .expect(({ body }) => {
+    //                     expect(body.data.addPostTags.map(tag => tag.tag_name))
+    //                         .toEqual(expect.arrayContaining(["funny", "magic", "gr9", "fire"]))
+    //                 }).end(finished)
+    //         )
+    //     })
+    // })
+    describe('GQL: UPDATE (add and delete) post_tags', () => {
+        it("Should add to a post's tags", done => {
+            const input = {
+                title: 'New title', post_content: 'New Post Content lorem lorem lorem',
+                modTags: { addTags: ['lol', 'fire'], deleteTags: [] }
+            }
+            const id = 1
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.posts.update, variables: { id, input } })
                     .expect(({ body }) => {
-                        expect(body.data.addPostTags.map(tag => tag.tag_name))
-                            .toEqual(expect.arrayContaining(["funny", "magic", "gr9", ...tags.map(tag => tag.toLowerCase())]))
+                        expect(body).toMatchObject({
+                            "data": {
+                                "updatePost": {
+                                    id,
+                                    "user_id": 1,
+                                    "author": {
+                                        "username": "alpha"
+                                    },
+                                    caption: seedDB.posts[0][2],
+                                    title: input.title,
+                                    post_content: input.post_content,
+                                }
+                            }
+                        })
+                        expect(body.data.updatePost.tags.map(tag => tag.tag_name)).toEqual(['blog', 'cool', 'beautiful', 'amazing', 'dev', 'lol', 'fire'])
                     }).end(finished)
             )
         })
-        it('Should not throw error if no tags are provided', done => {
-            const tags = []
-            chainReqGQL(done, { query: queries.login.success[1] },
-                (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+        it("Should delete from a post's tags", done => {
+            const input = {
+                title: 'New title', post_content: 'New Post Content lorem lorem lorem',
+                modTags: { deleteTags: ['blog', 'cool'], addTags: [] }
+            }
+            const id = 1
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.posts.update, variables: { id, input } })
                     .expect(({ body }) => {
-                        expect(body.data.addPostTags.map(tag => tag.tag_name))
-                            .toEqual(expect.arrayContaining(["funny", "magic", "gr9"]))
+                        expect(body).toMatchObject({
+                            "data": {
+                                "updatePost": {
+                                    id,
+                                    "user_id": 1,
+                                    "author": {
+                                        "username": "alpha"
+                                    },
+                                    caption: seedDB.posts[0][2],
+                                    title: input.title,
+                                    post_content: input.post_content,
+                                }
+                            }
+                        })
+                        expect(body.data.updatePost.tags.map(tag => tag.tag_name)).toEqual(['beautiful', 'amazing', 'dev'])
                     }).end(finished)
             )
         })
-        it('Should not add a duplicate tag', done => {
-            const tags = ['fire', 'fire']
-            chainReqGQL(done, { query: queries.login.success[1] },
-                (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+        it("Should update a post's tags", done => {
+            const input = {
+                title: 'New title', post_content: 'New Post Content lorem lorem lorem',
+                modTags: { deleteTags: ['blog', 'cool'], addTags: ['lol', 'fire'] }
+            }
+            const id = 1
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.posts.update, variables: { id, input } })
                     .expect(({ body }) => {
-                        expect(body.data.addPostTags.map(tag => tag.tag_name))
-                            .toEqual(expect.arrayContaining(["funny", "magic", "gr9", "fire"]))
+                        expect(body).toMatchObject({
+                            "data": {
+                                "updatePost": {
+                                    id,
+                                    "user_id": 1,
+                                    "author": {
+                                        "username": "alpha"
+                                    },
+                                    caption: seedDB.posts[0][2],
+                                    title: input.title,
+                                    post_content: input.post_content,
+                                }
+                            }
+                        })
+                        expect(body.data.updatePost.tags.map(tag => tag.tag_name)).toEqual(['beautiful', 'amazing', 'dev', 'lol', 'fire'])
                     }).end(finished)
             )
         })

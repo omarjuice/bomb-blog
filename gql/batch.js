@@ -241,7 +241,36 @@ const applyLoaders = (context) => {
                     return acc
                 }, {})
                 const postTags = tags.map(name => [post_id, Tags[name]])
-                await queryDB(`INSERT IGNORE INTO post_tags (post_id, tag_id) VALUES ?`, [postTags]).catch(e => { throw Errors.database })
+                return await queryDB(`INSERT IGNORE INTO post_tags (post_id, tag_id) VALUES ?`, [postTags]).catch(e => 0)
+            },
+            commentTags: async (tags, comment_id) => {
+                tags = tags.map((tag) => [tag.toLowerCase()])
+                await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
+                const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
+                const Tags = allTags.reduce((acc, { tag_name, id }) => {
+                    acc[tag_name] = id
+                    return acc
+                }, {})
+                const commentTags = tags.map(name => [post_id, Tags[name]])
+                return await queryDB(`INSERT IGNORE INTO comment_tags (comment_id, tag_id) VALUES ?`, [commentTags]).catch(e => 0)
+            }
+        }
+    }
+    context.batchDeletes = {
+        tags: {
+            postTags: async (tags, post_id) => {
+                tags = tags.map(tag => [tag.toLowerCase()])
+                return await queryDB(`
+                    DELETE IGNORE FROM post_tags WHERE post_id= ? AND tag_id IN (
+                            SELECT id FROM tags WHERE tag_name IN (?)
+                    )`, [post_id, tags]).catch(e => 0)
+            },
+            commentTags: async (tags, comment_id) => {
+                tags = tags.map(tag => [tag.toLowerCase()])
+                return await queryDB(`
+                    DELETE IGNORE FROM comment_tags WHERE comment_id= ? AND tag_id IN (
+                            SELECT id FROM tags WHERE tag_name IN (?)
+                    )`, [comment_id, tags]).catch(e => 0)
             }
         }
     }

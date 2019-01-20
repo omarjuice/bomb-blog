@@ -28,6 +28,9 @@ module.exports = {
           }`
   },
   authenticate: `query { authenticated }`,
+  register: `mutation($input: Register!){
+    register(input: $input)
+  }`,
   profile: {
     get: `query($id: Int){
         user(id: $id){
@@ -42,7 +45,12 @@ module.exports = {
         }
       }`,
     update: `mutation($input: ProfileDetails){
-            updateProfile(input: $input)
+            updateProfile(input: $input){
+              user_id
+              about
+              photo_path
+              last_updated
+            }
       }`
   },
   posts: {
@@ -113,6 +121,10 @@ module.exports = {
                 user_id
                 author{
                     username
+                }
+                tags{
+                  id
+                  tag_name
                 }
                 title
                 caption
