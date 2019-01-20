@@ -102,7 +102,10 @@ module.exports = gql`
       caption: String
       post_content: String
       tags: [String]
-     
+      modifyTags:{
+          add: [String]
+          delete: [String]
+      }
   }
 
 
