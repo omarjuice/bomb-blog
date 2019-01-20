@@ -95,6 +95,10 @@ module.exports = {
               }
               title
               caption
+              tags{
+                id
+                tag_name
+              }
               post_content
               created_at
               numLikes
@@ -363,6 +367,13 @@ module.exports = {
     }`,
     byId: `query($id: Int!){
       tag(id: $id){
+        id
+        tag_name
+        created_at
+      }
+    }`,
+    createPostTags: `mutation($post_id: Int!, $tags:[String]!){
+      addPostTags(post_id: $post_id, tags: $tags){
         id
         tag_name
         created_at

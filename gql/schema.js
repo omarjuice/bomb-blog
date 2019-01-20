@@ -28,6 +28,7 @@ module.exports = gql`
       createReply(comment_id: Int!, reply_text: String!): [Reply]!
       deleteReply(reply_id: Int!, comment_id: Int!): [Reply]!
       updateReply(reply_id: Int!, reply_text: String!, comment_id: Int!): [Reply]!
+      addPostTags(post_id:Int!, tags: [String]!): [Tag]!
   }
   type User{
       id: Int!
@@ -100,6 +101,8 @@ module.exports = gql`
       title: String
       caption: String
       post_content: String
+      tags: [String]
+     
   }
 
 

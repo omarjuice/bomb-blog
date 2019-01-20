@@ -319,6 +319,28 @@ module.exports = function () {
                         expect(error.message).toBe(Errors.posts.missingField.message)
                     }).end(finished))
         })
+        it('Should create a post with tags', done => {
+            const tags = ['blog', 'funny', 'lol', 'lmao']
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.posts.create, variables: { input: { ...input, tags } } })
+                    .expect(({ body }) => {
+                        expect(body).toMatchObject({
+                            "data": {
+                                "createPost": {
+                                    "id": 4,
+                                    "user_id": 2,
+                                    "author": {
+                                        "username": "beta"
+                                    },
+                                    "numLikes": 0,
+                                    ...input
+                                }
+                            }
+                        })
+                        expect(body.data.createPost.tags.map(tag => tag.tag_name)).toEqual(tags)
+                    }).end(finished)
+            )
+        })
     })
     describe('GQL: DELETE posts', () => {
         const input = { title: "my only post", caption: "balaaaaallalalala", post_content: "dftgukgjghkgiykgfviykgiykuvykuvukvikyvgij" }
@@ -577,7 +599,7 @@ module.exports = function () {
                     }).end(finished)
             )
         })
-        it('Should return false for comment_like that does not exst', done => {
+        it('Should return false for comment_like that does not exist', done => {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.comments.likes.delete, variables: { comment_id: 2 } })
                     .expect(({ body }) => {
@@ -770,6 +792,38 @@ module.exports = function () {
                     .expect(({ body }) => {
                         let [comment] = body.data.post.comments
                         expect(comment.tags).toEqual([])
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: CREATE tags(posts)', () => {
+        it('Should add tags to an existing post', done => {
+            const tags = ['LMAO', 'ChIlL', 'fire']
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+                    .expect(({ body }) => {
+                        expect(body.data.addPostTags.map(tag => tag.tag_name))
+                            .toEqual(expect.arrayContaining(["funny", "magic", "gr9", ...tags.map(tag => tag.toLowerCase())]))
+                    }).end(finished)
+            )
+        })
+        it('Should not throw error if no tags are provided', done => {
+            const tags = []
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+                    .expect(({ body }) => {
+                        expect(body.data.addPostTags.map(tag => tag.tag_name))
+                            .toEqual(expect.arrayContaining(["funny", "magic", "gr9"]))
+                    }).end(finished)
+            )
+        })
+        it('Should not add a duplicate tag', done => {
+            const tags = ['fire', 'fire']
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
+                    .expect(({ body }) => {
+                        expect(body.data.addPostTags.map(tag => tag.tag_name))
+                            .toEqual(expect.arrayContaining(["funny", "magic", "gr9", "fire"]))
                     }).end(finished)
             )
         })

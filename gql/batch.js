@@ -146,7 +146,7 @@ const batchCommentLikers = async keys => {
     return keys.map(key => Likers[key] || [])
 }
 const batchTags = async keys => {
-    const tags = await queryDB(`SELECT * FROM tags WHERE id IN (?)`, [keys], null, true)
+    const tags = await queryDB(`SELECT * FROM tags WHERE id IN (?)`, [keys], null, bool)
     const Tags = tags.reduce((acc, tag) => {
         if (!tag) return acc;
         acc[tag.id] = tag
@@ -154,10 +154,11 @@ const batchTags = async keys => {
     }, {})
     return keys.map(key => Tags[key] || {})
 }
-const insertBatchOfTags = async keys => {
-    const { affectedRows } = await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [[keys]], null, true)
-    return affectedRows;
-}
+// const insertBatchOfTags = async keys => {
+//     const { affectedRows } = await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [[keys]], null, true)
+//     if {affe}
+//     return keys.map(key => );
+// }
 const batchPostTags = async keys => {
     const tags =
         await queryDB(`
@@ -168,12 +169,12 @@ const batchPostTags = async keys => {
                 ON tags.id = post_tags.tag_id
             WHERE post_tags.post_id IN (?)`, [keys], null, bool)
 
-    const Tags = tags.reduce((acc, { post_id, id, tag_name }) => {
+    const Tags = tags.reduce((acc, { post_id, id, tag_name, created_at }) => {
         if (!post_id) return acc;
         if (!acc[post_id]) {
             acc[post_id] = [];
         }
-        acc[post_id].push({ id, tag_name })
+        acc[post_id].push({ id, tag_name, created_at })
         return acc;
     }, {})
 
@@ -188,13 +189,13 @@ const batchCommentTags = async keys => {
         INNER JOIN tags
             ON tags.id = comment_tags.tag_id
         WHERE comment_tags.comment_id IN (?)
-        `, [keys], null, true)
-    const Tags = tags.reduce((acc, { comment_id, id, tag_name }) => {
+        `, [keys], null, bool)
+    const Tags = tags.reduce((acc, { comment_id, id, tag_name, created_at }) => {
         if (!comment_id) return acc;
         if (!acc[comment_id]) {
             acc[comment_id] = []
         }
-        acc[comment_id].push({ id, tag_name })
+        acc[comment_id].push({ id, tag_name, created_at })
         return acc;
     }, {})
     return keys.map(key => Tags[key] || [])
@@ -222,12 +223,27 @@ const applyLoaders = (context) => {
         },
         tags: {
             byId: new DataLoader(keys => batchTags(keys)),
-            insert: new DataLoader(keys => insertBatchOfTags(keys)),
+            // insert: new DataLoader(keys => insertBatchOfTags(keys)),
             byPostId: new DataLoader(keys => batchPostTags(keys)),
             byCommentId: new DataLoader(keys => batchCommentTags(keys))
         }
 
 
+    }
+    context.batchInserts = {
+        tags: {
+            postTags: async (tags, post_id) => {
+                tags = tags.map((tag) => [tag.toLowerCase()])
+                await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
+                const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
+                const Tags = allTags.reduce((acc, { tag_name, id }) => {
+                    acc[tag_name] = id
+                    return acc
+                }, {})
+                const postTags = tags.map(name => [post_id, Tags[name]])
+                await queryDB(`INSERT IGNORE INTO post_tags (post_id, tag_id) VALUES ?`, [postTags]).catch(e => { throw Errors.database })
+            }
+        }
     }
     return context
 }

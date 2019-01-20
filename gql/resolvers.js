@@ -105,8 +105,8 @@ const resolvers = {
                 throw Errors.database;
             }
         },
-        createPost: async (_, args, { req }) => {
-            const { title, post_content, caption } = args.input;
+        createPost: async (_, args, { req, Loaders, batchInserts }) => {
+            const { title, post_content, caption, tags } = args.input;
             let sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
             if (!title || !post_content || !caption) throw Errors.posts.missingField;
@@ -114,15 +114,15 @@ const resolvers = {
             if (rowsAffected < 1) {
                 return null
             }
-            const [newPost] = await queryDB(`
-            SELECT
-                *
-            FROM posts 
-            WHERE user_id = ?
-            ORDER BY created_at DESC
-            LIMIT 1
-            `, [sessionUser])
-            if (newPost) return newPost;
+
+            const [newPost] = await queryDB(`SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC LIMIT 1`, [sessionUser])
+            if (newPost) {
+                if (tags && tags.length > 0) {
+                    await batchInserts.tags.postTags(tags, newPost.id)
+                    return await Loaders.posts.byId.load(newPost.id)
+                }
+                return newPost
+            }
 
             throw Errors.database
         },
@@ -241,16 +241,18 @@ const resolvers = {
             const { reply_id, comment_id, reply_text } = args;
             const [oldReply] = await queryDB(`SELECT * FROM replies WHERE id= ?`, [reply_id]).catch(e => { throw Errors.replies.notFound })
             const { affectedRows } =
-                await queryDB(`
-                UPDATE replies
-                SET
-                    reply_text= ?,
-                    last_updated=NOW()
-                WHERE id= ? AND user_id= ?`,
+                await queryDB(`UPDATE replies SET reply_text= ?, last_updated=NOW() WHERE id= ? AND user_id= ?`,
                     [reply_text || oldReply.reply_text, reply_id, sessionUser]).catch(e => 0)
             if (affectedRows < 1) throw Errors.database;
             return await Loaders.comments.replies.load(comment_id)
-        }
+        },
+        addPostTags: async (_, args, { req, Loaders, batchInserts }) => {
+            if (args.tags.length < 1) return await Loaders.tags.byPostId.load(args.post_id);
+            const sessionUser = authenticate(req.session);
+            if (!sessionUser) throw Errors.authentication.notLoggedIn;
+            await batchInserts.tags.postTags(args.tags, args.post_id)
+            return await Loaders.tags.byPostId.load(args.post_id)
+        },
 
 
     },
