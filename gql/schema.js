@@ -4,6 +4,7 @@ module.exports = gql`
   type Query {
     hello: String
     user(id: Int, username: String): User!
+    users(limit: Int = 3, search: String): [User]!
     authenticated: Boolean!
     post(id: Int!): Post
     posts(limit: Int = 3, search: String ): [Post]!

@@ -23,6 +23,10 @@ const resolvers = {
             if (user && user.id) return user;
             throw Errors.user.notFound
         },
+        users: async (_, args, ) => {
+            const query = `SELECT id, username, email FROM users WHERE username LIKE ? LIMIT ?`
+            return await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
+        },
         authenticated: (_, args, { req }) => !!req.session.user,
         post: async (_, args, { Loaders }) => {
             const post = await Loaders.posts.byId.load(args.id)
@@ -31,9 +35,7 @@ const resolvers = {
         },
         posts: async (_, args) => {
             const query = `SELECT * FROM posts WHERE title LIKE ? LIMIT ?`
-            const posts = await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
-            if (posts) return posts;
-            throw Errors.posts.notFound
+            return await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
         },
         tags: async (_, args) => {
             const query = `SELECT * FROM tags WHERE tag_name LIKE ? LIMIT ?`

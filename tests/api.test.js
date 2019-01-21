@@ -136,6 +136,34 @@ module.exports = function () {
                 })
         })
     })
+    describe('GQL: GET users', done => {
+        it('Should get all users', done => {
+            queryDB(`INSERT IGNORE INTO users (email, username, pswd, created_at) VALUES ?`, [seedDB.manyUsers(10)], seedDB.hashUsers)
+                .then(() => {
+                    reqGQL({ query: queries.user.all, variables: { limit: 15 } })
+                        .expect(({ body }) => {
+                            expect(body.data.users.length).toBe(13)
+                            body.data.users.forEach(user => {
+                                expect(user).toMatchObject({
+                                    id: expect.any(Number),
+                                    username: expect.any(String)
+                                })
+                            })
+                        }).end(done)
+                })
+
+        })
+        it('Should search users', done => {
+            reqGQL({ query: queries.user.all, variables: { search: 'alpha' } })
+                .expect(({ body }) => {
+                    expect(body.data.users.length).toBe(1)
+                    expect(body.data.users[0]).toMatchObject({
+                        id: 1,
+                        username: 'alpha'
+                    })
+                }).end(done)
+        })
+    })
     describe('GQL: GET PROFILES', () => {
         it('Should get a profile for a user', done => {
             const id = 1

@@ -23,6 +23,12 @@ module.exports = {
   },
   logout: `mutation { logout }`,
   user: {
+    all: `query($limit: Int, $search: String){
+      users(limit: $limit, search: $search){
+        id
+        username
+      }
+    }`,
     byId: `query($id: Int){
             user(id: $id){
               id

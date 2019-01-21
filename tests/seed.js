@@ -2,7 +2,7 @@ const faker = require("faker");
 const { hashPW } = require('../db/crypt')
 const { database } = require('../config')
 const { userSchema, profileSchema, postSchema, likeSchema, commentSchema, commentLikeSchema,
-    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, interestSchema, userInterestSchema } = require('../db/schema')
+    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema } = require('../db/schema')
 const { queryDB } = require('../db/connect')
 
 const seedDB = {
@@ -46,8 +46,9 @@ const seedDB = {
         null,
         `${'/gamma'}${'xxxxx'.replace(/x/g, () => ((Math.random() * 36) | 0).toString(36))}`
     ]],
-    interests: [['web development'], ['coding'], ['food'], ['programming'], ['garbage'], ['smiling'], ['fitness']],
-    userInterests: [[1, 1], [1, 3], [1, 4], [2, 5], [3, 2], [3, 6], [3, 7]],
+    // interests: [['web development'], ['coding'], ['food'], ['programming'], ['garbage'], ['smiling'], ['fitness']],
+    // userInterests: [[1, 1], [1, 3], [1, 4], [2, 5], [3, 2], [3, 6], [3, 7]],
+    userTags: [[1, 2], [1, 6], [2, 11], [3, 4], [3, 9]],
     follows: [[1, 1], [1, 3], [1, 2], [2, 3], [2, 2], [3, 1], [3, 3]],
     posts: [[
         1,
@@ -168,8 +169,6 @@ const resetTables = (done) => {
         ${userSchema.drop};
         ${profileSchema.drop};
         ${followSchema.drop};
-        ${interestSchema.drop};
-        ${userInterestSchema.drop};
         ${postSchema.drop};
         ${likeSchema.drop};
         ${commentSchema.drop};
@@ -178,26 +177,24 @@ const resetTables = (done) => {
         ${tagSchema.drop};
         ${postTagSchema.drop};
         ${commentTagSchema.drop};
+        ${userTagSchema.drop};
         SET FOREIGN_KEY_CHECKS = 1;
   `).then(() => Promise.all([
-            queryDB(userSchema.create),
-            queryDB(profileSchema.create),
-            queryDB(followSchema.create),
-            queryDB(interestSchema.create),
-            queryDB(userInterestSchema.create),
-            queryDB(postSchema.create),
-            queryDB(likeSchema.create),
-            queryDB(commentSchema.create),
-            queryDB(commentLikeSchema.create),
-            queryDB(replySchema.create),
-            queryDB(tagSchema.create),
-            queryDB(postTagSchema.create),
-            queryDB(commentTagSchema.create)
-        ]))
+        queryDB(userSchema.create),
+        queryDB(profileSchema.create),
+        queryDB(followSchema.create),
+        queryDB(postSchema.create),
+        queryDB(likeSchema.create),
+        queryDB(commentSchema.create),
+        queryDB(commentLikeSchema.create),
+        queryDB(replySchema.create),
+        queryDB(tagSchema.create),
+        queryDB(postTagSchema.create),
+        queryDB(commentTagSchema.create),
+        queryDB(userTagSchema.create)
+    ]))
         .then(() => queryDB(`INSERT INTO users (email, username, pswd) VALUES ?`, [seedDB.usersHashed])
             .then(() => queryDB(`INSERT INTO profiles (user_id, about, photo_path) VALUES ?`, [seedDB.profiles]))
-            .then(() => queryDB(`INSERT INTO interests (interest_name) VALUES ?`, [seedDB.interests]))
-            .then(() => queryDB(`INSERT INTO user_interests (user_id, interest_id) VALUES ?`, [seedDB.userInterests]))
             .then(() => queryDB(`INSERT INTO follows (followee_id, follower_id) VALUES ?`, [seedDB.follows]))
             .then(() => queryDB(`INSERT INTO tags (tag_name) VALUES ?`, [seedDB.tags]))
             .then(() => queryDB(`INSERT INTO posts (user_id, title, caption, created_at, post_content) VALUES ?`, [seedDB.posts]))
@@ -208,6 +205,7 @@ const resetTables = (done) => {
             ]))
             .then(() => Promise.all([
                 queryDB(`INSERT INTO comment_tags (comment_id, tag_id) VALUES ?`, [seedDB.comment_tags]),
+                queryDB(`INSERT INTO user_tags (user_id, tag_id) VALUES ?`, [seedDB.userTags]),
                 queryDB(`INSERT INTO comment_likes (user_id, comment_id) VALUES ?`, [seedDB.comment_likes]),
                 queryDB(`INSERT INTO replies (user_id, comment_id, reply_text) VALUES ?`, [seedDB.replies])
             ]))

@@ -109,6 +109,16 @@ const commentTagSchema = {
     )`,
     drop: `DROP TABLE IF EXISTS comment_tags`
 }
+const userTagSchema = {
+    create: `CREATE TABLE user_tags(
+        user_id INT NOT NULL,
+        tag_id INT NOT NULL,
+        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY(tag_id) REFERENCES tags(id) ON DELETE CASCADE,
+        PRIMARY KEY(user_id, tag_id)
+    )`,
+    drop: `DROP TABLE IF EXISTS user_tags`
+}
 const followSchema = {
     create: `CREATE TABLE follows(
         followee_id INT NOT NULL,
@@ -120,25 +130,26 @@ const followSchema = {
     )`,
     drop: `DROP TABLE IF EXISTS follows`
 }
-const interestSchema = {
-    create: `CREATE TABLE interests(
-        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        interest_name VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW()
-    )`,
-    drop: `DROP TABLE IF EXISTS interests`
-}
-const userInterestSchema = {
-    create: `CREATE TABLE user_interests(
-        user_id INT NOT NULL,
-        interest_id INT NOT NULL,
-        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY(interest_id) REFERENCES interests(id) ON DELETE CASCADE,
-        PRIMARY KEY (interest_id, user_id)
-    )`,
-    drop: `DROP TABLE IF EXISTS user_interests`
-}
+// const interestSchema = {
+//     create: `CREATE TABLE interests(
+//         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+//         interest_name VARCHAR(255) NOT NULL,
+//         created_at TIMESTAMP DEFAULT NOW()
+//     )`,
+//     drop: `DROP TABLE IF EXISTS interests`
+// }
+// const userInterestSchema = {
+//     create: `CREATE TABLE user_interests(
+//         user_id INT NOT NULL,
+//         interest_id INT NOT NULL,
+//         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+//         FOREIGN KEY(interest_id) REFERENCES interests(id) ON DELETE CASCADE,
+//         PRIMARY KEY (interest_id, user_id)
+//     )`,
+//     drop: `DROP TABLE IF EXISTS user_interests`
+// }
+
 module.exports = {
-    userSchema, profileSchema, postSchema, likeSchema, commentSchema, interestSchema, userInterestSchema,
-    commentLikeSchema, replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema
+    userSchema, profileSchema, postSchema, likeSchema, commentSchema, commentLikeSchema,
+    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema
 }

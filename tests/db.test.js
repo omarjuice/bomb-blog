@@ -902,16 +902,11 @@ module.exports = function () {
             const user_id = 1
             const query = `
                 SELECT 
-                    username, about, photo_path, GROUP_CONCAT(interest_name SEPARATOR ', ') as interests
+                    username, about, photo_path
                 FROM users
                 LEFT JOIN profiles 
                     ON users.id = profiles.user_id
-                LEFT JOIN user_interests
-                    ON user_interests.user_id = users.id
-                LEFT JOIN interests
-                    ON interests.id = user_interests.interest_id
                 WHERE users.id=${user_id}
-                GROUP BY user_interests.user_id
             `
             queryDB(query)
                 .then(([profile]) => {
@@ -919,7 +914,6 @@ module.exports = function () {
                         username: 'alpha',
                         about: 'I am a web developer based in City, Country',
                         photo_path: /alpha\w+/,
-                        interests: 'web development, food, programming'
                     })
                     done()
                 }).catch(e => done(e))
@@ -954,57 +948,77 @@ module.exports = function () {
                 }).catch(e => done(e))
         })
     })
-    describe('DATABASE: QUERY interests', () => {
-        it('Should SELECT all interests of a given user', done => {
-            const user_id = 1
+    describe('DATABASE: QUERY user_tags', () => {
+        it('Should get a users tags', done => {
+            const user_id = 3
             const query = `
-                SELECT 
-                    interest_name
-                FROM user_interests 
-                INNER JOIN interests
-                    ON interests.id = user_interests.interest_id
-                WHERE user_interests.user_id = ${user_id}
+            SELECT
+                user_id, username, GROUP_CONCAT(tag_name SEPARATOR ', ') as tags
+            FROM user_tags
+            INNER JOIN tags
+                ON tags.id=user_tags.tag_id
+            INNER JOIN users
+                ON users.id=user_tags.user_id
+            WHERE users.id = ${user_id}
             `
             queryDB(query)
-                .then((interests) => {
-                    expect(interests.length).toBe(3)
-                    done()
-                }).catch(e => done(e))
-        })
-        it('Should INSERT a new interest and not insert a duplicate interest', done => {
-            const interest_name = 'hiking';
-            const user_id = 2;
-            queryDB(`INSERT INTO interests (interest_name) VALUES ?`, [[[interest_name]]])
-                .then(() => queryDB(`INSERT INTO user_interests (user_id, interest_id) VALUES ?`, [[[user_id, 8]]]))
-                .then(() => queryDB(`
-                        SELECT 
-                            interest_name 
-                        FROM user_interests 
-                        INNER JOIN interests 
-                            ON interests.id = user_interests.interest_id 
-                        WHERE user_interests.user_id = ${user_id}`))
-                .then((interests) => {
-                    expect(interests).toEqual(expect.arrayContaining([{ interest_name: 'hiking' }]))
-                    done()
-                }).catch(e => done(e))
-        })
-        it('Should DELETE an interest', done => {
-            queryDB(`DELETE FROM interests WHERE id=5`)
-                .then(() => queryDB(`SELECT * FROM user_interests WHERE interest_id=5`))
-                .then((interests) => {
-                    expect(interests.length).toBe(0)
-                    done()
-                }).catch(e => done(e))
-        })
-        it('Should DELETE a user interest', done => {
-            queryDB(`DELETE FROM user_interests WHERE user_id=2 AND interest_id=5`)
-                .then(() => queryDB(`SELECT interest_id FROM user_interests WHERE user_id=2`))
-                .then((interests) => {
-                    expect(interests).not.toEqual(expect.arrayContaining([{ interest_id: 5 }]))
+                .then(([user]) => {
+                    expect(user.tags).toBe('beautiful, gr8')
                     done()
                 }).catch(e => done(e))
         })
     })
+    // describe('DATABASE: QUERY interests', () => {
+    //     it('Should SELECT all interests of a given user', done => {
+    //         const user_id = 1
+    //         const query = `
+    //             SELECT 
+    //                 interest_name
+    //             FROM user_interests 
+    //             INNER JOIN interests
+    //                 ON interests.id = user_interests.interest_id
+    //             WHERE user_interests.user_id = ${user_id}
+    //         `
+    //         queryDB(query)
+    //             .then((interests) => {
+    //                 expect(interests.length).toBe(3)
+    //                 done()
+    //             }).catch(e => done(e))
+    //     })
+    //     it('Should INSERT a new interest and not insert a duplicate interest', done => {
+    //         const interest_name = 'hiking';
+    //         const user_id = 2;
+    //         queryDB(`INSERT INTO interests (interest_name) VALUES ?`, [[[interest_name]]])
+    //             .then(() => queryDB(`INSERT INTO user_interests (user_id, interest_id) VALUES ?`, [[[user_id, 8]]]))
+    //             .then(() => queryDB(`
+    //                     SELECT 
+    //                         interest_name 
+    //                     FROM user_interests 
+    //                     INNER JOIN interests 
+    //                         ON interests.id = user_interests.interest_id 
+    //                     WHERE user_interests.user_id = ${user_id}`))
+    //             .then((interests) => {
+    //                 expect(interests).toEqual(expect.arrayContaining([{ interest_name: 'hiking' }]))
+    //                 done()
+    //             }).catch(e => done(e))
+    //     })
+    //     it('Should DELETE an interest', done => {
+    //         queryDB(`DELETE FROM interests WHERE id=5`)
+    //             .then(() => queryDB(`SELECT * FROM user_interests WHERE interest_id=5`))
+    //             .then((interests) => {
+    //                 expect(interests.length).toBe(0)
+    //                 done()
+    //             }).catch(e => done(e))
+    //     })
+    //     it('Should DELETE a user interest', done => {
+    //         queryDB(`DELETE FROM user_interests WHERE user_id=2 AND interest_id=5`)
+    //             .then(() => queryDB(`SELECT interest_id FROM user_interests WHERE user_id=2`))
+    //             .then((interests) => {
+    //                 expect(interests).not.toEqual(expect.arrayContaining([{ interest_id: 5 }]))
+    //                 done()
+    //             }).catch(e => done(e))
+    //     })
+    // })
     describe('DATABASE: QUERY follows', () => {
         it('Should SELECT all follows and exclude self follows', done => {
             queryDB(`SELECT * FROM follows WHERE follower_id != followee_id`)
