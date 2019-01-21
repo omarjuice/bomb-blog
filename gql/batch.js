@@ -200,11 +200,53 @@ const batchCommentTags = async keys => {
     }, {})
     return keys.map(key => Tags[key] || [])
 }
+const batchFollowers = async keys => {
+    const followers =
+        await queryDB(`
+        SELECT 
+            username, id, followee_id
+        FROM follows
+        INNER JOIN users
+            ON follower_id = users.id
+        WHERE follows.followee_id IN (?) AND follows.follower_id != follows.followee_id`, [keys], null, true);
+    const Followers = followers.reduce((acc, { followee_id, username, id }) => {
+        if (!followee_id) return acc;
+        if (!acc[followee_id]) {
+            acc[followee_id] = [];
+        }
+        acc[followee_id].push({ username, id })
+        return acc
+    }, {})
+    return keys.map(key => Followers[key] || [])
+}
+const batchFollowing = async keys => {
+    const following =
+        await queryDB(`
+        SELECT 
+            username, id, follower_id
+        FROM follows
+        INNER JOIN users
+            ON followee_id = users.id
+        WHERE follows.follower_id IN (?) AND follows.follower_id != follows.followee_id
+        `, [keys], null, true);
+    const Following = following.reduce((acc, { follower_id, username, id }) => {
+        if (!follower_id) return acc;
+        if (!acc[follower_id]) {
+            acc[follower_id] = [];
+        }
+        acc[follower_id].push({ username, id })
+        return acc
+    }, {})
+    return keys.map(key => Following[key] || [])
+
+}
 const applyLoaders = (context) => {
     //remove bool when done testing
     context.Loaders = {
         users: {
-            byId: new DataLoader(keys => batchUsers(keys))
+            byId: new DataLoader(keys => batchUsers(keys)),
+            followers: new DataLoader(keys => batchFollowers(keys)),
+            following: new DataLoader(keys => batchFollowing(keys))
         },
         posts: {
             byId: new DataLoader(keys => batchPosts(keys)),
@@ -223,12 +265,9 @@ const applyLoaders = (context) => {
         },
         tags: {
             byId: new DataLoader(keys => batchTags(keys)),
-            // insert: new DataLoader(keys => insertBatchOfTags(keys)),
             byPostId: new DataLoader(keys => batchPostTags(keys)),
             byCommentId: new DataLoader(keys => batchCommentTags(keys))
         }
-
-
     }
     context.batchInserts = {
         tags: {
@@ -251,7 +290,7 @@ const applyLoaders = (context) => {
                     acc[tag_name] = id
                     return acc
                 }, {})
-                const commentTags = tags.map(name => [post_id, Tags[name]])
+                const commentTags = tags.map(name => [comment_id, Tags[name]])
                 return await queryDB(`INSERT IGNORE INTO comment_tags (comment_id, tag_id) VALUES ?`, [commentTags]).catch(e => 0)
             }
         }

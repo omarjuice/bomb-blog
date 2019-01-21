@@ -20,7 +20,7 @@ module.exports = gql`
       updatePost(id: Int!, input: PostDetails): Post!
       addLike(post_id: Int!): Boolean!
       deleteLike(post_id: Int!): Boolean!
-      createComment(post_id: Int!, comment_text: String!): [Comment]!
+      createComment(post_id: Int!, comment_text: String!, tags: [String]): [Comment]!
       updateComment(comment_id: Int!, comment_text: String!, post_id: Int!, modTags: ModTags): [Comment]!
       deleteComment(comment_id: Int!, post_id: Int!): [Comment]!
       addCommentLike(comment_id: Int!): Boolean!
@@ -32,6 +32,8 @@ module.exports = gql`
   }
   type User{
       id: Int!
+      followers: [User]!
+      following: [User]!
       username: String!
       email: String!
       created_at: String!

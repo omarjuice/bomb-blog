@@ -65,8 +65,8 @@ const resolvers = {
             const { username, password, email } = input;
             const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username])
             if (!user) {
-                await queryDB(`INSERT INTO users (username, email, pswd) VALUES ?`, [[[username, email, password]]], hashUser).catch(e => { throw Errors.database })
-                const [newUser] = await queryDB(`SELECT username, email, id, created_at FROM users WHERE username= ?`, [username]).catch(e => { throw Errors.database })
+                const { insertId } = await queryDB(`INSERT INTO users (username, email, pswd) VALUES ?`, [[[username, email, password]]], hashUser).catch(e => { throw Errors.database })
+                const [newUser] = await queryDB(`SELECT username, email, id, created_at FROM users WHERE id= ?`, [insertId]).catch(e => { throw Errors.database })
                 await queryDB(`INSERT INTO profiles (user_id) VALUES ?`, [[[newUser.id]]]).catch(e => { throw Errors.database })
                 req.session.user = { ...newUser }
                 return true
@@ -108,16 +108,13 @@ const resolvers = {
             let sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
             if (!title || !post_content || !caption) throw Errors.posts.missingField;
-            const { rowsAffected } = await queryDB(`INSERT INTO posts (user_id, title, caption, post_content) VALUES ?`, [[[sessionUser, title, caption, post_content]]]).catch(e => { throw Errors.database })
+            const { rowsAffected, insertId } = await queryDB(`INSERT INTO posts (user_id, title, caption, post_content) VALUES ?`, [[[sessionUser, title, caption, post_content]]]).catch(e => { throw Errors.database })
             if (rowsAffected < 1) return null;
-            const [newPost] = await queryDB(`SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC LIMIT 1`, [sessionUser])
-            if (newPost) {
-                if (tags && tags.length > 0) {
-                    await batchInserts.tags.postTags(tags, newPost.id)
-                    return await Loaders.posts.byId.load(newPost.id)
-                }
-                return newPost
+            if (tags && tags.length > 0) {
+                await batchInserts.tags.postTags(tags, insertId)
             }
+            const newPost = await Loaders.posts.byId.load(insertId)
+            if (newPost) return newPost;
             throw Errors.database
         },
         deletePost: async (_, args, { req }) => {
@@ -176,15 +173,18 @@ const resolvers = {
             const { affectedRows } = await queryDB(`DELETE FROM likes WHERE user_id= ? AND post_id = ?`, [sessionUser, post_id]).catch(e => false)
             return affectedRows > 0;
         },
-        createComment: async (_, args, { req, Loaders }) => {
+        createComment: async (_, args, { req, Loaders, batchInserts }) => {
             const sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
-            const { post_id, comment_text } = args;
-            const { affectedRows } = await queryDB(`INSERT INTO comments (user_id, post_id, comment_text) VALUES ?`, [[[sessionUser, post_id, comment_text]]]).catch(e => { throw Errors.database })
+            const { post_id, comment_text, tags } = args;
+            const { affectedRows, insertId } = await queryDB(`INSERT INTO comments (user_id, post_id, comment_text) VALUES ?`, [[[sessionUser, post_id, comment_text]]]).catch(e => { throw Errors.database })
             if (affectedRows < 1) throw Errors.authorization.notAuthorized;
+            if (tags && tags.length > 0) {
+                await batchInserts.tags.commentTags(tags, insertId)
+            }
             return await Loaders.posts.comments.load(post_id)
         },
-        updateComment: async (_, args, { req, Loaders }) => {
+        updateComment: async (_, args, { req, Loaders, batchDeletes, batchInserts }) => {
             const sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
             const { comment_id, comment_text, post_id, modTags } = args;
@@ -266,12 +266,17 @@ const resolvers = {
             if (profile && profile.user_id) return profile
             throw Errors.profile.notFound
         },
-        posts: async (parent, args, { req, Loaders }) => {
-            const { id } = parent
+        posts: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.posts.notFound;
             const posts = await Loaders.posts.byUserId.load(id)
             if (!posts) throw Errors.posts.notFound;
             return posts
+        },
+        followers: async ({ id }, _, { Loaders }) => {
+            return await Loaders.users.followers.load(id)
+        },
+        following: async ({ id }, _, { Loaders }) => {
+            return await Loaders.users.following.load(id)
         }
     },
     Post: {

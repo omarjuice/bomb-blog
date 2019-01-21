@@ -273,8 +273,8 @@ module.exports = {
     }`
   },
   comments: {
-    create: `mutation($post_id: Int!, $comment_text: String!){
-      createComment(post_id: $post_id, comment_text: $comment_text){
+    create: `mutation($post_id: Int!, $comment_text: String!, $tags: [String]){
+      createComment(post_id: $post_id, comment_text: $comment_text, tags: $tags){
             id
             user_id
             commenter{
@@ -282,20 +282,27 @@ module.exports = {
               username
             }
             post_id
+            tags{
+              id 
+              tag_name
+            }
             comment_text
             numLikes
             created_at
             last_updated
       }
     }`,
-    update: `mutation($comment_id: Int!, $comment_text: String!, $post_id: Int!){
-      updateComment(post_id: $post_id, comment_text: $comment_text, comment_id: $comment_id){
+    update: `mutation($comment_id: Int!, $comment_text: String!, $post_id: Int!, $modTags: ModTags){
+      updateComment(post_id: $post_id, comment_text: $comment_text, comment_id: $comment_id, modTags: $modTags){
         id
         user_id
-        
         commenter{
           id
           username
+        }
+        tags{
+          id
+          tag_name
         }
         post_id
         comment_text
@@ -384,13 +391,7 @@ module.exports = {
         created_at
       }
     }`,
-    createPostTags: `mutation($post_id: Int!, $tags:[String]!){
-      addPostTags(post_id: $post_id, tags: $tags){
-        id
-        tag_name
-        created_at
-      }
-    }`
+
   }
 
 }

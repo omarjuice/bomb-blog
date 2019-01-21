@@ -528,6 +528,7 @@ module.exports = function () {
                             commenter: {
                                 id: 2
                             },
+                            tags: [],
                             comment_text,
                             numLikes: 0,
                             created_at: expect.any(String)
@@ -542,6 +543,27 @@ module.exports = function () {
                         expect(body.errors).toBeTruthy()
                         const [error] = body.errors
                         expect(error.message).toBe(Errors.authentication.notLoggedIn.message)
+                    }).end(finished)
+            )
+        })
+        it('Should create a new comment with tags', done => {
+            const tags = ['dev', 'blog', 'FIRE']
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.comments.create, variables: { post_id: 2, comment_text, tags } })
+                    .expect(({ body }) => {
+                        expect(body.data.createComment[0]).toMatchObject({
+                            id: 4,
+                            user_id: 2,
+                            post_id: 2,
+                            commenter: {
+                                id: 2
+                            },
+                            comment_text,
+                            numLikes: 0,
+                            created_at: expect.any(String)
+
+                        })
+                        expect(body.data.createComment[0].tags.map(tag => tag.tag_name)).toEqual(expect.arrayContaining(tags.map(tag => tag.toLowerCase())))
                     }).end(finished)
             )
         })
@@ -853,7 +875,7 @@ module.exports = function () {
     //         )
     //     })
     // })
-    describe('GQL: UPDATE (add and delete) post_tags', () => {
+    describe('GQL: UPDATE (add & delete) post_tags', () => {
         it("Should add to a post's tags", done => {
             const input = {
                 title: 'New title', post_content: 'New Post Content lorem lorem lorem',
@@ -932,6 +954,76 @@ module.exports = function () {
                             }
                         })
                         expect(body.data.updatePost.tags.map(tag => tag.tag_name)).toEqual(['beautiful', 'amazing', 'dev', 'lol', 'fire'])
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: UPDATE(add & delete) comment tags', () => {
+        it('Should add tags to a comment', done => {
+            const modTags = { addTags: ['lol', 'LOL', 'fire'], deleteTags: [] }
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', post_id: 1, modTags } })
+                    .expect(({ body }) => {
+                        expect(body.data.updateComment[0]).toMatchObject(
+                            {
+                                id: 1,
+                                user_id: 3,
+                                post_id: 1,
+                                comment_text: 'Cool post',
+                                commenter: {
+                                    id: 3
+                                },
+                                numLikes: expect.any(Number),
+                                last_updated: expect.any(String)
+                            })
+                        expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
+                            .toEqual(expect.arrayContaining(modTags.addTags.map(tag => tag.toLowerCase())))
+                    }).end(finished)
+            )
+        })
+        it('Should delete tags from a comment', done => {
+            const modTags = { addTags: [], deleteTags: ['magic'] }
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', post_id: 1, modTags } })
+                    .expect(({ body }) => {
+                        expect(body.data.updateComment[0]).toMatchObject(
+                            {
+                                id: 1,
+                                user_id: 3,
+                                post_id: 1,
+                                comment_text: 'Cool post',
+                                commenter: {
+                                    id: 3
+                                },
+                                numLikes: expect.any(Number),
+                                last_updated: expect.any(String)
+                            })
+                        expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
+                            .toEqual(expect.not.arrayContaining(modTags.deleteTags))
+                    }).end(finished)
+            )
+        })
+        it('Should update comment tags', done => {
+            const modTags = { addTags: ['lol', 'LOL', 'fire'], deleteTags: ['magic'] }
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', post_id: 1, modTags } })
+                    .expect(({ body }) => {
+                        expect(body.data.updateComment[0]).toMatchObject(
+                            {
+                                id: 1,
+                                user_id: 3,
+                                post_id: 1,
+                                comment_text: 'Cool post',
+                                commenter: {
+                                    id: 3
+                                },
+                                numLikes: expect.any(Number),
+                                last_updated: expect.any(String)
+                            })
+                        expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
+                            .toEqual(expect.not.arrayContaining(modTags.deleteTags))
+                        expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
+                            .toEqual(expect.arrayContaining(modTags.addTags.map(tag => tag.toLowerCase())))
                     }).end(finished)
             )
         })
