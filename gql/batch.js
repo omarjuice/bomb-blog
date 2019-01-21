@@ -220,6 +220,66 @@ const batchUserTags = async keys => {
     }, {})
     return keys.map(key => Tags[key] || [])
 }
+const batchTagUsers = async keys => {
+    const users =
+        await queryDB(`
+        SELECT 
+            tag_id, users.id as id, username, email, users.created_at as created_at
+        FROM users
+        INNER JOIN user_tags
+            ON user_tags.user_id=users.id
+        WHERE user_tags.tag_id IN (?)
+        `, [keys], null, bool)
+    const tagUsers = users.reduce((acc, { tag_id, ...user }) => {
+        if (!user) return acc;
+        if (!acc[tag_id]) {
+            acc[tag_id] = []
+        }
+        acc[tag_id].push(user)
+        return acc
+    }, {})
+    return keys.map(key => tagUsers[key] || [])
+}
+const batchTagPosts = async keys => {
+    const posts =
+        await queryDB(`
+        SELECT 
+            tag_id, posts.id as id, title, posts.user_id, posts.created_at, last_updated, title, caption, post_content
+        FROM posts
+        INNER JOIN post_tags
+            ON post_tags.post_id=posts.id
+        WHERE post_tags.tag_id IN (?)
+        `, [keys], null, bool)
+    const tagPosts = posts.reduce((acc, { tag_id, ...post }) => {
+        if (!post) return acc;
+        if (!acc[tag_id]) {
+            acc[tag_id] = []
+        }
+        acc[tag_id].push(post)
+        return acc
+    }, {})
+    return keys.map(key => tagPosts[key] || [])
+}
+const batchTagComments = async keys => {
+    const comments =
+        await queryDB(`
+        SELECT 
+            tag_id, comments.id, comments.user_id, comments.post_id, comment_text, comments.created_at, comments.last_updated
+        FROM comments
+        INNER JOIN comment_tags
+            ON comment_tags.comment_id=comments.id
+        WHERE comment_tags.tag_id IN (?)
+        `, [keys], null, bool)
+    const tagComments = comments.reduce((acc, { tag_id, ...comment }) => {
+        if (!comment) return acc;
+        if (!acc[tag_id]) {
+            acc[tag_id] = []
+        }
+        acc[tag_id].push(comment)
+        return acc
+    }, {})
+    return keys.map(key => tagComments[key] || [])
+}
 const batchFollowers = async keys => {
     const followers =
         await queryDB(`
@@ -268,6 +328,7 @@ const bulkInsertTags = async tags => {
         return acc
     }, {})
 }
+
 const applyLoaders = (context) => {
     //remove bool when done testing
     context.Loaders = {
@@ -295,7 +356,10 @@ const applyLoaders = (context) => {
             byId: new DataLoader(keys => batchTags(keys)),
             byPostId: new DataLoader(keys => batchPostTags(keys)),
             byCommentId: new DataLoader(keys => batchCommentTags(keys)),
-            byUserId: new DataLoader(keys => batchUserTags(keys))
+            byUserId: new DataLoader(keys => batchUserTags(keys)),
+            users: new DataLoader(keys => batchTagUsers(keys)),
+            posts: new DataLoader(keys => batchTagPosts(keys)),
+            comments: new DataLoader(keys => batchTagComments(keys))
         }
     }
     context.batchInserts = {

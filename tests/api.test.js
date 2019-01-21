@@ -1079,6 +1079,40 @@ module.exports = function () {
             )
         })
     })
+    describe('GQL: GET tag associations', done => {
+        it('Should get all associations of a tag', done => {
+            reqGQL({ query: queries.tags.byIdWithAssociations, variables: { id: 2 } })
+                .expect(({ body }) => {
+                    const { users, posts, comments } = body.data.tag
+                    users.forEach(user => {
+                        expect(user).toMatchObject({
+                            id: expect.any(Number),
+                            username: expect.any(String),
+                            email: expect.any(String),
+                            created_at: expect.any(String)
+                        })
+                    })
+                    posts.forEach(post => {
+                        expect(post).toMatchObject({
+                            id: expect.any(Number),
+                            title: expect.any(String),
+                            caption: expect.any(String),
+                            post_content: expect.any(String),
+                            created_at: expect.any(String)
+                        })
+                    })
+                    comments.forEach(comment => {
+                        expect(comment).toMatchObject({
+                            id: expect.any(Number),
+                            comment_text: expect.any(String),
+                            user_id: expect.any(Number),
+                            post_id: expect.any(Number),
+                            created_at: expect.any(String)
+                        })
+                    })
+                }).end(done)
+        })
+    })
     describe('GQL: GET followers and following', done => {
         it('Should get a users followers and following', done => {
             reqGQL({ query: queries.user.byId, variables: { id: 1 } })

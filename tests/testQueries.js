@@ -417,6 +417,38 @@ module.exports = {
         created_at
       }
     }`,
+    byIdWithAssociations: `query($id: Int!){
+      tag(id: $id){
+        id
+        tag_name
+        created_at
+      
+      users{
+        id
+        username
+        email
+        created_at
+      }
+      posts{
+        id
+        title
+        caption
+        user_id     
+        post_content
+        created_at
+        last_updated
+      }
+      comments{
+        id
+        comment_text
+        user_id
+        post_id
+        created_at
+        last_updated
+      }
+    }
+  }`
+
   },
   follows: {
     create: `mutation($user_id: Int!){

@@ -70,6 +70,9 @@ module.exports = gql`
       id: Int!
       tag_name: String!
       created_at: String!
+      users: [User]!
+      posts: [Post]!
+      comments: [Comment]!
   }
   type Comment{
       id: Int!

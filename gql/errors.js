@@ -33,7 +33,8 @@ module.exports = {
         notSpecified: new Error('No comment_id specified')
     },
     tags: {
-        notFound: new Error('Tag not found')
+        notFound: new Error('Tag not found'),
+        notSpecified: new Error('Tag not Specified')
     }
 
 

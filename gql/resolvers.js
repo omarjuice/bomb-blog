@@ -76,9 +76,7 @@ const resolvers = {
             throw Errors.register.alreadyExists
         },
         logout: (_, args, { req }) => {
-            if (!req.session.user) {
-                return true
-            }
+            if (!req.session.user) return true;
             req.session.user = null;
             return true
         },
@@ -385,6 +383,20 @@ const resolvers = {
             if (!user || !user.username) throw Errors.user.notFound;
             return user
         }
+    },
+    Tag: {
+        users: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.tags.notSpecified
+            return await Loaders.tags.users.load(id)
+        },
+        posts: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.tags.notSpecified
+            return await Loaders.tags.posts.load(id)
+        },
+        comments: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.tags.notSpecified
+            return await Loaders.tags.comments.load(id)
+        },
     }
 
 };
