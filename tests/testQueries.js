@@ -23,9 +23,25 @@ module.exports = {
   },
   logout: `mutation { logout }`,
   user: {
-    notFound: `mutation{
-            login(username:"delta", password:"1234567")
-          }`
+    byId: `query($id: Int){
+            user(id: $id){
+              id
+              username
+              email
+              followers{
+                id
+                username
+                followed_at
+              }
+              following{
+                id
+                username
+                followed_at
+              }
+              created_at
+            }
+          }`,
+
   },
   authenticate: `query { authenticated }`,
   register: `mutation($input: Register!){
@@ -391,7 +407,14 @@ module.exports = {
         created_at
       }
     }`,
-
+  },
+  follows: {
+    create: `mutation($user_id: Int!){
+      createFollow(user_id: $user_id)
+    }`,
+    delete: `mutation($user_id: Int!){
+      deleteFollow(user_id: $user_id)
+    }`
   }
 
 }

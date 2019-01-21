@@ -257,6 +257,24 @@ const resolvers = {
             if (affectedRows < 1) throw Errors.authorization.notAuthorized;
             return await Loaders.comments.replies.load(comment_id)
         },
+        createFollow: async (_, { user_id }, { req }) => {
+            const sessionUser = authenticate(req.session);
+            if (!sessionUser) throw Errors.authentication.notLoggedIn;
+            if (sessionUser === user_id) {
+                return false
+            }
+            const { affectedRows } = await queryDB(`INSERT IGNORE INTO follows (follower_id, followee_id) VALUES ?`, [[[sessionUser, user_id]]]).catch(e => { throw Errors.database })
+            return affectedRows > 0
+        },
+        deleteFollow: async (_, { user_id }, { req }) => {
+            const sessionUser = authenticate(req.session);
+            if (!sessionUser) throw Errors.authentication.notLoggedIn;
+            if (sessionUser === user_id) {
+                return false
+            }
+            const { affectedRows } = await queryDB(`DELETE IGNORE FROM follows WHERE follower_id= ? AND followee_id= ?`, [sessionUser, user_id]).catch(e => { throw (e) })
+            return affectedRows > 0
+        }
     },
     User: {
         profile: async (parent, args, { req, Loaders }) => {

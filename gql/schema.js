@@ -29,11 +29,13 @@ module.exports = gql`
       deleteReply(reply_id: Int!, comment_id: Int!): [Reply]!
       updateReply(reply_id: Int!, reply_text: String!, comment_id: Int!): [Reply]!
       addPostTags(post_id:Int!, tags: [String]!): [Tag]!
+      createFollow(user_id: Int!): Boolean!
+      deleteFollow(user_id: Int!): Boolean!
   }
   type User{
       id: Int!
-      followers: [User]!
-      following: [User]!
+      followers: [Follower]!
+      following: [Follower]!
       username: String!
       email: String!
       created_at: String!
@@ -95,6 +97,11 @@ module.exports = gql`
       user_id: Int!,
       username: String!,
       liked_at: String!
+  }
+  type Follower{
+      id: Int!
+      username: String!
+      followed_at: String!
   }
   input ProfileDetails {
       about: String

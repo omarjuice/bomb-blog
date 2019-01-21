@@ -119,16 +119,6 @@ module.exports = function () {
                     })
                     .end(finished))
         })
-        it('Should not log in a user that does not exist', done => {
-            const query = queries.user.notFound
-            chainReqGQL(done, { query },
-                (finished) => reqGQL({ query: queries.authenticate })
-                    .expect(200)
-                    .expect(({ body }) => {
-                        expect(body.data).toMatchObject({ authenticated: false })
-                    })
-                    .end(finished))
-        })
     })
     describe('GQL: LOGOUT', () => {
         it('Should logout a user', done => {
@@ -1024,6 +1014,82 @@ module.exports = function () {
                             .toEqual(expect.not.arrayContaining(modTags.deleteTags))
                         expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
                             .toEqual(expect.arrayContaining(modTags.addTags.map(tag => tag.toLowerCase())))
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: GET followers and following', done => {
+        it('Should get a users followers and following', done => {
+            reqGQL({ query: queries.user.byId, variables: { id: 1 } })
+                .expect(({ body }) => {
+                    body.data.user.followers.forEach(follower => {
+                        expect(follower).toMatchObject({
+                            id: expect.any(Number),
+                            username: expect.any(String),
+                            followed_at: expect.any(String)
+                        })
+                    })
+                    body.data.user.following.forEach(followee => {
+                        expect(followee).toMatchObject({
+                            id: expect.any(Number),
+                            username: expect.any(String),
+                            followed_at: expect.any(String)
+                        })
+                    })
+                }).end(done)
+        })
+        it('Should return empty arrays if user has no followers/following', done => {
+            const input = { username: 'delta', password: '1234567', email: 'd@w.com' }
+            chainReqGQL(done, { query: queries.register, variables: { input } },
+                (finished) => reqGQL({ query: queries.user.byId })
+                    .expect(({ body }) => {
+                        expect(body.data.user.followers.length).toBe(0)
+                        expect(body.data.user.following.length).toBe(0)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: CREATE follows', () => {
+        it('Should create a new follow', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.follows.create, variables: { user_id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.createFollow).toBe(true)
+                    }).end(finished)
+            )
+        })
+        it('Should not create a duplicate follow', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                { query: queries.follows.create, variables: { user_id: 2 } },
+                (finished) => reqGQL({ query: queries.follows.create, variables: { user_id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.createFollow).toBe(false)
+                    }).end(finished)
+            )
+        })
+        it('Should not allow a user to follow themselves', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.follows.create, variables: { user_id: 1 } })
+                    .expect(({ body }) => {
+                        expect(body.data.createFollow).toBe(false)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: DELETE follows', () => {
+        it('Should delete a follow', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.follows.delete, variables: { user_id: 3 } })
+                    .expect(({ body }) => {
+                        expect(body.data.deleteFollow).toBe(true)
+                    }).end(finished)
+            )
+        })
+        it('Should return false for follow that does not exist', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.follows.delete, variables: { user_id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.deleteFollow).toBe(false)
                     }).end(finished)
             )
         })

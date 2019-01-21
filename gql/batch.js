@@ -204,17 +204,17 @@ const batchFollowers = async keys => {
     const followers =
         await queryDB(`
         SELECT 
-            username, id, followee_id
+            username, id, followee_id, follows.created_at as followed_at
         FROM follows
         INNER JOIN users
             ON follower_id = users.id
-        WHERE follows.followee_id IN (?) AND follows.follower_id != follows.followee_id`, [keys], null, true);
-    const Followers = followers.reduce((acc, { followee_id, username, id }) => {
+        WHERE follows.followee_id IN (?) AND follows.follower_id != follows.followee_id`, [keys], null, bool);
+    const Followers = followers.reduce((acc, { followee_id, username, id, followed_at }) => {
         if (!followee_id) return acc;
         if (!acc[followee_id]) {
             acc[followee_id] = [];
         }
-        acc[followee_id].push({ username, id })
+        acc[followee_id].push({ username, id, followed_at })
         return acc
     }, {})
     return keys.map(key => Followers[key] || [])
@@ -223,18 +223,18 @@ const batchFollowing = async keys => {
     const following =
         await queryDB(`
         SELECT 
-            username, id, follower_id
+            username, id, follower_id, follows.created_at as followed_at
         FROM follows
         INNER JOIN users
             ON followee_id = users.id
         WHERE follows.follower_id IN (?) AND follows.follower_id != follows.followee_id
-        `, [keys], null, true);
-    const Following = following.reduce((acc, { follower_id, username, id }) => {
+        `, [keys], null, bool);
+    const Following = following.reduce((acc, { follower_id, username, id, followed_at }) => {
         if (!follower_id) return acc;
         if (!acc[follower_id]) {
             acc[follower_id] = [];
         }
-        acc[follower_id].push({ username, id })
+        acc[follower_id].push({ username, id, followed_at })
         return acc
     }, {})
     return keys.map(key => Following[key] || [])
