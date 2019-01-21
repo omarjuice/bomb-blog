@@ -82,7 +82,7 @@ const resolvers = {
             req.session.user = null;
             return true
         },
-        updateProfile: async (_, args, { req, Loaders }) => {
+        updateProfile: async (_, args, { req, Loaders, batchDeletes, batchInserts }) => {
             let id = authenticate(req.session)
             if (!id) throw Errors.authentication.notLoggedIn;
             if (!args.input) {
@@ -99,6 +99,15 @@ const resolvers = {
                     last_updated = NOW() 
                 WHERE user_id = ?`, [args.input.about || about, args.input.photo_path || photo_path, id]).catch(e => { throw Errors.database })
             if (affectedRows > 0) {
+                if (args.input.modTags) {
+                    const { addTags, deleteTags } = args.input.modTags;
+                    if (addTags && addTags.length > 0) {
+                        await batchInserts.tags.userTags(addTags, id)
+                    }
+                    if (deleteTags && deleteTags.length > 0) {
+                        await batchDeletes.tags.userTags(deleteTags, id)
+                    }
+                }
                 const [profile] = await queryDB(`SELECT * FROM profiles WHERE user_id= ?`, [id])
                 return profile
             } else {
@@ -297,6 +306,10 @@ const resolvers = {
         },
         following: async ({ id }, _, { Loaders }) => {
             return await Loaders.users.following.load(id)
+        },
+        tags: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.user.notSpecified;
+            return await Loaders.tags.byUserId.load(id);
         }
     },
     Post: {

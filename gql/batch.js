@@ -200,6 +200,26 @@ const batchCommentTags = async keys => {
     }, {})
     return keys.map(key => Tags[key] || [])
 }
+const batchUserTags = async keys => {
+    const tags =
+        await queryDB(`
+        SELECT 
+            tag_name, tags.id as id, user_id, tags.created_at as created_at
+        FROM user_tags
+        INNER JOIN tags
+            ON tags.id = user_tags.tag_id
+        WHERE user_tags.user_id IN (?)
+        `, [keys], null, bool)
+    const Tags = tags.reduce((acc, { user_id, id, tag_name, created_at }) => {
+        if (!user_id) return acc;
+        if (!acc[user_id]) {
+            acc[user_id] = []
+        }
+        acc[user_id].push({ id, tag_name, created_at })
+        return acc
+    }, {})
+    return keys.map(key => Tags[key] || [])
+}
 const batchFollowers = async keys => {
     const followers =
         await queryDB(`
@@ -240,6 +260,14 @@ const batchFollowing = async keys => {
     return keys.map(key => Following[key] || [])
 
 }
+const bulkInsertTags = async tags => {
+    await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
+    const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
+    return allTags.reduce((acc, { tag_name, id }) => {
+        acc[tag_name] = id
+        return acc
+    }, {})
+}
 const applyLoaders = (context) => {
     //remove bool when done testing
     context.Loaders = {
@@ -266,32 +294,29 @@ const applyLoaders = (context) => {
         tags: {
             byId: new DataLoader(keys => batchTags(keys)),
             byPostId: new DataLoader(keys => batchPostTags(keys)),
-            byCommentId: new DataLoader(keys => batchCommentTags(keys))
+            byCommentId: new DataLoader(keys => batchCommentTags(keys)),
+            byUserId: new DataLoader(keys => batchUserTags(keys))
         }
     }
     context.batchInserts = {
         tags: {
             postTags: async (tags, post_id) => {
                 tags = tags.map((tag) => [tag.toLowerCase()])
-                await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
-                const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
-                const Tags = allTags.reduce((acc, { tag_name, id }) => {
-                    acc[tag_name] = id
-                    return acc
-                }, {})
+                const Tags = await bulkInsertTags(tags)
                 const postTags = tags.map(name => [post_id, Tags[name]])
                 return await queryDB(`INSERT IGNORE INTO post_tags (post_id, tag_id) VALUES ?`, [postTags]).catch(e => 0)
             },
             commentTags: async (tags, comment_id) => {
                 tags = tags.map((tag) => [tag.toLowerCase()])
-                await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
-                const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
-                const Tags = allTags.reduce((acc, { tag_name, id }) => {
-                    acc[tag_name] = id
-                    return acc
-                }, {})
+                const Tags = await bulkInsertTags(tags)
                 const commentTags = tags.map(name => [comment_id, Tags[name]])
                 return await queryDB(`INSERT IGNORE INTO comment_tags (comment_id, tag_id) VALUES ?`, [commentTags]).catch(e => 0)
+            },
+            userTags: async (tags, user_id) => {
+                tags = tags.map((tag) => [tag.toLowerCase()])
+                const Tags = await bulkInsertTags(tags)
+                const userTags = tags.map(name => [user_id, Tags[name]])
+                return await queryDB(`INSERT IGNORE INTO user_tags (user_id, tag_id) VALUES ?`, [userTags]).catch(e => 0)
             }
         }
     }
@@ -301,15 +326,22 @@ const applyLoaders = (context) => {
                 tags = tags.map(tag => [tag.toLowerCase()])
                 return await queryDB(`
                     DELETE IGNORE FROM post_tags WHERE post_id= ? AND tag_id IN (
-                            SELECT id FROM tags WHERE tag_name IN (?)
+                        SELECT id FROM tags WHERE tag_name IN (?)
                     )`, [post_id, tags]).catch(e => 0)
             },
             commentTags: async (tags, comment_id) => {
                 tags = tags.map(tag => [tag.toLowerCase()])
                 return await queryDB(`
                     DELETE IGNORE FROM comment_tags WHERE comment_id= ? AND tag_id IN (
-                            SELECT id FROM tags WHERE tag_name IN (?)
+                        SELECT id FROM tags WHERE tag_name IN (?)
                     )`, [comment_id, tags]).catch(e => 0)
+            },
+            userTags: async (tags, user_id) => {
+                tags = tags.map(tag => [tag.toLowerCase()])
+                return await queryDB(`
+                    DELETE IGNORE FROM user_tags WHERE user_id= ? AND tag_id IN (
+                        SELECT id FROM tags WHERE tag_name IN (?)
+                    )`, [user_id, tags]).catch(e => 0)
             }
         }
     }

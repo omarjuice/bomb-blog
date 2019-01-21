@@ -29,7 +29,6 @@ module.exports = gql`
       createReply(comment_id: Int!, reply_text: String!): [Reply]!
       deleteReply(reply_id: Int!, comment_id: Int!): [Reply]!
       updateReply(reply_id: Int!, reply_text: String!, comment_id: Int!): [Reply]!
-      addPostTags(post_id:Int!, tags: [String]!): [Tag]!
       createFollow(user_id: Int!): Boolean!
       deleteFollow(user_id: Int!): Boolean!
   }
@@ -42,6 +41,7 @@ module.exports = gql`
       created_at: String!
       profile(id: Int): Profile!
       posts: [Post]!
+      tags: [Tag]!
   }
   type Profile{
       user_id: Int!
@@ -107,6 +107,7 @@ module.exports = gql`
   input ProfileDetails {
       about: String
       photo_path: String
+      modTags: ModTags
   }
   input PostDetails {
       title: String

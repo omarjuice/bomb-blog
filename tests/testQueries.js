@@ -44,6 +44,10 @@ module.exports = {
                 username
                 followed_at
               }
+              tags{
+                id
+                tag_name
+              }
               created_at
             }
           }`,

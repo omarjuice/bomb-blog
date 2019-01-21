@@ -861,38 +861,28 @@ module.exports = function () {
             )
         })
     })
-    // describe('GQL: CREATE post_tags', () => {
-    //     it('Should add tags to an existing post', done => {
-    //         const tags = ['LMAO', 'ChIlL', 'fire']
-    //         chainReqGQL(done, { query: queries.login.success[1] },
-    //             (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
-    //                 .expect(({ body }) => {
-    //                     expect(body.data.addPostTags.map(tag => tag.tag_name))
-    //                         .toEqual(expect.arrayContaining(["funny", "magic", "gr9", ...tags.map(tag => tag.toLowerCase())]))
-    //                 }).end(finished)
-    //         )
-    //     })
-    //     it('Should not throw error if no tags are provided', done => {
-    //         const tags = []
-    //         chainReqGQL(done, { query: queries.login.success[1] },
-    //             (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
-    //                 .expect(({ body }) => {
-    //                     expect(body.data.addPostTags.map(tag => tag.tag_name))
-    //                         .toEqual(expect.arrayContaining(["funny", "magic", "gr9"]))
-    //                 }).end(finished)
-    //         )
-    //     })
-    //     it('Should not add a duplicate tag', done => {
-    //         const tags = ['fire', 'fire']
-    //         chainReqGQL(done, { query: queries.login.success[1] },
-    //             (finished) => reqGQL({ query: queries.tags.createPostTags, variables: { post_id: 2, tags } })
-    //                 .expect(({ body }) => {
-    //                     expect(body.data.addPostTags.map(tag => tag.tag_name))
-    //                         .toEqual(expect.arrayContaining(["funny", "magic", "gr9", "fire"]))
-    //                 }).end(finished)
-    //         )
-    //     })
-    // })
+    describe('GQL: GET user_tags', () => {
+        it('Should get all tags for a user', done => {
+            reqGQL({ query: queries.user.byId, variables: { id: 3 } })
+                .expect(({ body }) => {
+                    body.data.user.tags.forEach(tag => {
+                        expect(tag).toMatchObject({
+                            id: expect.any(Number),
+                            tag_name: expect.any(String)
+                        })
+                    })
+                }).end(done)
+        })
+        it('Should return empty array for user with no tags', done => {
+            const input = { username: 'delta', password: '1234567', email: 'd@w.com' }
+            chainReqGQL(done, { query: queries.register, variables: { input } },
+                (finished) => reqGQL({ query: queries.user.byId })
+                    .expect(({ body }) => {
+                        expect(body.data.user.tags).toEqual([])
+                    }).end(finished)
+            )
+        })
+    })
     describe('GQL: UPDATE (add & delete) post_tags', () => {
         it("Should add to a post's tags", done => {
             const input = {
@@ -1042,6 +1032,49 @@ module.exports = function () {
                             .toEqual(expect.not.arrayContaining(modTags.deleteTags))
                         expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
                             .toEqual(expect.arrayContaining(modTags.addTags.map(tag => tag.toLowerCase())))
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: UPDATE(add & delete) user_tags', () => {
+        it('Should add user tags', done => {
+            const modTags = {
+                addTags: ['kool', 'LOL'],
+                deleteTags: []
+            }
+            chainReqGQL(done, { query: queries.login.success[0] },
+                { query: queries.profile.update, variables: { input: { modTags } } },
+                (finished) => reqGQL({ query: queries.user.byId, variables: { id: 1 } })
+                    .expect(({ body }) => {
+                        expect(body.data.user.tags.map(tag => tag.tag_name)).toEqual(expect.arrayContaining(modTags.addTags.map(tag => tag.toLowerCase())))
+                    }).end(finished)
+            )
+        })
+        it('Should delete user tags', done => {
+            const modTags = {
+                addTags: [],
+                deleteTags: ['cool']
+            }
+            chainReqGQL(done, { query: queries.login.success[0] },
+                { query: queries.profile.update, variables: { input: { modTags } } },
+                (finished) => reqGQL({ query: queries.user.byId, variables: { id: 1 } })
+                    .expect(({ body }) => {
+                        expect(body.data.user.tags.map(tag => tag.tag_name)).toEqual(expect.not.arrayContaining(modTags.deleteTags))
+                    }).end(finished)
+            )
+        })
+        it('Should update user tags', done => {
+            const modTags = {
+                addTags: ['kool', 'LOL'],
+                deleteTags: ['cool']
+            }
+            chainReqGQL(done, { query: queries.login.success[0] },
+                { query: queries.profile.update, variables: { input: { modTags } } },
+                (finished) => reqGQL({ query: queries.user.byId, variables: { id: 1 } })
+                    .expect(({ body }) => {
+                        const tags = body.data.user.tags.map(tag => tag.tag_name)
+                        expect(tags).toEqual(expect.arrayContaining(modTags.addTags.map(tag => tag.toLowerCase())))
+                        expect(tags).toEqual(expect.not.arrayContaining(modTags.deleteTags))
                     }).end(finished)
             )
         })
