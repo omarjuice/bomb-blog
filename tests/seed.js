@@ -46,8 +46,6 @@ const seedDB = {
         null,
         `${'/gamma'}${'xxxxx'.replace(/x/g, () => ((Math.random() * 36) | 0).toString(36))}`
     ]],
-    // interests: [['web development'], ['coding'], ['food'], ['programming'], ['garbage'], ['smiling'], ['fitness']],
-    // userInterests: [[1, 1], [1, 3], [1, 4], [2, 5], [3, 2], [3, 6], [3, 7]],
     userTags: [[1, 2], [1, 6], [2, 11], [3, 4], [3, 9]],
     follows: [[1, 1], [1, 3], [1, 2], [2, 3], [2, 2], [3, 1], [3, 3]],
     posts: [[

@@ -12,14 +12,8 @@ const { resetDB, resetTables } = require('./tests/seed')
 const dev = process.env.NODE_ENV !== 'production'
 let port = process.env.PORT || 3000
 
-
 const nextApp = next({ dev, dir: __dirname })
-
-
-
 const apollo = new ApolloServer({ typeDefs, resolvers, context: ctx => applyLoaders(ctx), uploads: process.env.NODE_ENV !== 'test' })
-
-
 
 if (process.env.NODE_ENV === 'test') {
     port++
@@ -29,7 +23,6 @@ if (process.env.NODE_ENV === 'test') {
             initializeServer(app, !dev, process.env.NODE_ENV !== 'test')
         )
     )
-
 }
 const initializeServer = (app, productionEnv = false, nextAutoRouting = true) => {
     return (done = null) => {
@@ -66,7 +59,6 @@ const initializeServer = (app, productionEnv = false, nextAutoRouting = true) =>
     }
 
 }
-
 module.exports = { nextApp, port, initializeServer, app }
 
 

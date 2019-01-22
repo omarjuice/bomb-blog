@@ -968,57 +968,7 @@ module.exports = function () {
                 }).catch(e => done(e))
         })
     })
-    // describe('DATABASE: QUERY interests', () => {
-    //     it('Should SELECT all interests of a given user', done => {
-    //         const user_id = 1
-    //         const query = `
-    //             SELECT 
-    //                 interest_name
-    //             FROM user_interests 
-    //             INNER JOIN interests
-    //                 ON interests.id = user_interests.interest_id
-    //             WHERE user_interests.user_id = ${user_id}
-    //         `
-    //         queryDB(query)
-    //             .then((interests) => {
-    //                 expect(interests.length).toBe(3)
-    //                 done()
-    //             }).catch(e => done(e))
-    //     })
-    //     it('Should INSERT a new interest and not insert a duplicate interest', done => {
-    //         const interest_name = 'hiking';
-    //         const user_id = 2;
-    //         queryDB(`INSERT INTO interests (interest_name) VALUES ?`, [[[interest_name]]])
-    //             .then(() => queryDB(`INSERT INTO user_interests (user_id, interest_id) VALUES ?`, [[[user_id, 8]]]))
-    //             .then(() => queryDB(`
-    //                     SELECT 
-    //                         interest_name 
-    //                     FROM user_interests 
-    //                     INNER JOIN interests 
-    //                         ON interests.id = user_interests.interest_id 
-    //                     WHERE user_interests.user_id = ${user_id}`))
-    //             .then((interests) => {
-    //                 expect(interests).toEqual(expect.arrayContaining([{ interest_name: 'hiking' }]))
-    //                 done()
-    //             }).catch(e => done(e))
-    //     })
-    //     it('Should DELETE an interest', done => {
-    //         queryDB(`DELETE FROM interests WHERE id=5`)
-    //             .then(() => queryDB(`SELECT * FROM user_interests WHERE interest_id=5`))
-    //             .then((interests) => {
-    //                 expect(interests.length).toBe(0)
-    //                 done()
-    //             }).catch(e => done(e))
-    //     })
-    //     it('Should DELETE a user interest', done => {
-    //         queryDB(`DELETE FROM user_interests WHERE user_id=2 AND interest_id=5`)
-    //             .then(() => queryDB(`SELECT interest_id FROM user_interests WHERE user_id=2`))
-    //             .then((interests) => {
-    //                 expect(interests).not.toEqual(expect.arrayContaining([{ interest_id: 5 }]))
-    //                 done()
-    //             }).catch(e => done(e))
-    //     })
-    // })
+
     describe('DATABASE: QUERY follows', () => {
         it('Should SELECT all follows and exclude self follows', done => {
             queryDB(`SELECT * FROM follows WHERE follower_id != followee_id`)
@@ -1104,31 +1054,5 @@ module.exports = function () {
                 }).catch(e => done(e))
         })
     })
-    // describe('AUTHENTICATE user', () => {
-    //     it('Should authenticate a user with the correct credentials', done => {
-    //         const [, username, password] = seedDB.users[0];
-    //         queryDB(`SELECT pswd FROM users WHERE username='${username}'`)
-    //             .then(([{ pswd }]) => {
-    //                 return compare(password, pswd)
-    //             })
-    //             .then((result) => {
-    //                 console.log(result)
-    //                 expect(result).toBe(true)
-    //                 done()
-    //             }).catch(e => done(e))
-    //     })
-    //     it('Should NOT authenticate a user with incorrect credentials', done => {
-    //         const username = seedDB.users[1][1];
-    //         const password = 'xyz'
 
-    //         queryDB(`SELECT pswd FROM users WHERE username='${username}'`)
-    //             .then(([{ pswd }]) => {
-    //                 return compare(password, pswd)
-    //             })
-    //             .then((result) => {
-    //                 expect(result).toBe(false)
-    //                 done()
-    //             }).catch(e => done(e))
-    //     })
-    // })
 }

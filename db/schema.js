@@ -130,24 +130,7 @@ const followSchema = {
     )`,
     drop: `DROP TABLE IF EXISTS follows`
 }
-// const interestSchema = {
-//     create: `CREATE TABLE interests(
-//         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-//         interest_name VARCHAR(255) NOT NULL,
-//         created_at TIMESTAMP DEFAULT NOW()
-//     )`,
-//     drop: `DROP TABLE IF EXISTS interests`
-// }
-// const userInterestSchema = {
-//     create: `CREATE TABLE user_interests(
-//         user_id INT NOT NULL,
-//         interest_id INT NOT NULL,
-//         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-//         FOREIGN KEY(interest_id) REFERENCES interests(id) ON DELETE CASCADE,
-//         PRIMARY KEY (interest_id, user_id)
-//     )`,
-//     drop: `DROP TABLE IF EXISTS user_interests`
-// }
+
 
 module.exports = {
     userSchema, profileSchema, postSchema, likeSchema, commentSchema, commentLikeSchema,
