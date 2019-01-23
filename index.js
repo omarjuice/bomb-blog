@@ -13,7 +13,12 @@ const dev = process.env.NODE_ENV !== 'production'
 let port = process.env.PORT || 3000
 
 const nextApp = next({ dev, dir: __dirname })
-const apollo = new ApolloServer({ typeDefs, resolvers, context: ctx => applyLoaders(ctx), uploads: process.env.NODE_ENV !== 'test' })
+const apollo = new ApolloServer({
+    typeDefs, resolvers, context: ctx => {
+        console.log(ctx.req.session.id)
+        return applyLoaders(ctx)
+    }, uploads: process.env.NODE_ENV !== 'test'
+})
 
 if (process.env.NODE_ENV === 'test') {
     port++
