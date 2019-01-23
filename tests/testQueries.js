@@ -23,8 +23,8 @@ module.exports = {
   },
   logout: `mutation { logout }`,
   user: {
-    all: `query($limit: Int, $search: String){
-      users(limit: $limit, search: $search){
+    all: `query($limit: Int, $search: String, $orderBy: String, $order: Boolean){
+      users(limit: $limit, search: $search, orderBy: $orderBy, order: $order){
         id
         username
       }
@@ -80,8 +80,8 @@ module.exports = {
       }`
   },
   posts: {
-    all: `query ($limit: Int, $search: String){
-            posts(limit: $limit, search: $search){
+    all: `query ($limit: Int, $search: String, $orderBy: String, $order: Boolean ){
+            posts(limit: $limit, search: $search, orderBy: $orderBy, order: $order ){
                   id
                   user_id
                   title
@@ -403,8 +403,8 @@ module.exports = {
     }`
   },
   tags: {
-    all: `query($search: String, $limit: Int){
-      tags(search: $search, limit: $limit){
+    all: `query($search: String, $limit: Int, $orderBy: String, $order: Boolean ){
+      tags(search: $search, limit: $limit, order: $order, orderBy: $orderBy){
         id
         tag_name
         created_at

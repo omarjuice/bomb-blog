@@ -24,7 +24,9 @@ const resolvers = {
             throw Errors.user.notFound
         },
         users: async (_, args, ) => {
-            const query = `SELECT id, username, email FROM users WHERE username LIKE ? LIMIT ?`
+            const orderBy = args.orderBy === 'username' ? 'LOWER(username)' : 'created_at';
+            const order = args.order ? 'ASC' : 'DESC'
+            const query = `SELECT id, username, email, created_at FROM users WHERE username LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?`
             return await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
         },
         authenticated: (_, args, { req }) => !!req.session.user,
@@ -34,20 +36,25 @@ const resolvers = {
             throw Errors.posts.notFound
         },
         posts: async (_, args) => {
-            const query = `SELECT * FROM posts WHERE title LIKE ? LIMIT ?`
+            const orderBy = args.orderBy === 'title' ? 'LOWER(title)' : 'created_at';
+            const order = args.order ? 'ASC' : 'DESC'
+            const query = `SELECT * FROM posts WHERE title LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?`
             return await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
-        },
-        tags: async (_, args) => {
-            const query = `SELECT * FROM tags WHERE tag_name LIKE ? LIMIT ?`
-            const tags = await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
-            if (tags) return tags;
-            throw Errors.tags.notFound
         },
         tag: async (_, args, { Loaders }) => {
             const tag = await Loaders.tags.byId.load(args.id)
             if (tag && tag.id) return tag;
             throw Errors.tags.notFound;
+        },
+        tags: async (_, args) => {
+            const orderBy = args.orderBy === 'tag_name' ? 'LOWER(tag_name)' : 'created_at';
+            const order = args.order ? 'ASC' : 'DESC'
+            const query = `SELECT * FROM tags WHERE tag_name LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?`
+            const tags = await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
+            if (tags) return tags;
+            throw Errors.tags.notFound
         }
+
     },
     Mutation: {
         login: async (_, { username, password }, { req }) => {

@@ -4,12 +4,12 @@ module.exports = gql`
   type Query {
     hello: String
     user(id: Int, username: String): User!
-    users(limit: Int = 3, search: String): [User]!
+    users(limit: Int = 3, search: String, order: Boolean, orderBy: String): [User]!
     authenticated: Boolean!
     post(id: Int!): Post
-    posts(limit: Int = 3, search: String ): [Post]!
-    tags(limit: Int = 100, search: String ): [Tag]!
+    posts(limit: Int = 3, search: String, order: Boolean, orderBy: String ): [Post]!
     tag(id: Int!): Tag!
+    tags(limit: Int = 100, search: String, order: Boolean, orderBy: String ): [Tag]!
   }
   type Mutation {
       login (username: String, password: String): Boolean!
