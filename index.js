@@ -41,7 +41,7 @@ const initializeServer = (app, productionEnv = false, nextAutoRouting = true) =>
                 if (productionEnv) { app.set('trust proxy', 1) }
                 apollo.applyMiddleware({ app })
                 app.get('/', (req, res) => {
-                    res.send('OK')
+                    nextApp.render(req, res, '/')
                 })
                 if (nextAutoRouting) {
                     app.get('*', (req, res) => nextApp.getRequestHandler()(req, res))
