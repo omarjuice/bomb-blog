@@ -5,11 +5,10 @@ import withApollo from '../apollo'
 class MyApp extends App {
     render() {
         const { Component, pageProps, apollo } = this.props;
-
         return (
             <Container>
                 <ApolloProvider client={apollo}>
-                    <Component {...pageProps} />
+                    <Component {...pageProps} client={apollo} />
                 </ApolloProvider>
             </Container>
         );

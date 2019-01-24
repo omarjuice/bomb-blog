@@ -1,6 +1,5 @@
 import withApollo from 'next-with-apollo'
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
-import { createHttpLink } from 'apollo-link-http';
 
 
 export default withApollo(({ ctx, headers, initialState }) => (

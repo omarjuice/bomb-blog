@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Users from '../components/queries/auth/Users';
-import gql from 'graphql-tag';
+
+import Authenticated from '../components/auth/Authenticated';
 class Index extends Component {
     static async getInitialProps({ apolloClient }) {
         // const result = await apolloClient.query({
@@ -18,10 +18,16 @@ class Index extends Component {
         return {}
 
     }
+    componentDidMount() {
+    }
 
     render() {
         return (
-            <div><Users /></div>
+            // <div><Users /></div>
+            <>
+                <Authenticated />
+
+            </>
         );
     }
 }
