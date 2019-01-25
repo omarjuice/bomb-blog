@@ -13,7 +13,8 @@ module.exports = {
         invalid: new Error('Incorrect Password')
     },
     register: {
-        alreadyExists: new Error('A user with that username or email already exists')
+        alreadyExists: new Error('A user with that username or email already exists'),
+        invalidEmail: new Error('Not a valid email.')
     },
     profile: {
         notFound: new Error('Profile not found'),

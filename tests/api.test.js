@@ -81,6 +81,12 @@ module.exports = function () {
                     expect(body.data.register).toBe(true)
                 }).end(done)
         })
+        it('Should not register a new user with an invalid email', done => {
+            reqGQL({ query: queries.register, variables: { input: { ...input, email: 'ffff' } } })
+                .expect(({ body }) => {
+                    expect(body.errors[0].message).toBe(Errors.register.invalidEmail.message)
+                }).end(done)
+        })
         it('Should authenticate the new user', done => {
             chainReqGQL(done, { query: queries.register, variables: { input } },
                 (finished) => reqGQL({ query: queries.authenticate })

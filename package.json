@@ -22,6 +22,7 @@
     "bcryptjs": "^2.4.3",
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
+    "email-validator": "^2.0.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "faker": "^4.1.0",

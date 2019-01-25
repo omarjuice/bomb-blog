@@ -1,6 +1,7 @@
 const { queryDB } = require('../db/connect')
 const { compare, hashUser } = require('../db/crypt')
 const Errors = require('./errors')
+const validator = require('email-validator')
 
 const authenticate = (session) => {
     let sessionUser;
@@ -71,7 +72,9 @@ const resolvers = {
             throw Errors.user.notFound
         },
         register: async (_, { input }, { req }) => {
+            console.log(input);
             const { username, password, email } = input;
+            if (!validator.validate(email)) throw Errors.register.invalidEmail;
             const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username])
             if (!user) {
                 const { insertId } = await queryDB(`INSERT INTO users (username, email, pswd) VALUES ?`, [[[username, email, password]]], hashUser).catch(e => { throw Errors.database })
