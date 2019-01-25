@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Authenticated from '../components/auth/Authenticated';
+import Header from '../components/meta/Header';
 class Index extends Component {
     static async getInitialProps({ apolloClient }) {
         // const result = await apolloClient.query({
@@ -25,8 +26,7 @@ class Index extends Component {
         return (
             // <div><Users /></div>
             <>
-                <Authenticated />
-
+                <Header />
             </>
         );
     }
