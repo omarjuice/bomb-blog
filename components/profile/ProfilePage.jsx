@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import Panels from './Panels';
+
 const USER = gql`
     query User($id: Int){
         user(id: $id){
@@ -32,11 +34,11 @@ class ProfilePage extends Component {
                         if (error) return <p>ERROR</p>;
                         const { username, id, email, created_at, profile } = data.user
                         return (
-                            <>
-                                <div className="columns is-centered is-multiline is-mobile">
+                            <div className="has-background-primary">
+                                <div className="columns is-centered is-multiline is-mobile has-background-light">
                                     <div id="profile-header" className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered p">
-                                        <figure class="image is-128x128">
-                                            <img class="is-rounded" src="/static/user_image.png" />
+                                        <figure className="image is-128x128">
+                                            <img className="is-rounded" src="/static/user_image.png" />
                                         </figure>
                                         <div id="user-info" className="box">
                                             <h1 className="title is-3">
@@ -59,17 +61,12 @@ class ProfilePage extends Component {
                                             </p>
                                         </div>
                                     </div>
-                                    {/* <div className="column has-text-centered">
-                                        <ul>
-                                            <li>{id}</li>
-                                            <li>{username}</li>
-                                            <li>{email}</li>
-                                            <li>{created_at}</li>
-                                            <li>{profile.about}</li>
-                                            <li>{profile.last_updated || ''}</li>
-                                        </ul>
-                                    </div> */}
+                                    <div className="column is-two-thirds"></div>
+                                    <Panels userId={id} />
+
                                 </div>
+
+
                                 <style jsx>{`
                                     #profile-header{
                                         display: flex;
@@ -96,11 +93,9 @@ class ProfilePage extends Component {
                                         position: relative;
                                         z-index: 0;
                                         top: -4rem
-                                    }
-
-                                    
+                                    } 
                                     `}</style>
-                            </>
+                            </div>
                         )
                     }}
                 </Query>
