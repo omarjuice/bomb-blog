@@ -41,10 +41,10 @@ class Register extends Component {
             await register({
                 variables: { input: { username, password, email } }
             })
-            this.setState({
-                username: '',
-                password: ''
-            })
+            // this.setState({
+            //     username: '',
+            //     password: ''
+            // })
         }
     }
     renderInput = (field) => {
@@ -59,8 +59,8 @@ class Register extends Component {
                 <label className="label has-text-centered">{field}</label>
                 <div className="control has-icons-left">
                     <input type="text" className={`input ${this.state.formErrors[field] && 'is-danger'}`} onChange={e => this.setState({ [field]: e.target.value })} />
-                    <span class="icon is-small is-left">
-                        <i class={`fas fa-${icons[field]}`}></i>
+                    <span className="icon is-small is-left">
+                        <i className={`fas fa-${icons[field]}`}></i>
                     </span>
                 </div>
             </div>

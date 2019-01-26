@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Head from 'next/head'
 import Modal from './Modal';
 import Authenticated from '../auth/Authenticated';
+import GlobalStyles from './GlobalStyles';
 
 class Header extends Component {
     state = {
@@ -22,6 +23,10 @@ class Header extends Component {
             })
         }
     }
+    modalOff = () => {
+        this.setState({ modal: { active: false } })
+        return 'Loading'
+    }
     render() {
         return (
             <>
@@ -33,6 +38,7 @@ class Header extends Component {
                         crossorigin="anonymous"></link>
                     <title>Blog</title>
                 </Head>
+                <GlobalStyles />
                 <nav className="navbar" role="navigation" aria-label="main navigation">
                     <div className="navbar-brand">
                         <a className="navbar-item" href="https://bulma.io">
@@ -75,6 +81,7 @@ class Header extends Component {
                                     </a>
                                 </div>
                             </div>
+
                         </div>
 
                         <div className="navbar-end">
@@ -82,7 +89,17 @@ class Header extends Component {
                         </div>
                     </div>
                 </nav>
-                <Modal display={this.state.modal.display} active={this.state.modal.active} toggle={() => this.setState({ modal: { active: false } })} />
+                <div id="buffer"></div>
+                <Modal display={this.state.modal.display} active={this.state.modal.active} toggle={this.modalOff} />
+                <style jsx>{`
+                    .navbar-menu{
+                        position: relative;
+                        z-index: 5
+                    }
+                    #buffer{
+                        height: 50px
+                    }
+                `}</style>
             </>
         );
     }

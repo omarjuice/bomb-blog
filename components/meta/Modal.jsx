@@ -7,6 +7,9 @@ class Modal extends Component {
         Login: (<Login onSuccess={this.props.toggle} />),
         Register: (<Register onSuccess={this.props.toggle} />)
     }
+    onSuccess = () => {
+
+    }
     render() {
         return (
             <div className={`modal ${this.props.active && 'is-active'}`}>

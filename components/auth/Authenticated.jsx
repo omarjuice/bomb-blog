@@ -19,15 +19,15 @@ class Authenticated extends Component {
                     if (loading) return <p>Loading...</p>;
                     if (error) return <p>{error.message.replace(/GraphQL error: /g, '')}</p>;
                     return data.authenticated ? <Logout /> : <>
-                        <div className="navbar-item">
+                        <div className="navbar-item has-text-centered">
                             <a className="button is-link" onClick={this.props.handleClick('Register')}>
                                 <strong>Sign up</strong>
                             </a>
                         </div>
-                        <div className="navbar-item">
+                        <div className="navbar-item has-text-centered">
                             <a className="button is-light" onClick={this.props.handleClick('Login')}>
                                 Log in
-                        </a>
+                            </a>
                         </div>
                     </>
                 }}

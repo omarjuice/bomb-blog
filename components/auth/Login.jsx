@@ -33,10 +33,10 @@ class Login extends Component {
             await login({
                 variables: { username: this.state.username, password: this.state.password }
             })
-            this.setState({
-                username: '',
-                password: ''
-            })
+            // this.setState({
+            //     username: '',
+            //     password: ''
+            // })
         }
     }
     renderInput = (field) => {
@@ -49,8 +49,8 @@ class Login extends Component {
                 <label className="label">{field} </label>
                 <div className="control has-icons-left">
                     <input type="text" className={`input ${this.state.formErrors[field] && 'is-danger'}`} onChange={e => this.setState({ [field]: e.target.value })} />
-                    <span class="icon is-small is-left">
-                        <i class={`fas fa-${icons[field]}`}></i>
+                    <span className="icon is-small is-left">
+                        <i className={`fas fa-${icons[field]}`}></i>
                     </span>
                 </div>
             </div>
@@ -58,18 +58,18 @@ class Login extends Component {
         )
     }
     render() {
-        return (<Mutation mutation={LOGIN} refetchQueries={[`Authenticated`]} >
+        return (<Mutation mutation={LOGIN} refetchQueries={[`Authenticated`, `CurrentUser`]} >
             {(login, { data, loading, error }) => {
-                if (loading) return <p>Loading...</p>;
                 if (!data) return (
                     <form action="" onSubmit={this.onSubmit(login)} className="form has-text-centered">
+                        {loading && <p>Loading...</p>}
                         <p>{error ? error.message.replace(/GraphQL error: /g, '') : ''}</p>
                         {this.renderInput('username')}
                         {this.renderInput('password')}
                         <button className="button is-success" type="submit">Login</button>
                     </form>
                 )
-                return <p>{data.login ? this.props.onSuccess() : 'Login Failed'}</p>
+                return (data.login ? <p>{this.props.onSuccess()}</p> : <p>Login Failed</p>)
             }}
         </Mutation>
         )

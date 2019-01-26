@@ -18,7 +18,7 @@ class Logout extends Component {
                     if (error) return <button>{error.message.replace(/GraphQL error: /g, '')}</button>
                     if (!data) return (
                         <>
-                            <div className="navbar-item">
+                            <div className="navbar-item has-text-centered">
                                 <User />
                                 <button className="button is-warning" onClick={logout}>Logout</button>
                             </div>

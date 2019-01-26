@@ -25,11 +25,11 @@ if (process.env.NODE_ENV === 'test') {
 } else {
     resetDB(
         () => resetTables(
-            initializeServer(app, !dev, process.env.NODE_ENV !== 'test')
+            initializeServer(app, !dev)
         )
     )
 }
-const initializeServer = (app, productionEnv = false, nextAutoRouting = true) => {
+const initializeServer = (app, productionEnv = false) => {
     return (done = null) => {
         nextApp.prepare()
             .then(() => {
@@ -48,9 +48,14 @@ const initializeServer = (app, productionEnv = false, nextAutoRouting = true) =>
                 app.get('/', (req, res) => {
                     nextApp.render(req, res, '/')
                 })
-                if (nextAutoRouting) {
-                    app.get('*', (req, res) => nextApp.getRequestHandler()(req, res))
-                }
+                app.get('/profile', (req, res) => {
+                    const { query } = req
+                    nextApp.render(req, res, '/profile', query)
+                })
+                app.get('*', (req, res) => {
+                    nextApp.render(req, res, '/')
+                })
+
 
                 app.listen(port, () => {
                     console.log(`Listening on port ${port}`, apollo.graphqlPath)
