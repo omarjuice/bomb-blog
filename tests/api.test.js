@@ -461,6 +461,29 @@ module.exports = function () {
                     }).end(finished))
         })
     })
+    describe('GQL: GET liked posts', () => {
+        it('Should get all liked posts by user', done => {
+            reqGQL({ query: queries.likes.getUserLikes, variables: { id: 1 } })
+                .expect(({ body }) => {
+                    body.data.user.likedPosts.forEach(post => {
+                        expect(post).toMatchObject({
+                            id: expect.any(Number),
+                            title: expect.any(String)
+                        })
+                    })
+                }).end(done)
+        })
+        it('Should return empty array if there are no likes', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                { query: queries.likes.delete, variables: { post_id: 1 } },
+                { query: queries.likes.delete, variables: { post_id: 3 } },
+                (finished) => reqGQL({ query: queries.likes.getUserLikes, variables: { id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.user.likedPosts).toEqual([])
+                    }).end(finished)
+            )
+        })
+    })
     describe('GQL: CREATE likes', () => {
         it('Should add a new like', done => {
             chainReqGQL(done, { query: queries.login.success[1] },

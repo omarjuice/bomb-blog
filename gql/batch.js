@@ -59,6 +59,26 @@ const batchPostLikes = async keys => {
     }, {})
     return keys.map(key => Likes[key] ? Likes[key] : 0)
 }
+const batchUserLikes = async keys => {
+    const likedPosts =
+        await queryDB(`
+        SELECT 
+            posts.*, likes.user_id as liker_id
+        FROM posts
+        INNER JOIN likes
+            ON posts.id = likes.post_id
+        WHERE likes.user_id IN (?) 
+        `, [keys], null, bool);
+    const LikedPosts = likedPosts.reduce((acc, { liker_id, ...post }) => {
+        if (!liker_id) return acc
+        if (!acc[liker_id]) {
+            acc[liker_id] = [];
+        }
+        acc[liker_id].push(post)
+        return acc
+    }, {})
+    return keys.map(key => LikedPosts[key] || [])
+}
 const batchComments = async keys => {
     const comments =
         await queryDB(`
@@ -335,7 +355,8 @@ const applyLoaders = (context) => {
         users: {
             byId: new DataLoader(keys => batchUsers(keys)),
             followers: new DataLoader(keys => batchFollowers(keys)),
-            following: new DataLoader(keys => batchFollowing(keys))
+            following: new DataLoader(keys => batchFollowing(keys)),
+            likedPosts: new DataLoader(keys => batchUserLikes(keys))
         },
         posts: {
             byId: new DataLoader(keys => batchPosts(keys)),

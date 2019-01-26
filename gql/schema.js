@@ -42,6 +42,7 @@ module.exports = gql`
       profile(id: Int): Profile!
       posts: [Post]!
       tags: [Tag]!
+      likedPosts: [Post]!
   }
   type Profile{
       user_id: Int!

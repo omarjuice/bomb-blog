@@ -296,6 +296,16 @@ module.exports = {
     }`,
     delete: `mutation($post_id: Int!){
       deleteLike(post_id:$post_id)
+    }`,
+    getUserLikes: `query($id: Int){
+      user(id:$id){
+        id
+        likedPosts{
+          id
+          title
+     
+        }
+      }
     }`
   },
   comments: {

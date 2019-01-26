@@ -72,7 +72,6 @@ const resolvers = {
             throw Errors.user.notFound
         },
         register: async (_, { input }, { req }) => {
-            console.log(input);
             const { username, password, email } = input;
             if (!validator.validate(email)) throw Errors.register.invalidEmail;
             const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username])
@@ -318,6 +317,10 @@ const resolvers = {
         tags: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.user.notSpecified;
             return await Loaders.tags.byUserId.load(id);
+        },
+        likedPosts: async ({ id }, _, { Loaders }) => {
+            if (!id) throw Errors.user.notSpecified;
+            return await Loaders.users.likedPosts.load(id)
         }
     },
     Post: {
