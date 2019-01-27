@@ -46,6 +46,8 @@ module.exports = gql`
       tags: [Tag]!
       likedPosts: [Post]!
       isMe: Boolean!
+      imFollowing: Boolean!
+      followingMe: Boolean!
   }
   type Profile{
       user_id: Int!

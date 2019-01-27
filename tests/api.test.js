@@ -1174,6 +1174,27 @@ module.exports = function () {
                     }).end(finished)
             )
         })
+        it('Should tell if a user is a followee/follower of another user', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.follows.getFollowBools })
+                    .expect(({ body }) => {
+                        for (let user of body.data.users) {
+                            if (user.id === 1) {
+                                expect(user.imFollowing).toBe(false)
+                                expect(user.followingMe).toBe(false)
+                            }
+                            if (user.id === 2) {
+                                expect(user.imFollowing).toBe(false)
+                                expect(user.followingMe).toBe(true)
+                            }
+                            if (user.id === 3) {
+                                expect(user.imFollowing).toBe(true)
+                                expect(user.followingMe).toBe(true)
+                            }
+                        }
+                    }).end(finished)
+            )
+        })
     })
     describe('GQL: CREATE follows', () => {
         it('Should create a new follow', done => {

@@ -312,6 +312,8 @@ const resolvers = {
         following: async ({ id }, _, { Loaders }) => await Loaders.users.following.load(id),
         numFollowers: async ({ id }, _, { Loaders }) => await Loaders.users.numFollowers.load(id),
         numFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.numFollowing.load(id),
+        imFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.imFollowing.load(id),
+        followingMe: async ({ id }, _, { Loaders }) => await Loaders.users.followingMe.load(id),
         tags: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.user.notSpecified;
             return await Loaders.tags.byUserId.load(id);
@@ -406,7 +408,6 @@ const resolvers = {
             return await Loaders.tags.posts.load(id)
         },
         comments: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.tags.notSpecified
             return await Loaders.tags.comments.load(id)
         },
     }

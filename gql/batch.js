@@ -372,6 +372,36 @@ const batchNumFollowing = async keys => {
     }, {})
     return keys.map(key => typeof NumFollowing[key] === 'number' ? NumFollowing[key] : 0)
 }
+const batchFollowingMe = async (keys, id) => {
+    if (!id) return keys.map(() => false);
+    const followingMe =
+        await queryDB(`
+        SELECT
+            *
+        FROM follows
+        WHERE follower_id IN (?) AND followee_id = ? AND follower_id != followee_id
+        `, [keys, id], null, bool)
+    const FollowingMe = followingMe.reduce((acc, { follower_id }) => {
+        acc[follower_id] = true;
+        return acc
+    }, {})
+    return keys.map(key => !!FollowingMe[key])
+}
+const batchImFollowing = async (keys, id) => {
+    if (!id) return keys.map(() => false);
+    const imFollowing =
+        await queryDB(`
+        SELECT 
+            *
+        FROM follows
+        WHERE followee_id IN (?) AND follower_id = ? AND followee_id != follower_id
+        `, [keys, id], null, bool)
+    const ImFollowing = imFollowing.reduce((acc, { followee_id }) => {
+        acc[followee_id] = true;
+        return acc
+    }, {})
+    return keys.map(key => !!ImFollowing[key])
+}
 const bulkInsertTags = async tags => {
     await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
     const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
@@ -382,7 +412,12 @@ const bulkInsertTags = async tags => {
 }
 
 const applyLoaders = (context) => {
-    //remove bool when done testing
+    let id;
+    try {
+        id = context.req.session.user.id
+    } catch (e) {
+        id = null
+    }
     context.Loaders = {
         users: {
             byId: new DataLoader(keys => batchUsers(keys)),
@@ -390,6 +425,8 @@ const applyLoaders = (context) => {
             following: new DataLoader(keys => batchFollowing(keys)),
             numFollowers: new DataLoader(keys => batchNumFollowers(keys)),
             numFollowing: new DataLoader(keys => batchNumFollowing(keys)),
+            imFollowing: new DataLoader(keys => batchImFollowing(keys, id)),
+            followingMe: new DataLoader(keys => batchFollowingMe(keys, id)),
             likedPosts: new DataLoader(keys => batchUserLikes(keys)),
         },
         posts: {

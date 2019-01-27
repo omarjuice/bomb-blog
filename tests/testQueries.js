@@ -467,6 +467,13 @@ module.exports = {
     }`,
     delete: `mutation($user_id: Int!){
       deleteFollow(user_id: $user_id)
+    }`,
+    getFollowBools: `query{
+      users{
+        id
+        imFollowing
+        followingMe
+      }
     }`
   }
 
