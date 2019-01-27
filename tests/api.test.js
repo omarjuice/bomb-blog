@@ -1165,10 +1165,12 @@ module.exports = function () {
         it('Should return empty arrays if user has no followers/following', done => {
             const input = { username: 'delta', password: '1234567', email: 'd@w.com' }
             chainReqGQL(done, { query: queries.register, variables: { input } },
-                (finished) => reqGQL({ query: queries.user.byId })
-                    .expect(({ body }) => {
-                        expect(body.data.user.followers.length).toBe(0)
-                        expect(body.data.user.following.length).toBe(0)
+                (finished) => reqGQL({ query: queries.user.byId, variables: { id: 4 } })
+                    .expect(({ body: { data: { user: { followers, following, numFollowers, numFollowing } } } }) => {
+                        expect(followers.length).toBe(0)
+                        expect(following.length).toBe(0)
+                        expect(numFollowers).toBe(0)
+                        expect(numFollowing).toBe(0)
                     }).end(finished)
             )
         })

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import UserPosts from './UserPosts';
 import Follows from './Follows';
+import Likes from './Likes';
 class Panels extends Component {
     state = {
         display: 'posts'
@@ -8,7 +9,8 @@ class Panels extends Component {
     displays = {
         posts: <UserPosts userId={this.props.userId} />,
         followers: <Follows display="followers" userId={this.props.userId} />,
-        following: <Follows display="following" userId={this.props.userId} />
+        following: <Follows display="following" userId={this.props.userId} />,
+        likes: <Likes userId={this.props.userId} />
     }
     changeDisplay = (display) => {
         return e => {
@@ -31,14 +33,15 @@ class Panels extends Component {
         return (
             <>
                 <div className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered">
-                    <div class="tabs is-toggle is-fullwidth">
+                    <div className="tabs is-toggle is-fullwidth is-small">
                         <ul>
-                            <li class="is-active" onClick={this.changeDisplay('posts')}><a>Posts</a></li>
+                            <li className="is-active" onClick={this.changeDisplay('posts')}><a>Posts</a></li>
+                            <li onClick={this.changeDisplay('likes')}><a>Likes</a></li>
                             <li onClick={this.changeDisplay('followers')}><a>Followers</a></li>
                             <li onClick={this.changeDisplay('following')}><a>Following</a></li>
                         </ul>
                     </div>
-                    <div id="panel-display" className="box">
+                    <div id="panel-display" className="box has-text-centered">
                         {this.getDisplay()}
                     </div>
                 </div>

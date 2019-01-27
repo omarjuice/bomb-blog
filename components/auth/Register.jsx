@@ -67,7 +67,7 @@ class Register extends Component {
         )
     }
     render() {
-        return (<Mutation mutation={REGISTER} refetchQueries={[`Authenticated`]}>
+        return (<Mutation mutation={REGISTER} refetchQueries={[`Authenticated`, `CurrentUser`, `User`]}>
             {(register, { data, loading, error }) => {
                 if (loading) return <p>Loading...</p>;
                 if (!data) return (

@@ -33,9 +33,9 @@ class Header extends Component {
                 <Head>
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                     <meta charSet="utf-8" />
-                    <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/cerulean/bulmaswatch.min.css"></link>
+                    <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/simplex/bulmaswatch.min.css"></link>
                     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
-                        crossorigin="anonymous"></link>
+                        crossOrigin="anonymous"></link>
                     <title>Blog</title>
                 </Head>
                 <GlobalStyles />
@@ -97,7 +97,7 @@ class Header extends Component {
                         z-index: 5
                     }
                     #buffer{
-                        height: 50px
+                        height: 35px
                     }
                 `}</style>
             </>

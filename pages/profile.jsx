@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import UsersList from '../components/auth/Users';
 import Header from '../components/meta/Header';
 import ProfilePage from '../components/profile/ProfilePage';
+import gql from 'graphql-tag';
 class Profile extends Component {
-    static getInitialProps({ query: { id }, req, res }) {
+    static async getInitialProps({ query: { id }, req, res }) {
         if (req && !id) {
             res.writeHead(302, { Location: `/` })
             res.end()
             return {}
         }
+
         return { id }
     }
     render() {

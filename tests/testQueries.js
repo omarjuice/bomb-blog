@@ -44,6 +44,8 @@ module.exports = {
                 username
                 followed_at
               }
+              numFollowers
+              numFollowing
               tags{
                 id
                 tag_name
@@ -303,7 +305,6 @@ module.exports = {
         likedPosts{
           id
           title
-     
         }
       }
     }`

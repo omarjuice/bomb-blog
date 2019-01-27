@@ -308,12 +308,10 @@ const resolvers = {
             if (!posts) throw Errors.posts.notFound;
             return posts
         },
-        followers: async ({ id }, _, { Loaders }) => {
-            return await Loaders.users.followers.load(id)
-        },
-        following: async ({ id }, _, { Loaders }) => {
-            return await Loaders.users.following.load(id)
-        },
+        followers: async ({ id }, _, { Loaders }) => await Loaders.users.followers.load(id),
+        following: async ({ id }, _, { Loaders }) => await Loaders.users.following.load(id),
+        numFollowers: async ({ id }, _, { Loaders }) => await Loaders.users.numFollowers.load(id),
+        numFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.numFollowing.load(id),
         tags: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.user.notSpecified;
             return await Loaders.tags.byUserId.load(id);
@@ -321,7 +319,8 @@ const resolvers = {
         likedPosts: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.user.notSpecified;
             return await Loaders.users.likedPosts.load(id)
-        }
+        },
+        isMe: async ({ id }, _, { req }) => id === authenticate(req.session)
     },
     Post: {
         author: async ({ user_id }, _, { Loaders }) => {

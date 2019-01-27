@@ -10,6 +10,6 @@ export default withApollo(({ ctx, headers, initialState }) => (
         credentials: 'same-origin',
         onError: (errors) => {
             console.log(errors);
-        }
+        },
     })
 ))

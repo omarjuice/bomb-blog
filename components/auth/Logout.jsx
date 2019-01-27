@@ -12,7 +12,7 @@ const LOGOUT = gql`
 class Logout extends Component {
     render() {
         return (
-            <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`]}>
+            <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`, `CurrentUser`, `User`]}>
                 {(logout, { loading, error, data }) => {
                     if (loading) return <button>Loading...</button>;
                     if (error) return <button>{error.message.replace(/GraphQL error: /g, '')}</button>

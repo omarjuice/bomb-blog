@@ -20,18 +20,22 @@ class User extends Component {
                     if (loading) return <p>Loading...</p>;
                     if (error) return <p>{error.message.replace(/GraphQL error: /g, '')}</p>;
                     return (
-                        <>
+                        <div>
                             <Link href={{ pathname: '/profile', query: { id: data.user.id } }}>
-                                <a id="greeting">
+                                <a id="greeting" className="has-text-light ">
                                     <p><em>Hey there, </em><strong>{data.user.username}</strong>!</p>
                                 </a>
+
                             </Link>
                             <style jsx>{`
                                 p{
                                     margin-right: 10px;
                                 }
+                                a{
+                                    text-decoration: underline
+                                }
                                 `}</style>
-                        </>
+                        </div>
                     )
                 }}
             </Query>

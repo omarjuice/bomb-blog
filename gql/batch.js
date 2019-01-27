@@ -175,7 +175,7 @@ const batchTags = async keys => {
     return keys.map(key => Tags[key] || {})
 }
 // const insertBatchOfTags = async keys => {
-//     const { affectedRows } = await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [[keys]], null, true)
+//     const { affectedRows } = await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [[keys]], null, bool)
 //     if {affe}
 //     return keys.map(key => );
 // }
@@ -340,6 +340,38 @@ const batchFollowing = async keys => {
     return keys.map(key => Following[key] || [])
 
 }
+const batchNumFollowers = async keys => {
+    const numFollowers =
+        await queryDB(`
+        SELECT 
+            followee_id, COUNT(follows.created_at) as num_followers
+        FROM follows
+        WHERE followee_id != follower_id AND followee_id IN (?)
+        GROUP BY followee_id
+        `, [keys], null, bool)
+    const NumFollowers = numFollowers.reduce((acc, { followee_id, num_followers }) => {
+        if (!followee_id) return acc;
+        acc[followee_id] = num_followers;
+        return acc;
+    }, {})
+    return keys.map(key => typeof NumFollowers[key] === 'number' ? NumFollowers[key] : 0)
+}
+const batchNumFollowing = async keys => {
+    const numFollowing =
+        await queryDB(`
+        SELECT 
+            follower_id, COUNT(follows.created_at) as num_following
+        FROM follows
+        WHERE followee_id != follower_id AND follower_id IN (?)
+        GROUP BY follower_id
+        `, [keys], null, bool)
+    const NumFollowing = numFollowing.reduce((acc, { follower_id, num_following }) => {
+        if (!follower_id) return acc;
+        acc[follower_id] = num_following;
+        return acc;
+    }, {})
+    return keys.map(key => typeof NumFollowing[key] === 'number' ? NumFollowing[key] : 0)
+}
 const bulkInsertTags = async tags => {
     await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
     const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
@@ -356,7 +388,9 @@ const applyLoaders = (context) => {
             byId: new DataLoader(keys => batchUsers(keys)),
             followers: new DataLoader(keys => batchFollowers(keys)),
             following: new DataLoader(keys => batchFollowing(keys)),
-            likedPosts: new DataLoader(keys => batchUserLikes(keys))
+            numFollowers: new DataLoader(keys => batchNumFollowers(keys)),
+            numFollowing: new DataLoader(keys => batchNumFollowing(keys)),
+            likedPosts: new DataLoader(keys => batchUserLikes(keys)),
         },
         posts: {
             byId: new DataLoader(keys => batchPosts(keys)),

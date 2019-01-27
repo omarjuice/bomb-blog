@@ -36,6 +36,8 @@ module.exports = gql`
       id: Int!
       followers: [Follower]!
       following: [Follower]!
+      numFollowers: Int!
+      numFollowing: Int!
       username: String!
       email: String!
       created_at: String!
@@ -43,6 +45,7 @@ module.exports = gql`
       posts: [Post]!
       tags: [Tag]!
       likedPosts: [Post]!
+      isMe: Boolean!
   }
   type Profile{
       user_id: Int!
