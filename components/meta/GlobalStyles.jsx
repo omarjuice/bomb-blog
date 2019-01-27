@@ -4,12 +4,22 @@ class GlobalStyles extends Component {
     render() {
         return (
             <style jsx global>{`
-            
+                .font-1{
+                    font-family: 'Coiny', sans-serif
+                }
                 .navbar{
                     position: fixed;
                     top: 0;
                     left: 0;
                     right: 0
+                }
+                .hover-icon{
+                    filter: brightness(80%);
+                    -webkit-filter: brightness(80%);
+                }
+                .hover-icon:hover{
+                    filter: brightness(100%);
+                    -webkit-filter: brightness(100%);
                 }
             `}</style>
         );

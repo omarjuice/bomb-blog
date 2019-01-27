@@ -1,6 +1,7 @@
 import { Query } from "react-apollo";
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
+import Loading from "../meta/Loading";
 
 
 
@@ -19,7 +20,7 @@ class Users extends Component {
             `}
                 variables={{ limit, orderBy, search, order }}>
                 {({ loading, error, data }) => {
-                    if (loading) return <p>Loading...</p>
+                    if (loading) return <Loading />
                     if (error) return <p>Error :(</p>
                     return (
                         <>

@@ -3,6 +3,8 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import moment from 'moment'
 import Link from 'next/link';
+import Loading from '../meta/Loading';
+import ErrorMessage from '../meta/ErrorMessage';
 const LIKES = gql`
     query($id: Int){
         user(id: $id){
@@ -30,11 +32,13 @@ class Likes extends Component {
     render() {
         return (
             <>
-                <h1 className="title is-2">Likes</h1>
+                <h1 className="title is-2 font-1">
+                    Likes
+                </h1>
                 <Query query={LIKES} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <p>ERROR</p>;
+                        if (loading) return <Loading />
+                        if (error) return <ErrorMessage />;
                         if (data.user.likedPosts.length < 1) {
                             return (
                                 <h1 className="subtitle">{data.user.isMe ? 'You have no likes. Go show some love.' : `${data.user.username} doesn't like anything...`}</h1>

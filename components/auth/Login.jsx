@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
+import Loading from '../meta/Loading';
 
 const LOGIN = gql`
     mutation Login($username: String, $password: String){
@@ -33,10 +34,6 @@ class Login extends Component {
             await login({
                 variables: { username: this.state.username, password: this.state.password }
             })
-            // this.setState({
-            //     username: '',
-            //     password: ''
-            // })
         }
     }
     renderInput = (field) => {
@@ -62,7 +59,7 @@ class Login extends Component {
             {(login, { data, loading, error }) => {
                 if (!data) return (
                     <form action="" onSubmit={this.onSubmit(login)} className="form has-text-centered">
-                        {loading && <p>Loading...</p>}
+                        {loading && <Loading />}
                         <p>{error ? error.message.replace(/GraphQL error: /g, '') : ''}</p>
                         {this.renderInput('username')}
                         {this.renderInput('password')}

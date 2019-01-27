@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import validator from 'email-validator';
+import Loading from '../meta/Loading';
 
 const REGISTER = gql`
     mutation Register($input: Register!){
@@ -69,7 +70,7 @@ class Register extends Component {
     render() {
         return (<Mutation mutation={REGISTER} refetchQueries={[`Authenticated`, `CurrentUser`, `User`]}>
             {(register, { data, loading, error }) => {
-                if (loading) return <p>Loading...</p>;
+                if (loading) return <Loading />;
                 if (!data) return (
                     <form action="" onSubmit={this.onSubmit(register)} className="form has-text-centered">
                         {error ? <p>{error.message.replace(/GraphQL error: /g, '')}</p> : ''}

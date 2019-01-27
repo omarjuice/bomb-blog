@@ -4,7 +4,9 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import moment from 'moment'
 import Panels from './Panels';
-
+import Details from './Details'
+import Loading from '../meta/Loading';
+import ErrorMessage from '../meta/ErrorMessage';
 const USER = gql`
     query User($id: Int){
         user(id: $id){
@@ -19,6 +21,8 @@ const USER = gql`
                 last_updated
             }
             isMe
+            imFollowing
+            followingMe
         }
     }
 `
@@ -32,9 +36,9 @@ class ProfilePage extends Component {
                 </Link>
                 <Query query={USER} variables={{ id: Number(this.props.id) }} fetchPolicy="network-only">
                     {({ loading, error, data }) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <p>ERROR</p>;
-                        const { username, id, email, created_at, profile, isMe } = data.user
+                        if (loading) return <Loading />;
+                        if (error) return <ErrorMessage />;
+                        const { username, id, email, created_at, profile, isMe, followingMe, imFollowing } = data.user
                         return (
                             <div className="has-background-primary">
                                 <div className="columns is-centered is-multiline is-mobile has-background-light">
@@ -43,7 +47,7 @@ class ProfilePage extends Component {
                                             <img className="is-rounded" src="/static/user_image.png" />
                                         </figure>
                                         <div id="user-info" className="box">
-                                            <h1 className="title is-3">
+                                            <h1 className="title is-3 font-1">
                                                 {username}
                                             </h1>
                                             <h2 className="subtitle is-6">
@@ -61,6 +65,8 @@ class ProfilePage extends Component {
                                             <div className="content">
                                                 {profile.about || isMe ? <p>Let others know something about you!</p> : <p><strong>{username}</strong> has nothing to say...</p>}
                                             </div>
+                                            <hr />
+                                            <Details details={{ isMe, imFollowing, followingMe, user_id: id }} />
                                         </div>
                                     </div>
                                     <div className="column is-two-thirds"></div>
@@ -71,6 +77,9 @@ class ProfilePage extends Component {
                                         display: flex;
                                         justify-content: center;
                                         align-items: center;
+                                    }
+                                    .icon{
+                                        margin: 10px
                                     }
                                     .image{
                                         border-radius: 50%;

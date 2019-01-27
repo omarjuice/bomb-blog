@@ -20,7 +20,7 @@ class Logout extends Component {
                         <>
                             <div className="navbar-item has-text-centered">
                                 <User />
-                                <button className="button is-warning" onClick={logout}>Logout</button>
+                                <button className="button is-warning font-1" onClick={logout}>Logout</button>
                             </div>
                         </>
                     )

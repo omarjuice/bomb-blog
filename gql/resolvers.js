@@ -340,7 +340,6 @@ const resolvers = {
             return await Loaders.posts.comments.load(id)
         },
         numComments: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.posts.notSpecified;
             const comments = await Loaders.posts.comments.load(id)
             return comments.length
         },
@@ -410,6 +409,11 @@ const resolvers = {
         comments: async ({ id }, _, { Loaders }) => {
             return await Loaders.tags.comments.load(id)
         },
+    },
+    Follower: {
+        imFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.imFollowing.load(id),
+        followingMe: async ({ id }, _, { Loaders }) => await Loaders.users.followingMe.load(id),
+        isMe: async ({ id }, _, { req }) => id === authenticate(req.session)
     }
 
 };

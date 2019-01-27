@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import moment from 'moment'
+import Loading from '../meta/Loading';
+import ErrorMessage from '../meta/ErrorMessage';
 const USER_POSTS = gql`
     query UserPosts($id: Int){
         user(id: $id){
@@ -25,13 +27,13 @@ class UserPosts extends Component {
     render() {
         return (
             <>
-                <h1 className="title is-2">
+                <h1 className="title is-2 font-1">
                     Posts
                 </h1>
                 <Query query={USER_POSTS} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <p>ERROR</p>;
+                        if (loading) return <Loading />
+                        if (error) return <ErrorMessage />;
                         if (data.user.posts.length < 1) {
                             return (
                                 <h1 className="subtitle is-4">{data.user.isMe ? 'You have no Posts...' : `${data.user.username} has no Posts...`}</h1>

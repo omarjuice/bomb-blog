@@ -10,6 +10,7 @@ const { resetDB, resetTables } = require('./tests/seed')
 
 
 const dev = process.env.NODE_ENV !== 'production'
+const test = process.env.NODE_ENV === 'test'
 let port = process.env.PORT || 3000
 
 const nextApp = next({ dev, dir: __dirname })
@@ -17,10 +18,10 @@ const apollo = new ApolloServer({
     typeDefs, resolvers, context: ctx => {
         console.log(ctx.req.session.id)
         return applyLoaders(ctx)
-    }, uploads: process.env.NODE_ENV !== 'test'
+    }, uploads: test
 })
 
-if (process.env.NODE_ENV === 'test') {
+if (test) {
     port++
 } else {
     resetDB(
@@ -40,7 +41,7 @@ const initializeServer = (app, productionEnv = false) => {
                     saveUninitialized: true,
                     cookie: {
                         secure: productionEnv,
-                        maxAge: productionEnv ? 1000 * 60 * 60 * 24 * 30 : 60000
+                        maxAge: test ? 1000 * 60 * 60 * 24 * 30 : 60000
                     }
                 }))
                 if (productionEnv) { app.set('trust proxy', 1) }

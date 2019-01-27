@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UserPosts from './UserPosts';
-import Follows from './Follows';
+import FollowPanel from './FollowPanel';
 import Likes from './Likes';
 class Panels extends Component {
     state = {
@@ -8,8 +8,8 @@ class Panels extends Component {
     }
     displays = {
         posts: <UserPosts userId={this.props.userId} />,
-        followers: <Follows display="followers" userId={this.props.userId} />,
-        following: <Follows display="following" userId={this.props.userId} />,
+        followers: <FollowPanel display="followers" userId={this.props.userId} />,
+        following: <FollowPanel display="following" userId={this.props.userId} />,
         likes: <Likes userId={this.props.userId} />
     }
     changeDisplay = (display) => {
@@ -33,7 +33,7 @@ class Panels extends Component {
         return (
             <>
                 <div className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered">
-                    <div className="tabs is-toggle is-fullwidth is-small">
+                    <div className="tabs is-toggle is-fullwidth is-small is-rounded">
                         <ul>
                             <li className="is-active" onClick={this.changeDisplay('posts')}><a>Posts</a></li>
                             <li onClick={this.changeDisplay('likes')}><a>Likes</a></li>

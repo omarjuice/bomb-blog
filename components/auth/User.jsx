@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Link from 'next/link'
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import Loading from '../meta/Loading';
 
 const USER = gql`
     query CurrentUser{
@@ -17,7 +18,7 @@ class User extends Component {
         return (
             <Query query={USER}>
                 {({ loading, error, data }) => {
-                    if (loading) return <p>Loading...</p>;
+                    if (loading) return <Loading />;
                     if (error) return <p>{error.message.replace(/GraphQL error: /g, '')}</p>;
                     return (
                         <div>
