@@ -10,28 +10,28 @@ const seedDB = {
     users: [[
         "a@z.com",
         "alpha",
-        '1234567',
+        '1',
     ], [
         "b@y.com",
         "beta",
-        'password',
+        '2',
     ], [
         "c@x.com",
         "gamma",
-        'english'
+        '3'
     ]],
     usersHashed: [[
         "a@z.com",
         "alpha",
-        '1234567',
+        '1',
     ], [
         "b@y.com",
         "beta",
-        'password',
+        '2',
     ], [
         "c@x.com",
         "gamma",
-        'english'
+        '3'
     ]],
     profiles: [[
         1,

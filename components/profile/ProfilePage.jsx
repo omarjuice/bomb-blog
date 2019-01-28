@@ -74,7 +74,7 @@ class ProfilePage extends Component {
                                         z-index: 2;
                                         height: 128px important!;
                                         width: 128px important!
-                                    }import { USER } from '../../apollo/queries';
+                                    }
 
                                     #user-info{
                                         height: 75%;

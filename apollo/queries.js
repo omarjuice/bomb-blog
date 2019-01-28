@@ -53,61 +53,62 @@ export const FOLLOWING = gql`
     }
 `
 export const LIKES = gql`
-query UserLikes($id: Int){
-    user(id: $id){
-        id
-        username
-        likedPosts{
+    query UserLikes($id: Int){
+        user(id: $id){
             id
-            title
-            author{
+            username
+            likedPosts{
                 id
-                username
-                isMe
+                title
+                author{
+                    id
+                    username
+                    isMe
+                }
+                caption
+                numLikes
+                numComments
+                created_at
             }
-            caption
-            numLikes
-            numComments
-            created_at
+            isMe
         }
-        isMe
     }
-}
 `
 export const USER_POSTS = gql`
-query UserPosts($id: Int){
-    user(id: $id){
-        id
-        username
-        posts{
+    query UserPosts($id: Int){
+        user(id: $id){
             id
-            title
-            created_at
-            last_updated
-            numLikes
-            numComments
-            caption
+            username
+            posts{
+                id
+                title
+                created_at
+                last_updated
+                numLikes
+                numComments
+                caption
+            }
+            isMe
         }
-        isMe
     }
-}
 `
 export const USER_TAGS = gql`
-query UserTags($id: Int){
-    user(id: $id){
-        id
-        tags{
+    query UserTags($id: Int){
+        user(id: $id){
             id
-            tag_name
-        }
-        isMe
-    } 
-}
+            username
+            tags{
+                id
+                tag_name
+            }
+            isMe
+        } 
+    }
 `
 export const AUTHENTICATED = gql`
-query Authenticated{
-    authenticated
-}
+    query Authenticated{
+        authenticated
+    }
 `
 export const CURRENT_USER = gql`
     query CurrentUser{

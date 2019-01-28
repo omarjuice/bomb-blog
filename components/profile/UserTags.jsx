@@ -3,7 +3,7 @@ import { Query, Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import { USER_TAGS } from '../../apollo/queries';
-import { EDIT_TAGS } from '../../apollo/mutations';
+import { UPDATE_PROFILE } from '../../apollo/mutations';
 
 class UserTags extends Component {
     state = {
@@ -44,6 +44,7 @@ class UserTags extends Component {
                 }
             }
             await insertTags({ variables: { input: { modTags: { addTags, deleteTags } } } })
+            this.setState({ editing: false, tags: [], input: '' })
 
         }
     }
@@ -62,18 +63,20 @@ class UserTags extends Component {
                 {({ loading, error, data }) => {
                     if (loading) return <Loading />;
                     if (error) return <ErrorMessage />;
+                    const { tags, isMe, username } = data.user
+                    const editButton = <button className=" button is-link" onClick={this.editTags(data.user.tags.map(tag => tag.tag_name))}><i className="fas fa-pencil-alt"></i></button>
                     if (!this.state.editing) return (
                         <div>
-                            <div className="tags">
-                                {data.user.tags.map((tag, i) => {
+                            {tags.length > 0 ? <div className="tags">
+                                {tags.map((tag, i) => {
                                     return <span key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : ''}`}>{tag.tag_name}</span>
                                 })}
-                                {data.user.isMe ? <button className=" button is-link" onClick={this.editTags(data.user.tags.map(tag => tag.tag_name))}><i className="fas fa-pencil-alt"></i></button> : ''}
-                            </div>
+                                {isMe ? editButton : ''}
+                            </div> : isMe ? <><p className="content">You have no tags. What are you interested in?</p>{editButton}</> : <p className="content">{username} has no tags.</p>}
                         </div>
                     );
                     return (
-                        <Mutation mutation={EDIT_TAGS} refetchQueries={[`UserTags`]}>
+                        <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`UserTags`]}>
                             {(updateProfile, { loading, error, data }) => {
                                 if (loading) return <Loading />;
                                 if (error) return <ErrorMessage />;
@@ -85,7 +88,7 @@ class UserTags extends Component {
                                         <button type="submit" className="button is-link">Submit</button>
                                     </form>
                                 )
-                                if (data) return <UserTags user_id={this.props.userId} />
+                                return <p>DONE</p>
                             }}
                         </Mutation>
                     )

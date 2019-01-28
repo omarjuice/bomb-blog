@@ -104,7 +104,7 @@ const resolvers = {
                     about= ?,
                     photo_path= ?,
                     last_updated = NOW() 
-                WHERE user_id = ?`, [args.input.about || about, args.input.photo_path || photo_path, id]).catch(e => { throw Errors.database })
+                WHERE user_id = ?`, [args.input.about !== undefined ? args.input.about : about, args.input.photo_path || photo_path, id]).catch(e => { throw Errors.database })
             if (affectedRows > 0) {
                 if (args.input.modTags) {
                     const { addTags, deleteTags } = args.input.modTags;

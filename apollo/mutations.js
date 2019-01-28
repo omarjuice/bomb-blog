@@ -25,10 +25,13 @@ export const REGISTER = gql`
         register(input: $input)
     }
 `
-export const EDIT_TAGS = gql`
-mutation EditTags($input: ProfileDetails){
-        updateProfile(input: $input){
-          user_id
-        }
-  }
+export const UPDATE_PROFILE = gql`
+    mutation UpdateProfile($input: ProfileDetails){
+            updateProfile(input: $input){
+                user_id
+                about
+                photo_path
+                last_updated
+            }
+    }
 `
