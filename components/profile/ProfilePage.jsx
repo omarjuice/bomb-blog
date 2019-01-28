@@ -7,6 +7,7 @@ import Panels from './Panels';
 import Details from './Details'
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
+import UserTags from './UserTags';
 const USER = gql`
     query User($id: Int){
         user(id: $id){
@@ -63,10 +64,12 @@ class ProfilePage extends Component {
                                     <div className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered">
                                         <div id="about" className="box">
                                             <div className="content">
-                                                {profile.about || isMe ? <p>Let others know something about you!</p> : <p><strong>{username}</strong> has nothing to say...</p>}
+                                                {profile.about || (isMe ? <p>Let others know something about you!</p> : <p><strong>{username}</strong> has nothing to say...</p>)}
                                             </div>
                                             <hr />
                                             <Details details={{ isMe, imFollowing, followingMe, user_id: id }} />
+                                            <hr />
+                                            <UserTags user_id={id} />
                                         </div>
                                     </div>
                                     <div className="column is-two-thirds"></div>

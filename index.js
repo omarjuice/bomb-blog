@@ -41,7 +41,7 @@ const initializeServer = (app, productionEnv = false) => {
                     saveUninitialized: true,
                     cookie: {
                         secure: productionEnv,
-                        maxAge: test ? 1000 * 60 * 60 * 24 * 30 : 60000
+                        maxAge: !test ? 1000 * 60 * 60 * 24 * 30 : 60000
                     }
                 }))
                 if (productionEnv) { app.set('trust proxy', 1) }

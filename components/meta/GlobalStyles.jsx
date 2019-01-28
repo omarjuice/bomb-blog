@@ -7,6 +7,9 @@ class GlobalStyles extends Component {
                 .font-1{
                     font-family: 'Coiny', sans-serif
                 }
+                .font-2{
+                    font-family: 'Baloo Thambi', sans-serif;
+                }
                 .navbar{
                     position: fixed;
                     top: 0;

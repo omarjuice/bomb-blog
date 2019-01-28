@@ -51,7 +51,7 @@ class UserPosts extends Component {
                                         <div className="media-content">
                                             <div className="content">
                                                 <p>
-                                                    <strong>{title} </strong>
+                                                    <strong className="font-2">{title} </strong>
                                                     <br />
                                                     {caption}
                                                     <br />

@@ -36,14 +36,14 @@ class Header extends Component {
                     <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/simplex/bulmaswatch.min.css"></link>
                     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
                         crossOrigin="anonymous"></link>
-                    <link href="https://fonts.googleapis.com/css?family=Coiny" rel="stylesheet"></link>
+                    <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Coiny" rel="stylesheet"></link>
                     <title>Blog</title>
                 </Head>
                 <GlobalStyles />
                 <nav className="navbar" role="navigation" aria-label="main navigation">
                     <div className="navbar-brand">
                         <a className="navbar-item" href="https://bulma.io">
-                            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" />
+                            <img src="/static/brand.svg" width="150" height="50" />
                         </a>
                         <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                             <span aria-hidden="true"></span>
