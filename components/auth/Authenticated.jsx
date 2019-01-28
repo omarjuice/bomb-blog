@@ -11,7 +11,7 @@ import { AUTHENTICATED } from '../../apollo/queries';
 class Authenticated extends Component {
     render() {
         return (
-            <Query query={AUTHENTICATED}  >
+            <Query query={AUTHENTICATED} ssr={false} >
                 {({ loading, error, data }) => {
                     if (loading) return <Loading />;
                     if (error) return <p>{error.message.replace(/GraphQL error: /g, '')}</p>;

@@ -71,6 +71,7 @@ module.exports = gql`
       comments: [Comment]!
       likers: [Liker]!
       tags: [Tag]!
+      iLike: Boolean!
   }
   type Tag{
       id: Int!
@@ -93,6 +94,7 @@ module.exports = gql`
       replies: [Reply]!
       numReplies: Int!
       tags: [Tag]!
+      iLike: Boolean!
   }
   type Reply{
       id: Int!

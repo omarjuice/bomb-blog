@@ -16,7 +16,16 @@ let port = process.env.PORT || 3000
 const nextApp = next({ dev, dir: __dirname })
 const apollo = new ApolloServer({
     typeDefs, resolvers, context: ctx => {
-        console.log(ctx.req.session.id)
+        let user;
+        try {
+            user = ctx.req.session.user.id
+        } catch (e) {
+            user = null
+        }
+        console.log('-------------------------------')
+        console.log(user, ctx.req.session.id)
+        console.log(ctx.req.body.operationName)
+
         return applyLoaders(ctx)
     }, uploads: test
 })

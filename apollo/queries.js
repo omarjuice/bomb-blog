@@ -30,6 +30,7 @@ export const FOLLOWERS = gql`
                 followed_at
                 followingMe
                 imFollowing
+                isMe
             }
             isMe
         }
@@ -69,6 +70,7 @@ export const LIKES = gql`
                 numLikes
                 numComments
                 created_at
+                iLike
             }
             isMe
         }
@@ -87,6 +89,7 @@ export const USER_POSTS = gql`
                 numLikes
                 numComments
                 caption
+                iLike
             }
             isMe
         }

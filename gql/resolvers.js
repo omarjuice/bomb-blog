@@ -30,7 +30,7 @@ const resolvers = {
             const query = `SELECT id, username, email, created_at FROM users WHERE username LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?`
             return await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
         },
-        authenticated: (_, args, { req }) => !!req.session.user,
+        authenticated: (_, args, { req }) => !!authenticate(req.session),
         post: async (_, args, { Loaders }) => {
             const post = await Loaders.posts.byId.load(args.id)
             if (post && post.id) return post;
@@ -350,7 +350,8 @@ const resolvers = {
         tags: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.posts.notSpecified;
             return await Loaders.tags.byPostId.load(id);
-        }
+        },
+        iLike: async ({ id }, _, { Loaders }) => await Loaders.posts.iLike.load(id)
     },
     Comment: {
         commenter: async ({ user_id }, _, { Loaders }) => {
@@ -379,7 +380,8 @@ const resolvers = {
         tags: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.comments.notSpecified;
             return await Loaders.tags.byCommentId.load(id);
-        }
+        },
+        iLike: async ({ id }, _, { Loaders }) => await Loaders.comments.iLike.load(id)
     },
     Reply: {
         replier: async ({ user_id }, _, { Loaders }) => {

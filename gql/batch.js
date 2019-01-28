@@ -402,6 +402,36 @@ const batchImFollowing = async (keys, id) => {
     }, {})
     return keys.map(key => !!ImFollowing[key])
 }
+const batchILikePost = async (keys, id) => {
+    if (!id) return keys.map(() => false);
+    const iLike =
+        await queryDB(`
+        SELECT 
+            * 
+        FROM likes
+        WHERE post_id IN (?) AND user_id = ?
+        `, [keys, id], null, bool)
+    const Ilike = iLike.reduce((acc, { post_id }) => {
+        acc[post_id] = true;
+        return acc
+    }, {})
+    return keys.map(key => !!Ilike[key])
+}
+const batchILikeComment = async (keys, id) => {
+    if (!id) return keys.map(() => false);
+    const iLike =
+        await queryDB(`
+        SELECT
+            *
+        FROM comment_likes
+        WHERE comment_id IN (?) AND user_id = ?
+        `, [keys, id], null, bool)
+    const ILike = iLike.reduce((acc, { comment_id }) => {
+        acc[comment_id] = true;
+        return acc
+    }, {})
+    return keys.map(key => !!ILike[key])
+}
 const bulkInsertTags = async tags => {
     await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
     const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
@@ -434,7 +464,8 @@ const applyLoaders = (context) => {
             byUserId: new DataLoader(keys => batchPosts_user_id(keys)),
             numLikes: new DataLoader(keys => batchPostLikes(keys)),
             comments: new DataLoader(keys => batchComments(keys)),
-            likers: new DataLoader(keys => batchPostLikers(keys))
+            likers: new DataLoader(keys => batchPostLikers(keys)),
+            iLike: new DataLoader(keys => batchILikePost(keys, id))
         },
         profiles: {
             byId: new DataLoader(keys => batchProfiles(keys))
@@ -442,7 +473,8 @@ const applyLoaders = (context) => {
         comments: {
             numLikes: new DataLoader(keys => batchCommentLikes(keys)),
             replies: new DataLoader(keys => batchCommentReplies(keys)),
-            likers: new DataLoader(keys => batchCommentLikers(keys))
+            likers: new DataLoader(keys => batchCommentLikers(keys)),
+            iLike: new DataLoader(keys => batchILikeComment(keys, id))
         },
         tags: {
             byId: new DataLoader(keys => batchTags(keys)),

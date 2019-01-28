@@ -1241,4 +1241,30 @@ module.exports = function () {
             )
         })
     })
+    describe('GQL: MY LIKES', () => {
+        it('Should return whether an authenticated user likes posts/comments', done => {
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.likes.myLikes })
+                    .expect(({ body }) => {
+                        body.data.posts.forEach(post => {
+                            expect(typeof post.iLike).toBe('boolean')
+                            post.comments.forEach(comment => {
+                                expect(typeof comment.iLike).toBe('boolean')
+                            })
+                        })
+                    }).end(finished)
+            )
+        })
+        it('Should return false for all fields without authentication', done => {
+            reqGQL({ query: queries.likes.myLikes })
+                .expect(({ body }) => {
+                    body.data.posts.forEach(post => {
+                        expect(post.iLike).toBe(false)
+                        post.comments.forEach(comment => {
+                            expect(comment.iLike).toBe(false)
+                        })
+                    })
+                }).end(done)
+        })
+    })
 }

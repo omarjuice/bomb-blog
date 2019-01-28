@@ -2,16 +2,16 @@ module.exports = {
   login: {
     success: [`
         mutation{
-            login(username:"alpha", password:"1234567")
+            login(username:"alpha", password:"1")
           }
         `, `
         mutation{
-            login(username:"beta", password:"password")
+            login(username:"beta", password:"2")
           }
         `,
       `
         mutation{
-            login(username:"gamma", password:"english")
+            login(username:"gamma", password:"3")
           }
         `
     ],
@@ -305,6 +305,16 @@ module.exports = {
         likedPosts{
           id
           title
+        }
+      }
+    }`,
+    myLikes: `query{
+      posts{
+        id
+        iLike
+        comments{
+          id
+          iLike
         }
       }
     }`
