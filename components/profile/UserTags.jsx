@@ -1,27 +1,9 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
-const USER_TAGS = gql`
-    query UserTags($id: Int){
-        user(id: $id){
-            id
-            tags{
-                id
-                tag_name
-            }
-            isMe
-        } 
-    }
-`
-const EDIT_TAGS = gql`
-    mutation EditTags($input: ProfileDetails){
-            updateProfile(input: $input){
-              user_id
-            }
-      }
-`
+import { USER_TAGS } from '../../apollo/queries';
+import { EDIT_TAGS } from '../../apollo/mutations';
 
 class UserTags extends Component {
     state = {
@@ -76,7 +58,7 @@ class UserTags extends Component {
     }
     render() {
         return (
-            <Query query={USER_TAGS} variables={{ id: this.props.user_id }}>
+            <Query query={USER_TAGS} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
                     if (loading) return <Loading />;
                     if (error) return <ErrorMessage />;
@@ -103,7 +85,7 @@ class UserTags extends Component {
                                         <button type="submit" className="button is-link">Submit</button>
                                     </form>
                                 )
-                                if (data) return <UserTags user_id={this.props.user_id} />
+                                if (data) return <UserTags user_id={this.props.userId} />
                             }}
                         </Mutation>
                     )

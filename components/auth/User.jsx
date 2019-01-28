@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
 import Link from 'next/link'
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import Loading from '../meta/Loading';
+import { CURRENT_USER } from '../../apollo/queries';
 
-const USER = gql`
-    query CurrentUser{
-        user{
-            id
-            username
-        }
-    }
-`
+
 
 class User extends Component {
     render() {
         return (
-            <Query query={USER}>
+            <Query query={CURRENT_USER}>
                 {({ loading, error, data }) => {
                     if (loading) return <Loading />;
                     if (error) return <p>{error.message.replace(/GraphQL error: /g, '')}</p>;

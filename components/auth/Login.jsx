@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
+import { LOGIN } from '../../apollo/mutations';
 
-const LOGIN = gql`
-    mutation Login($username: String, $password: String){
-        login(username: $username, password: $password)
-    }
-`
+
 
 class Login extends Component {
     state = {

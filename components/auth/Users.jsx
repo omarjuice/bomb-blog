@@ -1,7 +1,7 @@
 import { Query } from "react-apollo";
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import Loading from "../meta/Loading";
+import { USERS } from '../../apollo/queries';
 
 
 
@@ -9,15 +9,7 @@ class Users extends Component {
     render() {
         const { limit, orderBy, search, order } = this.props.variables
         return (
-            <Query query={gql`
-                query Users($limit: Int, $order: Boolean, $orderBy: String, $search: String){
-                  users(limit: $limit, order: $order, orderBy: $orderBy, search: $search){
-                      id
-                      username
-                      created_at
-                  }  
-                }
-            `}
+            <Query query={USERS}
                 variables={{ limit, orderBy, search, order }}>
                 {({ loading, error, data }) => {
                     if (loading) return <Loading />

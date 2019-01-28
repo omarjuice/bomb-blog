@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
+import { FOLLOW } from '../../apollo/mutations';
 
-const FOLLOW = gql`
-    mutation CreateFollow($user_id: Int!){
-        createFollow(user_id: $user_id)
-    }
-`
+
 
 class Follow extends Component {
 

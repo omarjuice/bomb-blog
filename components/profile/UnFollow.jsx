@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
+import { UNFOLLOW } from '../../apollo/mutations';
 
-const UNFOLLOW = gql`
-    mutation DeleteFollow($user_id: Int!){
-        deleteFollow(user_id: $user_id)
-    }
-`
 
 class Unfollow extends Component {
 

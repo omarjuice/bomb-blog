@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import Logout from './Logout';
 import Loading from '../meta/Loading';
+import { AUTHENTICATED } from '../../apollo/queries';
 
 
 
-const AUTHENTICATED = gql`
-    query Authenticated{
-        authenticated
-    }
-`
+
 
 class Authenticated extends Component {
     render() {

@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import User from './User';
+import { LOGOUT } from '../../apollo/mutations';
 
-const LOGOUT = gql`
-    mutation Logout{
-        logout
-    }
-`
 
 class Logout extends Component {
     render() {

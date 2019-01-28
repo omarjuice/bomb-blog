@@ -1,32 +1,15 @@
 import React, { Component } from 'react';
 import Link from 'next/link'
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import moment from 'moment'
 import Panels from './Panels';
 import Details from './Details'
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import UserTags from './UserTags';
-const USER = gql`
-    query User($id: Int){
-        user(id: $id){
-            id
-            username
-            email
-            created_at
-            profile{
-                user_id
-                about
-                photo_path
-                last_updated
-            }
-            isMe
-            imFollowing
-            followingMe
-        }
-    }
-`
+import About from './About'
+import { USER } from '../../apollo/queries';
+
 
 class ProfilePage extends Component {
     render() {
@@ -64,12 +47,12 @@ class ProfilePage extends Component {
                                     <div className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered">
                                         <div id="about" className="box">
                                             <div className="content">
-                                                {profile.about || (isMe ? <p>Let others know something about you!</p> : <p><strong>{username}</strong> has nothing to say...</p>)}
+                                                {isMe ? <About userId={id} /> : (profile.about || <p><strong>{username}</strong> has nothing to say...</p>)}
                                             </div>
                                             <hr />
                                             <Details details={{ isMe, imFollowing, followingMe, user_id: id }} />
                                             <hr />
-                                            <UserTags user_id={id} />
+                                            <UserTags userId={id} />
                                         </div>
                                     </div>
                                     <div className="column is-two-thirds"></div>
@@ -91,7 +74,8 @@ class ProfilePage extends Component {
                                         z-index: 2;
                                         height: 128px important!;
                                         width: 128px important!
-                                    }
+                                    }import { USER } from '../../apollo/queries';
+
                                     #user-info{
                                         height: 75%;
                                         position: relative;

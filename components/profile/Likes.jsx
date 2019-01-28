@@ -1,32 +1,11 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import moment from 'moment'
 import Link from 'next/link';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
-const LIKES = gql`
-    query($id: Int){
-        user(id: $id){
-            id
-            username
-            likedPosts{
-                id
-                title
-                author{
-                    id
-                    username
-                    isMe
-                }
-                caption
-                numLikes
-                numComments
-                created_at
-            }
-            isMe
-        }
-    }
-`
+import { LIKES } from '../../apollo/queries';
+
 
 class Likes extends Component {
     render() {

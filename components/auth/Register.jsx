@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import validator from 'email-validator';
 import Loading from '../meta/Loading';
+import { REGISTER } from '../../apollo/mutations';
 
-const REGISTER = gql`
-    mutation Register($input: Register!){
-        register(input: $input)
-    }
-`
-//delta@ion.com
+
+
 class Register extends Component {
     state = {
         username: '',

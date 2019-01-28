@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import moment from 'moment'
 import Link from 'next/link'
@@ -7,43 +6,10 @@ import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import Follow from './Follow';
 import Unfollow from './UnFollow';
+import { FOLLOWING, FOLLOWERS } from '../../apollo/queries';
 
-const FOLLOWERS = gql`
-    query Followers($id: Int){
-        user(id: $id){
-            id
-            username
-            followers{
-                id
-                username
-                followed_at
-                followingMe
-                imFollowing
-            }
-            isMe
-        }
-    }
-`
-const FOLLOWING = gql`
-    query Following($id: Int){
-        user(id: $id){
-            id
-            username
-            following{
-                id
-                username
-                followed_at
-                followingMe
-                imFollowing
-                isMe
-            }
-            isMe
-        }
-    }
-`
-const queries = {
-    FOLLOWING, FOLLOWERS
-}
+
+const queries = { FOLLOWING, FOLLOWERS }
 
 class FollowPanel extends Component {
     render() {

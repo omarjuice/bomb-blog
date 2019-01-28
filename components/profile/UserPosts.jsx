@@ -1,27 +1,10 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import moment from 'moment'
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
-const USER_POSTS = gql`
-    query UserPosts($id: Int){
-        user(id: $id){
-            id
-            username
-            posts{
-                id
-                title
-                created_at
-                last_updated
-                numLikes
-                numComments
-                caption
-            }
-            isMe
-        }
-    }
-`
+import { USER_POSTS } from '../../apollo/queries';
+
 
 class UserPosts extends Component {
     render() {
