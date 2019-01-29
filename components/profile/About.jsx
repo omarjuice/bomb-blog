@@ -3,7 +3,7 @@ import { Query, Mutation } from 'react-apollo';
 import { USER_PROFILE } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import { UPDATE_PROFILE } from '../../apollo/mutations';
-import ErrorMessage from '../meta/ErrorMessage';
+import ErrorIcon from '../meta/ErrorIcon';
 
 
 
@@ -36,7 +36,7 @@ class About extends Component {
             <Query query={USER_PROFILE} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
                     if (loading) return <Loading />;
-                    if (error) return <ErrorMessage />;
+                    if (error) return <ErrorIcon />
                     if (!this.state.editing) return (
                         <div>
                             <p>{data.user.profile.about || 'Let others know something about you!'}</p>
@@ -48,7 +48,7 @@ class About extends Component {
                             <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`User`]}>
                                 {(updateProfile, { loading, error, data }) => {
                                     if (loading) return <Loading />
-                                    if (error) return <ErrorMessage />
+                                    if (error) return <ErrorIcon />
                                     if (!data) return (
                                         <form action="" onSubmit={this.handleSubmit(updateProfile)}>
                                             <textarea className="textarea" value={this.state.input}

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import moment from 'moment'
 import Loading from '../meta/Loading';
-import ErrorMessage from '../meta/ErrorMessage';
 import { USER_POSTS } from '../../apollo/queries';
 
 
@@ -16,7 +15,7 @@ class UserPosts extends Component {
                 <Query query={USER_POSTS} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
                         if (loading) return <Loading />
-                        if (error) return <ErrorMessage />;
+                        if (error) return <ErrorIcon />;
                         if (data.user.posts.length < 1) {
                             return (
                                 <h1 className="subtitle is-4">{data.user.isMe ? 'You have no Posts...' : `${data.user.username} has no Posts...`}</h1>

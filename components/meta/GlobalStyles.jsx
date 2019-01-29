@@ -4,6 +4,9 @@ class GlobalStyles extends Component {
     render() {
         return (
             <style jsx global>{`
+                body{
+                    background-color: whitesmoke
+                }
                 .font-1{
                     font-family: 'Coiny', sans-serif
                 }

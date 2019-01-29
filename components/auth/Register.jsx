@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo';
 import validator from 'email-validator';
 import Loading from '../meta/Loading';
 import { REGISTER } from '../../apollo/mutations';
+import ErrorMessage from '../meta/ErrorMessage';
 
 
 
@@ -38,10 +39,7 @@ class Register extends Component {
             await register({
                 variables: { input: { username, password, email } }
             })
-            // this.setState({
-            //     username: '',
-            //     password: ''
-            // })
+
         }
     }
     renderInput = (field) => {
@@ -69,7 +67,7 @@ class Register extends Component {
                 if (loading) return <Loading />;
                 if (!data) return (
                     <form action="" onSubmit={this.onSubmit(register)} className="form has-text-centered">
-                        {error ? <p>{error.message.replace(/GraphQL error: /g, '')}</p> : ''}
+                        <ErrorMessage />
                         {this.renderInput('username')}
                         {this.renderInput('email')}
                         {this.renderInput('password')}

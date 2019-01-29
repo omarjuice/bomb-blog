@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
 import { LOGIN } from '../../apollo/mutations';
+import ErrorMessage from '../meta/ErrorMessage';
 
 
 
@@ -56,7 +57,7 @@ class Login extends Component {
                 if (!data) return (
                     <form action="" onSubmit={this.onSubmit(login)} className="form has-text-centered">
                         {loading && <Loading scale={.2} />}
-                        <p>{error ? error.message.replace(/GraphQL error: /g, '') : ''}</p>
+                        <ErrorMessage />
                         {this.renderInput('username')}
                         {this.renderInput('password')}
                         <button className="button is-success" type="submit">Login</button>

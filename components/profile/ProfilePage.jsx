@@ -5,7 +5,6 @@ import moment from 'moment'
 import Panels from './Panels';
 import Details from './Details'
 import Loading from '../meta/Loading';
-import ErrorMessage from '../meta/ErrorMessage';
 import UserTags from './UserTags';
 import About from './About'
 import { USER_PROFILE } from '../../apollo/queries';
@@ -21,7 +20,7 @@ class ProfilePage extends Component {
                 <Query query={USER_PROFILE} variables={{ id: Number(this.props.id) }} fetchPolicy="network-only">
                     {({ loading, error, data }) => {
                         if (loading) return <Loading />;
-                        if (error) return <ErrorMessage />;
+                        if (error) return <ErrorIcon />;
                         const { username, id, email, created_at, profile, isMe, followingMe, imFollowing } = data.user
                         return (
                             <div className="has-background-primary">

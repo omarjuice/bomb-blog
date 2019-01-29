@@ -4,7 +4,7 @@ import Follow from './Follow'
 import { Query } from 'react-apollo';
 import { USER_PROFILE } from '../../apollo/queries';
 import Loading from '../meta/Loading';
-import ErrorMessage from '../meta/ErrorMessage';
+import ErrorIcon from '../meta/ErrorIcon';
 
 class Details extends Component {
 
@@ -22,7 +22,14 @@ class Details extends Component {
                                 </div>
                             </div>
                         )
-                        if (error) return <ErrorMessage />;
+                        if (error) return (
+                            <div className="level-item has-text-centered">
+                                <div>
+                                    <p className="heading">Loading</p>
+                                    <p className="title"><ErrorIcon /></p>
+                                </div>
+                            </div>
+                        );
                         const { isMe, followingMe, imFollowing, username, numFollowers, numFollowing } = data.user
                         return (<>
 

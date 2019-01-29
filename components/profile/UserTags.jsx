@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
-import ErrorMessage from '../meta/ErrorMessage';
 import { USER_TAGS } from '../../apollo/queries';
 import { UPDATE_PROFILE } from '../../apollo/mutations';
+import ErrorIcon from '../meta/ErrorIcon';
 
 class UserTags extends Component {
     state = {
@@ -62,7 +62,7 @@ class UserTags extends Component {
             <Query query={USER_TAGS} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
                     if (loading) return <Loading />;
-                    if (error) return <ErrorMessage />;
+                    if (error) return <ErrorIcon />;
                     const { tags, isMe, username } = data.user
                     const editButton = <button className=" button is-link" onClick={this.editTags(data.user.tags.map(tag => tag.tag_name))}><i className="fas fa-pencil-alt"></i></button>
                     if (!this.state.editing) return (
@@ -79,7 +79,7 @@ class UserTags extends Component {
                         <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`UserTags`]}>
                             {(updateProfile, { loading, error, data }) => {
                                 if (loading) return <Loading />;
-                                if (error) return <ErrorMessage />;
+                                if (error) return <ErrorIcon />;
                                 if (!data) return (
                                     <form action="" onSubmit={this.handleSubmit(updateProfile)}>
                                         <textarea class="textarea" placeholder="#tag1 #tag2"

@@ -3,10 +3,10 @@ import { Query } from 'react-apollo';
 import moment from 'moment'
 import Link from 'next/link'
 import Loading from '../meta/Loading';
-import ErrorMessage from '../meta/ErrorMessage';
 import Follow from './Follow';
 import Unfollow from './UnFollow';
 import { FOLLOWING, FOLLOWERS } from '../../apollo/queries';
+import ErrorIcon from '../meta/ErrorIcon';
 
 
 const queries = { FOLLOWING, FOLLOWERS }
@@ -25,7 +25,7 @@ class FollowPanel extends Component {
                     <Query query={queries[display.toUpperCase()]} variables={{ id: this.props.userId }}>
                         {({ loading, error, data }) => {
                             if (loading) return <Loading />;
-                            if (error) return <ErrorMessage />
+                            if (error) return <ErrorIcon />
                             if (data.user[display].length < 1) {
                                 return (
                                     <h1 className="subtitle is-4">{data.user.isMe ? `You ${display === 'following' ? 'are not following anyone.' : 'have no followers'}` : `${data.user.username} has no ${display}.`}</h1>

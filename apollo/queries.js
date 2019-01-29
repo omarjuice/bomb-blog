@@ -132,3 +132,12 @@ export const USERS = gql`
         }  
     }
 `
+export const ERROR = gql`
+query GetError{
+    error @client{
+        exists
+        message 
+        code
+    }
+}
+`

@@ -3,8 +3,8 @@ import { Query } from 'react-apollo';
 import moment from 'moment'
 import Link from 'next/link';
 import Loading from '../meta/Loading';
-import ErrorMessage from '../meta/ErrorMessage';
 import { LIKES } from '../../apollo/queries';
+import ErrorIcon from '../meta/ErrorIcon';
 
 
 class Likes extends Component {
@@ -17,7 +17,7 @@ class Likes extends Component {
                 <Query query={LIKES} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
                         if (loading) return <Loading />
-                        if (error) return <ErrorMessage />;
+                        if (error) return <ErrorIcon />;
                         if (data.user.likedPosts.length < 1) {
                             return (
                                 <h1 className="subtitle">{data.user.isMe ? 'You have no likes. Go show some love.' : `${data.user.username} doesn't like anything...`}</h1>

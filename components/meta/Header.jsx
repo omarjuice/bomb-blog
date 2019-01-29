@@ -6,27 +6,9 @@ import GlobalStyles from './GlobalStyles';
 
 class Header extends Component {
     state = {
-        modal: {
-            active: false,
-            display: ''
-        },
         menu: false
+    }
 
-    }
-    renderModal = (display) => {
-        return () => {
-            this.setState({
-                modal: {
-                    active: !this.state.modal.active,
-                    display
-                }
-            })
-        }
-    }
-    modalOff = () => {
-        this.setState({ modal: { active: false } })
-        return 'Loading'
-    }
     render() {
         return (
             <div>
@@ -86,12 +68,12 @@ class Header extends Component {
                         </div>
 
                         <div className="navbar-end">
-                            <Authenticated handleClick={this.renderModal} />
+                            <Authenticated />
                         </div>
                     </div>
                 </nav>
                 <div id="buffer"></div>
-                <Modal display={this.state.modal.display} active={this.state.modal.active} toggle={this.modalOff} />
+                <Modal />
                 <style jsx>{`
                     .navbar-menu{
                         position: relative;
