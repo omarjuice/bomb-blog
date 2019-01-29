@@ -13,7 +13,7 @@ class Authenticated extends Component {
         return (
             <Query query={AUTHENTICATED} ssr={false} >
                 {({ loading, error, data }) => {
-                    if (loading) return <Loading />;
+                    if (loading) return <Loading scale={.2} color="white" />;
                     if (error) return <p>{error.message.replace(/GraphQL error: /g, '')}</p>;
                     return data.authenticated ? <Logout /> : <>
                         <div className="navbar-item has-text-centered">

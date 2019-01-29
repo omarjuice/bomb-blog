@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
-export const USER = gql`
-    query User($id: Int){
+export const USER_PROFILE = gql`
+    query UserProfile($id: Int){
         user(id: $id){
             id
             username
@@ -16,6 +16,8 @@ export const USER = gql`
             isMe
             imFollowing
             followingMe
+            numFollowers
+            numFollowing
         }
     }
 `

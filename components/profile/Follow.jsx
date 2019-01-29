@@ -6,15 +6,17 @@ import { FOLLOW } from '../../apollo/mutations';
 
 
 
+
 class Follow extends Component {
 
     render() {
-        const { user_id } = this.props
+        const { userId } = this.props
         const size = this.props.size === 'large' ? 'fa-3x' : 'fa-lg'
-        return <Mutation mutation={FOLLOW} refetchQueries={[`Followers`, `Following`, `User`]} variables={{ user_id }}>
-            {(createFollow, { loading, error, data }) => {
-                if (loading) return <Loading />
-                if (error) return <ErrorMessage />
+        return <Mutation mutation={FOLLOW} refetchQueries={[`Followers`, `Following`, `UserProfile`]} variables={{ user_id: userId }}>
+            {(createFollow, { loading, error, data, client }) => {
+                if (loading) return <Loading scale={.2} />
+                if (error) return <ErrorMessage />;
+                console.log(data)
                 if (!data || (data && !data.createFollow)) return (
                     <a onClick={createFollow}>
                         <span className="icon hover-icon">
@@ -23,7 +25,7 @@ class Follow extends Component {
                     </a>
                 )
                 if (data && data.createFollow) {
-                    return <p>Followed</p>
+                    return <Loading />
                 }
             }}
         </Mutation>

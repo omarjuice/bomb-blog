@@ -8,14 +8,14 @@ class Logout extends Component {
     render() {
         return (
             <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`, `CurrentUser`, `User`]}>
-                {(logout, { loading, error, data }) => {
+                {(logout, { loading, error, data, client }) => {
                     if (loading) return <button>Loading...</button>;
                     if (error) return <button>{error.message.replace(/GraphQL error: /g, '')}</button>
                     if (!data) return (
                         <>
                             <div className="navbar-item has-text-centered">
                                 <User />
-                                <button className="button is-warning font-1" onClick={logout}>Logout</button>
+                                <button className="button is-warning font-1" onClick={() => logout() && client.resetStore()}>Logout</button>
                             </div>
                         </>
                     )

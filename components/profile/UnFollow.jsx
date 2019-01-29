@@ -8,9 +8,9 @@ import { UNFOLLOW } from '../../apollo/mutations';
 class Unfollow extends Component {
 
     render() {
-        const { user_id } = this.props
+        const { userId } = this.props
         const size = this.props.size === 'large' ? 'fa-3x' : 'fa-lg'
-        return <Mutation mutation={UNFOLLOW} refetchQueries={[`Followers`, `Following`, `User`]} variables={{ user_id }}>
+        return <Mutation mutation={UNFOLLOW} refetchQueries={[`Followers`, `Following`, `UserProfile`]} variables={{ user_id: userId }}>
             {(deleteFollow, { loading, error, data }) => {
                 if (loading) return <Loading />
                 if (error) return <ErrorMessage />
@@ -22,7 +22,7 @@ class Unfollow extends Component {
                     </a>
                 )
                 if (data && data.deleteFollow) {
-                    return <p>Unfollowed</p>
+                    return <Loading />
                 }
             }}
         </Mutation>

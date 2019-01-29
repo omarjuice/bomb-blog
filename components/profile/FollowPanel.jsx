@@ -58,7 +58,7 @@ class FollowPanel extends Component {
                                         <div className="column is-half has-text-centered">
                                             {isMe ? <span className="icon">
                                                 <i className={`fas fa-lg fa-user has-text-warning`}></i>
-                                            </span> : imFollowing ? <Unfollow user_id={id} size="small" /> : <Follow user_id={id} size="small" />}
+                                            </span> : imFollowing ? <Unfollow userId={id} size="small" /> : <Follow userId={id} size="small" />}
                                         </div>
                                         <div className="column is-half has-text-centered">
                                             {followingMe ? <span className="icon"><i className="fas fa-lg fa-user-check has-text-success"></i></span> : ''}

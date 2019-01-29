@@ -1,41 +1,42 @@
+const { AuthenticationError, ForbiddenError, UserInputError, ValidationError, ApolloError } = require('apollo-server-express')
 module.exports = {
     authentication: {
-        notLoggedIn: new Error('You must be logged in to do that')
+        notLoggedIn: new AuthenticationError('You must be logged in to do that')
     },
     authorization: {
-        notAuthorized: new Error('You are not authorized to do that.')
+        notAuthorized: new ForbiddenError('You are not authorized to do that.')
     },
     user: {
-        notFound: new Error('User not Found'),
-        notSpecified: new Error('Id or username not specified')
+        notFound: new ApolloError('User not Found'),
+        notSpecified: new ApolloError('Id or username not specified')
     },
     login: {
-        invalid: new Error('Incorrect Password')
+        invalid: new ValidationError('Incorrect Password')
     },
     register: {
-        alreadyExists: new Error('A user with that username or email already exists'),
-        invalidEmail: new Error('Not a valid email.')
+        alreadyExists: new ApolloError('A user with that username or email already exists'),
+        invalidEmail: new ValidationError('Not a valid email.')
     },
     profile: {
-        notFound: new Error('Profile not found'),
-        notSpecified: new Error('No id specified')
+        notFound: new ApolloError('Profile not found'),
+        notSpecified: new ApolloError('No id specified')
     },
-    database: new Error('There was a problem with the database'),
+    database: new ApolloError('There was a problem with the database'),
     posts: {
-        notFound: new Error('Post not found.'),
-        missingField: new Error('Missing Field.'),
-        notSpecified: new Error('No id specified')
+        notFound: new ApolloError('Post not found.'),
+        missingField: new UserInputError('Missing Field.'),
+        notSpecified: new ApolloError('No id specified')
     },
     comments: {
-        notSpecified: new Error('No post_id specified.')
+        notSpecified: new ApolloError('No post_id specified.')
     },
     replies: {
-        notFound: new Error('Reply not found'),
-        notSpecified: new Error('No comment_id specified')
+        notFound: new ApolloError('Reply not found'),
+        notSpecified: new ApolloError('No comment_id specified')
     },
     tags: {
-        notFound: new Error('Tag not found'),
-        notSpecified: new Error('Tag not Specified')
+        notFound: new ApolloError('Tag not found'),
+        notSpecified: new ApolloError('Tag not Specified')
     }
 
 

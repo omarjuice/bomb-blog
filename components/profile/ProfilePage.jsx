@@ -8,17 +8,17 @@ import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import UserTags from './UserTags';
 import About from './About'
-import { USER } from '../../apollo/queries';
+import { USER_PROFILE } from '../../apollo/queries';
 
 
 class ProfilePage extends Component {
     render() {
         return (
-            <div>
+            <div className="main-component">
                 <Link href="/">
                     <a>home</a>
                 </Link>
-                <Query query={USER} variables={{ id: Number(this.props.id) }} fetchPolicy="network-only">
+                <Query query={USER_PROFILE} variables={{ id: Number(this.props.id) }} fetchPolicy="network-only">
                     {({ loading, error, data }) => {
                         if (loading) return <Loading />;
                         if (error) return <ErrorMessage />;
@@ -50,7 +50,7 @@ class ProfilePage extends Component {
                                                 {isMe ? <About userId={id} /> : (profile.about || <p><strong>{username}</strong> has nothing to say...</p>)}
                                             </div>
                                             <hr />
-                                            <Details details={{ isMe, imFollowing, followingMe, user_id: id }} />
+                                            <Details details={{ isMe, imFollowing, followingMe, user_id: id }} userId={id} />
                                             <hr />
                                             <UserTags userId={id} />
                                         </div>
