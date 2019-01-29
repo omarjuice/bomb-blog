@@ -5,10 +5,13 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
+import { handleErrors } from './handleErrors';
+
 const defaults = {
     error: {
         __typename: 'Error',
         exists: false,
+        global: true,
         code: '',
         message: ''
     },
@@ -26,26 +29,8 @@ const stateLink = withClientState({ defaults, cache })
 const client = new ApolloClient({
     link: ApolloLink.from([
         stateLink,
-        onError(({ graphQLErrors, networkError }) => {
-            if (graphQLErrors) {
-                const [{ extensions: { code }, message }] = graphQLErrors;
-                cache.writeData({
-                    data: {
-                        error: {
-                            code, message, exists: true, __typename: 'Error'
-                        }
-                    }
-                })
-            }
-            if (networkError) {
-                cache.writeData({
-                    data: {
-                        error: {
-                            code: 'SERVER', message: 'There was an error with the server', exists: true, __typename: 'Error'
-                        }
-                    }
-                })
-            };
+        onError((errors) => {
+            handleErrors(cache, errors)
         }),
         new HttpLink({
             uri: 'http://localhost:3000/graphql',

@@ -25,8 +25,16 @@ export const clearError = () => {
                 __typename: 'Error',
                 exists: false,
                 code: '',
-                message: ''
+                message: '',
+                global: true
             }
+        }
+    })
+}
+export const clearAuth = () => {
+    client.writeData({
+        data: {
+            authenticated: false
         }
     })
 }

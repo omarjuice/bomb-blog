@@ -138,6 +138,7 @@ query GetError{
         exists
         message 
         code
+        global
     }
 }
 `

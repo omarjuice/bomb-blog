@@ -8,7 +8,9 @@ class ErrorMessage extends Component {
         return (
             <Query query={ERROR}>
                 {({ data }) => {
-                    if (!data || !data.error.exists) return <div></div>
+                    if (!data || !data.error.exists || !!this.props.globalScope !== data.error.global) return <div></div>
+
+
                     return (
                         <div className="columns is-centered is-mobile">
                             <div className="column is-two-fifths-desktop is-two-thirds-tablet is-10-mobile">

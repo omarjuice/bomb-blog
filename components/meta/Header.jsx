@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Modal from './Modal';
 import Authenticated from '../auth/Authenticated';
 import GlobalStyles from './GlobalStyles';
+import ErrorMessage from './ErrorMessage';
 
 class Header extends Component {
     state = {
@@ -74,6 +75,7 @@ class Header extends Component {
                 </nav>
                 <div id="buffer"></div>
                 <Modal />
+                <ErrorMessage globalScope={true} />
                 <style jsx>{`
                     .navbar-menu{
                         position: relative;

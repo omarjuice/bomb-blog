@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Query } from 'react-apollo';
 import Loading from '../meta/Loading';
 import { CURRENT_USER } from '../../apollo/queries';
+import { clearError } from '../../apollo/clientWrites';
 
 
 
@@ -12,7 +13,7 @@ class User extends Component {
             <Query query={CURRENT_USER}>
                 {({ loading, error, data }) => {
                     if (loading) return <Loading />;
-                    if (error) return <p>{error.message.replace(/GraphQL error: /g, '')}</p>;
+                    if (error) clearError();
                     return (
                         <div>
                             <Link href={{ pathname: '/profile', query: { id: data.user.id } }}>

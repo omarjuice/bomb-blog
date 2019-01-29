@@ -45,7 +45,7 @@ class About extends Component {
                     )
                     return (
                         <div>
-                            <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`User`]}>
+                            <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`UserProfile`]}>
                                 {(updateProfile, { loading, error, data }) => {
                                     if (loading) return <Loading />
                                     if (error) return <ErrorIcon />

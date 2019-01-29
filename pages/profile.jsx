@@ -18,7 +18,7 @@ class Profile extends Component {
         return (
             <>
                 <Header />
-                <ErrorMessage />
+
                 {/* <UsersList variables={{ limit: 100, orderBy: 'created_at', order: true, search: 'a' }} /> */}
                 <ProfilePage id={this.props.id} />
             </>
