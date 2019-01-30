@@ -15,10 +15,14 @@ class UserPosts extends Component {
                 <Query query={USER_POSTS} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
                         if (loading) return <Loading size="5x" color="primary" />
-                        if (error) return <ErrorIcon />;
+                        if (error) return <ErrorIcon size="5x" color="primary" />;
                         if (data.user.posts.length < 1) {
                             return (
-                                <h1 className="subtitle is-4">{data.user.isMe ? 'You have no Posts...' : `${data.user.username} has no Posts...`}</h1>
+                                <div>
+                                    <span className="icon has-text-primary"><i className="fas fa-5x fa-bomb"></i></span>
+                                    <hr />
+                                    <h1 className="subtitle font-2 is-4">{data.user.isMe ? 'You have no Posts...' : `${data.user.username} has no Posts...`}</h1>
+                                </div>
                             )
                         }
                         return (

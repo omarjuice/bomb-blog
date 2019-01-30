@@ -79,10 +79,10 @@ class UserTags extends Component {
                         <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`UserTags`]}>
                             {(updateProfile, { loading, error, data }) => {
                                 if (loading) return <Loading size="2x" color="primary" />;
-                                if (error) return <ErrorIcon />;
+                                if (error) return <ErrorIcon size="2x" color="primary" />;
                                 if (!data) return (
                                     <form action="" onSubmit={this.handleSubmit(updateProfile)}>
-                                        <textarea class="textarea" placeholder="#tag1 #tag2"
+                                        <textarea className="textarea" placeholder="#tag1 #tag2"
                                             value={this.state.input}
                                             onChange={(e) => this.setState({ input: e.target.value })} ></textarea>
                                         <button type="submit" className="button is-link">Submit</button>

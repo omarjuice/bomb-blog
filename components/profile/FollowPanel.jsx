@@ -21,17 +21,28 @@ class FollowPanel extends Component {
                         {display}
                     </h1>
                 </div>
-                <div className="column box is-three-fifths-desktop two-thirds-tablet is-four-fifths-mobile">
-                    <Query query={queries[display.toUpperCase()]} variables={{ id: this.props.userId }}>
-                        {({ loading, error, data }) => {
-                            if (loading) return <Loading color="primary" size="4x" style="margin-top: 10px" />;
-                            if (error) return <ErrorIcon />
-                            if (data.user[display].length < 1) {
-                                return (
-                                    <h1 className="subtitle is-4">{data.user.isMe ? `You ${display === 'following' ? 'are not following anyone.' : 'have no followers'}` : `${data.user.username} has no ${display}.`}</h1>
-                                )
-                            }
-                            return data.user[display].map(({ id, username, followed_at, imFollowing, followingMe, isMe }) => {
+
+                <Query query={queries[display.toUpperCase()]} variables={{ id: this.props.userId }}>
+                    {({ loading, error, data }) => {
+                        if (loading) return <Loading color="primary" size="4x" style="margin-top: 10px" />;
+                        if (error) return <ErrorIcon color="primary" size="4x" style="margin-top: 10px" />
+                        if (data.user[display].length < 1) {
+                            return (
+                                <div>
+                                    <span className="icon has-text-primary"><i className={`${display === 'following' ? 'fas' : 'far'} fa-5x fa-sad-tear`}></i></span>
+                                    <hr />
+                                    <h1 className="subtitle is-4 font-2">{data.user.isMe ? `You ${display === 'following' ? 'are not following anyone.' : 'have no followers'}` : `${data.user.username} has no ${display}.`}</h1>
+                                    <style jsx>{`
+                                        .icon{
+                                            margin-top: 10px
+                                        }
+                                        `}</style>
+                                </div>
+
+                            )
+                        }
+                        return <div className="column box is-three-fifths-desktop two-thirds-tablet is-four-fifths-mobile">
+                            {data.user[display].map(({ id, username, followed_at, imFollowing, followingMe, isMe }) => {
                                 return <article key={id} className="media has-text-centered">
                                     <figure className="media-left">
                                         <p className="image is-48x48">
@@ -71,10 +82,10 @@ class FollowPanel extends Component {
                                         }
                                         `}</style>
                                 </article>
-                            })
-                        }}
-                    </Query>
-                </div>
+                            })}
+                        </div>
+                    }}
+                </Query>
             </div>
         );
     }

@@ -36,11 +36,11 @@ class About extends Component {
             <Query query={USER_PROFILE} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
                     if (loading) return <Loading size="3x" />;
-                    if (error) return <ErrorIcon />
+                    if (error) return <ErrorIcon size="3x" />
                     if (!this.state.editing) return (
                         <div>
                             <p>{data.user.profile.about || 'Let others know something about you!'}</p>
-                            <button className="button is-link" onClick={this.editAbout(data.user.profile.about)}><i class="fas fa-pen-alt"></i></button>
+                            <button className="button is-link" onClick={this.editAbout(data.user.profile.about)}><i className="fas fa-pen-alt"></i></button>
                         </div>
                     )
                     return (

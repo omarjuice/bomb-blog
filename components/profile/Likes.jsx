@@ -18,10 +18,14 @@ class Likes extends Component {
                     {({ loading, error, data }) => {
 
                         if (loading) return <Loading color="primary" size="4x" style="margin-top: 10px" />
-                        if (error) return <ErrorIcon />;
+                        if (error) return <ErrorIcon color="primary" size="4x" style="margin-top: 10px" />;
                         if (data.user.likedPosts.length < 1) {
                             return (
-                                <h1 className="subtitle">{data.user.isMe ? 'You have no likes. Go show some love.' : `${data.user.username} doesn't like anything...`}</h1>
+                                <div>
+                                    <span className="icon has-text-primary"><i className="far fa-5x fa-heart"></i></span>
+                                    <hr />
+                                    <h1 className="subtitle font-2">{data.user.isMe ? 'You have no likes. Go show some love.' : `${data.user.username} doesn't like anything...`}</h1>
+                                </div>
                             )
                         }
                         return (

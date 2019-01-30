@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import Loading from '../meta/Loading';
 import { CURRENT_USER } from '../../apollo/queries';
 import { clearError } from '../../apollo/clientWrites';
+import ErrorMessage from '../meta/ErrorMessage';
 
 
 
@@ -12,11 +13,15 @@ class User extends Component {
         return (
             <Query query={CURRENT_USER}>
                 {({ loading, error, data }) => {
-                    if (error) clearError();
+                    if (loading) return <Loading />;
+                    if (error) {
+                        clearError();
+                        return <ErrorMessage />
+                    };
                     return (
                         <div>
                             <Link href={{ pathname: '/profile', query: { id: data.user.id } }}>
-                                <a id="greeting" className="has-text-light ">
+                                <a id="greeting" className="has-text-light font-2 ">
                                     <p><em>Hey there, </em><strong>{(loading && <Loading style="margin" size="2x" />) || data.user.username}</strong>!</p>
                                 </a>
 
