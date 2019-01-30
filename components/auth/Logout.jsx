@@ -7,7 +7,7 @@ import { LOGOUT } from '../../apollo/mutations';
 class Logout extends Component {
     render() {
         return (
-            <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`, `User`]}>
+            <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`, `User`, `UserProfile`]}>
                 {(logout, { loading, error, data, client }) => {
                     if (loading) return <button>Loading...</button>;
                     if (error) return <button>{error.message.replace(/GraphQL error: /g, '')}</button>

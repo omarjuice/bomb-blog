@@ -35,7 +35,7 @@ class About extends Component {
         return (
             <Query query={USER_PROFILE} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
-                    if (loading) return <Loading />;
+                    if (loading) return <Loading size="3x" />;
                     if (error) return <ErrorIcon />
                     if (!this.state.editing) return (
                         <div>

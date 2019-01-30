@@ -14,7 +14,7 @@ class UserPosts extends Component {
                 </h1>
                 <Query query={USER_POSTS} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
-                        if (loading) return <Loading />
+                        if (loading) return <Loading size="5x" color="primary" />
                         if (error) return <ErrorIcon />;
                         if (data.user.posts.length < 1) {
                             return (

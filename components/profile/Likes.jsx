@@ -16,7 +16,8 @@ class Likes extends Component {
                 </h1>
                 <Query query={LIKES} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
-                        if (loading) return <Loading />
+
+                        if (loading) return <Loading color="primary" size="4x" style="margin-top: 10px" />
                         if (error) return <ErrorIcon />;
                         if (data.user.likedPosts.length < 1) {
                             return (

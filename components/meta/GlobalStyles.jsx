@@ -4,7 +4,7 @@ class GlobalStyles extends Component {
     render() {
         return (
             <style jsx global>{`
-                body{
+                html{
                     background-color: whitesmoke
                 }
                 .font-1{

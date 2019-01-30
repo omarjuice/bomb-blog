@@ -24,7 +24,7 @@ class FollowPanel extends Component {
                 <div className="column box is-three-fifths-desktop two-thirds-tablet is-four-fifths-mobile">
                     <Query query={queries[display.toUpperCase()]} variables={{ id: this.props.userId }}>
                         {({ loading, error, data }) => {
-                            if (loading) return <Loading />;
+                            if (loading) return <Loading color="primary" size="4x" style="margin-top: 10px" />;
                             if (error) return <ErrorIcon />
                             if (data.user[display].length < 1) {
                                 return (

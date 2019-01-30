@@ -56,7 +56,7 @@ class Login extends Component {
             {(login, { data, loading, error }) => {
                 if (!data) return (
                     <form action="" onSubmit={this.onSubmit(login)} className="form has-text-centered">
-                        {loading && <Loading scale={.2} />}
+                        {loading && <Loading color="primary" size="4x" />}
                         <ErrorMessage />
                         {this.renderInput('username')}
                         {this.renderInput('password')}

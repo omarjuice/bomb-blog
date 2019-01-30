@@ -13,7 +13,7 @@ class Follow extends Component {
         const size = this.props.size === 'large' ? 'fa-3x' : 'fa-lg'
         return <Mutation mutation={FOLLOW} refetchQueries={[`Followers`, `Following`, `UserProfile`]} variables={{ user_id: userId }}>
             {(createFollow, { loading, data }) => {
-                if (loading) return <Loading />
+                if (loading) return <Loading size={this.props.size} color="link" />
                 if (!data || (data && !data.createFollow)) return (
                     <a onClick={createFollow}>
                         <span className="icon hover-icon">

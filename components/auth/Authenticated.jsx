@@ -9,8 +9,11 @@ class Authenticated extends Component {
         return (
             <Query query={AUTHENTICATED} ssr={false} >
                 {({ loading, error, data, client }) => {
-                    if (loading) return <Loading scale={.2} color="white" />;
-                    if (error && error.message.replace(/GraphQL error: /g, '') === 'Id or username not specified') clearError();
+                    if (loading) return (
+                        <div className="navbar-item has-text-centered">
+                            <div><Loading size="2x" /></div>
+                        </div>)
+                    // if(error) clearError();
                     return data && data.authenticated ? <Logout /> : <>
                         <div className="navbar-item has-text-centered">
                             <a className="button is-link font-1" onClick={() => showModal({ display: 'Register', message: '', active: true })}>

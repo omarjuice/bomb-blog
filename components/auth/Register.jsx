@@ -67,6 +67,7 @@ class Register extends Component {
                 if (loading) return <Loading />;
                 if (!data) return (
                     <form action="" onSubmit={this.onSubmit(register)} className="form has-text-centered">
+                        {loading && <Loading color="primary" size="4x" />}
                         <ErrorMessage />
                         {this.renderInput('username')}
                         {this.renderInput('email')}

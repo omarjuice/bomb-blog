@@ -34,10 +34,10 @@ class Modal extends Component {
                             <div className="modal-background" onClick={dismiss}></div>
                             <div className="modal-card">
                                 <header className="modal-card-head has-text-centered">
-                                    <p className="modal-card-title">{message || display}</p>
+                                    <p className="modal-card-title font-2">{message || display}</p>
                                     <button className="delete" aria-label="close" onClick={dismiss}></button>
                                 </header>
-                                <section className="modal-card-body">
+                                <section className="modal-card-body has-text-centered">
                                     {this.displays[display]}
                                 </section>
                                 <footer className="modal-card-foot has-text-centered">

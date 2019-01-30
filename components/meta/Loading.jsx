@@ -5,7 +5,14 @@ class Loading extends Component {
 
     render() {
         return (
-            <span className="icon"><i className="fas fa-spin fa-compact-disc"></i></span>
+            <div>
+                <span className={`icon has-text-${this.props.color || ''}`}><i className={`fas fa-spin ${this.props.size ? `fa-${this.props.size}` : ''} fa-compact-disc`}></i></span>
+                <style jsx>{`
+                    .icon{
+                        ${this.props.style}
+                    }
+                    `}</style>
+            </div>
         );
     }
 }

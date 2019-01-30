@@ -19,7 +19,18 @@ class ProfilePage extends Component {
                 </Link>
                 <Query query={USER_PROFILE} variables={{ id: Number(this.props.id) }} fetchPolicy="network-only">
                     {({ loading, error, data }) => {
-                        if (loading) return <Loading />;
+                        if (loading) return (
+                            <div className="columns is-centered">
+                                <div className="column is-one-third has-text-centered">
+                                    <Loading size="10x" />
+                                </div>
+                                <style jsx>{`
+                                    .column{
+                                        margin-top: 40vh;
+                                    }
+                                    `}</style>
+                            </div>
+                        )
                         if (error) return <ErrorIcon />;
                         const { username, id, email, created_at, profile, isMe, followingMe, imFollowing } = data.user
                         return (

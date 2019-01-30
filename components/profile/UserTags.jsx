@@ -61,7 +61,7 @@ class UserTags extends Component {
         return (
             <Query query={USER_TAGS} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
-                    if (loading) return <Loading />;
+                    if (loading) return <Loading size="2x" color="primary" />;
                     if (error) return <ErrorIcon />;
                     const { tags, isMe, username } = data.user
                     const editButton = <button className=" button is-link" onClick={this.editTags(data.user.tags.map(tag => tag.tag_name))}><i className="fas fa-pencil-alt"></i></button>
@@ -78,7 +78,7 @@ class UserTags extends Component {
                     return (
                         <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`UserTags`]}>
                             {(updateProfile, { loading, error, data }) => {
-                                if (loading) return <Loading />;
+                                if (loading) return <Loading size="2x" color="primary" />;
                                 if (error) return <ErrorIcon />;
                                 if (!data) return (
                                     <form action="" onSubmit={this.handleSubmit(updateProfile)}>
