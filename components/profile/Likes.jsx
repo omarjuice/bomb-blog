@@ -36,7 +36,7 @@ class Likes extends Component {
                                             <article key={id} className="media has-text-centered">
                                                 <figure className="media-left">
                                                     <p className="image is-48x48">
-                                                        <img src="/static/user_image.png" />
+                                                        <img src={author.profile.photo_path || "/static/user_image.png"} />
                                                     </p>
                                                 </figure>
                                                 <div className="media-content">

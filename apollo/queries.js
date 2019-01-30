@@ -34,6 +34,9 @@ export const FOLLOWERS = gql`
                 followingMe
                 imFollowing
                 isMe
+                profile{
+                    photo_path
+                }
             }
             isMe
         }
@@ -51,6 +54,9 @@ export const FOLLOWING = gql`
                 followingMe
                 imFollowing
                 isMe
+                profile{
+                    photo_path
+                }
             }
             isMe
         }
@@ -68,6 +74,9 @@ export const LIKES = gql`
                     id
                     username
                     isMe
+                    profile{
+                        photo_path
+                    }
                 }
                 caption
                 numLikes
@@ -92,7 +101,10 @@ export const USER_POSTS = gql`
                 numLikes
                 numComments
                 caption
-                iLike
+                iLike 
+            }
+            profile{
+                photo_path
             }
             isMe
         }
@@ -142,6 +154,9 @@ export const POST = gql`
                 id
                 username
                 isMe
+                profile{
+                    photo_path
+                }
             }
             created_at
             last_updated 
@@ -155,6 +170,32 @@ export const POST = gql`
             numLikes
             numComments
             iLike
+        }
+    }
+`
+export const COMMENTS = gql`
+    query Comments($id: Int!){
+        post(id: $id){
+            comments{
+                id
+                commenter{
+                    id
+                    username
+                    profile{
+                    photo_path
+                    }
+                }
+                created_at
+                last_updated
+                comment_text
+                numLikes
+                tags{
+                    id
+                    tag_name
+                }
+                iLike
+                numReplies
+            }
         }
     }
 `

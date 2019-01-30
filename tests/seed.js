@@ -36,7 +36,7 @@ const seedDB = {
     profiles: [[
         1,
         "I am a web developer based in City, Country",
-        `${'/alpha'}${'xxxxx'.replace(/x/g, () => ((Math.random() * 36) | 0).toString(36))}`,
+        faker.image.avatar(),
     ], [
         2,
         "Kool Kid",
@@ -44,7 +44,7 @@ const seedDB = {
     ], [
         3,
         null,
-        `${'/gamma'}${'xxxxx'.replace(/x/g, () => ((Math.random() * 36) | 0).toString(36))}`
+        faker.image.avatar()
     ]],
     userTags: [[1, 2], [1, 6], [2, 11], [3, 4], [3, 9]],
     follows: [[1, 1], [1, 3], [1, 2], [2, 3], [2, 2], [3, 1], [3, 3]],

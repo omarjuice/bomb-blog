@@ -42,11 +42,11 @@ class FollowPanel extends Component {
                             )
                         }
                         return <div className="column box is-three-fifths-desktop two-thirds-tablet is-four-fifths-mobile">
-                            {data.user[display].map(({ id, username, followed_at, imFollowing, followingMe, isMe }) => {
+                            {data.user[display].map(({ id, username, followed_at, imFollowing, followingMe, isMe, profile }) => {
                                 return <article key={id} className="media has-text-centered">
                                     <figure className="media-left">
                                         <p className="image is-48x48">
-                                            <img src="/static/user_image.png" />
+                                            <img src={profile.photo_path || `/static/user_image.png`} />
                                         </p>
                                     </figure>
                                     <div className="media-content">

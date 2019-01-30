@@ -34,7 +34,7 @@ class UserPosts extends Component {
                                             <article key={id} className="media has-text-centered">
                                                 <figure className="media-left">
                                                     <p className="image is-48x48">
-                                                        <img src="/static/user_image.png" />
+                                                        <img src={data.user.profile.photo_path || "/static/user_image.png"} />
                                                     </p>
                                                 </figure>
                                                 <div className="media-content">
@@ -56,10 +56,7 @@ class UserPosts extends Component {
                                                         {iLike ? <span className="icon has-text-primary"><i className="fas fa-heart fa-2x"></i></span> : <span className="icon has-text-primary"><i className="far fa-heart fa-2x"></i></span>}
                                                     </div>
                                                 </div>
-
-
                                             </article>
-
                                         )
                                     })}
                                 </div>

@@ -117,6 +117,7 @@ module.exports = gql`
       followingMe: Boolean!
       imFollowing: Boolean!
       isMe: Boolean!
+      profile: Profile!
   }
   input ProfileDetails {
       about: String

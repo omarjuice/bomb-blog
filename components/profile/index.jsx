@@ -39,7 +39,7 @@ class ProfilePage extends Component {
                                 <div className="columns is-centered is-multiline is-mobile has-background-light">
                                     <div id="profile-header" className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered p">
                                         <figure className="image is-128x128">
-                                            <img className="is-rounded" src="/static/user_image.png" />
+                                            <img className="is-rounded" src={profile.photo_path || "/static/user_image.png"} />
                                         </figure>
                                         <div id="user-info" className="box">
                                             <h1 className="title is-3 font-1">
