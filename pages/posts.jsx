@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import UsersList from '../components/auth/Users';
 import Header from '../components/meta/Header';
-import ProfilePage from '../components/profile';
+import PostPage from '../components/posts';
 
-class Profile extends Component {
+class Posts extends Component {
     static async getInitialProps({ query: { id }, req, res }) {
         if (req && !id) {
             res.writeHead(302, { Location: `/` })
@@ -19,10 +18,10 @@ class Profile extends Component {
                 <Header />
 
                 {/* <UsersList variables={{ limit: 100, orderBy: 'created_at', order: true, search: 'a' }} /> */}
-                <ProfilePage id={this.props.id} />
+                <PostPage id={this.props.id} />
             </>
         );
     }
 }
 
-export default Profile;
+export default Posts;

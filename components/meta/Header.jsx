@@ -82,7 +82,7 @@ class Header extends Component {
                         z-index: 5
                     }
                     #buffer{
-                        height: 35px
+                        height: 45px;
                     }
                 `}</style>
             </div>

@@ -3,6 +3,7 @@ import { Query } from 'react-apollo';
 import moment from 'moment'
 import Loading from '../meta/Loading';
 import { USER_POSTS } from '../../apollo/queries';
+import Link from 'next/link';
 
 
 class UserPosts extends Component {
@@ -39,7 +40,7 @@ class UserPosts extends Component {
                                                 <div className="media-content">
                                                     <div className="content">
                                                         <p>
-                                                            <strong className="font-2">{title} </strong>
+                                                            <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-2">{title} </strong></a></Link>
                                                             <br />
                                                             {caption}
                                                             <br />

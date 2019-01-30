@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import Index from '../pages/index';
 
 export const USER_PROFILE = gql`
     query UserProfile($id: Int){
@@ -130,6 +131,31 @@ export const USERS = gql`
             username
             created_at
         }  
+    }
+`
+export const POST = gql`
+    query Post($id: Int!){
+        post(id: $id){
+            id
+            user_id
+            author{
+                id
+                username
+                isMe
+            }
+            created_at
+            last_updated 
+            title
+            caption
+            post_content
+            tags{
+                id
+                tag_name
+            }
+            numLikes
+            numComments
+            iLike
+        }
     }
 `
 export const ERROR = gql`

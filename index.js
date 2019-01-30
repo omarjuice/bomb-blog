@@ -62,6 +62,10 @@ const initializeServer = (app, productionEnv = false) => {
                     const { query } = req
                     nextApp.render(req, res, '/profile', query)
                 })
+                app.get('/posts', (req, res) => {
+                    const { query } = req;
+                    nextApp.render(req, res, '/posts', query)
+                })
                 app.get('*', (req, res) => {
                     nextApp.render(req, res, '/')
                 })

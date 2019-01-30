@@ -42,7 +42,7 @@ class Likes extends Component {
                                                 <div className="media-content">
                                                     <div className="content">
                                                         <p>
-                                                            <strong className="font-2">{title} </strong>
+                                                            <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-2">{title} </strong></a></Link>
                                                             <br />
                                                             By {author.isMe ? 'You' : <Link href={{ pathname: '/profile', query: { id: author.id } }} >
                                                                 <a>

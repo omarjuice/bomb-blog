@@ -53,19 +53,19 @@ const seedDB = {
         "My blog",
         "All the reasons why I am cool",
         faker.date.past(),
-        faker.lorem.paragraph()
+        faker.lorem.paragraphs(10, '***************')
     ], [
         1,
         "My other blog",
         "Even more reasons why I am cool",
         faker.date.past(),
-        faker.lorem.paragraph()
+        faker.lorem.paragraphs(10, '***************')
     ], [
         3,
         "A blog in Latin",
         "Lorem lorem lorem!!!",
         faker.date.past(),
-        faker.lorem.paragraph()
+        faker.lorem.paragraphs(10, '***************')
     ]],
     comments: [[
         3,

@@ -2,6 +2,7 @@
 export const handleErrors = (cache, { graphQLErrors, networkError, operation: { operationName } }) => {
     if (graphQLErrors) {
         const [{ extensions: { code }, message }] = graphQLErrors;
+        console.log(graphQLErrors)
         const localOperationErrorMap = ['Register', 'Login']
         const global = !localOperationErrorMap.includes(operationName)
         cache.writeData({
