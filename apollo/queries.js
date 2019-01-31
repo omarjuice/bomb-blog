@@ -219,6 +219,28 @@ export const COMMENTS = gql`
         }
     }
 `
+export const REPLIES = gql`
+    query Replies($id: Int!){
+        comment(id: $id){
+            id
+            replies{
+            id
+            reply_text
+                replier{
+                    id
+                    username
+                    profile{
+                        user_id
+                        photo_path
+                    }
+                    isMe
+                }
+                created_at
+                last_updated
+            }
+        }
+    }
+`
 export const ERROR = gql`
 query GetError{
     error @client{

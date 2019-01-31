@@ -1,51 +1,56 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { Query } from 'react-apollo';
+import { REPLIES } from '../../apollo/queries';
+import Loading from '../meta/Loading';
+import ErrorIcon from '../meta/ErrorIcon';
+import Reply from './Reply';
 
 
 class Replies extends Component {
     render() {
         return (
-            <div>
-                Replies{/* <article className="media">
-                                        <figure className="media-left">
-                                            <p className="image is-48x48">
-                                                <img src="https://bulma.io/images/placeholders/96x96.png" />
-                                            </p>
-                                        </figure>
-                                        <div className="media-content">
-                                            <div className="content">
-                                                <p>
-                                                    <strong>Sean Brown</strong>
-                                                    <br />
-                                                    Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.
-                                                    <br />
-                                                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                                                </p>
-                                            </div>
+            <Query query={REPLIES} variables={{ id: this.props.commentId }}>
+                {({ loading, error, data }) => {
+                    if (error || loading) return (
+                        <article className="media">
+                            <div className="media-content">
+                                <div className="content has-text-centered">
+                                    {loading && <Loading color="primary" size="2x" style="margin-top:5px" />}
+                                    {error && <ErrorIcon color="primary" size="2x" style="margin-top:5px" />}
+                                </div>
+                            </div>
+                        </article>
+                    )
+                    return (<div>
+                        {data.comment.replies.map((reply) => {
+                            return (
+                                <Reply key={reply.id} {...reply} />
+                            )
+                        })}
+                        <article className="media">
+                            <figure className="media-left">
+                                <p className="image is-48x48">
+                                    <img src={undefined || "/static/user_image.png"} />
+                                </p>
+                            </figure>
+                            <div className="media-content">
+                                <div className="field">
+                                    <p className="control">
+                                        <textarea className="textarea" rows="2" placeholder="Add a reply..."></textarea>
+                                    </p>
+                                </div>
+                                <div className="field">
+                                    <p className="control">
+                                        <button className="button">Reply</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    )
+                }}
+            </Query>
 
-
-                                        </div>
-                                    </article> */}
-
-                {/* <article className="media">
-                                        <figure className="media-left">
-                                            <p className="image is-48x48">
-                                                <img src="https://bulma.io/images/placeholders/96x96.png" />
-                                            </p>
-                                        </figure>
-                                        <div className="media-content">
-                                            <div className="content">
-                                                <p>
-                                                    <strong>Kayli Eunice </strong>
-                                                    <br />
-                                                    Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat.
-                                                    <br />
-                                                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </article> */}
-
-            </div>
         );
     }
 }
