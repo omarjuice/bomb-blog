@@ -25,8 +25,8 @@ class Header extends Component {
                 <GlobalStyles />
                 <nav className="navbar" role="navigation" aria-label="main navigation">
                     <div className="navbar-brand">
-                        <a className="navbar-item" href="https://bulma.io">
-                            <img src="/static/brand.svg" width="150" height="50" />
+                        <a className="navbar-item" href="/">
+                            <img src="/static/brand.svg" width="150" height="100" />
                         </a>
                         <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                             <span aria-hidden="true"></span>
@@ -84,6 +84,7 @@ class Header extends Component {
                     #buffer{
                         height: 45px;
                     }
+                    
                 `}</style>
             </div>
         );

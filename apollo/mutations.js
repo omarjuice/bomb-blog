@@ -40,6 +40,7 @@ export const CREATE_REPLY = gql`
     mutation CreateReply($comment_id: Int!, $reply_text: String!){
         createReply(comment_id: $comment_id, reply_text: $reply_text){
             id
+            comment_id
             reply_text
                 replier{
                     id
@@ -56,22 +57,17 @@ export const CREATE_REPLY = gql`
     }
 `
 export const DELETE_REPLY = gql`
-    mutation DeleteReply($comment_id: Int!, $reply_id: Int!){
-        deleteReply(comment_id: $comment_id, reply_id: $reply_id){
+    mutation DeleteReply($reply_id: Int!){
+        deleteReply(reply_id: $reply_id)
+    }
+`
+export const UPDATE_REPLY = gql`
+    mutation UpdateReply($reply_id: Int!, $reply_text: String!){
+        updateReply(reply_id: $reply_id, reply_text: $reply_text){
             id
-                comment_id
-                reply_text
-                replier{
-                    id
-                    username
-                    profile{
-                        user_id
-                        photo_path
-                    }
-                    isMe
-                }
-                created_at
-                last_updated
+            comment_id
+            reply_text
+            last_updated
         }
     }
 `

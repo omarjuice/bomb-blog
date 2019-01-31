@@ -5,12 +5,15 @@ import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import { REPLIES } from '../../apollo/queries';
 
-// const update = (proxy, {data: {deleteReply}}) => {
-//     const data = proxy.readQuery({query: REPLIES})
-//     data.comments.replies = deleteReply
-//     proxy.writeQuery({query: REPLIES, data})
+const update = (id, reply_id) => {
+    return (proxy, { data: { deleteReply } }) => {
+        if (!deleteReply) return
+        const data = proxy.readQuery({ query: REPLIES, variables: { id } })
+        data.comment.replies = data.comment.replies.filter(reply => reply.id !== reply_id)
+        proxy.writeQuery({ query: REPLIES, data })
+    }
 
-// }
+}
 
 class DeleteReply extends Component {
     state = {
@@ -20,7 +23,6 @@ class DeleteReply extends Component {
         return async () => {
             await deleteReply({
                 variables: {
-                    comment_id: this.props.commentId,
                     reply_id: this.props.replyId
                 }
             })
@@ -29,7 +31,7 @@ class DeleteReply extends Component {
     render() {
         return (
             <div className="media-right">
-                <Mutation mutation={DELETE_REPLY}  >
+                <Mutation mutation={DELETE_REPLY} update={update(this.props.commentId, this.props.replyId)} >
                     {(deleteReply, { loading, error, data }) => {
                         if (loading) return <Loading size="lg" />;
                         if (error) return <ErrorIcon size="lg" />
@@ -42,7 +44,7 @@ class DeleteReply extends Component {
                             )
                         }
                         return (
-                            <>Sure ? <a onClick={this.handleClick(deleteReply)} className="has-text-success has-text-weight-bold">Yes</a> · <a onClick={() => this.setState({ confirmation: false })} className="has-text-danger has-text-weight-bold">No</a></>
+                            <>Delete ? <a onClick={this.handleClick(deleteReply)} className="has-text-success has-text-weight-bold">Yes</a> · <a onClick={() => this.setState({ confirmation: false })} className="has-text-danger has-text-weight-bold">No</a></>
                         )
                     }}
                 </Mutation>

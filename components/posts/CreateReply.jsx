@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import { CREATE_REPLY } from '../../apollo/mutations';
-import { AUTHENTICATED } from '../../apollo/queries';
+import { AUTHENTICATED, REPLIES } from '../../apollo/queries';
 import UserPhoto from '../auth/UserPhoto';
-import Loading from '../meta/Loading';
+import { showModal } from '../../apollo/clientWrites';
 
+const update = id => {
+    return (proxy, { data: { createReply } }) => {
+        const data = proxy.readQuery({ query: REPLIES, variables: { id } })
+        data.comment.replies.push(createReply)
+        proxy.writeQuery({ query: REPLIES, variables: { id }, data })
+    }
+}
 class CreateReply extends Component {
     state = {
         input: ''
@@ -12,6 +19,7 @@ class CreateReply extends Component {
     onSubmit = createReply => {
         return async e => {
             e.preventDefault()
+            if (this.state.input.length < 1) return
             await createReply({ variables: { comment_id: this.props.commentId, reply_text: this.state.input } })
             this.setState({
                 input: ''
@@ -26,11 +34,11 @@ class CreateReply extends Component {
                         return (
                             <article className="media">
                                 <figure className="media-left">
-                                    <i class="fas fa-reply fa-3x"></i>
+                                    <i className="fas fa-reply fa-3x"></i>
                                 </figure>
                                 <div className="media-content">
                                     <div className="content is-size-5">
-                                        Log in to reply.
+                                        <a onClick={() => showModal({ display: 'Login', message: '', active: true })}>Log in</a>  to reply.
                                     </div>
                                 </div>
                             </article>
@@ -38,8 +46,8 @@ class CreateReply extends Component {
                     }
 
                     return (
-                        <Mutation mutation={CREATE_REPLY} refetchQueries={[`Replies`, `Comments`]}>
-                            {(createReply, { loading, error, data }) => {
+                        <Mutation mutation={CREATE_REPLY} update={update(this.props.commentId)}>
+                            {(createReply, { loading, error }) => {
                                 return <article className="media">
                                     <figure className="media-left">
                                         <p className="image is-48x48">
