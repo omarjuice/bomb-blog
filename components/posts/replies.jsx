@@ -4,6 +4,7 @@ import { REPLIES } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import Reply from './Reply';
+import CreateReply from './CreateReply';
 
 
 class Replies extends Component {
@@ -27,25 +28,7 @@ class Replies extends Component {
                                 <Reply key={reply.id} {...reply} />
                             )
                         })}
-                        <article className="media">
-                            <figure className="media-left">
-                                <p className="image is-48x48">
-                                    <img src={undefined || "/static/user_image.png"} />
-                                </p>
-                            </figure>
-                            <div className="media-content">
-                                <div className="field">
-                                    <p className="control">
-                                        <textarea className="textarea" rows="2" placeholder="Add a reply..."></textarea>
-                                    </p>
-                                </div>
-                                <div className="field">
-                                    <p className="control">
-                                        <button className="button">Reply</button>
-                                    </p>
-                                </div>
-                            </div>
-                        </article>
+                        <CreateReply commentId={this.props.commentId} />
                     </div>
                     )
                 }}

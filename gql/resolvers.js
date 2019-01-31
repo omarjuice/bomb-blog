@@ -201,12 +201,12 @@ const resolvers = {
             if (tags && tags.length > 0) {
                 await batchInserts.tags.commentTags(tags, insertId)
             }
-            return await Loaders.posts.comments.load(post_id)
+            return await Loaders.comments.byId.load(insertId)
         },
         updateComment: async (_, args, { req, Loaders, batchDeletes, batchInserts }) => {
             const sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
-            const { comment_id, comment_text, post_id, modTags } = args;
+            const { comment_id, comment_text, modTags } = args;
             const { affectedRows } =
                 await queryDB(`
                     UPDATE comments 
@@ -225,16 +225,14 @@ const resolvers = {
                     await batchInserts.tags.commentTags(addTags, comment_id)
                 }
             }
-            return await Loaders.posts.comments.load(post_id)
+            return await Loaders.comments.byId.load(comment_id)
         },
         deleteComment: async (_, args, { req, Loaders }) => {
             const sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
-            const { comment_id, post_id } = args
-            const { affectedRows } = await queryDB(`DELETE FROM comments WHERE id= ? AND post_id= ? AND user_id= ? `, [comment_id, post_id, sessionUser]).catch(e => { throw Errors.database })
-            if (affectedRows < 1) throw Errors.authorization.notAuthorized;
-            return await Loaders.posts.comments.load(post_id)
-
+            const { comment_id } = args
+            const { affectedRows } = await queryDB(`DELETE FROM comments WHERE id= ? AND user_id= ? `, [comment_id, sessionUser]).catch(e => { throw Errors.database })
+            return affectedRows > 0
         },
         addCommentLike: async (_, args, { req }) => {
             const sessionUser = authenticate(req.session)
@@ -254,27 +252,28 @@ const resolvers = {
             const sessionUser = authenticate(req.session);
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
             const { comment_id, reply_text } = args
-            const { affectedRows } = await queryDB(`INSERT INTO replies (comment_id, user_id, reply_text) VALUES ?`, [[[comment_id, sessionUser, reply_text]]]).catch(e => { throw Errors.database })
+            const { affectedRows, insertId } = await queryDB(`INSERT INTO replies (comment_id, user_id, reply_text) VALUES ?`, [[[comment_id, sessionUser, reply_text]]]).catch(e => { throw Errors.database })
             if (affectedRows < 1) throw Errors.authorization.notAuthorized;
-            return await Loaders.comments.replies.load(comment_id);
+            const [newReply] = await queryDB(`SELECT * FROM replies WHERE id = ?`, [insertId])
+            return newReply
         },
         deleteReply: async (_, args, { req, Loaders }) => {
             const sessionUser = authenticate(req.session);
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
-            const { reply_id, comment_id } = args;
+            const { reply_id } = args;
             const { affectedRows } = await queryDB(`DELETE FROM replies WHERE id= ? AND user_id= ?`, [reply_id, sessionUser]).catch(e => { throw Errors.database })
-            if (affectedRows < 1) throw Errors.authorization.notAuthorized;
-            return await Loaders.comments.replies.load(comment_id)
+            return affectedRows > 0
         },
         updateReply: async (_, args, { req, Loaders }) => {
             const sessionUser = authenticate(req.session);
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
-            const { reply_id, comment_id, reply_text } = args;
+            const { reply_id, reply_text } = args;
             const { affectedRows } =
                 await queryDB(`UPDATE replies SET reply_text= ?, last_updated=NOW() WHERE id= ? AND user_id= ?`,
                     [reply_text, reply_id, sessionUser]).catch(e => { throw Errors.database })
             if (affectedRows < 1) throw Errors.authorization.notAuthorized;
-            return await Loaders.comments.replies.load(comment_id)
+            const [updatedReply] = await queryDB(`SELECT * FROM replies WHERE id = ?`, [reply_id])
+            return updatedReply
         },
         createFollow: async (_, { user_id }, { req }) => {
             const sessionUser = authenticate(req.session);

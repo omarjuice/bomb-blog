@@ -4,6 +4,7 @@ import { COMMENTS } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import Comment from './Comment';
+import UserPhoto from '../auth/UserPhoto';
 
 class Comments extends Component {
 
@@ -24,7 +25,7 @@ class Comments extends Component {
                 <article className="media">
                     <figure className="media-left">
                         <p className="image is-64x64">
-                            <img src="https://bulma.io/images/placeholders/128x128.png" />
+                            <UserPhoto />
                         </p>
                     </figure>
                     <div className="media-content">

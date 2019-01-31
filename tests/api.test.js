@@ -562,7 +562,7 @@ module.exports = function () {
                     }).end(finished))
         })
     })
-    describe('GQL: GET comment (by id', () => {
+    describe('GQL: GET comment (by id)', () => {
         it('Should return a commment by id', done => {
             reqGQL({ query: queries.comments.byId, variables: { id: 1 } })
                 .expect(({ body: { data: { comment } } }) => {
@@ -577,7 +577,7 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.comments.create, variables: { post_id: 2, comment_text } })
                     .expect(({ body }) => {
-                        expect(body.data.createComment[0]).toMatchObject({
+                        expect(body.data.createComment).toMatchObject({
                             id: 4,
                             user_id: 2,
                             post_id: 2,
@@ -607,7 +607,8 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.comments.create, variables: { post_id: 2, comment_text, tags } })
                     .expect(({ body }) => {
-                        expect(body.data.createComment[0]).toMatchObject({
+
+                        expect(body.data.createComment).toMatchObject({
                             id: 4,
                             user_id: 2,
                             post_id: 2,
@@ -619,7 +620,7 @@ module.exports = function () {
                             created_at: expect.any(String)
 
                         })
-                        expect(body.data.createComment[0].tags.map(tag => tag.tag_name)).toEqual(expect.arrayContaining(tags.map(tag => tag.toLowerCase())))
+                        expect(body.data.createComment.tags.map(tag => tag.tag_name)).toEqual(expect.arrayContaining(tags.map(tag => tag.toLowerCase())))
                     }).end(finished)
             )
         })
@@ -627,9 +628,9 @@ module.exports = function () {
     describe('GQL: UPDATE comments', () => {
         it('Should update a comment', done => {
             chainReqGQL(done, { query: queries.login.success[2] },
-                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', post_id: 1 } })
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post' } })
                     .expect(({ body }) => {
-                        expect(body.data.updateComment[0]).toMatchObject(
+                        expect(body.data.updateComment).toMatchObject(
                             {
                                 id: 1,
                                 user_id: 3,
@@ -646,7 +647,7 @@ module.exports = function () {
         })
         it('Should not update a comment if the user is not the owner', done => {
             chainReqGQL(done, { query: queries.login.success[1] },
-                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, post_id: 1, comment_text: 'Cool post' } })
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post' } })
                     .expect(({ body }) => {
                         expect(body.errors).toBeTruthy()
                         const [error] = body.errors
@@ -658,19 +659,17 @@ module.exports = function () {
     describe('GQL: DELETE comments', () => {
         it('Should delete a comment', done => {
             chainReqGQL(done, { query: queries.login.success[1] },
-                (finished) => reqGQL({ query: queries.comments.delete, variables: { comment_id: 2, post_id: 3 } })
+                (finished) => reqGQL({ query: queries.comments.delete, variables: { comment_id: 2 } })
                     .expect(({ body }) => {
-                        expect(body.data.deleteComment.length).toBe(1)
+                        expect(body.data.deleteComment).toBe(true)
                     }).end(finished)
             )
         })
         it('Should not delete a comment that does not belong to the user', done => {
             chainReqGQL(done, { query: queries.login.success[0] },
-                (finished) => reqGQL({ query: queries.comments.delete, variables: { comment_id: 2, post_id: 3 } })
+                (finished) => reqGQL({ query: queries.comments.delete, variables: { comment_id: 2 } })
                     .expect(({ body }) => {
-                        expect(body.errors).toBeTruthy()
-                        const [error] = body.errors
-                        expect(error.message).toBe(Errors.authorization.notAuthorized.message)
+                        expect(body.data.deleteComment).toBe(false)
                     }).end(finished)
             )
         })
@@ -752,9 +751,8 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[0] },
                 (finished) => reqGQL({ query: queries.replies.create, variables: { comment_id, reply_text } })
                     .expect(({ body }) => {
-                        expect(body.data.createReply.length).toBe(4)
-                        expect(body.data.createReply.filter(({ id }) => id === 8)[0])
-                            .toMatchObject({ comment_id, reply_text, replier: { username: 'alpha' } })
+
+                        expect(body.data.createReply).toMatchObject({ comment_id, reply_text, replier: { username: 'alpha' } })
                     }).end(finished)
             )
         })
@@ -772,20 +770,17 @@ module.exports = function () {
         const reply_id = 7
         it('Should delete a reply', done => {
             chainReqGQL(done, { query: queries.login.success[1] },
-                (finished) => reqGQL({ query: queries.replies.delete, variables: { comment_id, reply_id } })
+                (finished) => reqGQL({ query: queries.replies.delete, variables: { reply_id } })
                     .expect(({ body }) => {
-                        expect(body.data.deleteReply.length).toBe(2)
-                        expect(body.data.deleteReply.filter(({ id }) => id === reply_id)[0]).toBeFalsy()
+                        expect(body.data.deleteReply).toBe(true)
                     }).end(finished)
             )
         })
         it('Should not delete a reply if the user doesnt own it', done => {
             chainReqGQL(done, { query: queries.login.success[0] },
-                (finished) => reqGQL({ query: queries.replies.delete, variables: { comment_id, reply_id } })
+                (finished) => reqGQL({ query: queries.replies.delete, variables: { reply_id } })
                     .expect(({ body }) => {
-                        expect(body.errors).toBeTruthy();
-                        const [error] = body.errors;
-                        expect(error.message).toBe(Errors.authorization.notAuthorized.message)
+                        expect(body.data.deleteReply).toBe(false)
                     }).end(finished)
             )
         })
@@ -796,9 +791,9 @@ module.exports = function () {
         const reply_text = 'Its ok.'
         it('Should update a reply', done => {
             chainReqGQL(done, { query: queries.login.success[1] },
-                (finished) => reqGQL({ query: queries.replies.update, variables: { comment_id, reply_text, reply_id } })
+                (finished) => reqGQL({ query: queries.replies.update, variables: { reply_text, reply_id } })
                     .expect(({ body }) => {
-                        expect(body.data.updateReply.filter(({ id }) => id === reply_id)[0])
+                        expect(body.data.updateReply)
                             .toMatchObject({
                                 comment_id, reply_text,
                                 id: reply_id,
@@ -810,7 +805,7 @@ module.exports = function () {
         })
         it('Should not update a reply not owned by the user', done => {
             chainReqGQL(done, { query: queries.login.success[0] },
-                (finished) => reqGQL({ query: queries.replies.update, variables: { comment_id, reply_text, reply_id } })
+                (finished) => reqGQL({ query: queries.replies.update, variables: { reply_text, reply_id } })
                     .expect(({ body }) => {
                         expect(body.errors).toBeTruthy();
                         const [error] = body.errors;
@@ -1008,9 +1003,9 @@ module.exports = function () {
         it('Should add tags to a comment', done => {
             const modTags = { addTags: ['lol', 'LOL', 'fire'], deleteTags: [] }
             chainReqGQL(done, { query: queries.login.success[2] },
-                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', post_id: 1, modTags } })
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', modTags } })
                     .expect(({ body }) => {
-                        expect(body.data.updateComment[0]).toMatchObject(
+                        expect(body.data.updateComment).toMatchObject(
                             {
                                 id: 1,
                                 user_id: 3,
@@ -1022,7 +1017,7 @@ module.exports = function () {
                                 numLikes: expect.any(Number),
                                 last_updated: expect.any(String)
                             })
-                        expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
+                        expect(body.data.updateComment.tags.map(tag => tag.tag_name))
                             .toEqual(expect.arrayContaining(modTags.addTags.map(tag => tag.toLowerCase())))
                     }).end(finished)
             )
@@ -1030,9 +1025,9 @@ module.exports = function () {
         it('Should delete tags from a comment', done => {
             const modTags = { addTags: [], deleteTags: ['magic'] }
             chainReqGQL(done, { query: queries.login.success[2] },
-                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', post_id: 1, modTags } })
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', modTags } })
                     .expect(({ body }) => {
-                        expect(body.data.updateComment[0]).toMatchObject(
+                        expect(body.data.updateComment).toMatchObject(
                             {
                                 id: 1,
                                 user_id: 3,
@@ -1044,7 +1039,7 @@ module.exports = function () {
                                 numLikes: expect.any(Number),
                                 last_updated: expect.any(String)
                             })
-                        expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
+                        expect(body.data.updateComment.tags.map(tag => tag.tag_name))
                             .toEqual(expect.not.arrayContaining(modTags.deleteTags))
                     }).end(finished)
             )
@@ -1052,9 +1047,9 @@ module.exports = function () {
         it('Should update comment tags', done => {
             const modTags = { addTags: ['lol', 'LOL', 'fire'], deleteTags: ['magic'] }
             chainReqGQL(done, { query: queries.login.success[2] },
-                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', post_id: 1, modTags } })
+                (finished) => reqGQL({ query: queries.comments.update, variables: { comment_id: 1, comment_text: 'Cool post', modTags } })
                     .expect(({ body }) => {
-                        expect(body.data.updateComment[0]).toMatchObject(
+                        expect(body.data.updateComment).toMatchObject(
                             {
                                 id: 1,
                                 user_id: 3,
@@ -1066,9 +1061,9 @@ module.exports = function () {
                                 numLikes: expect.any(Number),
                                 last_updated: expect.any(String)
                             })
-                        expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
+                        expect(body.data.updateComment.tags.map(tag => tag.tag_name))
                             .toEqual(expect.not.arrayContaining(modTags.deleteTags))
-                        expect(body.data.updateComment[0].tags.map(tag => tag.tag_name))
+                        expect(body.data.updateComment.tags.map(tag => tag.tag_name))
                             .toEqual(expect.arrayContaining(modTags.addTags.map(tag => tag.toLowerCase())))
                     }).end(finished)
             )

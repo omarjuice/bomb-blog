@@ -136,6 +136,17 @@ export const CURRENT_USER = gql`
         }
     }
 `
+export const USER_PHOTO = gql`
+    query UserPhoto{
+        user{
+            id
+            profile{
+                user_id
+                photo_path
+            }
+        }
+    }
+`
 export const USERS = gql`
     query Users($limit: Int, $order: Boolean, $orderBy: String, $search: String){
         users(limit: $limit, order: $order, orderBy: $orderBy, search: $search){
@@ -224,8 +235,9 @@ export const REPLIES = gql`
         comment(id: $id){
             id
             replies{
-            id
-            reply_text
+                id
+                comment_id
+                reply_text
                 replier{
                     id
                     username

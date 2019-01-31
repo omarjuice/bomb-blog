@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import Link from 'next/link'
-import Replies from './replies';
+import Replies from './Replies';
 class Comment extends Component {
     state = {
         replies: false
@@ -36,7 +36,7 @@ class Comment extends Component {
                         }
 
                         <br />
-                        <small><a>Like</a> · {moment.utc(Number(created_at)).local().fromNow()}</small> ·
+                        <small><a>Like</a> · {moment.utc(Number(created_at)).local().fromNow(true)}</small> ·
                         <a className="has-text-primary"><span className="icon"><i className={`${iLike ? 'fas' : 'far'} fa-heart`}></i></span><span className="has-text-primary">{numLikes}</span></a> ·
                         <a onClick={() => this.setState({ replies: !this.state.replies })}
                             className="has-text-info">

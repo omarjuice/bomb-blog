@@ -15,6 +15,9 @@ class Logout extends Component {
                         <>
                             <div className="navbar-item has-text-centered">
                                 <User />
+
+                            </div>
+                            <div className="navbar-item">
                                 <button className="button is-warning font-1" onClick={logout}>Logout</button>
                             </div>
                         </>

@@ -349,8 +349,8 @@ module.exports = {
             last_updated
       }
     }`,
-    update: `mutation($comment_id: Int!, $comment_text: String!, $post_id: Int!, $modTags: ModTags){
-      updateComment(post_id: $post_id, comment_text: $comment_text, comment_id: $comment_id, modTags: $modTags){
+    update: `mutation($comment_id: Int!, $comment_text: String!, $modTags: ModTags){
+      updateComment(comment_text: $comment_text, comment_id: $comment_id, modTags: $modTags){
         id
         user_id
         commenter{
@@ -368,20 +368,8 @@ module.exports = {
         last_updated
       }
     }`,
-    delete: `mutation($comment_id: Int!, $post_id: Int!){
-      deleteComment(post_id: $post_id, comment_id: $comment_id){
-        id
-        user_id
-        commenter{
-          id
-          username
-        }
-        post_id
-        comment_text
-        numLikes
-        created_at
-        last_updated
-      }
+    delete: `mutation($comment_id: Int!){
+      deleteComment(comment_id: $comment_id)
     }`,
     likes: {
       add: `mutation($comment_id: Int!){
@@ -406,21 +394,11 @@ module.exports = {
         last_updated
       }      
     }`,
-    delete: `mutation($reply_id: Int!, $comment_id: Int!){
-      deleteReply(reply_id: $reply_id, comment_id: $comment_id){
-        id
-        user_id
-        replier{
-          username
-        }
-        comment_id
-        reply_text
-        created_at
-        last_updated
-      }
+    delete: `mutation($reply_id: Int!){
+      deleteReply(reply_id: $reply_id)
     }`,
-    update: `mutation($reply_id: Int!, $comment_id: Int!, $reply_text: String!){
-      updateReply(reply_id: $reply_id, comment_id: $comment_id, reply_text: $reply_text){
+    update: `mutation($reply_id: Int!, $reply_text: String!){
+      updateReply(reply_id: $reply_id, reply_text: $reply_text){
         id
         user_id
         replier{
