@@ -54,7 +54,8 @@ const resolvers = {
             const tags = await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
             if (tags) return tags;
             throw Errors.tags.notFound
-        }
+        },
+        comment: async (_, { id }, { Loaders }) => await Loaders.comments.byId.load(id)
 
     },
     Mutation: {
@@ -339,10 +340,7 @@ const resolvers = {
             if (!id) throw Errors.posts.notSpecified;
             return await Loaders.posts.comments.load(id)
         },
-        numComments: async ({ id }, _, { Loaders }) => {
-            const comments = await Loaders.posts.comments.load(id)
-            return comments.length
-        },
+        numComments: async ({ id }, _, { Loaders }) => await Loaders.posts.numComments.load(id),
         likers: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.posts.notSpecified;
             return await Loaders.posts.likers.load(id)
@@ -364,11 +362,7 @@ const resolvers = {
             if (!id) throw Errors.comments.notSpecified
             return await Loaders.comments.numLikes.load(id)
         },
-        numReplies: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.comments.notSpecified
-            const replies = await Loaders.comments.replies.load(id)
-            return replies.length
-        },
+        numReplies: async ({ id }, _, { Loaders }) => await Loaders.comments.numReplies.load(id),
         replies: async ({ id }, _, { Loaders }) => {
             if (!id) throw Errors.comments.notSpecified;
             return await Loaders.comments.replies.load(id)

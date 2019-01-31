@@ -3,27 +3,8 @@ import { Query } from 'react-apollo';
 import { COMMENTS } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
-
-// comments{
-//     id
-//     commenter{
-//         id
-//         username
-//         profile{
-//             photo_path
-//         }
-//     }
-//     created_at
-//     last_updated
-//     comment_text
-//     numLikes
-//     tags{
-//         id
-//         tag_name
-//     }
-//     iLike
-//     numReplies
-// }
+import moment from 'moment'
+import Link from 'next/link';
 
 class Comments extends Component {
     render() {
@@ -37,6 +18,8 @@ class Comments extends Component {
                             {
                                 data.post.comments.map((comment) => {
                                     const { id, commenter, created_at, last_updated, comment_text, numLikes, tags, iLike, numReplies } = comment
+                                    let i = 0;
+
                                     return <article key={id} className="media">
                                         <figure className="media-left">
                                             <p className="image is-64x64">
@@ -46,53 +29,29 @@ class Comments extends Component {
                                         <div className="media-content">
                                             <div className="content">
                                                 <p>
-                                                    <strong>{commenter.username}</strong>
+                                                    <Link href={{ pathname: '/profile', query: { id: commenter.id } }} >
+                                                        <a>
+                                                            {commenter.isMe ? <em>You</em> : <strong>{commenter.username}</strong>}
+                                                        </a>
+                                                    </Link>
                                                     <br />
                                                     {comment_text}
                                                     <br />
-                                                    <small><a>Like</a> · <a>Reply</a> · 3 hrs</small> · <span className="icon has-text-primary"><i className={`${iLike ? 'fas' : 'far'} fa-heart`}></i></span><span className="has-text-primary">{numLikes}</span>
+                                                    {
+                                                        (tags.map((tag, i) => {
+                                                            return <a key={tag.id} className={`tag is-rounded is-small font-2 is-medium ${i % 2 === 1 ? 'is-info' : 'is-primary'}`}>{tag.tag_name}</a>
+                                                        }))
+                                                    }
+
+                                                    <br />
+                                                    <small><a>Like</a> · <a>Reply</a> · {moment.utc(Number(created_at)).local().fromNow(true)}</small> ·
+                                                    <span className="icon has-text-primary"><i className={`${iLike ? 'fas' : 'far'} fa-heart`}></i></span><span className="has-text-primary">{numLikes}</span> ·
+                                                    <span className="icon has-text-info"><i class="fas fa-reply"></i></span><span className="has-text-info">{numReplies}</span>
+
+
                                                 </p>
                                             </div>
 
-                                            {/* <article className="media">
-                                        <figure className="media-left">
-                                            <p className="image is-48x48">
-                                                <img src="https://bulma.io/images/placeholders/96x96.png" />
-                                            </p>
-                                        </figure>
-                                        <div className="media-content">
-                                            <div className="content">
-                                                <p>
-                                                    <strong>Sean Brown</strong>
-                                                    <br />
-                                                    Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.
-                                                    <br />
-                                                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                                                </p>
-                                            </div>
-
-
-                                        </div>
-                                    </article> */}
-
-                                            {/* <article className="media">
-                                        <figure className="media-left">
-                                            <p className="image is-48x48">
-                                                <img src="https://bulma.io/images/placeholders/96x96.png" />
-                                            </p>
-                                        </figure>
-                                        <div className="media-content">
-                                            <div className="content">
-                                                <p>
-                                                    <strong>Kayli Eunice </strong>
-                                                    <br />
-                                                    Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat.
-                                                    <br />
-                                                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </article> */}
                                         </div>
                                     </article>
                                 })

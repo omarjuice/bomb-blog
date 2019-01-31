@@ -74,9 +74,9 @@ class PostPage extends Component {
                                                         </div>
                                                     </div>
                                                     <div className="column is-8-desktop is-full-mobile">
-                                                        {<div className="tags has-text-centered">
+                                                        {<div className="tags">
                                                             {tags.map((tag, i) => {
-                                                                return <span key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</span>
+                                                                return <a key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
                                                             })}
                                                         </div>}
                                                     </div>

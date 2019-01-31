@@ -10,6 +10,7 @@ module.exports = gql`
     posts(limit: Int = 3, search: String, order: Boolean, orderBy: String ): [Post]!
     tag(id: Int!): Tag!
     tags(limit: Int = 100, search: String, order: Boolean, orderBy: String ): [Tag]!
+    comment(id: Int!): Comment
   }
   type Mutation {
       login (username: String, password: String): Boolean!

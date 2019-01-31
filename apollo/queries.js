@@ -182,6 +182,7 @@ export const ILIKEPOST = gql`
         }
     }
 `
+
 export const FOLLOWFACTS = gql`
     query FollowFacts($id: Int){
         user(id: $id){

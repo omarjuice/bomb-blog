@@ -6,12 +6,7 @@ class Panels extends Component {
     state = {
         display: 'posts'
     }
-    displays = {
-        posts: <UserPosts userId={this.props.userId} />,
-        followers: <FollowPanel display="followers" userId={this.props.userId} />,
-        following: <FollowPanel display="following" userId={this.props.userId} />,
-        likes: <Likes userId={this.props.userId} />
-    }
+
     changeDisplay = (display) => {
         return e => {
             if (display === this.state.display) return;
@@ -27,7 +22,15 @@ class Panels extends Component {
             }
         }
     }
-    getDisplay = () => this.displays[this.state.display]
+    getDisplay = () => {
+        const displays = {
+            posts: <UserPosts userId={this.props.userId} />,
+            followers: <FollowPanel display="followers" userId={this.props.userId} />,
+            following: <FollowPanel display="following" userId={this.props.userId} />,
+            likes: <Likes userId={this.props.userId} />
+        }
+        return displays[this.state.display]
+    }
 
     render() {
         return (

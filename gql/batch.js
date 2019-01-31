@@ -1,6 +1,6 @@
 const DataLoader = require('dataloader')
 const { queryDB } = require('../db/connect')
-const bool = false
+const bool = !['test', 'production'].includes(process.env.NODE_ENV)
 const batchUsers = async keys => {
     const users = await queryDB(`SELECT id, username, created_at, email FROM users WHERE id IN (?)`, [keys], null, bool)
     const Users = users.reduce((acc, user) => {
@@ -97,6 +97,36 @@ const batchComments = async keys => {
     }, {})
     return keys.map(key => postComments[key] || [])
 }
+const batchNumComments = async keys => {
+    const numComments =
+        await queryDB(`
+        SELECT 
+            post_id, COUNT(comments.created_at) AS numComments
+        FROM
+            comments
+        WHERE post_id IN (?)
+        GROUP BY post_id
+        `, [keys], null, bool)
+    const NumComments = numComments.reduce((acc, { post_id, numComments }) => {
+        acc[post_id] = numComments
+        return acc
+    }, {})
+    return keys.map(key => NumComments[key] ? NumComments[key] : 0)
+}
+const batchCommentsById = async keys => {
+    const comments =
+        await queryDB(`
+        SELECT 
+            *
+        FROM comments
+        WHERE id IN (?)
+        `, [keys], null, bool)
+    const Comments = comments.reduce((acc, comment) => {
+        acc[comment.id] = comment
+        return acc
+    }, {})
+    return keys.map(key => Comments[key] || {})
+}
 const batchCommentLikes = async keys => {
     const commentLikes =
         await queryDB(`
@@ -126,6 +156,21 @@ const batchCommentReplies = async keys => {
         return acc
     }, {})
     return keys.map(key => CommentReplies[key] || [])
+}
+const batchNumReplies = async keys => {
+    const numReplies =
+        await queryDB(`
+        SELECT 
+            comment_id, COUNT(replies.created_at) AS numReplies
+        FROM replies
+        WHERE comment_id IN (?)
+        GROUP BY comment_id
+        `, [keys], null, bool)
+    const NumReplies = numReplies.reduce((acc, { comment_id, numReplies }) => {
+        acc[comment_id] = numReplies
+        return acc
+    }, {})
+    return keys.map(key => NumReplies[key] ? NumReplies[key] : 0)
 }
 const batchPostLikers = async keys => {
     const likers =
@@ -464,6 +509,7 @@ const applyLoaders = (context) => {
             byUserId: new DataLoader(keys => batchPosts_user_id(keys)),
             numLikes: new DataLoader(keys => batchPostLikes(keys)),
             comments: new DataLoader(keys => batchComments(keys)),
+            numComments: new DataLoader(keys => batchNumComments(keys)),
             likers: new DataLoader(keys => batchPostLikers(keys)),
             iLike: new DataLoader(keys => batchILikePost(keys, id))
         },
@@ -471,8 +517,10 @@ const applyLoaders = (context) => {
             byId: new DataLoader(keys => batchProfiles(keys))
         },
         comments: {
+            byId: new DataLoader(keys => batchCommentsById(keys)),
             numLikes: new DataLoader(keys => batchCommentLikes(keys)),
             replies: new DataLoader(keys => batchCommentReplies(keys)),
+            numReplies: new DataLoader(keys => batchNumReplies(keys)),
             likers: new DataLoader(keys => batchCommentLikers(keys)),
             iLike: new DataLoader(keys => batchILikeComment(keys, id))
         },

@@ -562,6 +562,15 @@ module.exports = function () {
                     }).end(finished))
         })
     })
+    describe('GQL: GET comment (by id', () => {
+        it('Should return a commment by id', done => {
+            reqGQL({ query: queries.comments.byId, variables: { id: 1 } })
+                .expect(({ body: { data: { comment } } }) => {
+                    expect(comment.id).toBe(1)
+                    expect(comment.replies.length).toBe(3)
+                }).end(done)
+        })
+    })
     describe('GQL: CREATE comments', () => {
         const comment_text = 'Cool post!'
         it('Should create a new comment', done => {

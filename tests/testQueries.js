@@ -320,6 +320,16 @@ module.exports = {
     }`
   },
   comments: {
+    byId: `query($id: Int!){
+      comment(id: $id){
+        id
+        comment_text
+        replies{
+          id
+          reply_text
+        }
+      }
+    }`,
     create: `mutation($post_id: Int!, $comment_text: String!, $tags: [String]){
       createComment(post_id: $post_id, comment_text: $comment_text, tags: $tags){
             id
