@@ -64,7 +64,7 @@ class UserTags extends Component {
                     if (loading) return <Loading size="2x" color="primary" />;
                     if (error) return <ErrorIcon />;
                     const { tags, isMe, username } = data.user
-                    const editButton = <button className=" button is-link" onClick={this.editTags(data.user.tags.map(tag => tag.tag_name))}><i className="fas fa-pencil-alt"></i></button>
+                    const editButton = <button className=" button is-info" onClick={this.editTags(data.user.tags.map(tag => tag.tag_name))}><i className="fas fa-pencil-alt"></i></button>
                     if (!this.state.editing) return (
                         <div>
                             {tags.length > 0 ? <div className="tags">
@@ -85,7 +85,7 @@ class UserTags extends Component {
                                         <textarea className="textarea" placeholder="#tag1 #tag2"
                                             value={this.state.input}
                                             onChange={(e) => this.setState({ input: e.target.value })} ></textarea>
-                                        <button type="submit" className="button is-link">Submit</button>
+                                        <button type="submit" className="button is-info">Submit</button>
                                     </form>
                                 )
                                 return <p>DONE</p>

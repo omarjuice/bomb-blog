@@ -7,7 +7,7 @@ const typeDefs = require('./gql/schema');
 const resolvers = require('./gql/resolvers')
 const applyLoaders = require('./gql/batch')
 const { resetDB, resetTables } = require('./tests/seed')
-
+const moment = require('moment')
 
 const dev = process.env.NODE_ENV !== 'production'
 const test = process.env.NODE_ENV === 'test'
@@ -24,7 +24,7 @@ const apollo = new ApolloServer({
         }
         console.log('-------------------------------')
         console.log(user, ctx.req.session.id)
-        console.log(ctx.req.body.operationName)
+        console.log(ctx.req.body.operationName, ctx.req.body.variables, moment(Date.now()).format('hh:mm:ss'))
 
         return applyLoaders(ctx)
     }, uploads: test

@@ -22,7 +22,7 @@ class Unfollow extends Component {
                     </a>
                 )
                 if (data && data.deleteFollow) {
-                    return <Loading />
+                    return <span className="icon has-text-warning"><i className={`${size} fas fa-check`}></i></span>
                 }
             }}
         </Mutation>

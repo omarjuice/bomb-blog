@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Unfollow from './UnFollow';
-import Follow from './Follow'
+import Unfollow from '../global/UnFollow';
+import Follow from '../global/Follow'
 import { Query } from 'react-apollo';
 import { USER_PROFILE } from '../../apollo/queries';
 import Loading from '../meta/Loading';

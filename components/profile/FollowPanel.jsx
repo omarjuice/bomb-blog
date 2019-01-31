@@ -3,8 +3,8 @@ import { Query } from 'react-apollo';
 import moment from 'moment'
 import Link from 'next/link'
 import Loading from '../meta/Loading';
-import Follow from './Follow';
-import Unfollow from './UnFollow';
+import Follow from '../global/Follow';
+import Unfollow from '../global/UnFollow';
 import { FOLLOWING, FOLLOWERS } from '../../apollo/queries';
 import ErrorIcon from '../meta/ErrorIcon';
 

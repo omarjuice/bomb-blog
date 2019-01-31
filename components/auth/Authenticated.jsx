@@ -16,7 +16,7 @@ class Authenticated extends Component {
                     // if(error) clearError();
                     return data && data.authenticated ? <Logout /> : <>
                         <div className="navbar-item has-text-centered">
-                            <a className="button is-link font-1" onClick={() => showModal({ display: 'Register', message: '', active: true })}>
+                            <a className="button is-info font-1" onClick={() => showModal({ display: 'Register', message: '', active: true })}>
                                 <strong>Sign up</strong>
                             </a>
                         </div>

@@ -44,15 +44,16 @@ class Likes extends Component {
                                                         <p>
                                                             <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-2">{title} </strong></a></Link>
                                                             <br />
-                                                            By {author.isMe ? 'You' : <Link href={{ pathname: '/profile', query: { id: author.id } }} >
+                                                            By <Link href={{ pathname: '/profile', query: { id: author.id } }} >
                                                                 <a>
-                                                                    <em>{author.username}</em>
+
+                                                                    {author.isMe ? <strong>You</strong> : <em>{author.username}</em>}
                                                                 </a>
-                                                            </Link>}
+                                                            </Link>
                                                             <br />
                                                             <small>
                                                                 <a><span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{`${numLikes}`}</span></a> · <a>
-                                                                    <span className="icon has-text-weight-bold"><i className="fas fa-comments"></i> {numComments}</span></a> · {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}
+                                                                    <span className="icon has-text-weight-bold has-text-link"><i className="fas fa-comments"></i> {numComments}</span></a> · {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}
                                                             </small>
                                                         </p>
                                                     </div>

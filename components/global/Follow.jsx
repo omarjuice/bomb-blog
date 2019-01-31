@@ -19,12 +19,12 @@ class Follow extends Component {
                 if (!data || (data && !data.createFollow)) return (
                     <a onClick={createFollow}>
                         <span className="icon hover-icon">
-                            <i className={`fas ${size} fa-user-plus has-text-link`}></i>
+                            <i className={`fas ${size} fa-user-plus has-text-info`}></i>
                         </span>
                     </a>
                 )
                 if (data && data.createFollow) {
-                    return <Loading />
+                    return <span className="icon has-text-success"><i className={`${size} fas fa-check`}></i></span>
                 }
             }}
         </Mutation>

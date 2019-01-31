@@ -157,6 +157,7 @@ export const POST = gql`
                 profile{
                     photo_path
                 }
+                imFollowing
             }
             created_at
             last_updated 
@@ -173,16 +174,34 @@ export const POST = gql`
         }
     }
 `
+export const ILIKEPOST = gql`
+    query ILike($id: Int!){
+        post(id: $id){
+            id
+            iLike
+        }
+    }
+`
+export const FOLLOWFACTS = gql`
+    query FollowFacts($id: Int){
+        user(id: $id){
+            imFollowing
+            followingMe
+        }
+    }
+`
 export const COMMENTS = gql`
     query Comments($id: Int!){
         post(id: $id){
+            id
             comments{
                 id
                 commenter{
                     id
                     username
                     profile{
-                    photo_path
+                        user_id
+                        photo_path
                     }
                 }
                 created_at

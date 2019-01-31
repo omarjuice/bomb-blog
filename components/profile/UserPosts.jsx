@@ -46,7 +46,7 @@ class UserPosts extends Component {
                                                             <br />
                                                             <small>
                                                                 <a><span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{`${numLikes}`}</span></a> · <a>
-                                                                    <span className="icon has-text-weight-bold"><i className="fas fa-comments"></i> {numComments}</span></a> · {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}
+                                                                    <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {numComments}</span></a> · {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}
                                                             </small>
                                                         </p>
                                                     </div>
