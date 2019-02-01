@@ -4,6 +4,8 @@ import Link from 'next/link'
 import Replies from './replies';
 import DeleteComment from './DeleteComment';
 import UpdateComment from './UpdateComment';
+import UnlikeComment from './UnlikeComment';
+import LikeComment from './LikeComment';
 
 class Comment extends Component {
     state = {
@@ -32,7 +34,6 @@ class Comment extends Component {
                             </Link>
                             <br />
                             {comment_text}
-
                             {tags.length > 0 ?
                                 <>
                                     <br />
@@ -43,7 +44,7 @@ class Comment extends Component {
                             }
 
                             <br />
-                            <small><a className="has-text-weight-bold has-text-primary">Like</a> · {last_updated ? <i className="fas fa-pen-square"></i> : ''} {moment.utc(Number(last_updated || created_at)).local().fromNow(true)}</small> ·
+                            <small>{iLike ? <UnlikeComment commentId={id} postId={post_id} /> : <LikeComment commentId={id} postId={post_id} />} · {last_updated ? <i className="fas fa-pen-square"></i> : ''} {moment.utc(Number(last_updated || created_at)).local().fromNow(true)}</small> ·
                         <a className="has-text-primary"><span className="icon"><i className={`${iLike ? 'fas' : 'far'} fa-heart`}></i></span><span className="has-text-primary">{numLikes}</span></a> ·
                         <a onClick={() => this.setState({ replies: !this.state.replies })}
                                 className="has-text-info">
