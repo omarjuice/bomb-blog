@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
 import { Query } from 'react-apollo';
-import { POST } from '../../apollo/queries';
+import { POST, POST_AUTHOR } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import moment from 'moment'
@@ -35,7 +35,7 @@ class PostPage extends Component {
 
                             </div>
                         )
-                        const { id, user_id, author, title, caption, post_content, created_at, last_updated, tags, numLikes, numComments, iLike } = data.post
+                        const { id, user_id, author, title, caption, post_content, created_at, last_updated, tags, numComments } = data.post
                         return (<div className="columns is-centered is-mobile is-multiline">
                             <div className="column is-7-desktop is-10-tablet is-full-mobile">
                                 <div className="card article">
@@ -58,19 +58,29 @@ class PostPage extends Component {
                                                 <div className="columns is-mobile is-centered is-multiline">
                                                     <div className="column is-2"></div>
                                                     <div className="column is-2 has-text-centered">
+
                                                         <Like postId={id} size="3x" />
-                                                        <br />
-                                                        <p className="is-size-4 font-1">{numLikes}</p>
+
                                                     </div>
 
                                                     <div className="column is-6">
                                                         <div className="subtitle is-6 article-subtitle">
-                                                            <Link href={{ pathname: '/profile', query: { id: user_id } }}><a>@{author.username}</a></Link>
-                                                            <br />
-                                                            at {moment.utc(Number(created_at)).local().format(' h:mma on MMMM Do, YYYY')}
-                                                            <br />
-                                                            {!!last_updated && `last updated: ${moment.utc(Number(last_updated)).local().format(' h:mma on \n MMMM Do, YYYY')}`}
-                                                            {author.imFollowing ? <Unfollow userId={user_id} /> : <Follow userId={user_id} />}
+                                                            <Query query={POST_AUTHOR} variables={{ id: user_id }} ssr={false}>
+                                                                {({ loading, error, data }) => {
+                                                                    if (loading) return <Loading size="3x" color="info" />
+                                                                    if (error) return <ErrorIcon size="3x" color="info" />
+                                                                    const postAuthor = data.user
+                                                                    return (<>
+                                                                        <Link href={{ pathname: '/profile', query: { id: user_id } }}><a>@{postAuthor.username}</a></Link>
+                                                                        <br />
+                                                                        at {moment.utc(Number(created_at)).local().format(' h:mma on MMMM Do, YYYY')}
+                                                                        <br />
+                                                                        {!!last_updated && `last updated: ${moment.utc(Number(last_updated)).local().format(' h:mma on \n MMMM Do, YYYY')}`}
+                                                                        {postAuthor.imFollowing ? <Unfollow userId={user_id} /> : <Follow userId={user_id} />}
+                                                                    </>
+                                                                    )
+                                                                }}
+                                                            </Query>
                                                         </div>
                                                     </div>
                                                     <div className="column is-8-desktop is-full-mobile">

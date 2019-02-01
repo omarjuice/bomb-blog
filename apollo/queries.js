@@ -161,16 +161,13 @@ export const POST = gql`
     query Post($id: Int!){
         post(id: $id){
             id
-            user_id
             author{
                 id
-                username
-                isMe
                 profile{
                     photo_path
                 }
-                imFollowing
             }
+            user_id 
             created_at
             last_updated 
             title
@@ -180,9 +177,17 @@ export const POST = gql`
                 id
                 tag_name
             }
-            numLikes
             numComments
-            iLike
+        }
+    }
+`
+export const POST_AUTHOR = gql`
+    query PostAuthor($id: Int!){
+        user(id: $id){
+                id
+                username
+                isMe
+                imFollowing
         }
     }
 `
@@ -191,6 +196,7 @@ export const ILIKEPOST = gql`
         post(id: $id){
             id
             iLike
+            numLikes
         }
     }
 `

@@ -35,9 +35,24 @@ export const UPDATE_PROFILE = gql`
             }
     }
 `
-// export const CREATE_LIKE = gql`
-//     mutation LikePost
-// `
+export const LIKE_POST = gql`
+    mutation LikePost($post_id: Int!){
+        likePost(post_id:$post_id)
+  }`
+export const UNLIKE_POST = gql`
+    mutation UnlikePost($post_id: Int!){
+        unlikePost(post_id:$post_id)
+  }`
+export const LIKE_COMMENT = gql`
+    mutation LikeComment($comment_id: Int!){
+        likeComment(comment_id: $comment_id)
+  }
+`
+export const UNLIKE_COMMENT = gql`
+    mutation UnlikeComment($comment_id: Int!){
+        unlikeComment(comment_id: $comment_id)
+    }
+`
 export const CREATE_COMMENT = gql`
     mutation CreateComment($post_id: Int!, $comment_text: String!, $tags:[String]!){
         createComment(post_id: $post_id, comment_text: $comment_text, tags: $tags){

@@ -12,7 +12,7 @@ class Follow extends Component {
     render() {
         const { userId } = this.props
         const size = this.props.size === 'large' ? 'fa-3x' : 'fa-lg'
-        return <Mutation mutation={FOLLOW} refetchQueries={[`Followers`, `Following`, `UserProfile`]} variables={{ user_id: userId }}>
+        return <Mutation mutation={FOLLOW} refetchQueries={[`Followers`, `Following`, `UserProfile`]} variables={{ user_id: userId }} ssr={false}>
             {(createFollow, { error, loading, data }) => {
                 if (loading) return <Loading size={size} color="link" />
                 if (error) return <ErrorIcon size={size} color="link" />

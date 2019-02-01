@@ -18,6 +18,7 @@ class ProfilePage extends Component {
                 <Link href="/">
                     <a>home</a>
                 </Link>
+                {/* refactor fetchPolicy */}
                 <Query query={USER_PROFILE} variables={{ id: Number(this.props.id) }} fetchPolicy="network-only">
                     {({ loading, error, data }) => {
                         if (loading || error) return (

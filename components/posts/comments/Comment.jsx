@@ -4,8 +4,7 @@ import Link from 'next/link'
 import Replies from './replies';
 import DeleteComment from './DeleteComment';
 import UpdateComment from './UpdateComment';
-import DeleteLike from '../DeleteLike';
-import CreateLike from '../CreateLike';
+
 class Comment extends Component {
     state = {
         replies: false,
