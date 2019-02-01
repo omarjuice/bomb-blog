@@ -10,7 +10,7 @@ const update = id => {
         if (!likePost) return;
         const data = proxy.readQuery({ query: ILIKEPOST, variables: { id } })
         data.post.iLike = true;
-        data.post.numLikes--;
+        data.post.numLikes++;
         proxy.writeQuery({ query: ILIKEPOST, variables: { id }, data })
     }
 }
@@ -23,7 +23,7 @@ class LikePost extends Component {
                     if (loading) return <Loading color="primary" size={this.props.size} />
                     if (error) return <ErrorIcon color="primary" size={this.props.size} />
                     return (
-                        <a onClick={async () => await likePost({ variables: { post_id: this.props.postId } })} href="" className="has-text-primary">
+                        <a onClick={async () => await likePost({ variables: { post_id: this.props.postId } })} className="has-text-primary">
                             <span className="icon">
                                 <i className={`far fa-heart fa-${this.props.size || 'lg'}`}>
                                 </i>
