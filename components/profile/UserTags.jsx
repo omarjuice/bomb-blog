@@ -4,6 +4,7 @@ import Loading from '../meta/Loading';
 import { USER_TAGS } from '../../apollo/queries';
 import { UPDATE_PROFILE } from '../../apollo/mutations';
 import ErrorIcon from '../meta/ErrorIcon';
+import { getMatches, updateTags } from '../../utlils';
 
 class UserTags extends Component {
     state = {
@@ -23,40 +24,12 @@ class UserTags extends Component {
     handleSubmit = insertTags => {
         return async e => {
             e.preventDefault()
-            const oldTags = this.state.tags.reduce((acc, tag) => {
-                acc[tag] = true
-                return acc
-            }, {})
-            const inputTags = this.getMatches(this.state.input, /#(\w+)/g).reduce((acc, tag) => {
-                acc[tag] = true
-                return acc
-            }, {})
-            const addTags = [];
-            const deleteTags = [];
-            for (let tag in oldTags) {
-                if (!inputTags[tag]) {
-                    deleteTags.push(tag)
-                }
-            }
-            for (let tag in inputTags) {
-                if (!oldTags[tag]) {
-                    addTags.push(tag)
-                }
-            }
-            await insertTags({ variables: { input: { modTags: { addTags, deleteTags } } } })
+            const modTags = updateTags(this.state.tags, getMatches(this.state.input, /#(\w+)/g))
+            await insertTags({ variables: { input: { modTags } } })
             this.setState({ editing: false, tags: [], input: '' })
+        }
+    }
 
-        }
-    }
-    getMatches(string, regex, index) {
-        index || (index = 1);
-        var matches = [];
-        var match;
-        while (match = regex.exec(string)) {
-            matches.push(match[index]);
-        }
-        return matches;
-    }
     render() {
         return (
             <Query query={USER_TAGS} variables={{ id: this.props.userId }}>

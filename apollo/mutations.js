@@ -50,6 +50,20 @@ export const CREATE_COMMENT = gql`
         }
     }
 `
+export const UPDATE_COMMENT = gql`
+    mutation UpdateComment($comment_id: Int!, $comment_text: String!, $modTags: ModTags){
+        updateComment(comment_text: $comment_text, comment_id: $comment_id, modTags: $modTags){
+            id
+            tags{
+                id
+                tag_name
+            }
+            comment_text
+            created_at
+            last_updated
+            }
+    }
+`
 export const DELETE_COMMENT = gql`
     mutation DeleteComment($comment_id: Int!){
         deleteComment(comment_id: $comment_id)

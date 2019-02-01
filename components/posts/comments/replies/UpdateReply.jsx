@@ -18,7 +18,7 @@ class UpdateReply extends Component {
     onSubmit = updateReply => {
         return async e => {
             e.preventDefault();
-            if (this.state.input === this.props.initial) {
+            if (this.state.input === this.props.initial || this.state.input.length < 1) {
                 return this.props.stopEdit()
             }
             await updateReply({ variables: { reply_id: this.props.replyId, reply_text: this.state.input } })
@@ -37,7 +37,7 @@ class UpdateReply extends Component {
                         </div>
                         <div className="field">
                             <p className="control">
-                                <button type="submit" className={`button is-info is-outlined ${loading && 'is-loading'}`}>Reply</button>
+                                <button type="submit" className={`button is-info is-outlined ${loading && 'is-loading'}`}>Submit</button>
                             </p>
                         </div>
                     </form>)

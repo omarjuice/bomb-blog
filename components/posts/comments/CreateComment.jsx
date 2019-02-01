@@ -4,6 +4,7 @@ import { Query, Mutation } from 'react-apollo';
 import { AUTHENTICATED, COMMENTS, POST, USER_PHOTO } from '../../../apollo/queries';
 import { showModal } from '../../../apollo/clientWrites';
 import { CREATE_COMMENT } from '../../../apollo/mutations';
+import { getMatches } from '../../../utlils';
 
 const update = id => {
     return (proxy, { data: { createComment } }) => {
@@ -21,13 +22,15 @@ const update = id => {
 class CreateComment extends Component {
     state = {
         input: '',
-        tagsText: ''
+        tagsText: '',
+        error: false
     }
     onSubmit = createComment => {
         return async e => {
             e.preventDefault()
-            const tags = this.getMatches(this.state.tagsText, /#(\w+)/g)
+            const tags = getMatches(this.state.tagsText, /#(\w+)/g)
             const comment_text = this.state.input;
+            if (comment_text.length < 1) return this.setState({ error: true });
             await createComment({ variables: { post_id: this.props.postId, comment_text, tags } })
             this.setState({
                 input: '',
@@ -35,15 +38,7 @@ class CreateComment extends Component {
             })
         }
     }
-    getMatches(string, regex, index) {
-        index || (index = 1);
-        var matches = [];
-        var match;
-        while (match = regex.exec(string)) {
-            matches.push(match[index]);
-        }
-        return matches;
-    }
+
     render() {
         return <Query query={AUTHENTICATED}>
             {({ loading, error, data }) => {
@@ -75,7 +70,7 @@ class CreateComment extends Component {
                                         <form action="" className="form" onSubmit={!loading && !error ? this.onSubmit(createComment) : undefined}>
                                             <div className="field">
                                                 <p className="control">
-                                                    <textarea onChange={e => this.setState({ input: e.target.value })} value={this.state.input} className="textarea" rows="2" placeholder="Add a comment..."></textarea>
+                                                    <textarea onChange={e => this.setState({ input: e.target.value, error: false })} value={this.state.input} className={`textarea ${this.state.error ? 'is-primary' : ''}`} rows="2" placeholder="Add a comment..."></textarea>
                                                 </p>
                                             </div>
                                             <div className="field">
@@ -89,6 +84,8 @@ class CreateComment extends Component {
                                                 </p>
                                             </div>
                                         </form>
+                                        <br />
+
                                     </div>
                                 </article>
                             )

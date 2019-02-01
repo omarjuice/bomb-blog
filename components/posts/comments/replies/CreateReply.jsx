@@ -16,12 +16,13 @@ const update = id => {
 }
 class CreateReply extends Component {
     state = {
-        input: ''
+        input: '',
+        error: false
     }
     onSubmit = createReply => {
         return async e => {
             e.preventDefault()
-            if (this.state.input.length < 1) return
+            if (this.state.input.length < 1) return this.setState({ error: true })
             await createReply({ variables: { comment_id: this.props.commentId, reply_text: this.state.input } })
             this.setState({
                 input: ''
@@ -60,7 +61,7 @@ class CreateReply extends Component {
                                         <form action="" className="form" onSubmit={!loading && !error ? this.onSubmit(createReply) : undefined}>
                                             <div className="field">
                                                 <p className="control">
-                                                    <textarea onChange={e => this.setState({ input: e.target.value })} value={this.state.input} className="textarea" rows="2" placeholder="Add a reply..."></textarea>
+                                                    <textarea onChange={e => this.setState({ input: e.target.value, error: false })} value={this.state.input} className={`textarea ${this.state.error ? 'is-primary' : ''}`} rows="2" placeholder="Add a reply..."></textarea>
                                                 </p>
                                             </div>
                                             <div className="field">
