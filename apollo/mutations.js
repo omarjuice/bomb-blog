@@ -35,6 +35,9 @@ export const UPDATE_PROFILE = gql`
             }
     }
 `
+// export const CREATE_LIKE = gql`
+//     mutation LikePost
+// `
 export const CREATE_COMMENT = gql`
     mutation CreateComment($post_id: Int!, $comment_text: String!, $tags:[String]!){
         createComment(post_id: $post_id, comment_text: $comment_text, tags: $tags){
@@ -69,6 +72,7 @@ export const DELETE_COMMENT = gql`
         deleteComment(comment_id: $comment_id)
     }
 `
+
 
 export const CREATE_REPLY = gql`
     mutation CreateReply($comment_id: Int!, $reply_text: String!){

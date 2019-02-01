@@ -20,13 +20,13 @@ module.exports = gql`
       createPost(input: PostDetails): Post!
       deletePost(id: Int!): Boolean!
       updatePost(id: Int!, input: PostDetails): Post!
-      addLike(post_id: Int!): Boolean!
-      deleteLike(post_id: Int!): Boolean!
+      likePost(post_id: Int!): Boolean!
+      unlikePost(post_id: Int!): Boolean!
       createComment(post_id: Int!, comment_text: String!, tags: [String]): Comment!
       updateComment(comment_id: Int!, comment_text: String!, modTags: ModTags): Comment!
       deleteComment(comment_id: Int!): Boolean!
-      addCommentLike(comment_id: Int!): Boolean!
-      deleteCommentLike(comment_id: Int!): Boolean!
+      likeComment(comment_id: Int!): Boolean!
+      unlikeComment(comment_id: Int!): Boolean!
       createReply(comment_id: Int!, reply_text: String!): Reply!
       deleteReply(reply_id: Int!): Boolean!
       updateReply(reply_id: Int!, reply_text: String!): Reply!

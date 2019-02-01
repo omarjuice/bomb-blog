@@ -294,10 +294,10 @@ module.exports = {
   },
   likes: {
     add: `mutation($post_id: Int!){
-      addLike(post_id:$post_id)
+      likePost(post_id:$post_id)
     }`,
     delete: `mutation($post_id: Int!){
-      deleteLike(post_id:$post_id)
+      unlikePost(post_id:$post_id)
     }`,
     getUserLikes: `query($id: Int){
       user(id:$id){
@@ -373,10 +373,10 @@ module.exports = {
     }`,
     likes: {
       add: `mutation($comment_id: Int!){
-        addCommentLike(comment_id: $comment_id)
+        likeComment(comment_id: $comment_id)
       }`,
       delete: `mutation($comment_id: Int!){
-        deleteCommentLike(comment_id: $comment_id)
+        unlikeComment(comment_id: $comment_id)
       }`
     }
   },

@@ -13,7 +13,6 @@ class Comments extends Component {
                     {({ loading, error, data }) => {
                         if (loading) return <Loading size="5x" color="primary" style="margin-top: 5rem" />
                         if (error) return <ErrorIcon size="5x" color="primary" style="margin-top: 5rem" />
-
                         return (
                             <>
                                 <hr />
@@ -26,10 +25,8 @@ class Comments extends Component {
                                 </div>
                                 <hr />
                                 <CreateComment postId={this.props.id} />
-
                             </>
                         )
-
                     }}
                 </Query>
 

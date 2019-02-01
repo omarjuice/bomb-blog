@@ -489,14 +489,14 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.likes.add, variables: { post_id: 2 } })
                     .expect(({ body }) => {
-                        expect(body.data.addLike).toBe(true)
+                        expect(body.data.likePost).toBe(true)
                     }).end(finished))
         })
         it('Should not add a duplicate like', done => {
             chainReqGQL(done, { query: queries.login.success[0] },
                 (finished) => reqGQL({ query: queries.likes.add, variables: { post_id: 1 } })
                     .expect(({ body }) => {
-                        expect(body.data.addLike).toBe(false)
+                        expect(body.data.likePost).toBe(false)
                     }).end(finished))
         })
         it('Should not add a like if not authenticated', done => {
@@ -513,7 +513,7 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.likes.delete, variables: { post_id: 1 } })
                     .expect(({ body }) => {
-                        expect(body.data.deleteLike).toBe(true)
+                        expect(body.data.unlikePost).toBe(true)
                     }).end(finished),
             )
         })
@@ -521,7 +521,7 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.likes.delete, variables: { post_id: 2 } })
                     .expect(({ body }) => {
-                        expect(body.data.deleteLike).toBe(false)
+                        expect(body.data.unlikePost).toBe(false)
                     }).end(finished),
             )
         })
@@ -679,7 +679,7 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[0] },
                 (finished) => reqGQL({ query: queries.comments.likes.add, variables: { comment_id: 2 } })
                     .expect(({ body }) => {
-                        expect(body.data.addCommentLike).toBe(true)
+                        expect(body.data.likeComment).toBe(true)
                     }).end(finished)
             )
         })
@@ -687,7 +687,7 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[2] },
                 (finished) => reqGQL({ query: queries.comments.likes.add, variables: { comment_id: 3 } })
                     .expect(({ body }) => {
-                        expect(body.data.addCommentLike).toBe(false)
+                        expect(body.data.likeComment).toBe(false)
                     }).end(finished)
             )
         })
@@ -697,7 +697,7 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.comments.likes.delete, variables: { comment_id: 3 } })
                     .expect(({ body }) => {
-                        expect(body.data.deleteCommentLike).toBe(true)
+                        expect(body.data.unlikeComment).toBe(true)
                     }).end(finished)
             )
         })
@@ -705,7 +705,7 @@ module.exports = function () {
             chainReqGQL(done, { query: queries.login.success[1] },
                 (finished) => reqGQL({ query: queries.comments.likes.delete, variables: { comment_id: 2 } })
                     .expect(({ body }) => {
-                        expect(body.data.deleteCommentLike).toBe(false)
+                        expect(body.data.unlikeComment).toBe(false)
                     }).end(finished)
             )
         })

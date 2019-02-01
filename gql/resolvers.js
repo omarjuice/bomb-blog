@@ -176,7 +176,7 @@ const resolvers = {
             if (newPost) return newPost;
             throw Errors.posts.notFound
         },
-        addLike: async (_, args, { req }) => {
+        likePost: async (_, args, { req }) => {
             let sessionUser = authenticate(req.session)
             let { post_id } = args
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
@@ -184,7 +184,7 @@ const resolvers = {
             const { affectedRows } = await queryDB(`INSERT INTO likes (user_id, post_id) VALUES ?`, [[[sessionUser, post_id]]]).catch(e => 0)
             return affectedRows > 0;
         },
-        deleteLike: async (_, args, { req }) => {
+        unlikePost: async (_, args, { req }) => {
             const { post_id } = args
             const sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
@@ -234,14 +234,14 @@ const resolvers = {
             const { affectedRows } = await queryDB(`DELETE FROM comments WHERE id= ? AND user_id= ? `, [comment_id, sessionUser]).catch(e => { throw Errors.database })
             return affectedRows > 0
         },
-        addCommentLike: async (_, args, { req }) => {
+        likeComment: async (_, args, { req }) => {
             const sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
             const { comment_id } = args;
             const { affectedRows } = await queryDB(`INSERT INTO comment_likes (user_id, comment_id) VALUES ?`, [[[sessionUser, comment_id]]]).catch(e => 0)
             return affectedRows > 0
         },
-        deleteCommentLike: async (_, args, { req }) => {
+        unlikeComment: async (_, args, { req }) => {
             const sessionUser = authenticate(req.session)
             if (!sessionUser) throw Errors.authentication.notLoggedIn;
             const { comment_id } = args;
