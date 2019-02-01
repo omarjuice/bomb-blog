@@ -44,7 +44,17 @@ class DeleteReply extends Component {
                             )
                         }
                         return (
-                            <>Delete ? <a onClick={this.handleClick(deleteReply)} className="has-text-success has-text-weight-bold">Yes</a> · <a onClick={() => this.setState({ confirmation: false })} className="has-text-danger has-text-weight-bold">No</a></>
+                            <>
+                                Delete ?
+                            <a onClick={this.handleClick(deleteReply)}
+                                    className="has-text-success has-text-weight-bold">
+                                    Yes
+                                </a> ·
+                            <a onClick={() => this.setState({ confirmation: false })}
+                                    className="has-text-danger has-text-weight-bold">
+                                    No
+                                    </a>
+                            </>
                         )
                     }}
                 </Mutation>

@@ -35,6 +35,26 @@ export const UPDATE_PROFILE = gql`
             }
     }
 `
+export const CREATE_COMMENT = gql`
+    mutation CreateComment($post_id: Int!, $comment_text: String!, $tags:[String]!){
+        createComment(post_id: $post_id, comment_text: $comment_text, tags: $tags){
+            id
+            post_id
+            created_at
+            last_updated
+            comment_text
+            tags{
+                id
+                tag_name
+            }
+        }
+    }
+`
+export const DELETE_COMMENT = gql`
+    mutation DeleteComment($comment_id: Int!){
+        deleteComment(comment_id: $comment_id)
+    }
+`
 
 export const CREATE_REPLY = gql`
     mutation CreateReply($comment_id: Int!, $reply_text: String!){
@@ -42,17 +62,8 @@ export const CREATE_REPLY = gql`
             id
             comment_id
             reply_text
-                replier{
-                    id
-                    username
-                    profile{
-                        user_id
-                        photo_path
-                    }
-                    isMe
-                }
-                created_at
-                last_updated
+            created_at
+            last_updated
         }
     }
 `

@@ -140,6 +140,7 @@ export const USER_PHOTO = gql`
     query UserPhoto{
         user{
             id
+            username
             profile{
                 user_id
                 photo_path
@@ -208,6 +209,7 @@ export const COMMENTS = gql`
             id
             comments{
                 id
+                post_id
                 commenter{
                     id
                     username
@@ -215,6 +217,7 @@ export const COMMENTS = gql`
                         user_id
                         photo_path
                     }
+                    isMe
                 }
                 created_at
                 last_updated

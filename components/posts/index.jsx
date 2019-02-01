@@ -92,12 +92,9 @@ class PostPage extends Component {
                             </div>
                             <div className="column is-6-desktop is-8-tablet is-12-mobile">
                                 <div className="box has-text-centered">
-                                    <a onClick={this.toggleComments}>
-                                        <span className="icon is-large">
-                                            <span className="fa-stack fa-lg">
-                                                <i className="fas fa-comment fa-stack-2x has-text-info"></i>
-                                                <i className={`fas fa-ellipsis-h fa-stack-1x ${this.state.comments ? 'has-text-white' : ''}`}></i>
-                                            </span>
+                                    <a onClick={this.toggleComments} className="has-text-info">
+                                        <span className="icon">
+                                            <i className="fas fa-comment-dots fa-4x"></i>
                                         </span>
                                     </a>
                                     {this.state.comments ? <Comments id={id} /> : <h1 className="title is-4 font-1">Comments: {numComments}</h1>}

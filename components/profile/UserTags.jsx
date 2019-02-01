@@ -49,7 +49,7 @@ class UserTags extends Component {
         }
     }
     getMatches(string, regex, index) {
-        index || (index = 1); // default to the first capturing group
+        index || (index = 1);
         var matches = [];
         var match;
         while (match = regex.exec(string)) {

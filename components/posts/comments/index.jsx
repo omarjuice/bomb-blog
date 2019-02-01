@@ -4,10 +4,8 @@ import { COMMENTS } from '../../../apollo/queries';
 import Loading from '../../meta/Loading';
 import ErrorIcon from '../../meta/ErrorIcon';
 import Comment from './Comment';
-import UserPhoto from '../../auth/UserPhoto';
-
+import CreateComment from './CreateComment'
 class Comments extends Component {
-
     render() {
         return (
             <div>
@@ -15,31 +13,22 @@ class Comments extends Component {
                     {({ loading, error, data }) => {
                         if (loading) return <Loading size="5x" color="primary" style="margin-top: 5rem" />
                         if (error) return <ErrorIcon size="5x" color="primary" style="margin-top: 5rem" />
-                        return (<>
-                            <div>
-                                {data.post.comments.map((comment) => <Comment key={comment.id} {...comment} />)}
+
+                        return (
+                            <>
                                 <hr />
-                            </div>
-                            <article className="media">
-                                <figure className="media-left">
-                                    <p className="image is-64x64">
-                                        <UserPhoto />
-                                    </p>
-                                </figure>
-                                <div className="media-content">
-                                    <div className="field">
-                                        <p className="control">
-                                            <textarea className="textarea" placeholder="Add a comment..."></textarea>
-                                        </p>
-                                    </div>
-                                    <div className="field">
-                                        <p className="control">
-                                            <button className="button">Post comment</button>
-                                        </p>
-                                    </div>
+                                <div>
+                                    {data.post.comments.length < 1 ?
+                                        <>
+                                            <div className="is-size-5 font-2">Be the first to comment on this post!</div>
+                                            <hr />
+                                        </> : ''}
+                                    {data.post.comments.map((comment) => <Comment key={comment.id} {...comment} />)}
                                 </div>
-                            </article>
-                        </>
+                                <hr />
+                                <CreateComment postId={this.props.id} />
+
+                            </>
                         )
 
                     }}

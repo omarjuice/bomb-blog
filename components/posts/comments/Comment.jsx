@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment'
 import Link from 'next/link'
 import Replies from './replies';
+import DeleteComment from './DeleteComment';
 class Comment extends Component {
     state = {
         replies: false
@@ -10,7 +11,7 @@ class Comment extends Component {
     // onMouseLeave = e => e.target.classList.remove('has-text-dark')
 
     render() {
-        const { id, commenter, created_at, last_updated, comment_text, numLikes, tags, iLike, numReplies } = this.props
+        const { id, post_id, commenter, created_at, last_updated, comment_text, numLikes, tags, iLike, numReplies } = this.props
         return <article key={id}
             className="media">
             <figure className="media-left">
@@ -48,6 +49,7 @@ class Comment extends Component {
                 </div>
                 {this.state.replies ? <Replies commentId={id} /> : ''}
             </div>
+            {commenter.isMe ? <DeleteComment postId={post_id} commentId={id} /> : ''}
             <style jsx>{`
                 .button.is-gray{
                     width: 100%;

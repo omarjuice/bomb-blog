@@ -5,7 +5,7 @@ import { USER_PHOTO } from '../../apollo/queries';
 class UserPhoto extends Component {
     render() {
         return (
-            <Query query={USER_PHOTO}>
+            <Query query={USER_PHOTO} ssr={false} >
                 {({ data }) => {
                     let photo_path;
                     try {
