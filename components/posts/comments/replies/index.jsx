@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo';
-import { REPLIES } from '../../apollo/queries';
-import Loading from '../meta/Loading';
-import ErrorIcon from '../meta/ErrorIcon';
+import { REPLIES } from '../../../../apollo/queries';
+import Loading from '../../../meta/Loading';
+import ErrorIcon from '../../../meta/ErrorIcon';
 import Reply from './Reply';
 import CreateReply from './CreateReply';
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import { UPDATE_REPLY } from '../../apollo/mutations';
-import { REPLIES } from '../../apollo/queries';
+import { UPDATE_REPLY } from '../../../../apollo/mutations';
+import { REPLIES } from '../../../../apollo/queries';
 
 const update = (id, reply_id) => {
     return (proxy, { data: { updateReply } }) => {

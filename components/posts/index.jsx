@@ -5,7 +5,7 @@ import { POST } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import moment from 'moment'
-import Comments from './Comments';
+import Comments from './comments';
 import Unfollow from '../global/UnFollow';
 import Follow from '../global/Follow';
 import Like from '../global/Like';

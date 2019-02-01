@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import Link from 'next/link'
-import Replies from './Replies';
+import Replies from './replies';
 class Comment extends Component {
     state = {
         replies: false

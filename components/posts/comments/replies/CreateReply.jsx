@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Mutation, Query } from 'react-apollo';
-import { CREATE_REPLY } from '../../apollo/mutations';
-import { AUTHENTICATED, REPLIES } from '../../apollo/queries';
-import UserPhoto from '../auth/UserPhoto';
-import { showModal } from '../../apollo/clientWrites';
+import { CREATE_REPLY } from '../../../../apollo/mutations';
+import { AUTHENTICATED, REPLIES } from '../../../../apollo/queries';
+import UserPhoto from '../../../auth/UserPhoto';
+import { showModal } from '../../../../apollo/clientWrites';
 
 const update = id => {
     return (proxy, { data: { createReply } }) => {
