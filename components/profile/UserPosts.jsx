@@ -4,6 +4,8 @@ import moment from 'moment'
 import Loading from '../meta/Loading';
 import { USER_POSTS } from '../../apollo/queries';
 import Link from 'next/link';
+import LikePost from '../posts/LikePost';
+import UnlikePost from '../posts/UnlikePost';
 
 
 class UserPosts extends Component {
@@ -53,7 +55,7 @@ class UserPosts extends Component {
                                                 </div>
                                                 <div className="media-right columns is-multiline is-mobile is-centered">
                                                     <div className="column is-half has-text-centered">
-                                                        {iLike ? <span className="icon has-text-primary"><i className="fas fa-heart fa-2x"></i></span> : <span className="icon has-text-primary"><i className="far fa-heart fa-2x"></i></span>}
+                                                        {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> : <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
                                                     </div>
                                                 </div>
                                             </article>

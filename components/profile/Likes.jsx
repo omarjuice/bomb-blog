@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Loading from '../meta/Loading';
 import { LIKES } from '../../apollo/queries';
 import ErrorIcon from '../meta/ErrorIcon';
+import UnlikePost from '../posts/UnlikePost';
 
 
 class Likes extends Component {
@@ -60,7 +61,7 @@ class Likes extends Component {
                                                 </div>
                                                 <div className="media-right columns is-multiline is-mobile is-centered">
                                                     <div className="column is-half has-text-centered">
-                                                        {iLike ? <span className="icon has-text-primary"><i className="fas fa-heart fa-2x"></i></span> : <span className="icon has-text-primary"><i className="far fa-heart fa-2x"></i></span>}
+                                                        {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> : <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
                                                     </div>
                                                 </div>
                                             </article>

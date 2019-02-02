@@ -5,7 +5,14 @@ import Loading from '../meta/Loading';
 import { UPDATE_PROFILE } from '../../apollo/mutations';
 import ErrorIcon from '../meta/ErrorIcon';
 
-
+const update = id => {
+    return (proxy, { data: { updateProfile } }) => {
+        if (!updateProfile) return;
+        const data = proxy.readQuery({ query: USER_PROFILE, variables: { id } })
+        data.user.profile = { ...data.user.profile, ...updateProfile }
+        proxy.writeQuery({ query: USER_PROFILE, variables: { id }, data })
+    }
+}
 
 class About extends Component {
     state = {
@@ -45,7 +52,7 @@ class About extends Component {
                     )
                     return (
                         <div>
-                            <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`UserProfile`]}>
+                            <Mutation mutation={UPDATE_PROFILE} update={update(this.props.userId)}>
                                 {(updateProfile, { loading, error, data }) => {
                                     if (loading) return <Loading />
                                     if (error) return <ErrorIcon />
