@@ -18,12 +18,12 @@ const update = id => {
 class UnlikePost extends Component {
     render() {
         return (
-            <Mutation mutation={UNLIKE_POST} update={update(this.props.postId)}>
+            <Mutation mutation={UNLIKE_POST} variables={{ post_id: this.props.postId }} update={update(this.props.postId)}>
                 {(unlikePost, { loading, error }) => {
                     if (loading) return <Loading color="primary" size={this.props.size} />
                     if (error) return <ErrorIcon color="primary" size={this.props.size} />
                     return (
-                        <a onClick={async () => await unlikePost({ variables: { post_id: this.props.postId } })} className="has-text-primary">
+                        <a onClick={unlikePost} className="has-text-primary">
                             <span className="icon">
                                 <i className={`fas fa-heart fa-${this.props.size || 'lg'}`}>
                                 </i>

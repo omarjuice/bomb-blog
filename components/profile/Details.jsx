@@ -36,7 +36,7 @@ class Details extends Component {
                             {isMe ? '' : <div className="level-item has-text-centered">
                                 <div>
                                     <p className="heading">{imFollowing ? 'Unfollow' : 'Follow'}</p>
-                                    <div className="title">{imFollowing ? <Unfollow userId={userId} size="small" /> : <Follow userId={userId} size="small" />}</div>
+                                    <div className="title">{imFollowing ? <Unfollow userId={userId} size="small" page="profile" /> : <Follow userId={userId} size="small" page="profile" />}</div>
                                 </div>
                             </div>}
                             {followingMe ? <div className="level-item has-text-centered">

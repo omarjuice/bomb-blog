@@ -133,14 +133,6 @@ export const CURRENT_USER = gql`
         user{
             id
             username
-        }
-    }
-`
-export const USER_PHOTO = gql`
-    query UserPhoto{
-        user{
-            id
-            username
             profile{
                 user_id
                 photo_path

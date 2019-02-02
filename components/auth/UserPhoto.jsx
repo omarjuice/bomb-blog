@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import { USER_PHOTO } from '../../apollo/queries';
+import { CURRENT_USER } from '../../apollo/queries';
 
 class UserPhoto extends Component {
     render() {
         return (
-            <Query query={USER_PHOTO} ssr={false} >
+            <Query query={CURRENT_USER} ssr={false} >
                 {({ data }) => {
                     let photo_path;
                     try {

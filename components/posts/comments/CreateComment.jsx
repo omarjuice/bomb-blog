@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import UserPhoto from '../../auth/UserPhoto';
 import { Query, Mutation } from 'react-apollo';
-import { AUTHENTICATED, COMMENTS, POST, USER_PHOTO } from '../../../apollo/queries';
+import { AUTHENTICATED, COMMENTS, POST, CURRENT_USER } from '../../../apollo/queries';
 import { showModal } from '../../../apollo/clientWrites';
 import { CREATE_COMMENT } from '../../../apollo/mutations';
 import { getMatches } from '../../../utlils';
@@ -9,7 +9,7 @@ import { getMatches } from '../../../utlils';
 const update = id => {
     return (proxy, { data: { createComment } }) => {
         const data = proxy.readQuery({ query: COMMENTS, variables: { id } })
-        const { user } = proxy.readQuery({ query: USER_PHOTO })
+        const { user } = proxy.readQuery({ query: CURRENT_USER })
         user.isMe = true
         data.post.comments.push({ ...createComment, commenter: user, numLikes: 0, numReplies: 0, iLike: false })
         proxy.writeQuery({ query: COMMENTS, variables: { id }, data })

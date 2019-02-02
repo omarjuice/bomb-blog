@@ -23,12 +23,12 @@ const update = (id, comment_id) => {
 class LikeComment extends Component {
     render() {
         return (
-            <Mutation mutation={LIKE_COMMENT} update={update(this.props.postId, this.props.commentId)}>
+            <Mutation mutation={LIKE_COMMENT} variables={{ comment_id: this.props.commentId }} update={update(this.props.postId, this.props.commentId)}>
                 {(likeComment, { loading, error }) => {
                     if (loading) return <Loading />
                     if (error) return <ErrorIcon />
                     return (
-                        <a onClick={async () => await likeComment({ variables: { comment_id: this.props.commentId } })}
+                        <a onClick={likeComment}
                             className="has-text-weight-bold has-text-primary">Like</a>
                     )
                 }}

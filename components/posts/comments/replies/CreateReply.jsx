@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import { CREATE_REPLY } from '../../../../apollo/mutations';
-import { AUTHENTICATED, REPLIES, USER_PHOTO } from '../../../../apollo/queries';
+import { AUTHENTICATED, REPLIES, CURRENT_USER } from '../../../../apollo/queries';
 import UserPhoto from '../../../auth/UserPhoto';
 import { showModal } from '../../../../apollo/clientWrites';
 
 const update = id => {
     return (proxy, { data: { createReply } }) => {
         const data = proxy.readQuery({ query: REPLIES, variables: { id } })
-        const { user } = proxy.readQuery({ query: USER_PHOTO })
+        const { user } = proxy.readQuery({ query: CURRENT_USER })
         user.isMe = true
         data.comment.replies.push({ ...createReply, replier: user })
         proxy.writeQuery({ query: REPLIES, variables: { id }, data })

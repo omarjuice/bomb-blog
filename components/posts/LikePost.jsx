@@ -18,12 +18,12 @@ const update = id => {
 class LikePost extends Component {
     render() {
         return (
-            <Mutation mutation={LIKE_POST} update={update(this.props.postId)}>
+            <Mutation mutation={LIKE_POST} variables={{ post_id: this.props.postId }} update={update(this.props.postId)}>
                 {(likePost, { loading, error }) => {
                     if (loading) return <Loading color="primary" size={this.props.size} />
                     if (error) return <ErrorIcon color="primary" size={this.props.size} />
                     return (
-                        <a onClick={async () => await likePost({ variables: { post_id: this.props.postId } })} className="has-text-primary">
+                        <a onClick={likePost} className="has-text-primary">
                             <span className="icon">
                                 <i className={`far fa-heart fa-${this.props.size || 'lg'}`}>
                                 </i>
