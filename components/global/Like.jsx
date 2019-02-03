@@ -8,7 +8,7 @@ import UnlikePost from '../posts/UnlikePost';
 
 class Like extends Component {
     render() {
-        const { size } = this.props
+        const { size, scale } = this.props
         return (
 
             <Query query={ILIKEPOST} variables={{ id: this.props.postId }} ssr={false}>
@@ -17,7 +17,7 @@ class Like extends Component {
                     if (error) return <ErrorIcon color="primary" size={size || 'lg'} />
                     const { iLike, numLikes, id } = data.post
                     return (<>
-                        {iLike ? <UnlikePost postId={id} size={size} /> : <LikePost postId={id} size={size} />}
+                        {iLike ? <UnlikePost postId={id} size={size} scale={scale} /> : <LikePost postId={id} size={size} scale={scale} />}
                         <br />
                         <p className="is-size-4 font-1">{numLikes}</p>
                     </>

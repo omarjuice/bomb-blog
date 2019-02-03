@@ -4,6 +4,7 @@ import Modal from './Modal';
 import Authenticated from '../auth/Authenticated';
 import GlobalStyles from './GlobalStyles';
 import ErrorMessage from './ErrorMessage';
+import BomgSVG from '../svg/bomb';
 
 class Header extends Component {
     state = {
@@ -26,7 +27,8 @@ class Header extends Component {
                 <nav className="navbar" role="navigation" aria-label="main navigation">
                     <div className="navbar-brand">
                         <a className="navbar-item" href="/">
-                            <img src="/static/brand.svg" width="150" height="100" />
+                            <span className="icon is-large"><BomgSVG lit={true} /></span>
+                            <img id="brand-img" src="/static/brand.svg" width="150" height="100" />
                         </a>
                         <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                             <span aria-hidden="true"></span>

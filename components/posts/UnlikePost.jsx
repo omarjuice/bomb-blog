@@ -4,6 +4,7 @@ import { UNLIKE_POST } from '../../apollo/mutations';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import { ILIKEPOST, USER_POSTS, LIKES, CURRENT_USER } from '../../apollo/queries';
+import BomgSVG from '../svg/bomb';
 
 const update = (id, { page, userId }) => {
     return (proxy, { data: { unlikePost } }) => {
@@ -55,10 +56,9 @@ class UnlikePost extends Component {
                     if (loading) return <Loading color="primary" size={this.props.size} />
                     if (error) return <ErrorIcon color="primary" size={this.props.size} />
                     return (
-                        <a onClick={unlikePost} className="has-text-primary">
-                            <span className="icon">
-                                <i className={`fas fa-heart fa-${this.props.size || 'lg'}`}>
-                                </i>
+                        <a onClick={unlikePost} className="has-text-primary has-text-centered">
+                            <span className="icon is-large">
+                                <BomgSVG lit={true} scale={this.props.scale || 1.2} />
                             </span>
                         </a>
                     )

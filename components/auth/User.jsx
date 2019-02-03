@@ -19,22 +19,33 @@ class User extends Component {
                         return <ErrorMessage />
                     };
                     return (
-                        <div>
-                            <Link href={{ pathname: '/profile', query: { id: data.user.id } }}>
-                                <a id="greeting" className="has-text-light font-2 ">
-                                    <p><em>Hey there, </em><strong>{(loading && <Loading style="margin" size="2x" />) || data.user.username}</strong>!</p>
-                                </a>
+                        <>
+                            <div>
+                                <img src={data.user.profile.photo_path || '/static/user_image.png'} alt="" />
+                            </div>
+                            <div className="has-text-centered">
 
-                            </Link>
-                            <style jsx>{`
+                                <Link href={{ pathname: '/profile', query: { id: data.user.id } }}>
+
+                                    <a id="greeting" className="has-text-light font-2 has-text-centered">
+                                        <p><strong>{(loading && <Loading style="margin" size="2x" />) || data.user.username}</strong></p>
+                                    </a>
+
+                                </Link>
+                                <style jsx>{`
                                 p{
                                     margin-right: 10px;
                                 }
                                 a{
                                     text-decoration: underline
                                 }
+                                #greeting{
+                                    position: relative;
+                                    left: .5rem !important;
+                                }
                                 `}</style>
-                        </div>
+                            </div>
+                        </>
                     )
                 }}
             </Query>

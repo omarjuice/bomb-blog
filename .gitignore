@@ -2,3 +2,4 @@
 .next
 .env
 test.sql
+stats.js

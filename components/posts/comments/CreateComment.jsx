@@ -4,7 +4,7 @@ import { Query, Mutation } from 'react-apollo';
 import { AUTHENTICATED, COMMENTS, POST, CURRENT_USER } from '../../../apollo/queries';
 import { showModal } from '../../../apollo/clientWrites';
 import { CREATE_COMMENT } from '../../../apollo/mutations';
-import { getMatches } from '../../../utlils';
+import { getMatches } from '../../../utils';
 
 const update = id => {
     return (proxy, { data: { createComment } }) => {
@@ -75,7 +75,7 @@ class CreateComment extends Component {
                                             </div>
                                             <div className="field">
                                                 <p className="control">
-                                                    <textarea onChange={e => this.setState({ tagsText: e.target.value })} value={this.state.tagsText} className="textarea" rows="1" placeholder="Add tags to your comment"></textarea>
+                                                    <textarea onChange={e => this.setState({ tagsText: e.target.value })} value={this.state.tagsText} className="textarea" rows="1" placeholder="#Add #tags #to #your #comment"></textarea>
                                                 </p>
                                             </div>
                                             <div className="field">

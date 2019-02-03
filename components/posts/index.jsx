@@ -59,7 +59,7 @@ class PostPage extends Component {
                                                     <div className="column is-2"></div>
                                                     <div className="column is-2 has-text-centered">
 
-                                                        <Like postId={id} size="3x" />
+                                                        <Like postId={id} size="3x" scale={1.5} />
 
                                                     </div>
 
@@ -83,7 +83,7 @@ class PostPage extends Component {
                                                             </Query>
                                                         </div>
                                                     </div>
-                                                    <div className="column is-8-desktop is-full-mobile">
+                                                    <div className="column is-8-desktop is-8-tablet is-full-mobile">
                                                         {<div className="tags">
                                                             {tags.map((tag, i) => {
                                                                 return <a key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
@@ -150,6 +150,10 @@ class PostPage extends Component {
                     }
                     .load-error{
                         margin-top: 40vh
+                    }
+                    .icon.is-large{
+                        height: 80px !important;
+                        width: 80px !important;
                     }
                 `}</style>
             </div>

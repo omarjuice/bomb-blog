@@ -4,7 +4,7 @@ import Loading from '../meta/Loading';
 import { USER_TAGS } from '../../apollo/queries';
 import { UPDATE_PROFILE } from '../../apollo/mutations';
 import ErrorIcon from '../meta/ErrorIcon';
-import { getMatches, updateTags } from '../../utlils';
+import { getMatches, updateTags } from '../../utils';
 
 class UserTags extends Component {
     state = {

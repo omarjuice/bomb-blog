@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { UPDATE_COMMENT } from '../../../apollo/mutations';
 import { Mutation } from 'react-apollo';
-import { updateTags, getMatches } from '../../../utlils';
+import { updateTags, getMatches } from '../../../utils';
 import { COMMENTS } from '../../../apollo/queries';
 
 const update = (id, comment_id) => {

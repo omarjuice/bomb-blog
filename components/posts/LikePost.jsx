@@ -4,6 +4,7 @@ import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import { ILIKEPOST, POST, USER_POSTS, LIKES, CURRENT_USER } from '../../apollo/queries';
 import { LIKE_POST } from '../../apollo/mutations';
+import BomgSVG from '../svg/bomb';
 
 const update = (id, { page, userId }) => {
     return (proxy, { data: likePost }) => {
@@ -48,10 +49,10 @@ class LikePost extends Component {
                     if (loading) return <Loading color="primary" size={this.props.size} />
                     if (error) return <ErrorIcon color="primary" size={this.props.size} />
                     return (
-                        <a onClick={likePost} className="has-text-primary">
-                            <span className="icon">
-                                <i className={`far fa-heart fa-${this.props.size || 'lg'}`}>
-                                </i>
+                        <a onClick={likePost} className="has-text-primary has-text-centered">
+                            <span className="icon is-large">
+
+                                <BomgSVG lit={false} scale={this.props.scale || 1.2} />
                             </span>
                         </a>
                     )
