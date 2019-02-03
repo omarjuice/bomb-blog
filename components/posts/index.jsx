@@ -151,10 +151,7 @@ class PostPage extends Component {
                     .load-error{
                         margin-top: 40vh
                     }
-                    .icon.is-large{
-                        height: 80px !important;
-                        width: 80px !important;
-                    }
+      
                 `}</style>
             </div>
         );

@@ -107,9 +107,13 @@ module.exports = gql`
       last_updated: String
   }
   type Liker{
-      user_id: Int!,
-      username: String!,
+      id: Int!
+      username: String!
+      profile: Profile!
       liked_at: String!
+      imFollowing: Boolean!
+      followingMe: Boolean!
+      isMe: Boolean!
   }
   type Follower{
       id: Int!

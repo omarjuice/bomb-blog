@@ -1,5 +1,8 @@
 import client from './client'
 export const showModal = (modal) => {
+    if (modal.info) {
+        modal.info = JSON.stringify(modal.info)
+    }
     client.writeData({
         data: {
             modal: { ...modal, __typename: 'Modal' }
@@ -13,6 +16,7 @@ export const hideModal = () => {
                 active: false,
                 message: '',
                 display: '',
+                info: '',
                 __typename: 'Modal'
             }
         }

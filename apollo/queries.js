@@ -254,13 +254,59 @@ export const REPLIES = gql`
         }
     }
 `
-export const ERROR = gql`
-query GetError{
-    error @client{
-        exists
-        message 
-        code
-        global
+export const LIKERS = gql`
+    query Likers($id: Int!){
+        post(id: $id){
+            id
+            likers{
+                id
+                username
+                profile{
+                    photo_path
+                }
+                isMe
+                imFollowing
+                followingMe
+                liked_at
+            }
+        }
     }
-}
+`
+export const COMMENT_LIKERS = gql`
+    query CommentLikers($id: Int!){
+        comment(id: $id){
+            id
+            likers{
+                id
+                username
+                profile{
+                    photo_path
+                }
+                isMe
+                imFollowing
+                followingMe
+                liked_at
+            }
+        }
+    }
+`
+export const ERROR = gql`
+    query GetError{
+        error @client{
+            exists
+            message 
+            code
+            global
+        }
+    }
+`
+export const GET_MODAL = gql`
+    query GetModal{
+        modal @client{
+            active
+            message
+            display
+            info
+        }
+    }
 `

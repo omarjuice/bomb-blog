@@ -176,7 +176,7 @@ const batchPostLikers = async keys => {
     const likers =
         await queryDB(`
             SELECT 
-                users.id AS user_id, post_id, username, likes.created_at AS liked_at
+                users.id AS id, post_id, username, likes.created_at AS liked_at
             FROM users
             INNER JOIN likes
                 ON likes.user_id = users.id
@@ -195,7 +195,7 @@ const batchCommentLikers = async keys => {
     const likers =
         await queryDB(`
             SELECT 
-                users.id AS user_id, comment_id, username, comment_likes.created_at AS liked_at
+                users.id AS id, comment_id, username, comment_likes.created_at AS liked_at
             FROM users
             INNER JOIN comment_likes
                 ON comment_likes.user_id = users.id

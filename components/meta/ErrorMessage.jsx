@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import { ERROR } from '../../apollo/queries';
-import { clearError } from '../../apollo/clientWrites';
+import { clearError, showModal } from '../../apollo/clientWrites';
 
 class ErrorMessage extends Component {
+    messageComponents = {
+        UNAUTHENTICATED: <div><a onClick={() => showModal({ display: 'Login', message: '', active: true })} >You must be logged in to do that. Click to log in.</a></div>
+    }
     render() {
         return (
             <Query query={ERROR}>
@@ -21,7 +24,7 @@ class ErrorMessage extends Component {
                                             onClick={clearError}></button>
                                     </div>
                                     <div className="message-body">
-                                        {data.error.message || 'ERROR MESSAGE'}
+                                        {this.messageComponents[data.error.code] || data.error.message || 'ERROR MESSAGE'}
                                     </div>
                                 </article>
                             </div>

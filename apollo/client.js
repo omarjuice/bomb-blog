@@ -19,7 +19,8 @@ const defaults = {
         __typename: 'Modal',
         active: false,
         message: '',
-        display: ''
+        display: '',
+        info: ''
     }
 }
 const cache = new InMemoryCache()

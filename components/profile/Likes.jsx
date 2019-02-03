@@ -6,6 +6,7 @@ import Loading from '../meta/Loading';
 import { LIKES } from '../../apollo/queries';
 import ErrorIcon from '../meta/ErrorIcon';
 import UnlikePost from '../posts/UnlikePost';
+import LikePost from '../posts/LikePost';
 
 
 class Likes extends Component {
@@ -69,10 +70,6 @@ class Likes extends Component {
                                     })}
                                 </div>
                                 <style jsx>{`
-                                .media-right{
-                                            position: relative;
-                                            top: 20px;
-                                        }
                                     .box{
                                         padding: 30px
                                     }

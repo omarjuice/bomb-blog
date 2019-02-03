@@ -27,6 +27,9 @@ class GlobalStyles extends Component {
                     filter: brightness(100%);
                     -webkit-filter: brightness(100%);
                 }
+                .underline{
+                    text-decoration: underline;
+                }
                 #brand-img{
                     width: 80px !important
                 }

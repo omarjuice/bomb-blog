@@ -63,10 +63,6 @@ class UserPosts extends Component {
                                     })}
                                 </div>
                                 <style jsx>{`
-                                    .media-right{
-                                        position: relative;
-                                        top: 20px;
-                                    }
                                     .box{
                                         padding: 30px
                                     }
