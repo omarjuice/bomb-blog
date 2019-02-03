@@ -2,13 +2,31 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
-import { ILIKEPOST, POST, USER_POSTS, LIKES, CURRENT_USER } from '../../apollo/queries';
+import { POST_LIKES, USER_POSTS, LIKES, CURRENT_USER, LIKERS } from '../../apollo/queries';
 import { LIKE_POST } from '../../apollo/mutations';
 import BomgSVG from '../svg/bomb';
 
 const update = (id, { page, userId }) => {
     return (proxy, { data: likePost }) => {
         if (!likePost) return;
+        try {
+            const { user } = proxy.readQuery({ query: CURRENT_USER })
+            const postLikers = proxy.readQuery({ query: LIKERS, variables: { id } })
+            postLikers.post.likers.push({
+                id: user.id,
+                username: user.username,
+                profile: {
+                    photo_path: user.profile.photo_path,
+                    __typename: "Profile"
+                },
+                isMe: true,
+                imFollowing: false,
+                followingMe: false,
+                liked_at: String(Date.now()),
+                __typename: "Liker"
+            })
+            proxy.writeQuery({ query: LIKERS, variables: { id }, data: postLikers })
+        } catch (e) { }
         if (page && page === 'profile' && userId) {
             try {
                 const userPosts = proxy.readQuery({ query: USER_POSTS, variables: { id: userId } })
@@ -32,12 +50,14 @@ const update = (id, { page, userId }) => {
                 })
                 proxy.writeQuery({ query: LIKES, variables: { id: userId }, data: userLikes })
             } catch (e) { }
+
+
             return
         }
-        const data = proxy.readQuery({ query: ILIKEPOST, variables: { id } })
+        const data = proxy.readQuery({ query: POST_LIKES, variables: { id } })
         data.post.iLike = true;
         data.post.numLikes++;
-        proxy.writeQuery({ query: ILIKEPOST, variables: { id }, data })
+        proxy.writeQuery({ query: POST_LIKES, variables: { id }, data })
     }
 }
 

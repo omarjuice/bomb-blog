@@ -3,12 +3,18 @@ import { Mutation } from 'react-apollo';
 import { UNLIKE_POST } from '../../apollo/mutations';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
-import { ILIKEPOST, USER_POSTS, LIKES, CURRENT_USER } from '../../apollo/queries';
+import { POST_LIKES, USER_POSTS, LIKES, CURRENT_USER, LIKERS } from '../../apollo/queries';
 import BomgSVG from '../svg/bomb';
 
 const update = (id, { page, userId }) => {
     return (proxy, { data: { unlikePost } }) => {
         if (!unlikePost) return;
+        try {
+            const currentUser = proxy.readQuery({ query: CURRENT_USER })
+            const postLikers = proxy.readQuery({ query: LIKERS, variables: { id } })
+            postLikers.post.likers = postLikers.post.likers.filter(liker => liker.id !== currentUser.user.id)
+            proxy.writeQuery({ query: LIKERS, variables: { id }, data: postLikers })
+        } catch (e) { }
         if (page && page === 'profile' && userId) {
             try {
                 const userPosts = proxy.readQuery({ query: USER_POSTS, variables: { id: userId } })
@@ -20,7 +26,7 @@ const update = (id, { page, userId }) => {
                     return post
                 })
                 proxy.writeQuery({ query: USER_POSTS, variables: { id: userId }, data: userPosts })
-            } catch (e) { console.log(e) }
+            } catch (e) { }
             try {
                 const userLikes = proxy.readQuery({ query: LIKES, variables: { id: userId } })
                 userLikes.user.likedPosts = userLikes.user.likedPosts.map(post => {
@@ -39,12 +45,14 @@ const update = (id, { page, userId }) => {
                 proxy.writeQuery({ query: LIKES, variables: { id: currentUser.user.id }, data: currentUserLikes })
 
             } catch (e) { }
+
             return
         }
-        const data = proxy.readQuery({ query: ILIKEPOST, variables: { id } })
+
+        const data = proxy.readQuery({ query: POST_LIKES, variables: { id } })
         data.post.iLike = false;
         data.post.numLikes--;
-        proxy.writeQuery({ query: ILIKEPOST, variables: { id }, data })
+        proxy.writeQuery({ query: POST_LIKES, variables: { id }, data })
     }
 }
 

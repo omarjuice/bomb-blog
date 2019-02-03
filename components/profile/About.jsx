@@ -30,7 +30,6 @@ class About extends Component {
     handleSubmit = editAbout => {
         return async e => {
             e.preventDefault();
-            console.log(this.state.input);
             await editAbout({ variables: { input: { about: this.state.input } } })
             this.setState({
                 editing: false,

@@ -183,7 +183,7 @@ export const POST_AUTHOR = gql`
         }
     }
 `
-export const ILIKEPOST = gql`
+export const POST_LIKES = gql`
     query ILike($id: Int!){
         post(id: $id){
             id

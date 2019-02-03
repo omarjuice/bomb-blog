@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import { ILIKEPOST } from '../../apollo/queries';
+import { POST_LIKES } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import LikePost from '../posts/LikePost';
@@ -13,7 +13,7 @@ class Like extends Component {
         const { size, scale } = this.props
         return (
 
-            <Query query={ILIKEPOST} variables={{ id: this.props.postId }} ssr={false}>
+            <Query query={POST_LIKES} variables={{ id: this.props.postId }} ssr={false}>
                 {({ loading, error, data }) => {
                     if (loading) return <Loading color="primary" size={size || 'lg'} />;
                     if (error) return <ErrorIcon color="primary" size={size || 'lg'} />
