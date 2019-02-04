@@ -42,7 +42,7 @@ module.exports = gql`
       username: String!
       email: String!
       created_at: String!
-      profile(id: Int): Profile!
+      profile: Profile!
       posts: [Post]!
       tags: [Tag]!
       likedPosts: [Post]!

@@ -295,115 +295,50 @@ const resolvers = {
         }
     },
     User: {
-        profile: async (parent, args, { req, Loaders }) => {
-            const id = args.id || parent.id || req.session.user.id
-            if (!id) return null;
+        profile: async ({ id }, _, { Loaders }) => {
             const profile = await Loaders.profiles.byId.load(id)
             if (profile && profile.user_id) return profile
             throw Errors.profile.notFound
         },
-        posts: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.posts.notFound;
-            const posts = await Loaders.posts.byUserId.load(id)
-            if (!posts) throw Errors.posts.notFound;
-            return posts
-        },
+        posts: async ({ id }, _, { Loaders }) => await Loaders.posts.byUserId.load(id),
         followers: async ({ id }, _, { Loaders }) => await Loaders.users.followers.load(id),
         following: async ({ id }, _, { Loaders }) => await Loaders.users.following.load(id),
         numFollowers: async ({ id }, _, { Loaders }) => await Loaders.users.numFollowers.load(id),
         numFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.numFollowing.load(id),
         imFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.imFollowing.load(id),
         followingMe: async ({ id }, _, { Loaders }) => await Loaders.users.followingMe.load(id),
-        tags: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.user.notSpecified;
-            return await Loaders.tags.byUserId.load(id);
-        },
-        likedPosts: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.user.notSpecified;
-            return await Loaders.users.likedPosts.load(id)
-        },
+        tags: async ({ id }, _, { Loaders }) => await Loaders.tags.byUserId.load(id),
+        likedPosts: async ({ id }, _, { Loaders }) => await Loaders.users.likedPosts.load(id),
         isMe: async ({ id }, _, { req }) => id === authenticate(req.session)
     },
     Post: {
-        author: async ({ user_id }, _, { Loaders }) => {
-            if (!user_id) throw Errors.user.notSpecified;
-            const author = await Loaders.users.byId.load(user_id)
-            if (!author || !author.username) throw Errors.user.notFound;
-            return author
-        },
-        numLikes: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.posts.notSpecified;
-            return await Loaders.posts.numLikes.load(id)
-        },
-        comments: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.posts.notSpecified;
-            return await Loaders.posts.comments.load(id)
-        },
+        author: async ({ user_id }, _, { Loaders }) => await Loaders.users.byId.load(user_id),
+        numLikes: async ({ id }, _, { Loaders }) => await Loaders.posts.numLikes.load(id),
+        comments: async ({ id }, _, { Loaders }) => await Loaders.posts.comments.load(id),
         numComments: async ({ id }, _, { Loaders }) => await Loaders.posts.numComments.load(id),
-        likers: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.posts.notSpecified;
-            return await Loaders.posts.likers.load(id)
-        },
-        tags: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.posts.notSpecified;
-            return await Loaders.tags.byPostId.load(id);
-        },
+        likers: async ({ id }, _, { Loaders }) => await Loaders.posts.likers.load(id),
+        tags: async ({ id }, _, { Loaders }) => await Loaders.tags.byPostId.load(id),
         iLike: async ({ id }, _, { Loaders }) => await Loaders.posts.iLike.load(id)
     },
     Comment: {
-        commenter: async ({ user_id }, _, { Loaders }) => {
-            if (!user_id) throw Errors.user.notSpecified;
-            const commenter = await Loaders.users.byId.load(user_id)
-            if (!commenter || !commenter.username) throw Errors.user.notFound;
-            return commenter
-        },
-        numLikes: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.comments.notSpecified
-            return await Loaders.comments.numLikes.load(id)
-        },
+        commenter: async ({ user_id }, _, { Loaders }) => await Loaders.users.byId.load(user_id),
+        numLikes: async ({ id }, _, { Loaders }) => await Loaders.comments.numLikes.load(id),
         numReplies: async ({ id }, _, { Loaders }) => await Loaders.comments.numReplies.load(id),
-        replies: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.comments.notSpecified;
-            return await Loaders.comments.replies.load(id)
-        },
-        likers: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.comments.notSpecified;
-            return await Loaders.comments.likers.load(id)
-        },
-        tags: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.comments.notSpecified;
-            return await Loaders.tags.byCommentId.load(id);
-        },
+        replies: async ({ id }, _, { Loaders }) => await Loaders.comments.replies.load(id),
+        likers: async ({ id }, _, { Loaders }) => await Loaders.comments.likers.load(id),
+        tags: async ({ id }, _, { Loaders }) => await Loaders.tags.byCommentId.load(id),
         iLike: async ({ id }, _, { Loaders }) => await Loaders.comments.iLike.load(id)
     },
     Reply: {
-        replier: async ({ user_id }, _, { Loaders }) => {
-            if (!user_id) throw Errors.user.notSpecified;
-            const replier = await Loaders.users.byId.load(user_id)
-            if (!replier || !replier.username) throw Errors.user.notFound;
-            return replier
-        },
+        replier: async ({ user_id }, _, { Loaders }) => await Loaders.users.byId.load(user_id),
     },
     Profile: {
-        user: async ({ user_id }, _, { Loaders }) => {
-            if (!user_id) throw Errors.user.notSpecified;
-            const user = await Loaders.users.byId.load(user_id)
-            if (!user || !user.username) throw Errors.user.notFound;
-            return user
-        }
+        user: async ({ user_id }, _, { Loaders }) => await Loaders.users.byId.load(user_id)
     },
     Tag: {
-        users: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.tags.notSpecified
-            return await Loaders.tags.users.load(id)
-        },
-        posts: async ({ id }, _, { Loaders }) => {
-            if (!id) throw Errors.tags.notSpecified
-            return await Loaders.tags.posts.load(id)
-        },
-        comments: async ({ id }, _, { Loaders }) => {
-            return await Loaders.tags.comments.load(id)
-        },
+        users: async ({ id }, _, { Loaders }) => await Loaders.tags.users.load(id),
+        posts: async ({ id }, _, { Loaders }) => await Loaders.tags.posts.load(id),
+        comments: async ({ id }, _, { Loaders }) => await Loaders.tags.comments.load(id),
     },
     Follower: {
         imFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.imFollowing.load(id),
@@ -417,7 +352,6 @@ const resolvers = {
         isMe: async ({ id }, _, { req }) => id === authenticate(req.session),
         profile: async ({ id }, _, { Loaders }) => await Loaders.profiles.byId.load(id)
     }
-
 };
 
 module.exports = resolvers

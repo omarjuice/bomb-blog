@@ -56,14 +56,14 @@ class PostPage extends Component {
                                                 </div>
                                                 <hr />
                                                 <div className="columns is-mobile is-centered is-multiline">
-                                                    <div className="column is-2"></div>
+                                                    <div className="column is-2 is-1-mobile"></div>
                                                     <div className="column is-2 has-text-centered">
-
-                                                        <Like postId={id} size="3x" scale={1.5} />
-
+                                                        <div>
+                                                            <Like postId={id} size="3x" scale={1.5} />
+                                                        </div>
                                                     </div>
-
-                                                    <div className="column is-6">
+                                                    <div className="column is-2 is-hidden-tablet"></div>
+                                                    <div className="post-stats column is-6">
                                                         <div className="subtitle is-6 article-subtitle">
                                                             <Query query={POST_AUTHOR} variables={{ id: user_id }} ssr={false}>
                                                                 {({ loading, error, data }) => {
@@ -150,6 +150,10 @@ class PostPage extends Component {
                     }
                     .load-error{
                         margin-top: 40vh
+                    }
+                    .post-stats{
+                        display: flex;
+                        align-items: center;
                     }
       
                 `}</style>
