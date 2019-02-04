@@ -13,12 +13,6 @@ class GlobalStyles extends Component {
                 .font-2{
                     font-family: 'Baloo Thambi', sans-serif;
                 }
-                .navbar{
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0
-                }
                 .hover-icon{
                     filter: brightness(80%);
                     -webkit-filter: brightness(80%);
@@ -29,6 +23,13 @@ class GlobalStyles extends Component {
                 }
                 .underline{
                     text-decoration: underline;
+                }
+                .primary-navbar{
+                    z-index: 4
+                }
+                .secondary-navbar{
+                    z-index: 2;
+                    top: 4rem !important
                 }
                 #brand-img{
                     width: 80px !important

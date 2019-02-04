@@ -3,7 +3,7 @@ import { Query } from 'react-apollo';
 import Logout from './Logout';
 import Loading from '../meta/Loading';
 import { AUTHENTICATED } from '../../apollo/queries';
-import { showModal, clearError } from '../../apollo/clientWrites';
+import { showModal } from '../../apollo/clientWrites';
 class Authenticated extends Component {
     render() {
         return (
@@ -13,7 +13,6 @@ class Authenticated extends Component {
                         <div className="navbar-item has-text-centered">
                             <div><Loading size="2x" /></div>
                         </div>)
-                    // if(error) clearError();
                     return data && data.authenticated ? <Logout /> : <>
                         <div className="navbar-item has-text-centered">
                             <a className="button is-info font-1" onClick={() => showModal({ display: 'Register', message: '', active: true })}>

@@ -15,7 +15,7 @@ class Posts extends Component {
     render() {
         return (
             <>
-                <Header />
+
 
                 {/* <UsersList variables={{ limit: 100, orderBy: 'created_at', order: true, search: 'a' }} /> */}
                 <PostPage id={this.props.id} />

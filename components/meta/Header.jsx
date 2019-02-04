@@ -5,6 +5,7 @@ import Authenticated from '../auth/Authenticated';
 import GlobalStyles from './GlobalStyles';
 import ErrorMessage from './ErrorMessage';
 import BomgSVG from '../svg/bomb';
+import Navbar from './Navbar';
 
 class Header extends Component {
     state = {
@@ -32,57 +33,7 @@ class Header extends Component {
                     <meta name="theme-color" content="#ffffff"></meta>
                 </Head>
                 <GlobalStyles />
-                <nav className="navbar" role="navigation" aria-label="main navigation">
-                    <div className="navbar-brand">
-                        <a className="navbar-item" href="/">
-                            <span className="icon is-large"><BomgSVG lit={true} /></span>
-                            <img id="brand-img" src="/static/brand.svg" width="150" height="100" />
-                        </a>
-                        <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                        </a>
-                    </div>
-                    <div id="navbarBasicExample" className={`navbar-menu ${this.state.menu && 'is-active'}`}>
-                        <div className="navbar-start">
-                            <a className="navbar-item">
-                                Home
-                            </a>
-
-                            <a className="navbar-item">
-                                Documentation
-                            </a>
-
-                            <div className="navbar-item has-dropdown is-hoverable">
-                                <a className="navbar-link">
-                                    More
-                                </a>
-
-                                <div className="navbar-dropdown">
-                                    <a className="navbar-item">
-                                        About
-                                    </a>
-                                    <a className="navbar-item">
-                                        Jobs
-                                    </a>
-                                    <a className="navbar-item">
-                                        Contact
-                                    </a>
-                                    <hr className="navbar-divider" />
-                                    <a className="navbar-item">
-                                        Report an issue
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div className="navbar-end">
-                            <Authenticated />
-                        </div>
-                    </div>
-                </nav>
+                <Navbar />
                 <div id="buffer"></div>
                 <Modal />
                 <ErrorMessage globalScope={true} />
@@ -94,7 +45,6 @@ class Header extends Component {
                     #buffer{
                         height: 45px;
                     }
-                    
                 `}</style>
             </div>
         );

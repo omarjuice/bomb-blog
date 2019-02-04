@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import Authenticated from '../components/auth/Authenticated';
-import Header from '../components/meta/Header';
 import BomgSVG from '../components/svg/bomb';
 class Index extends Component {
     static async getInitialProps({ apolloClient }) {
@@ -27,7 +25,6 @@ class Index extends Component {
         return (
             // <div><Users /></div>
             <>
-                <Header />
                 <BomgSVG />
             </>
         );

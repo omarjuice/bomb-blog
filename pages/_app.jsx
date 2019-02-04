@@ -1,6 +1,7 @@
 import App, { Container } from 'next/app'
 import { ApolloProvider } from 'react-apollo'
 import withApollo from '../apollo'
+import Header from '../components/meta/Header';
 
 class MyApp extends App {
     render() {
@@ -8,6 +9,7 @@ class MyApp extends App {
         return (
             <Container>
                 <ApolloProvider client={apollo}>
+                    <Header />
                     <Component {...pageProps} client={apollo} />
                 </ApolloProvider>
             </Container>
