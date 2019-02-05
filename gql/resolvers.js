@@ -32,7 +32,7 @@ const resolvers = {
             if (input.tags && input.tags.length > 0) {
                 const query = `
                 SELECT 
-                    users.id, COUNT(tags.tag_name) as relevance
+                    users.id, users.username, users.email, users.created_at, COUNT(tags.tag_name) as relevance
                 FROM users
                 INNER JOIN user_tags
                     ON user_tags.user_id=users.id
@@ -43,11 +43,11 @@ const resolvers = {
                 ORDER BY relevance ${order}
                 LIMIT ?,?
                 `
-                const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit]).catch(e => { console.log(e) })
+                const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
                 return { results, cursor: cursor + results.length }
             }
             const query = `SELECT id, username, email, created_at FROM users WHERE username LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
-            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit]).catch(e => { console.log(e); })
+            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e); })
             return { results, cursor: cursor + results.length }
         },
         post: async (_, args, { Loaders }) => {
@@ -73,11 +73,11 @@ const resolvers = {
                 ORDER BY relevance ${order}
                 LIMIT ?,?
                 `
-                const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit]).catch(e => { console.log(e) })
+                const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
                 return { results, cursor: cursor + results.length }
             }
             const query = `SELECT * FROM posts WHERE title LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
-            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit]).catch(e => { console.log(e) })
+            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
             return { results, cursor: cursor + results.length }
         },
         tag: async (_, args, { Loaders }) => {

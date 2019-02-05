@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import BomgSVG from '../svg/bomb';
 import Authenticated from '../auth/Authenticated';
-import SecondaryNav from './SecondaryNav';
+import SearchNav from './SearchNav';
 
 class Navbar extends Component {
     state = {
         menu: false,
-        secondaryNav: false
+        searchNav: false
     }
     render() {
 
@@ -22,12 +22,12 @@ class Navbar extends Component {
                         <a className="navbar-item">
                             <span className="icon is-large"><i className="fas fa-home fa-lg"></i></span>
                         </a>
-                        <a className={`navbar-item ${this.state.secondaryNav ? 'has-text-info' : ''}`}
-                            onClick={() => this.setState({ secondaryNav: !this.state.secondaryNav })}>
+                        <a className={`navbar-item ${this.state.searchNav ? 'has-text-info' : ''}`}
+                            onClick={() => this.setState({ searchNav: !this.state.searchNav, menu: !this.state.searchNav ? false : this.state.menu })}>
                             <span className="icon is-large"><i className="fas fa-search fa-lg"></i></span>
                         </a>
 
-                        <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                        <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu, searchNav: !this.state.menu ? false : this.state.searchNav })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
@@ -42,7 +42,7 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </nav>
-                <SecondaryNav active={this.state.secondaryNav} />
+                <SearchNav active={this.state.searchNav} />
             </div>
         );
     }

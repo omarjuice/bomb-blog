@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Link from 'next/link';
 import { getMatches } from '../../utils';
 
-class SecondaryNav extends Component {
+class SearchNav extends Component {
     state = {
         input: '',
         optionsActive: false,
@@ -10,10 +10,7 @@ class SecondaryNav extends Component {
     }
     parseInput() {
         const { input, options } = this.state;
-        const tagRegex = /#(\w+)/g
-        const tags = getMatches(input, tagRegex) || [];
-        const search = input.replace(tagRegex, '').trim().replace(/\s+/g, ' ')
-        return { search, tags, options }
+        return { input, options }
     }
     render() {
         return (
@@ -50,4 +47,4 @@ class SecondaryNav extends Component {
     }
 }
 
-export default SecondaryNav;
+export default SearchNav;

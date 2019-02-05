@@ -9,7 +9,6 @@ const applyLoaders = require('./gql/batch')
 // const { resetDB, resetTables } = require('./tests/seed')
 const moment = require('moment')
 const { queryDB } = require('./db/connect')
-
 const dev = process.env.NODE_ENV !== 'production'
 const test = process.env.NODE_ENV === 'test'
 let port = process.env.PORT || 3000
@@ -59,7 +58,6 @@ const initializeServer = (app, productionEnv = false) => {
                 })
                 app.get('/search', (req, res) => {
                     const { query } = req
-                    if (!query.tags) query.tags = []
                     nextApp.render(req, res, '/search', query)
                 })
                 app.get('*', (req, res) => {

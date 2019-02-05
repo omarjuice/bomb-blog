@@ -291,11 +291,21 @@ export const COMMENT_LIKERS = gql`
     }
 `
 export const SEARCH_POSTS = gql`
-    query SearchPosts($limit: Int, $cursor: Int, $search: String, $tags: [String], $order: Boolean, $orderBy: String){
-        posts(limit: $limit, cursor: $cursor, search: $search, tags: $tags, $order: $order, orderBy: $orderBy ){
+    query SearchPosts($input: Search!){
+        posts(input: $input){
             cursor
             results{
                 id
+                user_id
+                author{
+                    id
+                    username
+                    profile{
+                        user_id
+                        photo_path
+                    }
+                }
+                relevance
                 title
                 created_at
                 last_updated
@@ -312,13 +322,87 @@ export const SEARCH_POSTS = gql`
     }
 `
 export const SEARCH_USERS = gql`
-    
+    query SearchUsers($input: Search!){
+        users(input: $input){
+            cursor
+            results{
+                id
+                relevance
+                username
+                email
+                created_at
+                profile{
+                    user_id
+                    about
+                    photo_path
+                    last_updated
+                }
+                isMe
+                imFollowing
+                followingMe
+                numFollowers
+                numFollowing
+            }
+        }
+    }
+`
+export const SEARCH_ALL = gql`
+    query SearchAll($input: Search!){
+        users(input: $input){
+            cursor
+            results{
+                id
+                relevance
+                username
+                email
+                created_at
+                profile{
+                    user_id
+                    about
+                    photo_path
+                    last_updated
+                }
+                isMe
+                imFollowing
+                followingMe
+                numFollowers
+                numFollowing
+            }
+        }
+        posts(input: $input){
+            cursor
+            results{
+                id
+                user_id
+                author{
+                    id
+                    username
+                    profile{
+                        user_id
+                        photo_path
+                    }
+                }
+                relevance
+                title
+                created_at
+                last_updated
+                numLikes
+                numComments
+                caption
+                iLike 
+                tags{
+                    id
+                    tag_name
+                }
+            }
+        }
+    }
 `
 export const ERROR = gql`
     query GetError{
         error @client{
             exists
-            message 
+            message
             code
             global
         }
