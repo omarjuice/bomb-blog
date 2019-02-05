@@ -19,7 +19,7 @@ class ProfilePage extends Component {
                     <a>home</a>
                 </Link>
                 {/* refactor fetchPolicy */}
-                <Query query={USER_PROFILE} variables={{ id: Number(this.props.id) }} fetchPolicy="network-only">
+                <Query query={USER_PROFILE} variables={{ id: Number(this.props.id) }}>
                     {({ loading, error, data }) => {
                         if (loading || error) return (
                             <div className="columns is-centered">

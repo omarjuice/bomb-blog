@@ -12,7 +12,7 @@ class Details extends Component {
         const { userId } = this.props
         return (
             <nav className="level is-mobile">
-                <Query query={USER_PROFILE} variables={{ id: userId }}>
+                <Query query={USER_PROFILE} variables={{ id: userId }} ssr={false}>
                     {({ loading, error, data }) => {
                         if (loading) return (
                             <div className="level-item has-text-centered">
