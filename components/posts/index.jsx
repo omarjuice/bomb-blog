@@ -63,8 +63,8 @@ class PostPage extends Component {
                                                         </div>
                                                     </div>
                                                     <div className="column is-2 is-hidden-tablet"></div>
-                                                    <div className="post-stats column is-6">
-                                                        <div className="subtitle is-6 article-subtitle">
+                                                    <div className="post-stats column is-6 has-text-centered">
+                                                        <div className="subtitle is-6 article-subtitle has-text-centered">
                                                             <Query query={POST_AUTHOR} variables={{ id: user_id }} ssr={false}>
                                                                 {({ loading, error, data }) => {
                                                                     if (loading) return <Loading size="3x" color="info" />

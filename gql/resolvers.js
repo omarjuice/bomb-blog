@@ -27,8 +27,27 @@ const resolvers = {
         users: async (_, args, ) => {
             const orderBy = args.orderBy === 'username' ? 'LOWER(username)' : 'created_at';
             const order = args.order ? 'ASC' : 'DESC'
-            const query = `SELECT id, username, email, created_at FROM users WHERE username LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?`
-            return await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
+            const cursor = args.cursor ? args.cursor : 0
+            if (args.tags) {
+                const query = `
+                SELECT 
+                    users.id, COUNT(tags.tag_name) as relevance
+                FROM users
+                INNER JOIN user_tags
+                    ON user_tags.user_id=users.id
+                INNER JOIN tags
+                    ON tags.id = user_tags.tag_id
+                WHERE tag_name IN (?) AND users.username LIKE ?
+                GROUP BY users.id
+                ORDER BY relevance ${order}
+                LIMIT ?,?
+                `
+                const results = await queryDB(query, [args.tags, `%${args.search || ''}%`, cursor, args.limit]).catch(e => { throw Errors.database })
+                return { results, cursor: cursor + results.length }
+            }
+            const query = `SELECT id, username, email, created_at FROM users WHERE username LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
+            const results = await queryDB(query, [`%${args.search || ''}%`, cursor, args.limit]).catch(e => { throw Errors.database })
+            return { results, cursor: cursor + results.length }
         },
         authenticated: (_, args, { req }) => !!authenticate(req.session),
         post: async (_, args, { Loaders }) => {
@@ -39,8 +58,27 @@ const resolvers = {
         posts: async (_, args) => {
             const orderBy = args.orderBy === 'title' ? 'LOWER(title)' : 'created_at';
             const order = args.order ? 'ASC' : 'DESC'
-            const query = `SELECT * FROM posts WHERE title LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?`
-            return await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
+            const cursor = args.cursor ? args.cursor : 0
+            if (args.tags) {
+                const query = `
+                SELECT 
+                    posts.*, COUNT(tags.tag_name) as relevance
+                FROM posts
+                INNER JOIN post_tags
+                    ON post_tags.post_id=posts.id
+                INNER JOIN tags
+                    ON tags.id = post_tags.tag_id
+                WHERE tag_name IN (?) AND posts.title LIKE ?
+                GROUP BY posts.id
+                ORDER BY relevance ${order}
+                LIMIT ?,?
+                `
+                const results = await queryDB(query, [args.tags, `%${args.search || ''}%`, cursor, args.limit]).catch(e => { throw Errors.database })
+                return { results, cursor: cursor + results.length }
+            }
+            const query = `SELECT * FROM posts WHERE title LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
+            const results = await queryDB(query, [`%${args.search || ''}%`, cursor, args.limit]).catch(e => { throw Errors.database })
+            return { results, cursor: cursor + results.length }
         },
         tag: async (_, args, { Loaders }) => {
             const tag = await Loaders.tags.byId.load(args.id)
@@ -56,7 +94,6 @@ const resolvers = {
             throw Errors.tags.notFound
         },
         comment: async (_, { id }, { Loaders }) => await Loaders.comments.byId.load(id)
-
     },
     Mutation: {
         login: async (_, { username, password }, { req }) => {

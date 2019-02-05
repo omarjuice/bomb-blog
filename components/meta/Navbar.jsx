@@ -20,11 +20,11 @@ class Navbar extends Component {
                             <img id="brand-img" src="/static/brand.svg" width="150" height="100" />
                         </a>
                         <a className="navbar-item">
-                            <span className="icon is-large"><i class="fas fa-home fa-lg"></i></span>
+                            <span className="icon is-large"><i className="fas fa-home fa-lg"></i></span>
                         </a>
                         <a className={`navbar-item ${this.state.secondaryNav ? 'has-text-info' : ''}`}
                             onClick={() => this.setState({ secondaryNav: !this.state.secondaryNav })}>
-                            <span className="icon is-large"><i class="fas fa-search fa-lg"></i></span>
+                            <span className="icon is-large"><i className="fas fa-search fa-lg"></i></span>
                         </a>
 
                         <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
