@@ -197,7 +197,6 @@ const seedDB = {
 
 
 const resetDB = (done) => {
-    console.log(database)
     const query1 = `DROP DATABASE IF EXISTS ${database}`;
     const query2 = `CREATE DATABASE IF NOT EXISTS ${database}`;
     seedDB.hashUsers(seedDB.usersHashed).then(() => {
@@ -209,7 +208,6 @@ const resetDB = (done) => {
         .then(() => done ? done() : null).catch(e => console.log(e))
 }
 const resetTables = (done) => {
-    console.log('TABLES')
     seedDB.numUsers = 3
     queryDB(`
         SET FOREIGN_KEY_CHECKS = 0;

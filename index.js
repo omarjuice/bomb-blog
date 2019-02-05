@@ -57,6 +57,11 @@ const initializeServer = (app, productionEnv = false) => {
                     const { query } = req;
                     nextApp.render(req, res, '/posts', query)
                 })
+                app.get('/search', (req, res) => {
+                    const { query } = req
+                    if (!query.tags) query.tags = []
+                    nextApp.render(req, res, '/search', query)
+                })
                 app.get('*', (req, res) => {
                     nextApp.render(req, res, '/')
                 })

@@ -5,9 +5,9 @@ module.exports = gql`
     hello: String
     authenticated: Boolean!
     user(id: Int, username: String): User!
-    users(limit: Int = 3, cursor: Int, search: String, order: Boolean, orderBy: String, tags:[String]): Users!
+    users(input: Search!): Users!
     post(id: Int!): Post
-    posts(limit: Int = 3, cursor: Int, search: String, order: Boolean, orderBy: String, tags:[String]): Posts!
+    posts(input: Search!): Posts!
     tag(id: Int!): Tag!
     tags(limit: Int = 100, search: String, order: Boolean, orderBy: String ): [Tag]!
     comment(id: Int!): Comment
@@ -154,6 +154,14 @@ module.exports = gql`
     username: String! 
     password: String!
     email: String!
+  }
+  input Search{
+    limit: Int = 3
+    cursor: Int = 0
+    search: String 
+    order: Boolean
+    orderBy: String 
+    tags:[String]
   }
 
 `;

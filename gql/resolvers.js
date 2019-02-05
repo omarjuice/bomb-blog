@@ -16,6 +16,7 @@ const authenticate = (session) => {
 const resolvers = {
     Query: {
         hello: () => 'Hello world!',
+        authenticated: (_, args, { req }) => !!authenticate(req.session),
         user: async (_, args, { req, Loaders }) => {
             let sessionUser = authenticate(req.session)
             let id = args.id || sessionUser
@@ -24,11 +25,11 @@ const resolvers = {
             if (user && user.id) return user;
             throw Errors.user.notFound
         },
-        users: async (_, args, ) => {
-            const orderBy = args.orderBy === 'username' ? 'LOWER(username)' : 'created_at';
-            const order = args.order ? 'ASC' : 'DESC'
-            const cursor = args.cursor ? args.cursor : 0
-            if (args.tags) {
+        users: async (_, { input }, ) => {
+            const orderBy = input.orderBy === 'username' ? 'LOWER(username)' : 'created_at';
+            const order = input.order ? 'ASC' : 'DESC'
+            const { cursor, limit } = input
+            if (input.tags && input.tags.length > 0) {
                 const query = `
                 SELECT 
                     users.id, COUNT(tags.tag_name) as relevance
@@ -42,24 +43,23 @@ const resolvers = {
                 ORDER BY relevance ${order}
                 LIMIT ?,?
                 `
-                const results = await queryDB(query, [args.tags, `%${args.search || ''}%`, cursor, args.limit]).catch(e => { throw Errors.database })
+                const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit]).catch(e => { console.log(e) })
                 return { results, cursor: cursor + results.length }
             }
             const query = `SELECT id, username, email, created_at FROM users WHERE username LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
-            const results = await queryDB(query, [`%${args.search || ''}%`, cursor, args.limit]).catch(e => { throw Errors.database })
+            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit]).catch(e => { console.log(e); })
             return { results, cursor: cursor + results.length }
         },
-        authenticated: (_, args, { req }) => !!authenticate(req.session),
         post: async (_, args, { Loaders }) => {
             const post = await Loaders.posts.byId.load(args.id)
             if (post && post.id) return post;
             throw Errors.posts.notFound
         },
-        posts: async (_, args) => {
-            const orderBy = args.orderBy === 'title' ? 'LOWER(title)' : 'created_at';
-            const order = args.order ? 'ASC' : 'DESC'
-            const cursor = args.cursor ? args.cursor : 0
-            if (args.tags) {
+        posts: async (_, { input }) => {
+            const orderBy = input.orderBy === 'title' ? 'LOWER(title)' : 'created_at';
+            const order = input.order ? 'ASC' : 'DESC'
+            const { cursor, limit } = input
+            if (input.tags && input.tags.length > 0) {
                 const query = `
                 SELECT 
                     posts.*, COUNT(tags.tag_name) as relevance
@@ -73,11 +73,11 @@ const resolvers = {
                 ORDER BY relevance ${order}
                 LIMIT ?,?
                 `
-                const results = await queryDB(query, [args.tags, `%${args.search || ''}%`, cursor, args.limit]).catch(e => { throw Errors.database })
+                const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit]).catch(e => { console.log(e) })
                 return { results, cursor: cursor + results.length }
             }
             const query = `SELECT * FROM posts WHERE title LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
-            const results = await queryDB(query, [`%${args.search || ''}%`, cursor, args.limit]).catch(e => { throw Errors.database })
+            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit]).catch(e => { console.log(e) })
             return { results, cursor: cursor + results.length }
         },
         tag: async (_, args, { Loaders }) => {

@@ -146,10 +146,11 @@ module.exports = function () {
         it('Should get all users', done => {
             queryDB(`INSERT IGNORE INTO users (email, username, pswd, created_at) VALUES ?`, [seedDB.manyUsers(10)], seedDB.hashUsers)
                 .then(() => {
-                    reqGQL({ query: queries.user.all, variables: { limit: 15 } })
+                    reqGQL({ query: queries.user.all, variables: { input: { limit: 5, cursor: 3 } } })
                         .expect(({ body }) => {
-                            expect(body.data.users.length).toBe(13)
-                            body.data.users.forEach(user => {
+                            expect(body.data.users.results.length).toBe(5)
+                            expect(body.data.users.cursor).toBe(8)
+                            body.data.users.results.forEach(user => {
                                 expect(user).toMatchObject({
                                     id: expect.any(Number),
                                     username: expect.any(String)
@@ -160,10 +161,10 @@ module.exports = function () {
 
         })
         it('Should search users', done => {
-            reqGQL({ query: queries.user.all, variables: { search: 'alpha' } })
+            reqGQL({ query: queries.user.all, variables: { input: { search: 'alpha' } } })
                 .expect(({ body }) => {
-                    expect(body.data.users.length).toBe(1)
-                    expect(body.data.users[0]).toMatchObject({
+                    expect(body.data.users.results.length).toBe(1)
+                    expect(body.data.users.results[0]).toMatchObject({
                         id: 1,
                         username: 'alpha'
                     })
@@ -253,12 +254,13 @@ module.exports = function () {
         it('Should get all posts and the author', done => {
             queryDB(`INSERT INTO posts (user_id, title, caption, created_at, post_content) VALUES ?`, [seedDB.manyPosts(100)])
                 .then(() => {
-                    const limit = 103;
+                    const limit = 50;
+                    const cursor = 20
                     const order = true;
                     const orderBy = 'created_at';
-                    reqGQL({ query: queries.posts.all, variables: { limit, order, orderBy } })
+                    reqGQL({ query: queries.posts.all, variables: { input: { limit, order, orderBy, cursor } } })
                         .expect(({ body }) => {
-                            body.data.posts.forEach(({ id, title, caption, user_id, author, numLikes }) => {
+                            body.data.posts.results.forEach(({ id, title, caption, user_id, author, numLikes }) => {
                                 expect(typeof id).toBe('number')
                                 expect(typeof user_id).toBe('number')
                                 expect(typeof title).toBe('string')
@@ -266,14 +268,16 @@ module.exports = function () {
                                 expect(typeof author.username).toBe('string')
                                 expect(typeof numLikes).toBe('number')
                             })
-                            expect(body.data.posts.length).toBe(103)
+                            expect(body.data.posts.results.length).toBe(50)
+                            expect(body.data.posts.cursor).toBe(70)
+
                         }).end(done)
                 }).catch(e => done(e))
         })
         it('Should search all posts', done => {
-            reqGQL({ query: queries.posts.all, variables: { search: "latin" } })
+            reqGQL({ query: queries.posts.all, variables: { input: { search: "latin" } } })
                 .expect(({ body }) => {
-                    expect(body.data.posts[0]).toMatchObject({
+                    expect(body.data.posts.results[0]).toMatchObject({
                         "id": 3,
                         "user_id": 3,
                         "author": {
@@ -1180,9 +1184,9 @@ module.exports = function () {
         })
         it('Should tell if a user is a followee/follower of another user', done => {
             chainReqGQL(done, { query: queries.login.success[0] },
-                (finished) => reqGQL({ query: queries.follows.getFollowBools })
+                (finished) => reqGQL({ query: queries.follows.getFollowBools, variables: { input: {} } })
                     .expect(({ body }) => {
-                        for (let user of body.data.users) {
+                        for (let user of body.data.users.results) {
                             if (user.id === 1) {
                                 expect(user.imFollowing).toBe(false)
                                 expect(user.followingMe).toBe(false)
@@ -1248,9 +1252,9 @@ module.exports = function () {
     describe('GQL: MY LIKES', () => {
         it('Should return whether an authenticated user likes posts/comments', done => {
             chainReqGQL(done, { query: queries.login.success[2] },
-                (finished) => reqGQL({ query: queries.likes.myLikes })
+                (finished) => reqGQL({ query: queries.likes.myLikes, variables: { input: {} } })
                     .expect(({ body }) => {
-                        body.data.posts.forEach(post => {
+                        body.data.posts.results.forEach(post => {
                             expect(typeof post.iLike).toBe('boolean')
                             post.comments.forEach(comment => {
                                 expect(typeof comment.iLike).toBe('boolean')
@@ -1260,9 +1264,9 @@ module.exports = function () {
             )
         })
         it('Should return false for all fields without authentication', done => {
-            reqGQL({ query: queries.likes.myLikes })
+            reqGQL({ query: queries.likes.myLikes, variables: { input: {} } })
                 .expect(({ body }) => {
-                    body.data.posts.forEach(post => {
+                    body.data.posts.results.forEach(post => {
                         expect(post.iLike).toBe(false)
                         post.comments.forEach(comment => {
                             expect(comment.iLike).toBe(false)

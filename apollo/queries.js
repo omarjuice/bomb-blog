@@ -290,6 +290,30 @@ export const COMMENT_LIKERS = gql`
         }
     }
 `
+export const SEARCH_POSTS = gql`
+    query SearchPosts($limit: Int, $cursor: Int, $search: String, $tags: [String], $order: Boolean, $orderBy: String){
+        posts(limit: $limit, cursor: $cursor, search: $search, tags: $tags, $order: $order, orderBy: $orderBy ){
+            cursor
+            results{
+                id
+                title
+                created_at
+                last_updated
+                numLikes
+                numComments
+                caption
+                iLike 
+                tags{
+                    id
+                    tag_name
+                }
+            }
+        }
+    }
+`
+export const SEARCH_USERS = gql`
+    
+`
 export const ERROR = gql`
     query GetError{
         error @client{

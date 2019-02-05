@@ -1,7 +1,7 @@
 export const getMatches = (string, regex, index) => {
     index || (index = 1);
-    var matches = [];
-    var match;
+    const matches = [];
+    let match;
     while (match = regex.exec(string)) {
         matches.push(match[index]);
     }

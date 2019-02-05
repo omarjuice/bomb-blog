@@ -23,10 +23,12 @@ module.exports = {
   },
   logout: `mutation { logout }`,
   user: {
-    all: `query($limit: Int, $search: String, $orderBy: String, $order: Boolean){
-      users(limit: $limit, search: $search, orderBy: $orderBy, order: $order){
-        id
-        username
+    all: `query($input: Search!){
+      users(input: $input){
+        cursor
+        results{
+          id username
+        }
       }
     }`,
     byId: `query($id: Int){
@@ -82,17 +84,20 @@ module.exports = {
       }`
   },
   posts: {
-    all: `query ($limit: Int, $search: String, $orderBy: String, $order: Boolean ){
-            posts(limit: $limit, search: $search, orderBy: $orderBy, order: $order ){
-                  id
-                  user_id
-                  title
-                  caption
-                  created_at
-                  author{
-                    username
+    all: `query ($input: Search!){
+            posts(input: $input){
+                  cursor
+                  results{
+                    id
+                    user_id
+                    title
+                    caption
+                    created_at
+                    author{
+                      username
+                    }
+                    numLikes
                   }
-                  numLikes
             }
           }`,
     byId: `query ($id: Int!){
@@ -308,13 +313,16 @@ module.exports = {
         }
       }
     }`,
-    myLikes: `query{
-      posts{
-        id
-        iLike
-        comments{
+    myLikes: `query($input: Search!){
+      posts(input: $input){
+        cursor
+        results{
           id
           iLike
+          comments{
+          id
+          iLike
+        }
         }
       }
     }`
@@ -466,11 +474,14 @@ module.exports = {
     delete: `mutation($user_id: Int!){
       deleteFollow(user_id: $user_id)
     }`,
-    getFollowBools: `query{
-      users{
+    getFollowBools: `query($input: Search!){
+      users(input: $input){
+       cursor
+       results{
         id
         imFollowing
         followingMe
+       }
       }
     }`
   }
