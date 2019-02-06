@@ -15,7 +15,6 @@ class Users extends Component {
     }
     render() {
         const { data, input } = this.props
-        console.log(data);
         if (data && data.results.length === 0) {
             return (
                 <article className="media">

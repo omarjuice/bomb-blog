@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL } from '../apollo/queries';
 import SearchPage from '../components/search';
+import { setSearch } from '../apollo/clientWrites';
 
 class Search extends Component {
+    static getInitialProps({ query }) {
+        setSearch(query)
+        const { input, options } = query
+        return { input, options }
+    }
     render() {
-        const { input, options } = this.props.query
         return (
-            <SearchPage input={input} options={options} />
+            <SearchPage input={this.props.input} options={this.props.options} />
         );
     }
 }

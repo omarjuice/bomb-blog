@@ -5,7 +5,6 @@ export default class MyDocument extends Document {
         const initialProps = await Document.getInitialProps(ctx)
         return { ...initialProps }
     }
-
     render() {
         return (
             <html className="has-navbar-fixed-top">

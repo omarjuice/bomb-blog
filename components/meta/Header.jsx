@@ -17,7 +17,7 @@ class Header extends Component {
             <div>
 
                 <GlobalStyles />
-                <Navbar pathname={this.props.pathname} query={this.props.query} />
+                <Navbar client={this.props.client} />
                 <Modal />
                 <ErrorMessage globalScope={true} />
                 <style jsx>{`

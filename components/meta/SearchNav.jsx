@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
-import { getMatches } from '../../utils';
+import { GET_SEARCH } from '../../apollo/queries';
+
 
 class SearchNav extends Component {
     state = {
-        input: this.props.searchPath ? this.props.query.input : '',
-        options: this.props.searchPath ? this.props.query.options : 'all'
+        input: '',
+        optionsActive: false,
+        options: 'all'
+    }
+    componentDidMount() {
+        const initial = this.props.client.readQuery({ query: GET_SEARCH })
+        this.setState({
+            input: initial.search.input,
+            options: initial.search.options
+        })
     }
     render() {
         return (

@@ -9,8 +9,6 @@ class Navbar extends Component {
         searchNav: false
     }
     render() {
-
-
         return (
             <div>
                 <nav className="navbar is-fixed-top primary-navbar" role="navigation" aria-label="main navigation">
@@ -42,7 +40,7 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </nav>
-                <SearchNav active={this.state.searchNav} searchPath={this.props.pathname === '/search'} query={this.props.query} />
+                <SearchNav active={this.state.searchNav} client={this.props.client} />
             </div>
         );
     }

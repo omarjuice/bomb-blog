@@ -42,3 +42,14 @@ export const clearAuth = () => {
         }
     })
 }
+export const setSearch = ({ input, options }) => {
+    client.writeData({
+        data: {
+            search: {
+                __typename: 'Search',
+                input,
+                options
+            }
+        }
+    })
+}

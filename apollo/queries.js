@@ -427,3 +427,11 @@ export const GET_MODAL = gql`
         }
     }
 `
+export const GET_SEARCH = gql`
+    query GetSearch{
+        search @client{
+            input
+            options
+        }
+    }
+`
