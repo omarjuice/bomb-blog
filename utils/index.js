@@ -34,6 +34,6 @@ export const shortenNumber = (num) => {
 
     if (num >= 1000000) return String(num / 1000000).slice(0, 3) + 'M'
     if (num >= 1000) return String(num / 1000).slice(0, 3) + 'K';
-    if (num < 1000) return num
+    if (num < 1000) return String(num)
 
 }

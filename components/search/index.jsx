@@ -5,6 +5,7 @@ import ErrorIcon from '../meta/ErrorIcon';
 import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL } from '../../apollo/queries';
 import { Query } from 'react-apollo';
 import Posts from './Posts';
+import Users from './Users';
 class SearchPage extends Component {
     render() {
         const { input, options } = this.props
@@ -44,11 +45,32 @@ class SearchPage extends Component {
                         {({ loading, error, data }) => {
                             if (loading) return <Loading />
                             if (error) return <ErrorIcon />
+                            let numUsers;
+                            let numPosts;
+                            try {
+                                numUsers = data.users.length
+                            } catch (e) { numUsers = 0 }
+                            try {
+                                numPosts = data.posts.length
+                            } catch (e) { numPosts = 0 }
                             return (<>
                                 <div className="column is-full has-text-centered">
-                                    <h1 className="title is-2">{data.users.length < 1 && data.posts.length < 1 ? `No results found for ${header}` : `Results for ${header}`}</h1>
+                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for <em>{header}</em></p>}</h1>
                                 </div>
                                 {data.posts ?
+                                    <div className="column is-one-third-desktop is-half-tablet is-full-mobile">
+                                        <div className="box">
+                                            <article className="media">
+                                                <div className="media-content font-2 has-text-centered">
+                                                    <div className="content has-text-centered">
+                                                        <h2 className="subtitle is-3">Posts</h2>
+                                                    </div>
+                                                </div>
+                                            </article>
+                                            <Posts data={data.posts} input={variables.input} />
+                                        </div>
+                                    </div> : ''}
+                                {data.users ?
                                     <div className="column is-one-third-desktop is-half-tablet is-full-mobile">
                                         <div className="box">
                                             <article className="media">
@@ -56,14 +78,11 @@ class SearchPage extends Component {
                                                 </figure>
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">
-                                                        <h2 className="subtitle is-3">Posts</h2>
-
+                                                        <h2 className="subtitle is-3">Users</h2>
                                                     </div>
                                                 </div>
-
                                             </article>
-
-                                            <Posts data={data.posts} input={variables.input} />
+                                            <Users data={data.users} input={variables.input} />
                                         </div>
                                     </div> : ''}
                             </>

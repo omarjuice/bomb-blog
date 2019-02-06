@@ -7,6 +7,7 @@ import { LIKES } from '../../apollo/queries';
 import ErrorIcon from '../meta/ErrorIcon';
 import UnlikePost from '../posts/UnlikePost';
 import LikePost from '../posts/LikePost';
+import { shortenNumber } from '../../utils';
 
 
 class Likes extends Component {
@@ -32,8 +33,13 @@ class Likes extends Component {
                         }
                         return (
                             <div className="columns is-centered is-mobile">
-                                <div className="box column is-full-mobile is-four-fifths-tablet is-8-desktop">
+                                <div className="column is-full-mobile is-four-fifths-tablet is-8-desktop">
                                     {data.user.likedPosts.map(({ id, title, author, caption, numLikes, numComments, created_at, iLike }) => {
+                                        const likes = shortenNumber(numLikes)
+                                        const comments = shortenNumber(numComments)
+                                        const likesMargin = String(likes.length * .25) + 'rem'
+                                        const commentsMargin = String(comments.length * .4) + 'rem'
+                                        const timeMargin = String(comments.length * .25) + 'rem'
                                         return (
                                             <article key={id} className="media has-text-centered">
                                                 <figure className="media-left">
@@ -54,8 +60,8 @@ class Likes extends Component {
                                                             </Link>
                                                             <br />
                                                             <small>
-                                                                <a><span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{`${numLikes}`}</span></a> · <a>
-                                                                    <span className="icon has-text-weight-bold has-text-link"><i className="fas fa-comments"></i> {numComments}</span></a> · {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}
+                                                                <a><span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes}</span></a>  <a>
+                                                                    <span className="icon has-text-weight-bold has-text-link"><i className="fas fa-comments"></i> {comments}</span></a>  {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}
                                                             </small>
                                                         </p>
                                                     </div>
@@ -65,15 +71,19 @@ class Likes extends Component {
                                                         {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> : <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
                                                     </div>
                                                 </div>
+                                                <style jsx>{`
+                                                    small a:nth-of-type(1){
+                                                        margin-left: ${likesMargin}
+                                                    }
+                                                    small a:nth-of-type(2){
+                                                        margin-left: ${commentsMargin};
+                                                        margin-right: ${timeMargin}
+                                                    }
+                                                `}</style>
                                             </article>
                                         )
                                     })}
                                 </div>
-                                <style jsx>{`
-                                    .box{
-                                        padding: 30px
-                                    }
-                                    `}</style>
                             </div>
                         )
                     }}

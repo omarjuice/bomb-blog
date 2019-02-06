@@ -342,6 +342,10 @@ export const SEARCH_USERS = gql`
                 followingMe
                 numFollowers
                 numFollowing
+                tags{
+                    id
+                    tag_name
+                }
             }
         }
     }
@@ -367,6 +371,10 @@ export const SEARCH_ALL = gql`
                 followingMe
                 numFollowers
                 numFollowing
+                tags{
+                    id
+                    tag_name
+                }
             }
         }
         posts(input: $input){
@@ -377,6 +385,7 @@ export const SEARCH_ALL = gql`
                 author{
                     id
                     username
+                    isMe
                     profile{
                         user_id
                         photo_path

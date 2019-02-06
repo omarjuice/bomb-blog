@@ -40,7 +40,7 @@ const resolvers = {
                     ON tags.id = user_tags.tag_id
                 WHERE tag_name IN (?) AND users.username LIKE ?
                 GROUP BY users.id
-                ORDER BY relevance ${order}
+                ORDER BY relevance DESC, created_at ${order}
                 LIMIT ?,?
                 `
                 const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
@@ -70,7 +70,7 @@ const resolvers = {
                     ON tags.id = post_tags.tag_id
                 WHERE tag_name IN (?) AND posts.title LIKE ?
                 GROUP BY posts.id
-                ORDER BY relevance ${order}
+                ORDER BY relevance DESC, created_at ${order}
                 LIMIT ?,?
                 `
                 const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })

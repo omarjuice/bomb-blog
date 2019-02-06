@@ -8,6 +8,7 @@ import { SEARCH_POSTS } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import BomgSVG from '../svg/bomb';
+import { shortenNumber } from '../../utils';
 
 
 class Posts extends Component {
@@ -16,8 +17,7 @@ class Posts extends Component {
     }
     render() {
         const { data, input } = this.props
-        const nextInput = { ...input, cursor: data.cursor }
-        if (data.results.length === 0) {
+        if (data && data.results.length === 0) {
             return (
                 <article className="media">
                     <figure className="media-left">
@@ -37,9 +37,15 @@ class Posts extends Component {
                 </article>
             )
         }
+        const nextInput = { ...input, cursor: data.cursor }
         return (
             <>
                 {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags }) => {
+                    const likes = shortenNumber(numLikes)
+                    const comments = shortenNumber(numComments)
+                    const likesMargin = String(likes.length * .25) + 'rem'
+                    const commentsMargin = String(comments.length * .4) + 'rem'
+                    const timeMargin = String(comments.length * .25) + 'rem'
                     return (
                         <article key={id} className="media has-text-centered">
                             <figure className="media-left">
@@ -54,9 +60,10 @@ class Posts extends Component {
                                         <br />
                                         {caption}
                                         <br />
-                                        By
-                                        <Link href={{ path: '/profile', query: { id: author.id } }}>
-                                            <a><strong className="font-2"> {author.username} </strong></a>
+                                        <Link href={{ pathname: '/profile', query: { id: author.id } }} >
+                                            <a>
+                                                {author.isMe ? <strong>You</strong> : <em>{author.username}</em>}
+                                            </a>
                                         </Link>
                                         <br />
                                         {tags.map((tag, i) => (
@@ -64,8 +71,8 @@ class Posts extends Component {
                                         ))}
                                         <br />
                                         <small>
-                                            <a><span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{`${numLikes}`}</span></a> · <a>
-                                                <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {numComments}</span></a> · {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}
+                                            <a><span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span></a>  <a>
+                                                <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {comments}</span></a> <time>{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</time>
                                         </small>
                                     </p>
                                 </div>
@@ -75,6 +82,18 @@ class Posts extends Component {
                                     {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
                                 </div>
                             </div>
+
+                            <style jsx>{`
+
+                                small a:nth-of-type(1){
+                                    margin-left: ${likesMargin}
+                                }
+                                small a:nth-of-type(2){
+                                    margin-left: ${commentsMargin};
+                                    margin-right: ${timeMargin}
+                                }
+   
+                                `}</style>
                         </article>
                     )
                 })}
@@ -91,8 +110,16 @@ class Posts extends Component {
                     :
                     <Query query={SEARCH_POSTS} variables={{ input: nextInput }}>
                         {({ loading, error, data }) => {
-                            if (loading) return <Loading />;
-                            if (error) return <ErrorIcon />
+                            if (loading || error) return (
+                                <article className="media">
+                                    <div className="media-content font-2 has-text-centered">
+                                        <div className="content has-text-centered">
+                                            {loading && <Loading size="4x" style="margin-top:2rem" />}
+                                            {error && <ErrorIcon size="4x" style="margin-top:2rem" />}
+                                        </div>
+                                    </div>
+                                </article>
+                            )
                             return <Posts data={data.posts} input={nextInput} />
                         }}
                     </Query>
