@@ -4,9 +4,8 @@ import { getMatches } from '../../utils';
 
 class SearchNav extends Component {
     state = {
-        input: '',
-        optionsActive: false,
-        options: 'all'
+        input: this.props.searchPath ? this.props.query.input : '',
+        options: this.props.searchPath ? this.props.query.options : 'all'
     }
     render() {
         return (

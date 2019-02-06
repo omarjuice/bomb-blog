@@ -42,7 +42,7 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </nav>
-                <SearchNav active={this.state.searchNav} />
+                <SearchNav active={this.state.searchNav} searchPath={this.props.pathname === '/search'} query={this.props.query} />
             </div>
         );
     }

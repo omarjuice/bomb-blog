@@ -41,10 +41,10 @@ class SearchPage extends Component {
         return (
             <div>
                 <div className="columns is-centered is-mobile is-multiline">
-                    <Query query={gqlQueries[options]} variables={variables}>
+                    <Query query={gqlQueries[options]} variables={variables} ssr={false}>
                         {({ loading, error, data }) => {
-                            if (loading) return <Loading />
-                            if (error) return <ErrorIcon />
+                            if (loading) return <Loading size="7x" />
+                            if (error) return <ErrorIcon size="7x" />
                             let numUsers;
                             let numPosts;
                             try {
