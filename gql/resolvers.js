@@ -25,11 +25,11 @@ const resolvers = {
             if (user && user.id) return user;
             throw Errors.user.notFound
         },
-        users: async (_, { input }, ) => {
+        users: async (_, { input }) => {
             const orderBy = input.orderBy === 'username' ? 'LOWER(username)' : 'created_at';
             const order = input.order ? 'ASC' : 'DESC'
-            const { cursor, limit } = input
-            if (input.tags && input.tags.length > 0) {
+            const { cursor, limit, tags, search } = input
+            if (tags && tags.length > 0) {
                 const query = `
                 SELECT 
                     users.id, users.username, users.email, users.created_at, COUNT(tags.tag_name) as relevance
@@ -43,12 +43,12 @@ const resolvers = {
                 ORDER BY relevance DESC, created_at ${order}
                 LIMIT ?,?
                 `
-                const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
-                return { results, cursor: cursor + results.length }
+                const results = await queryDB(query, [tags, `%${search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+                return { results, cursor: results.length < limit ? null : cursor + results.length }
             }
             const query = `SELECT id, username, email, created_at FROM users WHERE username LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
             const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e); })
-            return { results, cursor: cursor + results.length }
+            return { results, cursor: results.length < limit ? null : cursor + results.length }
         },
         post: async (_, args, { Loaders }) => {
             const post = await Loaders.posts.byId.load(args.id)
@@ -58,8 +58,8 @@ const resolvers = {
         posts: async (_, { input }) => {
             const orderBy = input.orderBy === 'title' ? 'LOWER(title)' : 'created_at';
             const order = input.order ? 'ASC' : 'DESC'
-            const { cursor, limit } = input
-            if (input.tags && input.tags.length > 0) {
+            const { cursor, limit, tags, search } = input
+            if (tags && tags.length > 0) {
                 const query = `
                 SELECT 
                     posts.*, COUNT(tags.tag_name) as relevance
@@ -73,27 +73,52 @@ const resolvers = {
                 ORDER BY relevance DESC, created_at ${order}
                 LIMIT ?,?
                 `
-                const results = await queryDB(query, [input.tags, `%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
-                return { results, cursor: cursor + results.length }
+                const results = await queryDB(query, [tags, `%${search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+                return { results, cursor: results.length < limit ? null : cursor + results.length }
             }
             const query = `SELECT * FROM posts WHERE title LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
             const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
-            return { results, cursor: cursor + results.length }
+            return { results, cursor: results.length < limit ? null : cursor + results.length }
         },
-        tag: async (_, args, { Loaders }) => {
-            const tag = await Loaders.tags.byId.load(args.id)
+        tag: async (_, { id }, { Loaders }) => {
+            const tag = await Loaders.tags.byId.load(id)
             if (tag && tag.id) return tag;
             throw Errors.tags.notFound;
         },
-        tags: async (_, args) => {
-            const orderBy = args.orderBy === 'tag_name' ? 'LOWER(tag_name)' : 'created_at';
-            const order = args.order ? 'ASC' : 'DESC'
-            const query = `SELECT * FROM tags WHERE tag_name LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?`
-            const tags = await queryDB(query, [`%${args.search || ''}%`, args.limit]).catch(e => { throw Errors.database })
-            if (tags) return tags;
-            throw Errors.tags.notFound
+        tags: async (_, { input }) => {
+            const orderBy = input.orderBy === 'tag_name' ? 'LOWER(tag_name)' : 'created_at';
+            const order = input.order ? 'ASC' : 'DESC'
+            const { cursor, limit } = input
+            const query = `SELECT * FROM tags WHERE tag_name LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
+            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit]).catch(e => { throw Errors.database })
+            return { results, cursor: results.length < limit ? null : cursor + results.length };
         },
-        comment: async (_, { id }, { Loaders }) => await Loaders.comments.byId.load(id)
+        comment: async (_, { id }, { Loaders }) => await Loaders.comments.byId.load(id),
+        comments: async (_, { input }) => {
+            const orderBy = input.orderBy === 'comment_text' ? 'comment_text' : 'created_at';
+            const order = input.order ? 'ASC' : 'DESC'
+            const { cursor, limit, tags, search } = input
+            if (tags && tags.length > 0) {
+                const query = `
+                SELECT 
+                    comments.*, COUNT(tags.tag_name) AS relevance
+                FROM comments
+                INNER JOIN comment_tags
+                    ON comment_tags.comment_id=comments.id
+                INNER JOIN tags
+                    ON tags.id = comment_tags.tag_id
+                WHERE tag_name IN (?) AND comments.comment_text LIKE ?
+                GROUP BY comments.id
+                ORDER BY relevance DESC, created_at ${order}
+                LIMIT ?,?
+                `
+                const results = await queryDB(query, [tags, `%${search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+                return { results, cursor: results.length < limit ? null : cursor + results.length }
+            }
+            const query = `SELECT * FROM comments WHERE comment_text LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
+            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+            return { results, cursor: results.length < limit ? null : cursor + results.length }
+        }
     },
     Mutation: {
         login: async (_, { username, password }, { req }) => {

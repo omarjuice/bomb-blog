@@ -9,8 +9,9 @@ module.exports = gql`
     post(id: Int!): Post
     posts(input: Search!): Posts!
     tag(id: Int!): Tag!
-    tags(limit: Int = 100, search: String, order: Boolean, orderBy: String ): [Tag]!
+    tags(input: Search! ): Tags!
     comment(id: Int!): Comment
+    comments(input: Search!): Comments!
   }
   type Mutation {
       login (username: String, password: String): Boolean!
@@ -40,6 +41,14 @@ module.exports = gql`
   type Posts{
       cursor: Int
       results: [Post]!
+  }
+  type Tags{
+      cursor: Int
+      results: [Tag]!
+  }
+  type Comments{
+      cursor: Int
+      results: [Comment]!
   }
   type User{
       id: Int!
@@ -106,6 +115,7 @@ module.exports = gql`
       numReplies: Int!
       tags: [Tag]!
       iLike: Boolean!
+      relevance: Int
   }
   type Reply{
       id: Int!

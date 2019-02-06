@@ -6,16 +6,40 @@ import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL } from '../../apollo/queries';
 import { Query } from 'react-apollo';
 import Posts from './Posts';
 import Users from './Users';
+const gqlQueries = {
+    users: SEARCH_USERS,
+    posts: SEARCH_POSTS,
+    all: SEARCH_ALL
+}
 class SearchPage extends Component {
+    state = {
+        active: 'posts',
+        fetching: false
+    }
+    handleScroll = (display, client, { search, tags, limit, cursor, newCursor }) => {
+        const { options } = this.props
+        const getUpdateHeight = (cursor) => 1 - (1 / (cursor / 2))
+        return async ({ target: { scrollTop, scrollHeight } }) => {
+            if (!newCursor) return
+            // console.log(scrollTop, getUpdateHeight(newCursor) * scrollHeight, scrollTop > scrollHeight * getUpdateHeight(newCursor))
+            if (this.state.fetching) { return }
+            if (scrollTop + 100 > scrollHeight * getUpdateHeight(newCursor)) {
+                this.setState({ fetching: true }, async () => {
+                    const newItems = await client.query({ query: gqlQueries[display], variables: { input: { search, tags, limit, cursor: newCursor } } })
+                    const data = client.cache.readQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor } } })
+                    console.log(newItems)
+                    data[display].cursor = newItems.data[display].cursor
+                    data[display].results.push(...newItems.data[display].results)
+                    client.cache.writeQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor } }, data })
+                    this.setState({ fetching: false })
+                })
+            }
+        }
+    }
     render() {
         const { input, options } = this.props
-        if (!input) {
-            return (
-                <div>No Search</div>
-            )
-        }
         const tagRegex = /#(\w+)/g
-        const tags = getMatches(input, tagRegex) || [];
+        const tags = input ? getMatches(input, tagRegex) : [];
         const search = input ? input.replace(tagRegex, '').trim().replace(/\s+/g, ' ') : ''
         const limit = options === 'all' ? 5 : 10
         const variables = {
@@ -26,11 +50,7 @@ class SearchPage extends Component {
                 cursor: 0
             }
         }
-        const gqlQueries = {
-            users: SEARCH_USERS,
-            posts: SEARCH_POSTS,
-            all: SEARCH_ALL
-        }
+
         let header = ''
         if (search) {
             header += search
@@ -41,10 +61,10 @@ class SearchPage extends Component {
         return (
             <div>
                 <div className="columns is-centered is-mobile is-multiline">
-                    <Query query={gqlQueries[options]} variables={variables}>
-                        {({ loading, error, data }) => {
-                            if (loading) return <Loading />
-                            if (error) return <ErrorIcon />
+                    <Query query={gqlQueries[options]} variables={variables} ssr={false}>
+                        {({ loading, error, data, client }) => {
+                            if (loading) return <Loading size="5x" />
+                            if (error) return <ErrorIcon size="5x" />
                             let numUsers;
                             let numPosts;
                             try {
@@ -56,33 +76,40 @@ class SearchPage extends Component {
                             return (<>
                                 <div className="column is-full has-text-centered">
                                     <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for <em>{header}</em></p>}</h1>
+                                    <div className="tabs is-centered is-hidden-tablet">
+                                        <ul>
+                                            {data.posts ? <li className={this.state.active === 'posts' && 'is-active'}><a onClick={() => this.setState({ active: 'posts' })}>Posts</a></li> : ''}
+                                            {data.users ? <li className={this.state.active === 'users' && 'is-active'}><a onClick={() => this.setState({ active: 'users' })}>Users</a></li> : ''}
+                                        </ul>
+                                    </div>
                                 </div>
+
                                 {data.posts ?
-                                    <div className="column is-one-third-desktop is-half-tablet is-full-mobile">
-                                        <div className="box">
+                                    <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'posts' ? '' : 'is-hidden-mobile'}`}>
+                                        <div className="box" onScroll={this.handleScroll('posts', client, { ...variables.input, newCursor: data.posts.cursor })}>
                                             <article className="media">
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">
-                                                        <h2 className="subtitle is-3">Posts</h2>
+                                                        <h2 className="subtitle is-3 is-hidden-mobile">Posts</h2>
                                                     </div>
                                                 </div>
                                             </article>
-                                            <Posts data={data.posts} input={variables.input} />
+                                            <Posts data={data.posts} input={variables.input} end={!data.posts.cursor} />
                                         </div>
                                     </div> : ''}
                                 {data.users ?
-                                    <div className="column is-one-third-desktop is-half-tablet is-full-mobile">
-                                        <div className="box">
+                                    <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'users' ? '' : 'is-hidden-mobile'}`}>
+                                        <div className="box" onScroll={this.handleScroll('users', client, { ...variables.input, newCursor: data.users.cursor })}>
                                             <article className="media">
                                                 <figure className="media-left">
                                                 </figure>
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">
-                                                        <h2 className="subtitle is-3">Users</h2>
+                                                        <h2 className="subtitle is-3 is-hidden-mobile">Users</h2>
                                                     </div>
                                                 </div>
                                             </article>
-                                            <Users data={data.users} input={variables.input} />
+                                            <Users data={data.users} input={variables.input} end={!data.users.cursor} />
                                         </div>
                                     </div> : ''}
                             </>
@@ -93,6 +120,15 @@ class SearchPage extends Component {
                 <style jsx>{`
                 .columns{
                     margin-top: 5rem;
+                }
+                .box{
+                    padding: 2rem;
+                    height: 65vh;
+                    overflow: scroll;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .tabs{
+                    margin-bottom: -1.4rem
                 }
                 `}</style>
             </div>

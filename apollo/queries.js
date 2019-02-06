@@ -299,6 +299,7 @@ export const SEARCH_POSTS = gql`
                 user_id
                 author{
                     id
+                    isMe
                     username
                     profile{
                         user_id

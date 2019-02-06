@@ -386,7 +386,15 @@ module.exports = {
       delete: `mutation($comment_id: Int!){
         unlikeComment(comment_id: $comment_id)
       }`
-    }
+    },
+    search: `query($input: Search!){
+      comments(input: $input){
+        cursor
+        results{
+          id
+        }
+      }
+    }`
   },
   replies: {
     create: `mutation($comment_id: Int!, $reply_text: String!){
@@ -420,11 +428,14 @@ module.exports = {
     }`
   },
   tags: {
-    all: `query($search: String, $limit: Int, $orderBy: String, $order: Boolean ){
-      tags(search: $search, limit: $limit, order: $order, orderBy: $orderBy){
-        id
+    all: `query($input: Search! ){
+      tags(input: $input){
+        cursor
+        results{
+          id
         tag_name
         created_at
+        }
       }
     }`,
     byId: `query($id: Int!){

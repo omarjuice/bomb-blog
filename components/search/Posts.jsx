@@ -12,9 +12,6 @@ import { shortenNumber } from '../../utils';
 
 
 class Posts extends Component {
-    state = {
-        fetchMore: false
-    }
     render() {
         const { data, input } = this.props
         if (data && data.results.length === 0) {
@@ -37,7 +34,6 @@ class Posts extends Component {
                 </article>
             )
         }
-        const nextInput = { ...input, cursor: data.cursor }
         return (
             <>
                 {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags }) => {
@@ -97,33 +93,21 @@ class Posts extends Component {
                         </article>
                     )
                 })}
-                {!this.state.fetchMore ?
-                    <article className="media">
-                        <div className="media-content font-2 has-text-centered">
-                            <div className="content has-text-centered">
-                                <button onClick={() => this.setState({ fetchMore: true })} className="button is-large is-primary font-2">More</button>
-
-                            </div>
+                {this.props.end ? <article className="media">
+                    <figure className="media-left">
+                        <div className="image is-64x64">
+                            <BomgSVG lit={false} face={{ happy: false }} />
                         </div>
+                    </figure>
+                    <div className="media-content font-2 has-text-centered">
+                        <div className="content has-text-centered">
+                            <h3 className="subtitile is-3">
+                                No Posts to show...
+                        </h3>
 
-                    </article>
-                    :
-                    <Query query={SEARCH_POSTS} variables={{ input: nextInput }}>
-                        {({ loading, error, data }) => {
-                            if (loading || error) return (
-                                <article className="media">
-                                    <div className="media-content font-2 has-text-centered">
-                                        <div className="content has-text-centered">
-                                            {loading && <Loading size="4x" style="margin-top:2rem" />}
-                                            {error && <ErrorIcon size="4x" style="margin-top:2rem" />}
-                                        </div>
-                                    </div>
-                                </article>
-                            )
-                            return <Posts data={data.posts} input={nextInput} />
-                        }}
-                    </Query>
-                }
+                        </div>
+                    </div>
+                </article> : ''}
             </>
         )
     }

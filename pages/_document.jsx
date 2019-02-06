@@ -11,7 +11,7 @@ export default class MyDocument extends Document {
                 <Head>
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                     <meta charSet="utf-8" />
-                    <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/simplex/bulmaswatch.min.css"></link>
+                    <link rel="stylesheet" href="/static/bulma.css"></link>
                     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
                         crossOrigin="anonymous"></link>
                     <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Coiny" rel="stylesheet"></link>

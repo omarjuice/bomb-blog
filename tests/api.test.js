@@ -820,9 +820,9 @@ module.exports = function () {
     })
     describe('GQL: GET tags', () => {
         it('Should get all tags', done => {
-            reqGQL({ query: queries.tags.all, variables: { limit: 20 } })
+            reqGQL({ query: queries.tags.all, variables: { input: { limit: 20 } } })
                 .expect(({ body }) => {
-                    for (let tag of body.data.tags) {
+                    for (let tag of body.data.tags.results) {
                         expect(tag).toMatchObject({
                             id: expect.any(Number),
                             tag_name: expect.any(String),
@@ -832,9 +832,9 @@ module.exports = function () {
                 }).end(done)
         })
         it('Should search all tags', done => {
-            reqGQL({ query: queries.tags.all, variables: { search: 'cool' } })
+            reqGQL({ query: queries.tags.all, variables: { input: { search: 'cool' } } })
                 .expect(({ body }) => {
-                    expect(body.data.tags.length).toBe(1)
+                    expect(body.data.tags.results.length).toBe(1)
                 }).end(done)
         })
         it('Should get a single tag', done => {
@@ -1272,6 +1272,15 @@ module.exports = function () {
                             expect(comment.iLike).toBe(false)
                         })
                     })
+                }).end(done)
+        })
+    })
+    describe('GQL: SEARCH comments', () => {
+        it('Should return comments matching the search', done => {
+            reqGQL({ query: queries.comments.search, variables: { input: { limit: 2, tags: ["cool", "trash", "beautiful"] } } })
+                .expect(({ body }) => {
+                    expect(body.data.comments.cursor).toBe(2)
+                    expect(body.data.comments.results.length).toBe(2)
                 }).end(done)
         })
     })
