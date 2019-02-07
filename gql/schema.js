@@ -106,6 +106,7 @@ module.exports = gql`
       user_id: Int!
       commenter: User!
       post_id: Int!
+      post: Post!
       comment_text: String!
       numLikes: Int!
       likers: [Liker]!

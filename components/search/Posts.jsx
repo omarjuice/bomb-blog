@@ -3,37 +3,15 @@ import Link from 'next/link';
 import UnlikePost from '../posts/UnlikePost';
 import LikePost from '../posts/LikePost';
 import moment from 'moment'
-import { Query } from 'react-apollo';
-import { SEARCH_POSTS } from '../../apollo/queries';
-import Loading from '../meta/Loading';
-import ErrorIcon from '../meta/ErrorIcon';
 import BomgSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
+import { showModal } from '../../apollo/clientWrites';
 
 
 class Posts extends Component {
     render() {
-        const { data, input } = this.props
-        if (data && data.results.length === 0) {
-            return (
-                <article className="media">
-                    <figure className="media-left">
-                        <div className="image is-64x64">
-                            <BomgSVG lit={false} face={{ happy: false }} />
-                        </div>
-                    </figure>
-                    <div className="media-content font-2 has-text-centered">
-                        <div className="content has-text-centered">
-                            <h3 className="subtitile is-3">
-                                No Posts to show...
-                        </h3>
+        const { data } = this.props
 
-                        </div>
-                    </div>
-
-                </article>
-            )
-        }
         return (
             <>
                 {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags }) => {
@@ -67,8 +45,13 @@ class Posts extends Component {
                                         ))}
                                         <br />
                                         <small>
-                                            <a><span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span></a>  <a>
-                                                <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {comments}</span></a> <time>{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</time>
+                                            <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                <span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span>
+                                            </a>
+                                            <a>
+                                                <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {comments}</span>
+                                            </a>
+                                            <time>{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</time>
                                         </small>
                                     </p>
                                 </div>

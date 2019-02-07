@@ -14,8 +14,7 @@ class Comment extends Component {
         replies: false,
         editing: false
     }
-    // onMouseEnter = e => e.target.classList.add('has-text-dark')
-    // onMouseLeave = e => e.target.classList.remove('has-text-dark')
+
     render() {
         const { id, post_id, commenter, created_at, last_updated, comment_text, numLikes, tags, iLike, numReplies } = this.props
         return <article key={id}

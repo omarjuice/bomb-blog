@@ -384,6 +384,7 @@ const resolvers = {
     },
     Comment: {
         commenter: async ({ user_id }, _, { Loaders }) => await Loaders.users.byId.load(user_id),
+        post: async ({ post_id }, _, { Loaders }) => await Loaders.posts.byId.load(post_id),
         numLikes: async ({ id }, _, { Loaders }) => await Loaders.comments.numLikes.load(id),
         numReplies: async ({ id }, _, { Loaders }) => await Loaders.comments.numReplies.load(id),
         replies: async ({ id }, _, { Loaders }) => await Loaders.comments.replies.load(id),

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import LikePost from '../posts/LikePost';
 import UnlikePost from '../posts/UnlikePost';
 import { shortenNumber } from '../../utils';
+import { showModal } from '../../apollo/clientWrites';
 
 
 class UserPosts extends Component {
@@ -53,8 +54,13 @@ class UserPosts extends Component {
                                                             {caption}
                                                             <br />
                                                             <small>
-                                                                <a><span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span></a>  <a>
-                                                                    <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {comments}</span></a> <span>{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
+                                                                <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                                    <span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span>
+                                                                </a>
+                                                                <a>
+                                                                    <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {comments}</span>
+                                                                </a>
+                                                                <span>{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
                                                             </small>
                                                         </p>
                                                     </div>

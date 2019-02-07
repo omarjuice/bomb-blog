@@ -2,26 +2,28 @@ import React, { Component } from 'react';
 import { getMatches } from '../../utils/index';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
-import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL } from '../../apollo/queries';
+import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL, SEARCH_COMMENTS } from '../../apollo/queries';
 import { Query } from 'react-apollo';
 import Posts from './Posts';
 import Users from './Users';
+import Comments from './Comments'
 const gqlQueries = {
     users: SEARCH_USERS,
     posts: SEARCH_POSTS,
+    comments: SEARCH_COMMENTS,
     all: SEARCH_ALL
 }
 class SearchPage extends Component {
     state = {
-        active: 'posts',
+        active: this.props.options === 'all' ? 'posts' : this.props.options,
         fetching: false
     }
     handleScroll = (display, client, { search, tags, limit, cursor, newCursor }) => {
         const { options } = this.props
-        const getUpdateHeight = (cursor) => 1 - (1 / (cursor / 2))
+        const getUpdateHeight = (cursor) => 1 - (1 / (cursor / 2.5))
         return async ({ target: { scrollTop, scrollHeight } }) => {
             if (!newCursor) return
-            // console.log(scrollTop, getUpdateHeight(newCursor) * scrollHeight, scrollTop > scrollHeight * getUpdateHeight(newCursor))
+            console.log(scrollTop, getUpdateHeight(newCursor), getUpdateHeight(newCursor) * scrollHeight, scrollTop > scrollHeight * getUpdateHeight(newCursor))
             if (this.state.fetching) { return }
             if (scrollTop + 100 > scrollHeight * getUpdateHeight(newCursor)) {
                 this.setState({ fetching: true }, async () => {
@@ -75,11 +77,12 @@ class SearchPage extends Component {
                             } catch (e) { numPosts = 0 }
                             return (<>
                                 <div className="column is-full has-text-centered">
-                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for <em>{header}</em></p>}</h1>
+                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for "<em>{header}</em>"</p>}</h1>
                                     <div className="tabs is-centered is-hidden-tablet">
                                         <ul>
                                             {data.posts ? <li className={this.state.active === 'posts' && 'is-active'}><a onClick={() => this.setState({ active: 'posts' })}>Posts</a></li> : ''}
                                             {data.users ? <li className={this.state.active === 'users' && 'is-active'}><a onClick={() => this.setState({ active: 'users' })}>Users</a></li> : ''}
+                                            {data.users ? <li className={this.state.active === 'comments' && 'is-active'}><a onClick={() => this.setState({ active: 'comments' })}>Comments</a></li> : ''}
                                         </ul>
                                     </div>
                                 </div>
@@ -110,6 +113,21 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Users data={data.users} input={variables.input} end={!data.users.cursor} />
+                                        </div>
+                                    </div> : ''}
+                                {data.comments ?
+                                    <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'comments' ? '' : 'is-hidden-mobile'}`}>
+                                        <div className="box" onScroll={this.handleScroll('comments', client, { ...variables.input, newCursor: data.comments.cursor })}>
+                                            <article className="media">
+                                                <figure className="media-left">
+                                                </figure>
+                                                <div className="media-content font-2 has-text-centered">
+                                                    <div className="content has-text-centered">
+                                                        <h2 className="subtitle is-3 is-hidden-mobile">Comments</h2>
+                                                    </div>
+                                                </div>
+                                            </article>
+                                            <Comments data={data.comments} input={variables.input} end={!data.comments.cursor} />
                                         </div>
                                     </div> : ''}
                             </>

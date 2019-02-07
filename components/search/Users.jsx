@@ -3,10 +3,7 @@ import Link from 'next/link';
 import moment from 'moment'
 import Unfollow from '../global/UnFollow';
 import Follow from '../global/Follow';
-import { SEARCH_USERS } from '../../apollo/queries';
-import { Query } from 'react-apollo';
-import Loading from '../meta/Loading';
-import ErrorIcon from '../meta/ErrorIcon';
+
 import BomgSVG from '../svg/bomb';
 
 class Users extends Component {

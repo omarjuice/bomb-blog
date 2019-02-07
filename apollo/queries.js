@@ -351,6 +351,40 @@ export const SEARCH_USERS = gql`
         }
     }
 `
+export const SEARCH_COMMENTS = gql`
+    query SearchComments($input: Search!){
+        comments(input: $input){
+            cursor
+            results{
+                id
+                post_id
+                commenter{
+                    id
+                    username
+                    profile{
+                        user_id
+                        photo_path
+                    }
+                    isMe
+                }
+                post{
+                    id
+                    title
+                }
+                created_at
+                last_updated
+                comment_text
+                numLikes
+                tags{
+                    id
+                    tag_name
+                }
+                iLike
+                numReplies
+        }
+        }
+    }
+`
 export const SEARCH_ALL = gql`
     query SearchAll($input: Search!){
         users(input: $input){
@@ -405,6 +439,36 @@ export const SEARCH_ALL = gql`
                     tag_name
                 }
             }
+        }
+        comments(input: $input){
+            cursor
+            results{
+                id
+                post_id
+                commenter{
+                    id
+                    username
+                    profile{
+                        user_id
+                        photo_path
+                    }
+                    isMe
+                }
+                post{
+                    id
+                    title
+                }
+                created_at
+                last_updated
+                comment_text
+                numLikes
+                tags{
+                    id
+                    tag_name
+                }
+                iLike
+                numReplies
+        }
         }
     }
 `
