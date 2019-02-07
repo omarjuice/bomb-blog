@@ -6,7 +6,6 @@ const session = require('express-session')
 const typeDefs = require('./gql/schema');
 const resolvers = require('./gql/resolvers')
 const applyLoaders = require('./gql/batch')
-// const { resetDB, resetTables } = require('./tests/seed')
 const moment = require('moment')
 const { queryDB } = require('./db/connect')
 const dev = process.env.NODE_ENV !== 'production'

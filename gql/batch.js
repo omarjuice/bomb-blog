@@ -477,6 +477,30 @@ const batchILikeComment = async (keys, id) => {
     }, {})
     return keys.map(key => !!ILike[key])
 }
+const batchTagPopularity = async keys => {
+    const tagPopularities =
+        await queryDB(`
+        SELECT 
+            id, (num_comments*1 + num_posts*10 +num_users*30) as popularity
+        FROM
+        (SELECT
+        tags.id, COUNT(DISTINCT comment_id) as num_comments, COUNT(DISTINCT post_id) as num_posts, COUNT(DISTINCT user_id) as num_users
+        FROM tags
+        INNER JOIN comment_tags
+            ON comment_tags.tag_id=tags.id
+        INNER JOIN post_tags
+            ON post_tags.tag_id=tags.id
+        INNER JOIN user_tags
+            ON user_tags.tag_id=tags.id
+        WHERE tags.id IN (?)
+        GROUP BY tags.id) tag_counts
+        `, [keys], null, true)
+    const TagPopularities = tagPopularities.reduce((acc, { id, popularity }) => {
+        acc[id] = popularity
+        return acc
+    }, {})
+    return keys.map(key => TagPopularities[key] ? TagPopularities[key] : 0)
+}
 const bulkInsertTags = async tags => {
     await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
     const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
@@ -531,7 +555,8 @@ const applyLoaders = (context) => {
             byUserId: new DataLoader(keys => batchUserTags(keys)),
             users: new DataLoader(keys => batchTagUsers(keys)),
             posts: new DataLoader(keys => batchTagPosts(keys)),
-            comments: new DataLoader(keys => batchTagComments(keys))
+            comments: new DataLoader(keys => batchTagComments(keys)),
+            popularity: new DataLoader(keys => batchTagPopularity(keys))
         }
     }
     context.batchInserts = {

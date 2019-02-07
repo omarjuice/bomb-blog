@@ -88,9 +88,24 @@ const resolvers = {
         tags: async (_, { input }) => {
             const orderBy = input.orderBy === 'tag_name' ? 'LOWER(tag_name)' : 'created_at';
             const order = input.order ? 'ASC' : 'DESC'
-            const { cursor, limit } = input
-            const query = `SELECT * FROM tags WHERE tag_name LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
-            const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit]).catch(e => { throw Errors.database })
+            const { cursor, limit, tags, search } = input
+            const searchTags = tags && tags.length > 0 ? tags : [null]
+            const query = `
+            SELECT 
+                tags.id, tag_name, IF(tag_name IN (?), 1, 0) AS relevance, (COUNT(DISTINCT comment_id) * 1 +  COUNT(DISTINCT post_id)*10 + COUNT(DISTINCT user_id)*30 ) as popularity 
+            FROM tags
+            INNER JOIN comment_tags
+                ON comment_tags.tag_id=tags.id
+            INNER JOIN post_tags
+                ON post_tags.tag_id=tags.id
+            INNER JOIN user_tags
+                ON user_tags.tag_id=tags.id
+            WHERE tag_name LIKE ? OR tag_name IN (?) 
+            GROUP BY tags.id
+            ORDER BY relevance DESC, popularity DESC, ${orderBy} ${order}
+            LIMIT ?,?
+            `
+            const results = await queryDB(query, [searchTags, `%${search || ''}%`, searchTags, cursor, limit], null, true).catch(e => { throw e })
             return { results, cursor: results.length < limit ? null : cursor + results.length };
         },
         comment: async (_, { id }, { Loaders }) => await Loaders.comments.byId.load(id),
@@ -402,6 +417,7 @@ const resolvers = {
         users: async ({ id }, _, { Loaders }) => await Loaders.tags.users.load(id),
         posts: async ({ id }, _, { Loaders }) => await Loaders.tags.posts.load(id),
         comments: async ({ id }, _, { Loaders }) => await Loaders.tags.comments.load(id),
+        popularity: async ({ id, popularity }, _, { Loaders }) => popularity || await Loaders.tags.popularity.load(id)
     },
     Follower: {
         imFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.imFollowing.load(id),

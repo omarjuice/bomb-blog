@@ -3,7 +3,6 @@ import Link from 'next/link';
 import moment from 'moment'
 import Unfollow from '../global/UnFollow';
 import Follow from '../global/Follow';
-
 import BomgSVG from '../svg/bomb';
 
 class Users extends Component {

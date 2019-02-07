@@ -8,7 +8,7 @@ module.exports = gql`
     users(input: Search!): Users!
     post(id: Int!): Post
     posts(input: Search!): Posts!
-    tag(id: Int!): Tag!
+    tag(id: Int!, popularity: Boolean): Tag!
     tags(input: Search! ): Tags!
     comment(id: Int!): Comment
     comments(input: Search!): Comments!
@@ -97,6 +97,8 @@ module.exports = gql`
       id: Int!
       tag_name: String!
       created_at: String!
+      popularity: Int!
+      relevance: Int!
       users: [User]!
       posts: [Post]!
       comments: [Comment]!

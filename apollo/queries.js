@@ -385,6 +385,17 @@ export const SEARCH_COMMENTS = gql`
         }
     }
 `
+export const SEARCH_TAGS = gql`
+    query SearchTags($input: Search!){
+        tags(input: $input){
+            cursor
+            results{
+                id
+                tag_name
+            }
+        }
+    }
+`
 export const SEARCH_ALL = gql`
     query SearchAll($input: Search!){
         users(input: $input){
@@ -468,7 +479,14 @@ export const SEARCH_ALL = gql`
                 }
                 iLike
                 numReplies
+            }
         }
+        tags(input: $input){
+            cursor
+            results{
+                id
+                tag_name
+            }
         }
     }
 `

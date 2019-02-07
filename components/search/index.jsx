@@ -7,6 +7,7 @@ import { Query } from 'react-apollo';
 import Posts from './Posts';
 import Users from './Users';
 import Comments from './Comments'
+import Tags from './Tags';
 const gqlQueries = {
     users: SEARCH_USERS,
     posts: SEARCH_POSTS,
@@ -77,12 +78,13 @@ class SearchPage extends Component {
                             } catch (e) { numPosts = 0 }
                             return (<>
                                 <div className="column is-full has-text-centered">
-                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for "<em>{header}</em>"</p>}</h1>
+                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for <em>{header}</em></p>}</h1>
                                     <div className="tabs is-centered is-hidden-tablet">
                                         <ul>
                                             {data.posts ? <li className={this.state.active === 'posts' && 'is-active'}><a onClick={() => this.setState({ active: 'posts' })}>Posts</a></li> : ''}
                                             {data.users ? <li className={this.state.active === 'users' && 'is-active'}><a onClick={() => this.setState({ active: 'users' })}>Users</a></li> : ''}
                                             {data.users ? <li className={this.state.active === 'comments' && 'is-active'}><a onClick={() => this.setState({ active: 'comments' })}>Comments</a></li> : ''}
+                                            {data.users ? <li className={this.state.active === 'tags' && 'is-active'}><a onClick={() => this.setState({ active: 'tags' })}>Tags</a></li> : ''}
                                         </ul>
                                     </div>
                                 </div>
@@ -128,6 +130,21 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Comments data={data.comments} input={variables.input} end={!data.comments.cursor} />
+                                        </div>
+                                    </div> : ''}
+                                {data.tags ?
+                                    <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'tags' ? '' : 'is-hidden-mobile'}`}>
+                                        <div className="box" onScroll={this.handleScroll('tags', client, { ...variables.input, newCursor: data.tags.cursor })}>
+                                            <article className="media">
+                                                <figure className="media-left">
+                                                </figure>
+                                                <div className="media-content font-2 has-text-centered">
+                                                    <div className="content has-text-centered">
+                                                        <h2 className="subtitle is-3 is-hidden-mobile">Tags</h2>
+                                                    </div>
+                                                </div>
+                                            </article>
+                                            <Tags data={data.tags} input={variables.input} end={!data.tags.cursor} />
                                         </div>
                                     </div> : ''}
                             </>

@@ -10,7 +10,6 @@ import { shortenNumber } from '../../utils';
 class SearchComments extends Component {
     render() {
         const { data } = this.props
-        console.log(data)
         return (
             <>
                 {data.results.map(comment => {
@@ -31,7 +30,7 @@ class SearchComments extends Component {
                                         </a>
                                     </Link>
                                     <br />
-                                    <span className="icon"><i class="fas fa-long-arrow-alt-right"></i></span> <Link href={{ pathname: '/posts', query: { id: post.id } }} >
+                                    <span className="icon"><i className="fas fa-long-arrow-alt-right"></i></span> <Link href={{ pathname: '/posts', query: { id: post.id } }} >
                                         <a className="font-2">
                                             {post.title}
                                         </a>
