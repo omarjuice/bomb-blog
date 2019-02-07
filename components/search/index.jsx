@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getMatches } from '../../utils/index';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
-import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL, SEARCH_COMMENTS } from '../../apollo/queries';
+import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL, SEARCH_COMMENTS, SEARCH_TAGS } from '../../apollo/queries';
 import { Query } from 'react-apollo';
 import Posts from './Posts';
 import Users from './Users';
@@ -12,29 +12,34 @@ const gqlQueries = {
     users: SEARCH_USERS,
     posts: SEARCH_POSTS,
     comments: SEARCH_COMMENTS,
+    tags: SEARCH_TAGS,
     all: SEARCH_ALL
 }
 class SearchPage extends Component {
     state = {
         active: this.props.options === 'all' ? 'posts' : this.props.options,
-        fetching: false
+        fetching: null,
+        postsFrame: 0,
+        usersFrame: 0,
+        commentsFrame: 0,
+        tagsFrame: 0
     }
     handleScroll = (display, client, { search, tags, limit, cursor, newCursor }) => {
         const { options } = this.props
-        const getUpdateHeight = (cursor) => 1 - (1 / (cursor / 2.5))
-        return async ({ target: { scrollTop, scrollHeight } }) => {
+        const getUpdateHeight = (cursor) => 1 - (1 / (cursor / (display === 'posts' ? 2.5 : display === 'users' ? 3 : display === 'comments' ? 2.75 : display === 'tags' ? 3.5 : 2.5)))
+        return async ({ target: { scrollTop, scrollHeight, children } }) => {
             if (!newCursor) return
             console.log(scrollTop, getUpdateHeight(newCursor), getUpdateHeight(newCursor) * scrollHeight, scrollTop > scrollHeight * getUpdateHeight(newCursor))
             if (this.state.fetching) { return }
             if (scrollTop + 100 > scrollHeight * getUpdateHeight(newCursor)) {
-                this.setState({ fetching: true }, async () => {
+                this.setState({ fetching: display }, async () => {
                     const newItems = await client.query({ query: gqlQueries[display], variables: { input: { search, tags, limit, cursor: newCursor } } })
                     const data = client.cache.readQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor } } })
                     console.log(newItems)
                     data[display].cursor = newItems.data[display].cursor
                     data[display].results.push(...newItems.data[display].results)
                     client.cache.writeQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor } }, data })
-                    this.setState({ fetching: false })
+                    this.setState({ fetching: null })
                 })
             }
         }
@@ -92,7 +97,7 @@ class SearchPage extends Component {
                                 {data.posts ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'posts' ? '' : 'is-hidden-mobile'}`}>
                                         <div className="box" onScroll={this.handleScroll('posts', client, { ...variables.input, newCursor: data.posts.cursor })}>
-                                            <article className="media">
+                                            <article className="media header">
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <h2 className="subtitle is-3 is-hidden-mobile">Posts</h2>
@@ -100,12 +105,20 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Posts data={data.posts} input={variables.input} end={!data.posts.cursor} />
+                                            {this.state.fetching === 'posts' && <article className="media">
+                                                <div className="media-content font-2 has-text-centered">
+                                                    <div className="content has-text-centered">
+                                                        <Loading size="4x" style="margin-top:2rem" />
+                                                    </div>
+                                                </div>
+                                            </article>}
                                         </div>
                                     </div> : ''}
+                                <div className="column is-1-desktop is-hidden-touch"></div>
                                 {data.users ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'users' ? '' : 'is-hidden-mobile'}`}>
                                         <div className="box" onScroll={this.handleScroll('users', client, { ...variables.input, newCursor: data.users.cursor })}>
-                                            <article className="media">
+                                            <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>
                                                 <div className="media-content font-2 has-text-centered">
@@ -115,12 +128,20 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Users data={data.users} input={variables.input} end={!data.users.cursor} />
+                                            {this.state.fetching === 'users' && <article className="media">
+                                                <div className="media-content font-2 has-text-centered">
+                                                    <div className="content has-text-centered">
+                                                        <Loading size="4x" style="margin-top:2rem" />
+                                                    </div>
+                                                </div>
+                                            </article>}
                                         </div>
                                     </div> : ''}
+
                                 {data.comments ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'comments' ? '' : 'is-hidden-mobile'}`}>
                                         <div className="box" onScroll={this.handleScroll('comments', client, { ...variables.input, newCursor: data.comments.cursor })}>
-                                            <article className="media">
+                                            <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>
                                                 <div className="media-content font-2 has-text-centered">
@@ -130,12 +151,20 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Comments data={data.comments} input={variables.input} end={!data.comments.cursor} />
+                                            {this.state.fetching === 'comments' && <article className="media">
+                                                <div className="media-content font-2 has-text-centered">
+                                                    <div className="content has-text-centered">
+                                                        <Loading size="4x" style="margin-top:2rem" />
+                                                    </div>
+                                                </div>
+                                            </article>}
                                         </div>
                                     </div> : ''}
+                                <div className="column is-1-desktop is-hidden-touch"></div>
                                 {data.tags ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'tags' ? '' : 'is-hidden-mobile'}`}>
                                         <div className="box" onScroll={this.handleScroll('tags', client, { ...variables.input, newCursor: data.tags.cursor })}>
-                                            <article className="media">
+                                            <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>
                                                 <div className="media-content font-2 has-text-centered">
@@ -145,6 +174,13 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Tags data={data.tags} input={variables.input} end={!data.tags.cursor} />
+                                            {this.state.fetching === 'tags' && <article className="media">
+                                                <div className="media-content font-2 has-text-centered">
+                                                    <div className="content has-text-centered">
+                                                        <Loading size="4x" style="margin-top:2rem" />
+                                                    </div>
+                                                </div>
+                                            </article>}
                                         </div>
                                     </div> : ''}
                             </>
@@ -165,6 +201,7 @@ class SearchPage extends Component {
                 .tabs{
                     margin-bottom: -1.4rem
                 }
+            
                 `}</style>
             </div>
         );

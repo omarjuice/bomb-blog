@@ -1,19 +1,35 @@
 import React, { Component } from 'react';
+import moment from 'moment'
 import BomgSVG from '../svg/bomb';
-
 class Tags extends Component {
     render() {
         const { data } = this.props
         return (
             <>
-                {data.results.map(({ id, tag_name }) => {
+                {data.results.map(({ id, tag_name, popularity, created_at }, i) => {
                     return (
                         <article key={id} className="media has-text-centered">
                             <div className="media-content">
-                                <div className="content">
-                                    <a className="tag">{tag_name}</a>
+                                <div className="content has-text-centered">
+                                    <div className={`tag is-large font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag_name}</div>
+                                    <BomgSVG scale={.1} lit={true} >{popularity}</BomgSVG>
+                                    <small>Created {moment.utc(Number(created_at)).local().fromNow()}</small>
                                 </div>
                             </div>
+                            <div className="media-right columns is-multiline is-mobile is-centered">
+                                <div className="column is-half has-text-centered">
+                                    <span className="icon is-large"><i className="fas fa-search fa-2x"></i></span>
+                                </div>
+                            </div>
+                            <style jsx>{`
+                                small{
+                                    margin-top: -1rem;
+                                }
+                                .media-right{
+                                    position: relative;
+                                    top: 2rem
+                                }
+                                `}</style>
                         </article>
                     )
                 })}
@@ -27,7 +43,7 @@ class Tags extends Component {
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 No Tags to show...
-                        </h3>
+                            </h3>
 
                         </div>
                     </div>

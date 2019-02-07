@@ -44,7 +44,7 @@ class BomgSVG extends Component {
                             style={{ fill: secondaryColor, strokeWidth: "8px", stroke: secondaryColor }} id="e9_path" />}
                 </> : ''}
             </svg>
-
+            {this.props.children}
         </div>
         );
     }

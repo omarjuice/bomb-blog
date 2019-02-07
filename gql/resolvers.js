@@ -92,7 +92,7 @@ const resolvers = {
             const searchTags = tags && tags.length > 0 ? tags : [null]
             const query = `
             SELECT 
-                tags.id, tag_name, IF(tag_name IN (?), 1, 0) AS relevance, (COUNT(DISTINCT comment_id) * 1 +  COUNT(DISTINCT post_id)*10 + COUNT(DISTINCT user_id)*30 ) as popularity 
+                tags.id, tag_name, created_at, IF(tag_name IN (?), 1, 0) AS relevance, (COUNT(DISTINCT comment_id) * 1 +  COUNT(DISTINCT post_id)*10 + COUNT(DISTINCT user_id)*30 ) as popularity 
             FROM tags
             INNER JOIN comment_tags
                 ON comment_tags.tag_id=tags.id

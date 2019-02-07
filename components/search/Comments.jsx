@@ -37,14 +37,13 @@ class SearchComments extends Component {
                                     </Link>
                                     <br />
                                     {comment_text}
-                                    {tags.length > 0 ?
-                                        <>
-                                            <br />
-                                            {(tags.map((tag, i) => {
-                                                return <a key={tag.id} className={`tag is-rounded is-small font-2 is-medium ${i % 2 === 1 ? 'is-info' : 'is-primary'}`}>{tag.tag_name}</a>
-                                            }))}
-                                        </> : ''
-                                    }
+
+                                    <br />
+                                    {tags.map((tag, i) => (
+                                        <span key={tag.id} className={`tag font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</span>
+                                    ))}
+
+
 
                                     <br />
                                     <small>{iLike ? <UnlikeComment commentId={id} postId={post_id} /> : <LikeComment commentId={id} postId={post_id} />} · {last_updated ? <i className="fas fa-pen-square"></i> : ''} {moment.utc(Number(last_updated || created_at)).local().fromNow(true)}</small> ·

@@ -392,6 +392,9 @@ export const SEARCH_TAGS = gql`
             results{
                 id
                 tag_name
+                relevance 
+                popularity
+                created_at
             }
         }
     }
@@ -486,6 +489,9 @@ export const SEARCH_ALL = gql`
             results{
                 id
                 tag_name
+                relevance 
+                popularity
+                created_at
             }
         }
     }

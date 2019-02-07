@@ -480,11 +480,8 @@ const batchILikeComment = async (keys, id) => {
 const batchTagPopularity = async keys => {
     const tagPopularities =
         await queryDB(`
-        SELECT 
-            id, (num_comments*1 + num_posts*10 +num_users*30) as popularity
-        FROM
-        (SELECT
-        tags.id, COUNT(DISTINCT comment_id) as num_comments, COUNT(DISTINCT post_id) as num_posts, COUNT(DISTINCT user_id) as num_users
+        SELECT
+            tags.id, (COUNT(DISTINCT comment_id)*1 + COUNT(DISTINCT post_id)*10 +  COUNT(DISTINCT user_id)*30 ) as popularity
         FROM tags
         INNER JOIN comment_tags
             ON comment_tags.tag_id=tags.id
@@ -493,7 +490,7 @@ const batchTagPopularity = async keys => {
         INNER JOIN user_tags
             ON user_tags.tag_id=tags.id
         WHERE tags.id IN (?)
-        GROUP BY tags.id) tag_counts
+        GROUP BY tags.id
         `, [keys], null, true)
     const TagPopularities = tagPopularities.reduce((acc, { id, popularity }) => {
         acc[id] = popularity
