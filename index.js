@@ -55,6 +55,12 @@ const initializeServer = (app, productionEnv = false) => {
                     const { query } = req;
                     nextApp.render(req, res, '/posts', query)
                 })
+                app.get('/posts/new', (req, res) => {
+                    nextApp.render(req, res, '/new')
+                })
+                app.get('/posts/edit', (req, res) => {
+                    nextApp.render(req, res, '/edit')
+                })
                 app.get('/search', (req, res) => {
                     const { query } = req
                     nextApp.render(req, res, '/search', query)

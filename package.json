@@ -17,7 +17,11 @@
     "supertest": "^3.3.0"
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
+    "apollo-link-error": "^1.1.7",
+    "apollo-link-http": "^1.5.11",
+    "apollo-link-state": "^0.4.2",
     "apollo-server-express": "^2.3.1",
     "bcryptjs": "^2.4.3",
     "dataloader": "^1.4.0",
@@ -28,6 +32,7 @@
     "faker": "^4.1.0",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
+    "marked": "^0.6.0",
     "moment": "^2.24.0",
     "mysql": "^2.16.0",
     "next": "^7.0.2",

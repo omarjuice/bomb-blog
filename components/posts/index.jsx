@@ -93,7 +93,7 @@ class PostPage extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="content article-body">
+                                        <div className="content article-body markdown-body">
                                             {post_content}
                                         </div>
                                     </div>
@@ -101,7 +101,7 @@ class PostPage extends Component {
 
                             </div>
                             <div className="column is-6-desktop is-8-tablet is-12-mobile">
-                                <div className="box has-text-centered">
+                                <div className="has-text-centered">
                                     <a onClick={this.toggleComments} className="has-text-info">
                                         <span className="icon">
                                             <i className="fas fa-comment-dots fa-4x"></i>
