@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import marked from 'marked'
+import { setSearch } from '../apollo/clientWrites';
 const renderer = new marked.Renderer()
 marked.setOptions({
     breaks: true,
     sanitize: true
 });
 class New extends Component {
+    static getInitialProps() {
+        setSearch({ active: false })
+        return {}
+    }
     render() {
         return (
             <div className="markdown-body" dangerouslySetInnerHTML={{

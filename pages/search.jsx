@@ -4,7 +4,7 @@ import { setSearch } from '../apollo/clientWrites';
 
 class Search extends Component {
     static getInitialProps({ query }) {
-        setSearch(query)
+        setSearch({ ...query, active: true })
         const { input, options } = query
         return { input, options }
     }

@@ -521,6 +521,8 @@ export const GET_SEARCH = gql`
         search @client{
             input
             options
+            active
+            addToInput
         }
     }
 `

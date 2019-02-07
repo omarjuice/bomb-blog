@@ -9,11 +9,19 @@ class SearchNav extends Component {
         options: 'all'
     }
     componentDidMount() {
-        const { search: { input, options } } = this.props.client.readQuery({ query: GET_SEARCH })
+        const { search: { input, options } } = this.props
         this.setState({
             input,
             options
         })
+    }
+    componentDidUpdate() {
+        const { search: { addToInput } } = this.props
+        if (!this.state.input.includes(addToInput)) {
+            this.setState({
+                input: this.state.input + addToInput
+            })
+        }
     }
     render() {
         return (

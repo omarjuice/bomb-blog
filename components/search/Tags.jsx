@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import BomgSVG from '../svg/bomb';
+import { setSearch } from '../../apollo/clientWrites';
 class Tags extends Component {
     render() {
         const { data } = this.props
@@ -18,7 +19,7 @@ class Tags extends Component {
                             </div>
                             <div className="media-right columns is-multiline is-mobile is-centered">
                                 <div className="column is-half has-text-centered">
-                                    <span className="icon is-large"><i className="fas fa-search fa-2x"></i></span>
+                                    <a onClick={() => setSearch({ addToInput: ` #${tag_name}` })} className="has-text-dark"><span className="icon is-large"><i className="fas fa-search fa-2x"></i></span></a>
                                 </div>
                             </div>
                             <style jsx>{`

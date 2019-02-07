@@ -1,4 +1,5 @@
 import client from './client'
+import { GET_SEARCH } from './queries';
 export const showModal = (modal) => {
     if (modal.info) {
         modal.info = JSON.stringify(modal.info)
@@ -42,15 +43,17 @@ export const clearAuth = () => {
         }
     })
 }
-export const setSearch = ({ input = '', options = '', active = false }) => {
-    client.writeData({
-        data: {
-            search: {
-                __typename: 'Search',
-                input,
-                options,
-                active
-            }
-        }
-    })
+export const setSearch = ({ input, options, active, addToInput }) => {
+
+    const data = client.readQuery({ query: GET_SEARCH })
+    if (input !== undefined) data.search.input = input
+    if (options !== undefined) data.search.options = options
+    if (active !== undefined) data.search.active = active
+    if (addToInput !== undefined) {
+        data.search.addToInput = addToInput
+    } else {
+        data.search.addToInput = ''
+    }
+    console.log(data)
+    client.writeQuery({ query: GET_SEARCH, data })
 }

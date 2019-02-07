@@ -26,7 +26,8 @@ const defaults = {
         __typename: 'Search',
         input: '',
         options: '',
-        active: false
+        active: false,
+        addToInput: ''
     }
 }
 const cache = new InMemoryCache()

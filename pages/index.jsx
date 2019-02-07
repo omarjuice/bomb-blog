@@ -1,22 +1,11 @@
 import React, { Component } from 'react';
 
 import BomgSVG from '../components/svg/bomb';
+import { setSearch } from '../apollo/clientWrites';
 class Index extends Component {
-    static async getInitialProps({ apolloClient }) {
-        // const result = await apolloClient.query({
-        //     query: gql`
-        //     {
-        //         users{
-        //             id
-        //             username
-        //         }
-        //     }
-        //     `
-        // })
-        // console.log(result)
-        // return {}
+    static getInitialProps() {
+        setSearch({ active: false })
         return {}
-
     }
     componentDidMount() {
     }

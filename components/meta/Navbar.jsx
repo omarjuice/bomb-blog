@@ -2,11 +2,20 @@ import React, { Component } from 'react';
 import BomgSVG from '../svg/bomb';
 import Authenticated from '../auth/Authenticated';
 import SearchNav from './SearchNav';
+import { Query } from 'react-apollo';
+import { GET_SEARCH } from '../../apollo/queries';
 
 class Navbar extends Component {
     state = {
         menu: false,
         searchNav: false
+    }
+    componentDidMount() {
+        const { search: { active } } = this.props.client.cache.readQuery({ query: GET_SEARCH })
+        console.log(active);
+        this.setState({
+            searchNav: active
+        })
     }
     render() {
         return (
@@ -40,7 +49,11 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </nav>
-                <SearchNav active={this.state.searchNav} client={this.props.client} />
+                <Query query={GET_SEARCH}>
+                    {({ data }) => {
+                        return <SearchNav active={this.state.searchNav} search={data.search} />
+                    }}
+                </Query>
             </div>
         );
     }
