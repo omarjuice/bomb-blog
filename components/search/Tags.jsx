@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment'
-import BomgSVG from '../svg/bomb';
+import BombSVG from '../svg/bomb';
 import { setSearch } from '../../apollo/clientWrites';
 class Tags extends Component {
     render() {
@@ -13,7 +13,7 @@ class Tags extends Component {
                             <div className="media-content">
                                 <div className="content has-text-centered">
                                     <div className={`tag is-large font-2 ${this.props.inputTags.includes(tag_name) ? 'is-primary' : 'is-info'}`}>{tag_name}</div>
-                                    <BomgSVG scale={.1} lit={true} >{popularity}</BomgSVG>
+                                    <BombSVG scale={.1} lit={true} >{popularity}</BombSVG>
                                     <small>Created {moment.utc(Number(created_at)).local().fromNow()}</small>
                                 </div>
                             </div>
@@ -37,7 +37,7 @@ class Tags extends Component {
                 {this.props.end ? <article className="media">
                     <figure className="media-left">
                         <div className="image is-64x64">
-                            <BomgSVG lit={false} face={{ happy: false }} />
+                            <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
                     <div className="media-content font-2 has-text-centered">

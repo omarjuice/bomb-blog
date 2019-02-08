@@ -83,7 +83,7 @@ class SearchPage extends Component {
                             } catch (e) { numPosts = 0 }
                             return (<>
                                 <div className="column is-full has-text-centered">
-                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for <em>{header}</em></p>}</h1>
+                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for <em>{header.length > 1 ? header : 'ALL'}</em></p>}</h1>
                                     <div className="tabs is-centered is-hidden-tablet">
                                         <ul>
                                             {data.posts ? <li className={this.state.active === 'posts' && 'is-active'}><a onClick={() => this.setState({ active: 'posts' })}>Posts</a></li> : ''}

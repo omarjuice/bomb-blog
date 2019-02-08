@@ -3,7 +3,7 @@ import Link from 'next/link';
 import UnlikePost from '../posts/UnlikePost';
 import LikePost from '../posts/LikePost';
 import moment from 'moment'
-import BomgSVG from '../svg/bomb';
+import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
 import { showModal, setSearch } from '../../apollo/clientWrites';
 
@@ -79,7 +79,7 @@ class Posts extends Component {
                 {this.props.end ? <article className="media">
                     <figure className="media-left">
                         <div className="image is-64x64">
-                            <BomgSVG lit={false} face={{ happy: false }} />
+                            <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
                     <div className="media-content font-2 has-text-centered">

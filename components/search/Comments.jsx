@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
 import moment from 'moment'
-import BomgSVG from '../svg/bomb';
+import BombSVG from '../svg/bomb';
 import LikeComment from '../posts/comments/LikeComment';
 import UnlikeComment from '../posts/comments/UnlikeComment';
 import { showModal, setSearch } from '../../apollo/clientWrites';
@@ -47,7 +47,7 @@ class SearchComments extends Component {
 
                                     <br />
                                     <small>{iLike ? <UnlikeComment commentId={id} postId={post_id} /> : <LikeComment commentId={id} postId={post_id} />} · {last_updated ? <i className="fas fa-pen-square"></i> : ''} {moment.utc(Number(last_updated || created_at)).local().fromNow(true)}</small> ·
-                                <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'comment', id } })} className="has-text-primary"><span className="icon">{iLike ? <BomgSVG lit={true} scale={1.2} /> : <BomgSVG lit={false} scale={1.2} />}</span><span className="has-text-primary">{shortenNumber(numLikes)}</span></a> ·
+                                <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'comment', id } })} className="has-text-primary"><span className="icon">{iLike ? <BombSVG lit={true} scale={1.2} /> : <BombSVG lit={false} scale={1.2} />}</span><span className="has-text-primary">{shortenNumber(numLikes)}</span></a> ·
                                         <span className="icon has-text-info"><i className="fas fa-reply"></i></span>
                                     <span className="has-text-info">{shortenNumber(numReplies)}</span>
                                 </div>}
@@ -59,7 +59,7 @@ class SearchComments extends Component {
                 {this.props.end ? <article className="media">
                     <figure className="media-left">
                         <div className="image is-64x64">
-                            <BomgSVG lit={false} face={{ happy: false }} />
+                            <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
                     <div className="media-content font-2 has-text-centered">

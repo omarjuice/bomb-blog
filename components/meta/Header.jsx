@@ -4,7 +4,7 @@ import Modal from './Modal';
 import Authenticated from '../auth/Authenticated';
 import GlobalStyles from './GlobalStyles';
 import ErrorMessage from './ErrorMessage';
-import BomgSVG from '../svg/bomb';
+import BombSVG from '../svg/bomb';
 import Navbar from './Navbar';
 
 class Header extends Component {

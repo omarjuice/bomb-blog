@@ -6,7 +6,7 @@ import DeleteComment from './DeleteComment';
 import UpdateComment from './UpdateComment';
 import UnlikeComment from './UnlikeComment';
 import LikeComment from './LikeComment';
-import BomgSVG from '../../svg/bomb';
+import BombSVG from '../../svg/bomb';
 import { showModal } from '../../../apollo/clientWrites';
 
 class Comment extends Component {
@@ -46,7 +46,7 @@ class Comment extends Component {
 
                             <br />
                             <small>{iLike ? <UnlikeComment commentId={id} postId={post_id} /> : <LikeComment commentId={id} postId={post_id} />} · {last_updated ? <i className="fas fa-pen-square"></i> : ''} {moment.utc(Number(last_updated || created_at)).local().fromNow(true)}</small> ·
-                        <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'comment', id } })} className="has-text-primary"><span className="icon">{iLike ? <BomgSVG lit={true} scale={1.2} /> : <BomgSVG lit={false} scale={1.2} />}</span><span className="has-text-primary">{numLikes}</span></a> ·
+                        <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'comment', id } })} className="has-text-primary"><span className="icon">{iLike ? <BombSVG lit={true} scale={1.2} /> : <BombSVG lit={false} scale={1.2} />}</span><span className="has-text-primary">{numLikes}</span></a> ·
                         <a onClick={() => this.setState({ replies: !this.state.replies })}
                                 className="has-text-info">
                                 <span className="icon"><i className="fas fa-reply"></i></span>

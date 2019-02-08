@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class BomgSVG extends Component {
+class BombSVG extends Component {
 
     render() {
         const fill = this.props.lit ? '#3F3B3C' : 'lightgray'
@@ -50,4 +50,4 @@ class BomgSVG extends Component {
     }
 }
 
-export default BomgSVG;
+export default BombSVG;

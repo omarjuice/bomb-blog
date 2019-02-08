@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import BomgSVG from '../components/svg/bomb';
+import BombSVG from '../components/svg/bomb';
 import { setSearch } from '../apollo/clientWrites';
 class Index extends Component {
     static getInitialProps() {
@@ -14,7 +14,7 @@ class Index extends Component {
         return (
             // <div><Users /></div>
             <>
-                <BomgSVG />
+                <BombSVG />
             </>
         );
     }

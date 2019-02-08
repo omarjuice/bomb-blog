@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BomgSVG from '../svg/bomb';
+import BombSVG from '../svg/bomb';
 import Authenticated from '../auth/Authenticated';
 import SearchNav from './SearchNav';
 import { Query } from 'react-apollo';
@@ -22,7 +22,7 @@ class Navbar extends Component {
                 <nav className="navbar is-fixed-top primary-navbar" role="navigation" aria-label="main navigation">
                     <div className="navbar-brand">
                         <a className="navbar-item" href="/">
-                            <span className="icon is-large"><BomgSVG lit={true} face={{ happy: true }} /></span>
+                            <span className="icon is-large"><BombSVG lit={true} face={{ happy: true }} /></span>
                             <img id="brand-img" src="/static/brand.svg" width="150" height="100" />
                         </a>
                         <a className="navbar-item">

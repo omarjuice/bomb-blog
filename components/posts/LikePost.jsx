@@ -4,7 +4,7 @@ import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import { POST_LIKES, USER_POSTS, LIKES, CURRENT_USER, LIKERS } from '../../apollo/queries';
 import { LIKE_POST } from '../../apollo/mutations';
-import BomgSVG from '../svg/bomb';
+import BombSVG from '../svg/bomb';
 
 const update = (id, { page, userId }) => {
     return (proxy, { data: likePost }) => {
@@ -72,7 +72,7 @@ class LikePost extends Component {
                         <a onClick={likePost} className="has-text-primary has-text-centered">
                             <span className="icon is-large">
 
-                                <BomgSVG lit={false} scale={this.props.scale || 1.2} />
+                                <BombSVG lit={false} scale={this.props.scale || 1.2} />
                             </span>
                         </a>
                     )
