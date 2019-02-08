@@ -12,7 +12,6 @@ class Navbar extends Component {
     }
     componentDidMount() {
         const { search: { active } } = this.props.client.cache.readQuery({ query: GET_SEARCH })
-        console.log(active);
         this.setState({
             searchNav: active
         })
@@ -43,7 +42,6 @@ class Navbar extends Component {
                     <div id="navbarBasicExample" className={`navbar-menu ${this.state.menu && 'is-active'}`}>
                         <div className="navbar-start">
                         </div>
-
                         <div className="navbar-end">
                             <Authenticated />
                         </div>

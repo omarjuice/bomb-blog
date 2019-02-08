@@ -5,7 +5,7 @@ import LikePost from '../posts/LikePost';
 import moment from 'moment'
 import BomgSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
-import { showModal } from '../../apollo/clientWrites';
+import { showModal, setSearch } from '../../apollo/clientWrites';
 
 
 class Posts extends Component {
@@ -41,7 +41,7 @@ class Posts extends Component {
                                         </Link>
                                         <br />
                                         {tags.map((tag, i) => (
-                                            <span key={tag.id} className={`tag font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</span>
+                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
                                         ))}
                                         <br />
                                         <small>

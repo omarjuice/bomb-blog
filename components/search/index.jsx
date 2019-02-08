@@ -104,7 +104,7 @@ class SearchPage extends Component {
                                                     </div>
                                                 </div>
                                             </article>
-                                            <Posts data={data.posts} input={variables.input} end={!data.posts.cursor} />
+                                            <Posts data={data.posts} input={variables.input} end={!data.posts.cursor} inputTags={variables.input.tags} />
                                             {this.state.fetching === 'posts' && <article className="media">
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">
@@ -127,7 +127,7 @@ class SearchPage extends Component {
                                                     </div>
                                                 </div>
                                             </article>
-                                            <Users data={data.users} input={variables.input} end={!data.users.cursor} />
+                                            <Users data={data.users} input={variables.input} end={!data.users.cursor} inputTags={variables.input.tags} />
                                             {this.state.fetching === 'users' && <article className="media">
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">
@@ -150,7 +150,7 @@ class SearchPage extends Component {
                                                     </div>
                                                 </div>
                                             </article>
-                                            <Comments data={data.comments} input={variables.input} end={!data.comments.cursor} />
+                                            <Comments data={data.comments} input={variables.input} end={!data.comments.cursor} inputTags={variables.input.tags} />
                                             {this.state.fetching === 'comments' && <article className="media">
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">
@@ -173,7 +173,7 @@ class SearchPage extends Component {
                                                     </div>
                                                 </div>
                                             </article>
-                                            <Tags data={data.tags} input={variables.input} end={!data.tags.cursor} />
+                                            <Tags data={data.tags} input={variables.input} end={!data.tags.cursor} inputTags={variables.input.tags} />
                                             {this.state.fetching === 'tags' && <article className="media">
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">

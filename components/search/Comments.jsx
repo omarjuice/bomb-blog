@@ -4,7 +4,7 @@ import moment from 'moment'
 import BomgSVG from '../svg/bomb';
 import LikeComment from '../posts/comments/LikeComment';
 import UnlikeComment from '../posts/comments/UnlikeComment';
-import { showModal } from '../../apollo/clientWrites';
+import { showModal, setSearch } from '../../apollo/clientWrites';
 import { shortenNumber } from '../../utils';
 
 class SearchComments extends Component {
@@ -40,7 +40,7 @@ class SearchComments extends Component {
 
                                     <br />
                                     {tags.map((tag, i) => (
-                                        <span key={tag.id} className={`tag font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</span>
+                                        <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
                                     ))}
 
 

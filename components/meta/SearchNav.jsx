@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { GET_SEARCH } from '../../apollo/queries';
+import { setSearch } from '../../apollo/clientWrites';
 
 
 class SearchNav extends Component {
@@ -17,10 +18,13 @@ class SearchNav extends Component {
     }
     componentDidUpdate() {
         const { search: { addToInput } } = this.props
-        if (!this.state.input.includes(addToInput)) {
+        if (addToInput && !this.state.input.includes(addToInput)) {
             this.setState({
                 input: this.state.input + addToInput
+            }, () => {
+                setSearch({ addToInput: '' })
             })
+
         }
     }
     render() {
