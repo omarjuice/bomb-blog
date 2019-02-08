@@ -1,21 +1,15 @@
-
-
-
 import React, { Component } from 'react';
 import marked from 'marked'
-import { setSearch } from '../../apollo/clientWrites';
-// import Like from '../global/Like';
 import { getMatches } from '../../utils/index';
 import Follow from '../global/Follow';
 import BombSVG from '../svg/bomb';
-const renderer = new marked.Renderer()
 marked.setOptions({
     breaks: true,
     sanitize: true
 });
-
 class NewPost extends Component {
     state = {
+        head: true,
         preview: false,
         title: 'Title of post',
         caption: 'I am the bomb',
@@ -24,8 +18,11 @@ class NewPost extends Component {
         buttonActions: []
     }
     getTags = () => {
-        const tagRegex = /#(\w+)/g
+        const tagRegex = /#(\w{1,30})/g
         return getMatches(this.state.tags, tagRegex)
+    }
+    componentDidMount() {
+        this.markdown = document.querySelector('.markdown-body')
     }
     handleClick = (button) => {
         return e => {
@@ -36,15 +33,15 @@ class NewPost extends Component {
             let newSelectionEnd = selectionStart
             text.focus()
             let stringToAdd = ''
-
             switch (button) {
                 case 'header':
                     const { value } = e.target
                     if (!value) return
                     let headerNum = '#'.repeat(value)
                     stringToAdd += '\n' + headerNum + ' heading ' + value
-                    newSelectionStart += value
-                    newSelectionEnd += stringToAdd.length - value
+                    newSelectionStart += Number(value) + 2
+                    newSelectionEnd += stringToAdd.length
+                    document.getElementById('header-select').value = "defaultValue";
                     break;
                 case 'bold':
                     stringToAdd += ' **bold text**'
@@ -102,10 +99,21 @@ class NewPost extends Component {
             const body = body1 + body2
             this.setState({ body }, () => {
                 text.setSelectionRange(newSelectionStart, newSelectionEnd)
+                this.scrollmarkdown(newSelectionStart)
             })
         }
     }
+    scrollmarkdown = (selectionStart) => {
+        const { scrollHeight } = this.markdown
+        let numLinesToSelection = this.state.body.substring(0, selectionStart).split(/\r\n|\r|\n|#+/).length - 5
+        console.log(numLinesToSelection)
+        if (numLinesToSelection < 4) { return this.markdown.scrollTo(0, 0) }
+        let totalNumLines = this.state.body.substring(selectionStart).split(/\r\n|\r|\n|#+/).length
+        console.log(totalNumLines);
+        this.markdown.scrollTo(0, (numLinesToSelection / totalNumLines) * scrollHeight)
+    }
     render() {
+        const { head } = this.state
         return (
             <div >
                 <div className="columns is-centered is-multiline">
@@ -115,19 +123,19 @@ class NewPost extends Component {
                             <div className="field has-text-centered">
                                 <label className="label">Title</label>
                                 <div className="control">
-                                    <input onChange={e => this.setState({ title: e.target.value })} value={this.state.title} className="input" type="text" placeholder="Title" />
+                                    <input onChange={e => this.setState({ title: e.target.value, head: true })} value={this.state.title} className="input" type="text" placeholder="Title" />
                                 </div>
                             </div>
                             <div className="field has-text-centered">
                                 <label className="label">Caption</label>
                                 <div className="control">
-                                    <input onChange={e => this.setState({ caption: e.target.value })} value={this.state.caption} className="input" type="text" placeholder="Caption" />
+                                    <input onChange={e => this.setState({ caption: e.target.value, head: true })} value={this.state.caption} className="input" type="text" placeholder="Caption" />
                                 </div>
                             </div>
                             <div className="field has-text-centered">
                                 <label className="label">Tags</label>
                                 <div className="control">
-                                    <input onChange={e => this.setState({ tags: e.target.value })} value={this.state.tags} className="input" type="text" placeholder="#tags" />
+                                    <input onChange={e => { this.setState({ tags: e.target.value, head: true }) }} value={this.state.tags} className="input" type="text" placeholder="#tags" />
                                 </div>
                             </div>
                             <div className="card has-text-centered">
@@ -135,7 +143,7 @@ class NewPost extends Component {
                                     <div className="buttons">
                                         <div className="control has-icons-left select-container">
                                             <div className="select is-black">
-                                                <select onChange={this.handleClick('header')}>
+                                                <select value={""} id="header-select" onChange={this.handleClick('header')}>
                                                     <option></option>
                                                     <option>1</option>
                                                     <option>2</option>
@@ -156,13 +164,13 @@ class NewPost extends Component {
                                         <button className="button is-black" onClick={this.handleClick('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </button>
                                         <button className="button is-black" onClick={this.handleClick('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </button>
                                         <button className="button is-black" onClick={this.handleClick('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </button>
-
                                     </div>
-
                                 </header>
                                 <div className="field has-text-centered">
                                     <div className="control">
-                                        <textarea onChange={(e) => this.setState({ body: e.target.value })} value={this.state.body} className="textarea" type="text" placeholder="Post text goes here" />
+                                        <textarea onSelect={e => this.scrollmarkdown(e.target.selectionStart || 0)}
+                                            onChange={(e) => this.setState({ body: e.target.value })} value={this.state.body}
+                                            className="textarea" type="text" placeholder="Post text goes here" />
                                     </div>
                                 </div>
                             </div>
@@ -175,16 +183,18 @@ class NewPost extends Component {
                     <div className={`column is-5-desktop is-10-tablet is-full-mobile ${this.state.preview ? '' : 'is-hidden-touch'}`}>
                         <div className="card article">
                             <div className="card-content">
-                                <div className="media">
+                                <button id="toggle-header" onClick={() => this.setState({ head: !this.state.head })} className={`button ${this.state.head ? 'is-warning' : 'is-success'}`}><span className="icon">{this.state.head ? <i className="fas fa-window-minimize"></i> : <i className="far fa-window-maximize"></i>}</span></button>
+                                <div className={`media ${this.state.head ? '' : 'is-hidden'}`}>
                                     <div className="media-center">
                                         <img src={`/static/user_image.png`} className="author-image" />
                                     </div>
+
                                     <div className="media-content has-text-centered">
-                                        <p className="title is-1 article-title font-2">{this.state.title}</p>
+                                        <p id="title" className="title is-1 article-title font-2">{this.state.title}</p>
                                         <div className="caption content is-size-3">
                                             <div className="columns is-mobile is-centered">
                                                 <div className="column is-1"><i className="fas fa-quote-left fa-pull-left"></i></div>
-                                                <div className="column is-9">{this.state.caption}</div>
+                                                <div id="caption" className="column is-9">{this.state.caption}</div>
                                                 <div className="column is-1"><i className="fas fa-quote-right fa-pull-left"></i></div>
                                             </div>
 
@@ -235,7 +245,6 @@ class NewPost extends Component {
 
 
                 </div>
-
                 <style jsx>{`
                     .textarea{
                         height: 50vh
@@ -265,7 +274,7 @@ class NewPost extends Component {
                         margin-left: -30px;
                         border: 3px solid #ccc;
                         border-radius: 50%;
-                        box-shadow: 0px 1px 1px gray
+                        box-shadow: 0px 1px 1px gray;
                     }
                     .media-center {
                         display: block;
@@ -282,8 +291,9 @@ class NewPost extends Component {
                         color: #909AA0;
                         margin-bottom: 3rem;
                     }
-                    .article-body {
-                        line-height: 1.4;
+                    .markdown-body{
+                        height: ${head ? '35vh' : '80vh'};
+                        overflow: scroll;
                     }
                     .load-error{
                         margin-top: 40vh
@@ -292,7 +302,14 @@ class NewPost extends Component {
                         display: flex;
                         align-items: center;
                     }
-
+                    #toggle-header{
+                        position: absolute;
+                        top: 1rem;
+                        left: 1rem;
+                    }
+                    #caption, #title{
+                        word-break: break-all
+                    }
                     `}</style>
             </div>
         );
