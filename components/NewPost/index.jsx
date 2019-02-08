@@ -1,7 +1,10 @@
+
+
+
 import React, { Component } from 'react';
 import marked from 'marked'
 import { setSearch } from '../../apollo/clientWrites';
-import Like from '../global/Like';
+// import Like from '../global/Like';
 import { getMatches } from '../../utils/index';
 import Follow from '../global/Follow';
 import BombSVG from '../svg/bomb';
@@ -10,42 +13,101 @@ marked.setOptions({
     breaks: true,
     sanitize: true
 });
+
 class NewPost extends Component {
     state = {
         preview: false,
         title: 'Title of post',
         caption: 'I am the bomb',
         tags: '#tag1 #tag2',
-        body: '# post-body'
+        body: '# post-body',
+        buttonActions: []
     }
     getTags = () => {
         const tagRegex = /#(\w+)/g
         return getMatches(this.state.tags, tagRegex)
     }
+    handleClick = (button) => {
+        return e => {
+            e.preventDefault()
+            const text = document.querySelector('textarea')
+            const { selectionStart, selectionEnd } = text
+            let newSelectionStart = selectionStart;
+            let newSelectionEnd = selectionStart
+            text.focus()
+            let stringToAdd = ''
+
+            switch (button) {
+                case 'header':
+                    const { value } = e.target
+                    if (!value) return
+                    let headerNum = '#'.repeat(value)
+                    stringToAdd += '\n' + headerNum + ' heading ' + value
+                    newSelectionStart += value
+                    newSelectionEnd += stringToAdd.length - value
+                    break;
+                case 'bold':
+                    stringToAdd += ' **bold text**'
+                    newSelectionStart += 3
+                    newSelectionEnd += stringToAdd.length - 2
+                    break;
+                case 'italic':
+                    stringToAdd += ' _italic text_'
+                    newSelectionStart += 2
+                    newSelectionEnd += stringToAdd.length - 1
+                    break;
+                case 'strike':
+                    stringToAdd += ' ~~strikethrough~~'
+                    newSelectionStart += 3
+                    newSelectionEnd += stringToAdd.length - 2
+                    break;
+                case 'code':
+                    stringToAdd += '\n```\n <code></code> \n```'
+                    newSelectionStart += 6
+                    newSelectionEnd += stringToAdd.length - 5
+                    break;
+                case 'link':
+                    stringToAdd += ' [link](link.com)'
+                    newSelectionStart += 8
+                    newSelectionEnd += stringToAdd.length - 1
+                    break;
+                case 'quote':
+                    stringToAdd += '\n> block quote';
+                    newSelectionStart += 3
+                    newSelectionEnd += stringToAdd.length
+                    break;
+                case 'table':
+                    stringToAdd += '\n# table'
+                    newSelectionStart += 3
+                    newSelectionEnd += stringToAdd.length
+                    break;
+                case 'ul':
+                    stringToAdd += '\n-  \n-  \n- '
+                    newSelectionStart += 4
+                    newSelectionEnd += 4
+                    break;
+                case 'ol':
+                    stringToAdd += '\n1.  \n2.  \n3.'
+                    newSelectionStart += 4
+                    newSelectionEnd += 4
+                    break;
+                case 'image':
+                    stringToAdd += '\n![alt text](https://google.com)'
+                    newSelectionStart += 13
+                    newSelectionEnd += stringToAdd.length - 1
+                    break;
+            }
+            const body1 = this.state.body.substring(0, selectionStart) + stringToAdd
+            const body2 = this.state.body.substring(selectionEnd, this.state.body.length)
+            const body = body1 + body2
+            this.setState({ body }, () => {
+                text.setSelectionRange(newSelectionStart, newSelectionEnd)
+            })
+        }
+    }
     render() {
         return (
-
-            // <div className="markdown-body" dangerouslySetInnerHTML={{
-            //     __html: marked.parse(`# Hangman (client)\n## A multiplayer chat app and hangman game.
-            //     \nPlayers can play hangman and chat with anyone and anywhere.
-            //     \nThis web app is mobile responsive. It uses the Oxford Dictionary and Urban Dictionary APIs.
-            //     \n## User Experience
-
-            //     \nAt the join page, a user can enter a username and a room they would like to enter. If a room of the chosen name does not exist, the user will be asked to choose a dictionary for that room. Then users will be taken to a room where they can chat, and if there are at least 2 players, play hangman.
-
-            //     \n## GamePlay
-            //      \nIn the Urban or Oxford Dictionary rooms, players can choose a word and the app will choose a hint for them. In the Free-For-All rooms, players make their own hints. The max number of players per room is capped at 5.
-
-            //     \nPlayers get 60 seconds per turn and 5 incorrect guesses. For each correct letter, the player is awarded 1 point. Meaning partial credit even if the word is not complete. If the word is not completely guessed, the word-picker is awarded 5 points.
-            //     \nThe players take turns choosing words, and word choosers do not partake in the game that they choose for.
-
-            //     \n### Made with Socket.io, Node, React, Redux, and AnimeJS.
-
-            //     \n[Server code](https://github.com/OmarJuice/Hangman-server)`, { renderer })
-            // }}>
-
-            // </div>
-            <div>
+            <div >
                 <div className="columns is-centered is-multiline">
                     <div className={`column is-5-desktop is-10-tablet is-full-mobile has-text-centered ${this.state.preview ? 'is-hidden-touch' : ''}`}>
                         <h1 className="title">New Post</h1>
@@ -68,16 +130,47 @@ class NewPost extends Component {
                                     <input onChange={e => this.setState({ tags: e.target.value })} value={this.state.tags} className="input" type="text" placeholder="#tags" />
                                 </div>
                             </div>
-                            <div className="field has-text-centered">
-                                <label className="label">BODY</label>
-                                <div className="control">
-                                    <textarea onChange={(e) => this.setState({ body: e.target.value })} value={this.state.body} className="textarea" type="text" placeholder="Post text goes here" />
+                            <div className="card has-text-centered">
+                                <header className="card-header has-background-black has-text-centered">
+                                    <div className="buttons">
+                                        <div className="control has-icons-left select-container">
+                                            <div className="select is-black">
+                                                <select onChange={this.handleClick('header')}>
+                                                    <option></option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                </select>
+                                            </div>
+                                            <div className="icon is-small is-left has-text-black">
+                                                <i className="fas fa-lg fa-heading"></i>
+                                            </div>
+                                        </div>
+                                        <button className="button is-black" onClick={this.handleClick('bold')}><span className="icon is-large"><i className="fas fa-lg fa-bold"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('italic')}><span className="icon is-large"><i className="fas fa-lg fa-italic"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('strike')}><span className="icon is-large"><i className="fas fa-lg fa-strikethrough"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('table')}><span className="icon is-large"><i className="fas fa-lg fa-table"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </button>
+                                        <button className="button is-black" onClick={this.handleClick('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </button>
+
+                                    </div>
+
+                                </header>
+                                <div className="field has-text-centered">
+                                    <div className="control">
+                                        <textarea onChange={(e) => this.setState({ body: e.target.value })} value={this.state.body} className="textarea" type="text" placeholder="Post text goes here" />
+                                    </div>
                                 </div>
                             </div>
+
                         </form>
                     </div>
-                    <div className="buttons has-text-centered is-hidden-desktop">
-                        <button onClick={() => this.setState({ preview: !this.state.preview })} className="button is-large is-primary is-rounded font-2"> <span className="icon"><i className="far fa-eye"></i></span> </button>
+                    <div className="preview has-text-centered is-hidden-desktop">
+                        <button onClick={() => this.setState({ preview: !this.state.preview })} className="button is-large is-primary is-rounded font-2"> <span className="icon">{this.state.preview ? <i className="fas fa-pencil-alt"></i> : <i className="far fa-eye"></i>}</span> </button>
                     </div>
                     <div className={`column is-5-desktop is-10-tablet is-full-mobile ${this.state.preview ? '' : 'is-hidden-touch'}`}>
                         <div className="card article">
@@ -147,10 +240,21 @@ class NewPost extends Component {
                     .textarea{
                         height: 50vh
                     }
-                    .buttons{
+                    .card-header{
+                        display: flex;
+                        justify-content: center;
+                    }
+                    buttons .button{
+                        border: none
+                    }
+                    .select-container{
+                        margin-top: -0.4rem
+                    }
+                    .preview{
                        position: fixed;
                         bottom: 1rem; 
-                        right: 2rem
+                        right: 2rem;
+                        z-index:10;
                     }
                     .author-image {
                         position: absolute;
@@ -188,9 +292,9 @@ class NewPost extends Component {
                         display: flex;
                         align-items: center;
                     }
+
                     `}</style>
             </div>
-
         );
     }
 }

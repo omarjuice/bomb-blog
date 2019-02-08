@@ -38,6 +38,7 @@
     "next": "^7.0.2",
     "next-with-apollo": "^3.3.2",
     "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "react-no-ssr": "^1.1.0"
   }
 }

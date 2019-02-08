@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NoSSR from 'react-no-ssr';
 import { setSearch } from '../apollo/clientWrites';
 import NewPost from '../components/NewPost';
 
@@ -9,7 +10,9 @@ class New extends Component {
     }
     render() {
         return (
-            <NewPost />
+            <NoSSR>
+                <NewPost />
+            </NoSSR>
         );
     }
 }
