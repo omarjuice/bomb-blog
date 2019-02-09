@@ -23,15 +23,15 @@ class NewPost extends Component {
     }
     componentDidMount() {
         this.markdown = document.querySelector('.markdown-body')
+        this.textarea = document.querySelector('.textarea')
     }
     modifyText = (button) => {
         return e => {
             e.preventDefault()
-            const text = document.querySelector('textarea')
-            const { selectionStart, selectionEnd } = text
+            const { selectionStart, selectionEnd } = this.textarea
             let newSelectionStart = selectionStart;
             let newSelectionEnd = selectionStart
-            text.focus()
+            this.textarea.focus()
             let stringToAdd = ''
             switch (button) {
                 case 'header':
@@ -44,18 +44,18 @@ class NewPost extends Component {
                     document.getElementById('header-select').value = "defaultValue";
                     break;
                 case 'bold':
-                    stringToAdd += ' **bold text**'
-                    newSelectionStart += 3
+                    stringToAdd += '**bold text**'
+                    newSelectionStart += 2
                     newSelectionEnd += stringToAdd.length - 2
                     break;
                 case 'italic':
-                    stringToAdd += ' _italic text_'
-                    newSelectionStart += 2
+                    stringToAdd += '_italic text_'
+                    newSelectionStart += 1
                     newSelectionEnd += stringToAdd.length - 1
                     break;
                 case 'strike':
-                    stringToAdd += ' ~~strikethrough~~'
-                    newSelectionStart += 3
+                    stringToAdd += '~~strikethrough~~'
+                    newSelectionStart += 2
                     newSelectionEnd += stringToAdd.length - 2
                     break;
                 case 'code':
@@ -81,19 +81,19 @@ class NewPost extends Component {
                     }
                     const header = '\n' + 'column|'.repeat(cols - 1) + (cols < 2 ? 'column|' : 'column') + '\n'
                     const divider = '-------------|'.repeat(cols - 1) + (cols < 2 ? '-------------|' : '-------------') + '\n'
-                    const row = 'val' + '|val'.repeat(cols - 1) + '\n'
+                    const row = 'value' + '|value'.repeat(cols - 1) + '\n'
                     const allRows = (row).repeat(rows)
                     stringToAdd += header + divider + allRows
                     newSelectionStart += 1
                     newSelectionEnd += 1
                     break;
                 case 'ul':
-                    stringToAdd += '\n-  \n-  \n- '
+                    stringToAdd += '\n+  \n+  \n+  '
                     newSelectionStart += 4
                     newSelectionEnd += 4
                     break;
                 case 'ol':
-                    stringToAdd += '\n1.  \n2.  \n3.'
+                    stringToAdd += '\n1.  \n2.  \n3.  '
                     newSelectionStart += 4
                     newSelectionEnd += 4
                     break;
@@ -102,12 +102,17 @@ class NewPost extends Component {
                     newSelectionStart += 13
                     newSelectionEnd += stringToAdd.length - 1
                     break;
+                case 'tab':
+                    stringToAdd += '&nbsp;'.repeat(4)
+                    newSelectionStart += stringToAdd.length
+                    newSelectionEnd += stringToAdd.length
+                    break;
             }
             const body1 = this.state.body.substring(0, selectionStart) + stringToAdd
             const body2 = this.state.body.substring(selectionEnd, this.state.body.length)
             const body = body1 + body2
             this.setState({ body }, () => {
-                text.setSelectionRange(newSelectionStart, newSelectionEnd)
+                this.textarea.setSelectionRange(newSelectionStart, newSelectionEnd)
                 this.scrollmarkdown(newSelectionStart)
             })
         }
@@ -125,7 +130,6 @@ class NewPost extends Component {
             <div >
                 <div className="columns is-centered is-multiline">
                     <div className={`column is-5-desktop is-10-tablet is-full-mobile has-text-centered ${this.state.preview ? 'is-hidden-touch' : ''}`}>
-                        <h1 className="title">New Post</h1>
                         <form action="" className="form">
                             <div className="field has-text-centered">
                                 <label className="label">Title</label>
@@ -155,6 +159,9 @@ class NewPost extends Component {
                                                     <option>1</option>
                                                     <option>2</option>
                                                     <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
                                                 </select>
                                             </div>
                                             <div className="icon is-small is-left has-text-black">
@@ -195,6 +202,7 @@ class NewPost extends Component {
                                     <div className="control">
                                         <textarea onSelect={e => this.scrollmarkdown(e.target.selectionStart || 0)}
                                             onChange={(e) => this.setState({ body: e.target.value })} value={this.state.body}
+                                            onKeyDown={e => { if (e.keyCode === 9) { this.modifyText('tab')(e) } }}
                                             className="textarea" type="text" placeholder="Post text goes here" />
                                     </div>
                                 </div>
@@ -271,6 +279,9 @@ class NewPost extends Component {
 
                 </div>
                 <style jsx>{`
+                    .form{
+                        margin-top: 3rem
+                    }
                     .textarea{
                         height: 50vh
                     }
@@ -336,7 +347,7 @@ class NewPost extends Component {
                         left: 1rem;
                     }
                     #caption, #title{
-                        word-break: break-all
+                        word-break: break-word
                     }
                     `}</style>
             </div>

@@ -43,7 +43,7 @@ class Tags extends Component {
                     <div className="media-content font-2 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
-                                No Tags to show...
+                                No {data.results.length > 0 ? 'more' : ''} Tags to show...
                             </h3>
 
                         </div>

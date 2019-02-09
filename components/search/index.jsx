@@ -75,15 +75,24 @@ class SearchPage extends Component {
                             if (error) return <ErrorIcon size="5x" />
                             let numUsers;
                             let numPosts;
+                            let numComments;
+                            let numTags;
                             try {
                                 numUsers = data.users.length
                             } catch (e) { numUsers = 0 }
                             try {
                                 numPosts = data.posts.length
                             } catch (e) { numPosts = 0 }
+                            try {
+                                numComments = data.comments.length
+                            } catch (e) { numComments = 0 }
+                            try {
+                                numTags = data.tags.length
+                            } catch (e) { numTags = 0 }
+
                             return (<>
                                 <div className="column is-full has-text-centered">
-                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for <em>{header.length > 1 ? header : 'ALL'}</em></p>}</h1>
+                                    <h1 className="title is-2">{numUsers < 1 && numPosts < 1 && numComments < 1 && numTags < 1 ? <p>No results found for <em>{header}</em></p> : <p>Results for <em>{header.length > 1 ? header : 'ALL'}</em></p>}</h1>
                                     <div className="tabs is-centered is-hidden-tablet">
                                         <ul>
                                             {data.posts ? <li className={this.state.active === 'posts' && 'is-active'}><a onClick={() => this.setState({ active: 'posts' })}>Posts</a></li> : ''}
@@ -114,7 +123,7 @@ class SearchPage extends Component {
                                             </article>}
                                         </div>
                                     </div> : ''}
-                                <div className="column is-1-desktop is-hidden-touch"></div>
+                                <div className={`column is-1-desktop ${data.posts ? 'is-hidden-touch' : 'is-hidden'}`}></div>
                                 {data.users ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'users' ? '' : 'is-hidden-mobile'}`}>
                                         <div className="box" onScroll={this.handleScroll('users', client, { ...variables.input, newCursor: data.users.cursor })}>
@@ -160,7 +169,7 @@ class SearchPage extends Component {
                                             </article>}
                                         </div>
                                     </div> : ''}
-                                <div className="column is-1-desktop is-hidden-touch"></div>
+                                <div className={`column is-1-desktop ${data.comments ? 'is-hidden-touch' : 'is-hidden'}`}></div>
                                 {data.tags ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'tags' ? '' : 'is-hidden-mobile'}`}>
                                         <div className="box" onScroll={this.handleScroll('tags', client, { ...variables.input, newCursor: data.tags.cursor })}>

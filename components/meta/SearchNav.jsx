@@ -40,6 +40,8 @@ class SearchNav extends Component {
                                             <option>all</option>
                                             <option>users</option>
                                             <option>posts</option>
+                                            <option>comments</option>
+                                            <option>tags</option>
                                         </select>
                                     </span>
                                 </p>
