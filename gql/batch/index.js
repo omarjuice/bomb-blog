@@ -1,9 +1,10 @@
 const DataLoader = require('dataloader')
-const { queryDB } = require('../../db/connect')
 const users = require('./dbqueries/users')
 const posts = require('./dbqueries/posts')
 const comments = require('./dbqueries/comments')
 const tags = require('./dbqueries/tags')
+const insertTags = require('./dbqueries/inserts')
+const deleteTags = require('./dbqueries/deletes')
 const applyLoaders = (context) => {
     let id;
     try {
@@ -76,51 +77,10 @@ const applyLoaders = (context) => {
         }
     }
     context.batchInserts = {
-        tags: {
-            postTags: async (tags, post_id) => {
-                tags = tags.map((tag) => [tag.toLowerCase()])
-                const Tags = await tags.bulkInsertTags(tags)
-                const postTags = tags.map(name => [post_id, Tags[name]])
-                return await queryDB(`INSERT IGNORE INTO post_tags (post_id, tag_id) VALUES ?`, [postTags]).catch(e => 0)
-            },
-            commentTags: async (tags, comment_id) => {
-                tags = tags.map((tag) => [tag.toLowerCase()])
-                const Tags = await tags.bulkInsertTags(tags)
-                const commentTags = tags.map(name => [comment_id, Tags[name]])
-                return await queryDB(`INSERT IGNORE INTO comment_tags (comment_id, tag_id) VALUES ?`, [commentTags]).catch(e => 0)
-            },
-            userTags: async (tags, user_id) => {
-                tags = tags.map((tag) => [tag.toLowerCase()])
-                const Tags = await tags.bulkInsertTags(tags)
-                const userTags = tags.map(name => [user_id, Tags[name]])
-                return await queryDB(`INSERT IGNORE INTO user_tags (user_id, tag_id) VALUES ?`, [userTags]).catch(e => 0)
-            }
-        }
+        tags: insertTags
     }
     context.batchDeletes = {
-        tags: {
-            postTags: async (tags, post_id) => {
-                tags = tags.map(tag => [tag.toLowerCase()])
-                return await queryDB(`
-                    DELETE IGNORE FROM post_tags WHERE post_id= ? AND tag_id IN (
-                        SELECT id FROM tags WHERE tag_name IN (?)
-                    )`, [post_id, tags]).catch(e => 0)
-            },
-            commentTags: async (tags, comment_id) => {
-                tags = tags.map(tag => [tag.toLowerCase()])
-                return await queryDB(`
-                    DELETE IGNORE FROM comment_tags WHERE comment_id= ? AND tag_id IN (
-                        SELECT id FROM tags WHERE tag_name IN (?)
-                    )`, [comment_id, tags]).catch(e => 0)
-            },
-            userTags: async (tags, user_id) => {
-                tags = tags.map(tag => [tag.toLowerCase()])
-                return await queryDB(`
-                    DELETE IGNORE FROM user_tags WHERE user_id= ? AND tag_id IN (
-                        SELECT id FROM tags WHERE tag_name IN (?)
-                    )`, [user_id, tags]).catch(e => 0)
-            }
-        }
+        tags: deleteTags
     }
     return context
 }

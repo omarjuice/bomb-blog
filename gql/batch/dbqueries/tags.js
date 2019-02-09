@@ -155,12 +155,5 @@ module.exports = {
         }, {})
         return keys.map(key => TagPopularities[key] ? TagPopularities[key] : 0)
     },
-    bulkInsertTags: async tags => {
-        await queryDB(`INSERT IGNORE INTO tags (tag_name) VALUES ?`, [tags]).catch(e => { throw Errors.database })
-        const allTags = await queryDB(`SELECT * FROM tags WHERE tag_name IN (?)`, [tags]).catch(e => { throw Errors.database })
-        return allTags.reduce((acc, { tag_name, id }) => {
-            acc[tag_name] = id
-            return acc
-        }, {})
-    }
+
 }
