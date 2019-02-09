@@ -24,7 +24,7 @@ class NewPost extends Component {
     componentDidMount() {
         this.markdown = document.querySelector('.markdown-body')
     }
-    handleClick = (button) => {
+    modifyText = (button) => {
         return e => {
             e.preventDefault()
             const text = document.querySelector('textarea')
@@ -74,9 +74,18 @@ class NewPost extends Component {
                     newSelectionEnd += stringToAdd.length
                     break;
                 case 'table':
-                    stringToAdd += '\n# table'
-                    newSelectionStart += 3
-                    newSelectionEnd += stringToAdd.length
+                    const rows = Math.floor(document.getElementById('input-table-rows').value)
+                    const cols = Math.floor(document.getElementById('input-table-cols').value)
+                    if (typeof rows !== 'number' || rows < 1 || typeof cols !== 'number' || cols < 1) {
+                        return
+                    }
+                    const header = '\n' + 'column|'.repeat(cols - 1) + (cols < 2 ? 'column|' : 'column') + '\n'
+                    const divider = '-------------|'.repeat(cols - 1) + (cols < 2 ? '-------------|' : '-------------') + '\n'
+                    const row = 'val' + '|val'.repeat(cols - 1) + '\n'
+                    const allRows = (row).repeat(rows)
+                    stringToAdd += header + divider + allRows
+                    newSelectionStart += 1
+                    newSelectionEnd += 1
                     break;
                 case 'ul':
                     stringToAdd += '\n-  \n-  \n- '
@@ -106,10 +115,8 @@ class NewPost extends Component {
     scrollmarkdown = (selectionStart) => {
         const { scrollHeight } = this.markdown
         let numLinesToSelection = this.state.body.substring(0, selectionStart).split(/\r\n|\r|\n|#+/).length - 5
-        console.log(numLinesToSelection)
         if (numLinesToSelection < 4) { return this.markdown.scrollTo(0, 0) }
         let totalNumLines = this.state.body.substring(selectionStart).split(/\r\n|\r|\n|#+/).length
-        console.log(totalNumLines);
         this.markdown.scrollTo(0, (numLinesToSelection / totalNumLines) * scrollHeight)
     }
     render() {
@@ -142,8 +149,8 @@ class NewPost extends Component {
                                 <header className="card-header has-background-black has-text-centered">
                                     <div className="buttons">
                                         <div className="control has-icons-left select-container">
-                                            <div className="select is-black">
-                                                <select value={""} id="header-select" onChange={this.handleClick('header')}>
+                                            <div className="select is-black is-small">
+                                                <select value={""} id="header-select" onChange={this.modifyText('header')}>
                                                     <option></option>
                                                     <option>1</option>
                                                     <option>2</option>
@@ -154,16 +161,34 @@ class NewPost extends Component {
                                                 <i className="fas fa-lg fa-heading"></i>
                                             </div>
                                         </div>
-                                        <button className="button is-black" onClick={this.handleClick('bold')}><span className="icon is-large"><i className="fas fa-lg fa-bold"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('italic')}><span className="icon is-large"><i className="fas fa-lg fa-italic"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('strike')}><span className="icon is-large"><i className="fas fa-lg fa-strikethrough"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('table')}><span className="icon is-large"><i className="fas fa-lg fa-table"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </button>
-                                        <button className="button is-black" onClick={this.handleClick('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </button>
+                                        <button className="button is-black" onClick={this.modifyText('bold')}><span className="icon is-large"><i className="fas fa-lg fa-bold"></i></span> </button>
+                                        <button className="button is-black" onClick={this.modifyText('italic')}><span className="icon is-large"><i className="fas fa-lg fa-italic"></i></span> </button>
+                                        <button className="button is-black" onClick={this.modifyText('strike')}><span className="icon is-large"><i className="fas fa-lg fa-strikethrough"></i></span> </button>
+                                        <button className="button is-black" onClick={this.modifyText('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </button>
+
+                                        <div className="field has-addons">
+                                            <div className="control input-container">
+                                                <input id="input-table-rows" className="input is-small" type="number" max="25" min="1" placeholder="row" />
+                                            </div>
+                                            <div className="control input-container">
+                                                <input id="input-table-cols" className="input is-small" type="number" max="5" min="1" placeholder="col" />
+                                            </div>
+                                            <div className="control input-container">
+                                                <button onClick={this.modifyText('table')} className="button is-small">
+                                                    <span className="icon">
+                                                        <i className="fas fa-lg fa-table"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <button className="button is-black" onClick={this.modifyText('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </button>
+                                        <button className="button is-black" onClick={this.modifyText('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </button>
+                                        <button className="button is-black" onClick={this.modifyText('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </button>
+                                        <button className="button is-black" onClick={this.modifyText('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </button>
+                                        <button className="button is-black" onClick={this.modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </button>
+
+
                                     </div>
                                 </header>
                                 <div className="field has-text-centered">
@@ -258,6 +283,9 @@ class NewPost extends Component {
                     }
                     .select-container{
                         margin-top: -0.4rem
+                    }
+                    .input-container{
+                        margin-bottom: -0.8rem
                     }
                     .preview{
                        position: fixed;
