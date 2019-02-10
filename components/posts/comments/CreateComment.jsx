@@ -4,7 +4,7 @@ import { Query, Mutation } from 'react-apollo';
 import { AUTHENTICATED, COMMENTS, POST, CURRENT_USER } from '../../../apollo/queries';
 import { showModal } from '../../../apollo/clientWrites';
 import { CREATE_COMMENT } from '../../../apollo/mutations';
-import { getMatches } from '../../../utils';
+import { getMatches, tagRegex } from '../../../utils';
 
 const update = id => {
     return (proxy, { data: { createComment } }) => {
@@ -28,7 +28,7 @@ class CreateComment extends Component {
     onSubmit = createComment => {
         return async e => {
             e.preventDefault()
-            const tags = getMatches(this.state.tagsText, /#(\w+)/g)
+            const tags = getMatches(this.state.tagsText, tagRegex)
             const comment_text = this.state.input;
             if (comment_text.length < 1) return this.setState({ error: true });
             await createComment({ variables: { post_id: this.props.postId, comment_text, tags } })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class EditBar extends Component {
+class ToolBar extends Component {
     render() {
         const { modifyText } = this.props
         return (<div>
@@ -22,10 +22,10 @@ class EditBar extends Component {
                             <i className="fas fa-lg fa-heading"></i>
                         </div>
                     </div>
-                    <button className="button is-black" onClick={modifyText('bold')}><span className="icon is-large"><i className="fas fa-lg fa-bold"></i></span> </button>
-                    <button className="button is-black" onClick={modifyText('italic')}><span className="icon is-large"><i className="fas fa-lg fa-italic"></i></span> </button>
-                    <button className="button is-black" onClick={modifyText('strike')}><span className="icon is-large"><i className="fas fa-lg fa-strikethrough"></i></span> </button>
-                    <button className="button is-black" onClick={modifyText('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </button>
+                    <a className="has-text-light" onClick={modifyText('bold')}><span className="icon is-large"><i className="fas fa-lg fa-bold"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('italic')}><span className="icon is-large"><i className="fas fa-lg fa-italic"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('strike')}><span className="icon is-large"><i className="fas fa-lg fa-strikethrough"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </a>
 
                     <div className="field has-addons">
                         <div className="control input-container">
@@ -35,21 +35,25 @@ class EditBar extends Component {
                             <input id="input-table-cols" className="input is-small" type="number" max="5" min="1" placeholder="col" />
                         </div>
                         <div className="control input-container">
-                            <button onClick={modifyText('table')} className="button is-small">
+                            <a onClick={modifyText('table')} className="button is-small">
                                 <span className="icon">
                                     <i className="fas fa-lg fa-table"></i>
                                 </span>
-                            </button>
+                            </a>
                         </div>
                     </div>
-                    <button className="button is-black" onClick={modifyText('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </button>
-                    <button className="button is-black" onClick={modifyText('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </button>
-                    <button className="button is-black" onClick={modifyText('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </button>
-                    <button className="button is-black" onClick={modifyText('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </button>
-                    <button className="button is-black" onClick={modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </button>
+                    <a className="has-text-light" onClick={modifyText('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </a>
                 </div>
             </header>
             <style jsx>{`
+                .button{
+                    border: none;
+                    b
+                }
                 .card-header{
                     display: flex;
                     align-items: center;
@@ -59,7 +63,7 @@ class EditBar extends Component {
                         margin-top: -0.4rem
                     }
                     .input-container{
-                        margin-bottom: -0.8rem
+                        margin-bottom: -1rem
                     }
                 `}</style>
         </div>
@@ -67,4 +71,4 @@ class EditBar extends Component {
     }
 }
 
-export default EditBar;
+export default ToolBar;

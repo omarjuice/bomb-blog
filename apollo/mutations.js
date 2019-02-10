@@ -115,3 +115,10 @@ export const UPDATE_REPLY = gql`
         }
     }
 `
+export const CREATE_POST = gql`
+    mutation CreatePost($input: PostDetails!){
+        createPost(input: $input){
+            id
+        }
+    }
+`

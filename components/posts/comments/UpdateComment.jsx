@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { UPDATE_COMMENT } from '../../../apollo/mutations';
 import { Mutation } from 'react-apollo';
-import { updateTags, getMatches } from '../../../utils';
+import { updateTags, getMatches, tagRegex } from '../../../utils';
 import { COMMENTS } from '../../../apollo/queries';
 
 const update = (id, comment_id) => {
@@ -30,7 +30,7 @@ class UpdateComment extends Component {
             if (input.length < 1) {
                 return stopEdit()
             }
-            const modTags = tagsChange ? updateTags(this.props.initialTags, getMatches(this.state.tagsText, /#(\w+)/g)) : {};
+            const modTags = tagsChange ? updateTags(this.props.initialTags, getMatches(this.state.tagsText, tagRegex)) : {};
             await updateComment({ variables: { comment_id: this.props.commentId, comment_text: input, modTags } })
             stopEdit()
         }

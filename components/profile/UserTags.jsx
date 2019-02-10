@@ -4,7 +4,7 @@ import Loading from '../meta/Loading';
 import { USER_TAGS } from '../../apollo/queries';
 import { UPDATE_PROFILE } from '../../apollo/mutations';
 import ErrorIcon from '../meta/ErrorIcon';
-import { getMatches, updateTags } from '../../utils';
+import { getMatches, updateTags, tagRegex } from '../../utils';
 
 class UserTags extends Component {
     state = {
@@ -24,7 +24,7 @@ class UserTags extends Component {
     handleSubmit = insertTags => {
         return async e => {
             e.preventDefault()
-            const modTags = updateTags(this.state.tags, getMatches(this.state.input, /#(\w+)/g))
+            const modTags = updateTags(this.state.tags, getMatches(this.state.input, tagRegex))
             await insertTags({ variables: { input: { modTags } } })
             this.setState({ editing: false, tags: [], input: '' })
         }

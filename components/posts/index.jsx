@@ -9,6 +9,11 @@ import Comments from './comments';
 import Unfollow from '../global/UnFollow';
 import Follow from '../global/Follow';
 import Like from '../global/Like';
+import marked from 'marked'
+marked.setOptions({
+    breaks: true,
+    sanitize: true
+})
 class PostPage extends Component {
     state = {
         comments: false
@@ -93,8 +98,8 @@ class PostPage extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="content article-body markdown-body">
-                                            {post_content}
+                                        <div className="content article-body markdown-body" dangerouslySetInnerHTML={{ __html: marked.parse(post_content) }}>
+
                                         </div>
                                     </div>
                                 </div>

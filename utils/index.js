@@ -7,6 +7,7 @@ export const getMatches = (string, regex, index) => {
     }
     return matches;
 }
+export const tagRegex = /#(\w{1,30})/g
 export const updateTags = (oldTags, newTags) => {
     const OldTags = oldTags.reduce((acc, tag) => {
         acc[tag] = true
