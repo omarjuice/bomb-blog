@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import UserPhoto from '../../auth/UserPhoto';
 import { Query, Mutation } from 'react-apollo';
 import { AUTHENTICATED, COMMENTS, POST, CURRENT_USER } from '../../../apollo/queries';
-import { showModal } from '../../../apollo/clientWrites';
+import { renderModal } from '../../../apollo/clientWrites';
 import { CREATE_COMMENT } from '../../../apollo/mutations';
 import { getMatches, tagRegex } from '../../../utils';
 
@@ -50,7 +50,7 @@ class CreateComment extends Component {
                             </figure>
                             <div className="media-content">
                                 <div className="content is-size-4">
-                                    <a onClick={() => showModal({ display: 'Login', message: '', active: true })}>Log in</a>  to comment.
+                                    <a onClick={() => renderModal({ display: 'Login', message: '', active: true })}>Log in</a>  to comment.
                         </div>
                             </div>
                         </article>

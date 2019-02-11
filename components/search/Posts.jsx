@@ -5,7 +5,7 @@ import LikePost from '../posts/LikePost';
 import moment from 'moment'
 import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
-import { showModal, setSearch } from '../../apollo/clientWrites';
+import { renderModal, setSearch } from '../../apollo/clientWrites';
 
 
 class Posts extends Component {
@@ -45,7 +45,7 @@ class Posts extends Component {
                                         ))}
                                         <br />
                                         <small>
-                                            <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                            <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
                                                 <span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span>
                                             </a>
                                             <a>

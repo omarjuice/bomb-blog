@@ -7,7 +7,7 @@ import Link from 'next/link';
 import LikePost from '../posts/LikePost';
 import UnlikePost from '../posts/UnlikePost';
 import { shortenNumber } from '../../utils';
-import { showModal } from '../../apollo/clientWrites';
+import { renderModal } from '../../apollo/clientWrites';
 
 
 class UserPosts extends Component {
@@ -54,7 +54,7 @@ class UserPosts extends Component {
                                                             {caption}
                                                             <br />
                                                             <small>
-                                                                <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                                <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
                                                                     <span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span>
                                                                 </a>
                                                                 <a>

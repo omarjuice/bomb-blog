@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { setSearch, createError } from '../apollo/clientWrites';
-import { AUTHENTICATED, CURRENT_USER, POST } from '../apollo/queries';
+import { setSearch, createError, renderModal } from '../apollo/clientWrites';
+import { AUTHENTICATED, CURRENT_USER, POST, GET_MODAL } from '../apollo/queries';
 import Router from 'next/router'
 import { Query } from 'react-apollo';
 import Loading from '../components/meta/Loading';
@@ -28,7 +28,7 @@ class Edit extends Component {
     }
     onSubmit = (validate) => {
         let processingSubmit = false
-        const { client } = this.props
+        const { client, data: { post: { id } } } = this.props
         return async function (e) {
             e.preventDefault()
             if (processingSubmit) return
@@ -38,20 +38,37 @@ class Edit extends Component {
             const { title, caption, tags, body } = form
             let newTags = getMatches(tags, tagRegex)
             let modTags = updateTags(this.props.data.post.tags.map(tag => tag.tag_name), newTags)
-            console.log(modTags)
-            const { data } = await client.mutate({ mutation: UPDATE_POST, variables: { id: this.props.data.post.id, input: { title, caption, modTags, post_content: body } } })
-            if (data.updatePost) {
-                const oldData = client.cache.readQuery({ query: POST, variables: { id: data.updatePost.id } })
-                client.cache.writeQuery({ query: POST, variables: { id: data.updatePost.id }, data: { ...oldData, ...data.updatePost } })
-                return Router.replace({ pathname: '/posts', query: { id: data.updatePost.id } })
-            }
+            renderModal({ display: 'Confirm', info: { prompt: 'Are you ready submit these edits?' }, active: true, confirmation: null })
+            const page = this
+            this.waitForConfirmation = client.watchQuery({ query: GET_MODAL })
+                .subscribe({
+                    async next(subscription) {
+                        if (subscription.data.modal.confirmation === true) {
+                            const { data } = await client.mutate({ mutation: UPDATE_POST, variables: { id, input: { title, caption, modTags, post_content: body } } })
+                            if (data.updatePost) {
+                                const oldData = client.cache.readQuery({ query: POST, variables: { id } })
+                                client.cache.writeQuery({ query: POST, variables: { id }, data: { ...oldData, ...data.updatePost } })
+                                page.waitForConfirmation.unsubscribe()
+                                return Router.replace({ pathname: '/posts', query: { id } })
+                            }
+                        }
+                        if (subscription.data.modal.confirmation === false) {
+                            page.waitForConfirmation.unsubscribe()
+                            hideModal()
+                        }
+                    }
+                })
+
         }.bind(this)
+    }
+    componentWillUnmount() {
+        this.waitForConfirmation = null
     }
     render() {
         const { post } = this.props.data
         return (
             <Query query={AUTHENTICATED} ssr={false} >
-                {({ loading, error, data }) => {
+                {({ loading, error, data, client, refetch }) => {
                     if (loading) return <Loading />
                     if (error) return <ErrorIcon />
                     if (data.authenticated) return (
@@ -74,9 +91,32 @@ class Edit extends Component {
                             }}
                         </Query>
                     )
-                    createError({ code: 'UNAUTHENTICATED' })
-                    Router.replace('/')
-                    return <div></div>
+                    if (!data.authenticated) {
+                        renderModal({ display: 'Login', message: 'Login to edit this post', confirmation: null, active: true })
+                        const page = this
+                        this.waitForConfirmation = client.watchQuery({ query: GET_MODAL })
+                            .subscribe({
+                                next({ data }) {
+                                    if (data.modal.confirmation === true) {
+                                        refetch({ query: AUTHENTICATED })
+                                        page.waitForConfirmation = null
+                                    }
+                                    if (data.modal.confirmation === false) {
+                                        page.waitForConfirmation = null
+                                        createError({ code: 'UNAUTHENTICATED' })
+                                        Router.back()
+                                        return <div></div>
+                                    }
+                                },
+                                error() {
+                                    page.waitForConfirmation = null
+                                    createError({ code: 'UNAUTHENTICATED' })
+                                    Router.back()
+                                    return <div></div>
+                                }
+                            })
+                        return <Loading />
+                    }
                 }}
             </Query>
         );

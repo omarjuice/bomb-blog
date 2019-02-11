@@ -163,7 +163,7 @@ class WritePost extends Component {
         if (captionLen > 400) {
             errors.caption = 'Your caption is too long'
         }
-        if (bodyLen > 20000) {
+        if (bodyLen > 200000) {
             errors.body = 'Your post is too long'
         }
         this.setState({ errors })
@@ -173,6 +173,9 @@ class WritePost extends Component {
         window.onbeforeunload = null
         return { title, caption, tags, body }
 
+    }
+    componentWillUnmount() {
+        window.onbeforeunload = null
     }
     render() {
         const tags = this.getTags(this.state.tags)
@@ -213,7 +216,7 @@ class WritePost extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <p className={`help ${this.state.body.length < 100 || this.state.body.length > 20000 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.body.length}</span><span>{this.state.errors.body}</span></p>
+                            <p className={`help ${this.state.body.length < 100 || this.state.body.length > 200000 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.body.length}</span><span>{this.state.errors.body}</span></p>
                             <div className="field submit">
                                 <div className="control">
                                     <button type="submit" className="button is-success is-large font-2">Submit</button>
@@ -247,13 +250,20 @@ class WritePost extends Component {
                         top: 1rem
                     }
                     .textarea{
-                        height: 50vh
+                        height: 40vh
                     }
                     .preview{
                         position: fixed;
                         z-index:10;
-                        bottom: 1rem;
-                        right: 1rem;
+                        bottom: 2rem;
+                        right: 2rem;
+                    }
+                    @media only screen and (min-width: 767px){
+                        .preview{
+                            bottom: 10rem;
+                            right: 4rem;
+
+                        }
                     }
                     `}</style>
             </div >

@@ -6,7 +6,7 @@ import ErrorIcon from '../meta/ErrorIcon';
 import LikePost from '../posts/LikePost';
 import UnlikePost from '../posts/UnlikePost';
 import { shortenNumber } from '../../utils';
-import { showModal } from '../../apollo/clientWrites';
+import { renderModal } from '../../apollo/clientWrites';
 
 class Like extends Component {
     render() {
@@ -21,7 +21,7 @@ class Like extends Component {
                     return (<>
                         {iLike ? <UnlikePost postId={id} size={size} scale={scale} /> : <LikePost postId={id} size={size} scale={scale} />}
                         <br />
-                        <a onClick={() => showModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })} className="is-size-4 font-1 has-text-dark underline">{shortenNumber(numLikes)}</a>
+                        <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })} className="is-size-4 font-1 has-text-dark underline">{shortenNumber(numLikes)}</a>
                     </>
                     )
                 }}

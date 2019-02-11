@@ -513,6 +513,7 @@ export const GET_MODAL = gql`
             message
             display
             info
+            confirmation
         }
     }
 `

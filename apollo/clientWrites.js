@@ -1,15 +1,16 @@
 import client from './client'
-import { GET_SEARCH } from './queries';
-export const showModal = (modal) => {
-    if (modal.info) {
-        modal.info = JSON.stringify(modal.info)
+import { GET_SEARCH, GET_MODAL } from './queries';
+export const renderModal = ({ active = false, message = '', confirmation = null, info = {}, display = '' }) => {
+    if (info) {
+        info = JSON.stringify(info)
     }
     client.writeData({
         data: {
-            modal: { ...modal, __typename: 'Modal' }
+            modal: { active, message, confirmation, info, display, __typename: 'Modal' }
         }
     })
 }
+
 export const hideModal = () => {
     client.writeData({
         data: {
@@ -18,7 +19,8 @@ export const hideModal = () => {
                 message: '',
                 display: '',
                 info: '',
-                __typename: 'Modal'
+                __typename: 'Modal',
+                confirmation: null
             }
         }
     })
@@ -66,6 +68,5 @@ export const setSearch = ({ input, options, active, addToInput }) => {
     } else {
         data.search.addToInput = ''
     }
-    console.log(data)
     client.writeQuery({ query: GET_SEARCH, data })
 }

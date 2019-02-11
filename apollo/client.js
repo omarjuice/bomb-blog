@@ -20,7 +20,8 @@ const defaults = {
         active: false,
         message: '',
         display: '',
-        info: ''
+        info: '',
+        confirmation: null
     },
     search: {
         __typename: 'Search',

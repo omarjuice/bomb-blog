@@ -6,6 +6,8 @@ class ToolBar extends Component {
         return (<div>
             <header className="card-header has-background-black has-text-centered">
                 <div className="buttons">
+                    <a className="has-text-light" onClick={() => document.execCommand('undo')}><span className="icon is-large"><i className="fas fa-lg fa-undo"></i></span> </a>
+                    <a className="has-text-light" onClick={() => document.execCommand('redo')}><span className="icon is-large"><i className="fas fa-lg fa-redo"></i></span> </a>
                     <div className="control has-icons-left select-container">
                         <div className="select is-black is-small">
                             <select value={""} id="header-select" onChange={modifyText('header')}>
@@ -22,12 +24,19 @@ class ToolBar extends Component {
                             <i className="fas fa-lg fa-heading"></i>
                         </div>
                     </div>
+
                     <a className="has-text-light" onClick={modifyText('bold')}><span className="icon is-large"><i className="fas fa-lg fa-bold"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('italic')}><span className="icon is-large"><i className="fas fa-lg fa-italic"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('strike')}><span className="icon is-large"><i className="fas fa-lg fa-strikethrough"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </a>
 
+
+                    <a className="has-text-light" onClick={modifyText('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('line')}><span className="icon is-large"><i className="fas fa-lg fa-grip-lines"></i></span> </a>
                     <div className="field has-addons">
                         <div className="control input-container">
                             <input id="input-table-rows" className="input is-small" type="number" max="25" min="1" placeholder="row" />
@@ -43,13 +52,6 @@ class ToolBar extends Component {
                             </a>
                         </div>
                     </div>
-                    <a className="has-text-light" onClick={modifyText('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </a>
-                    <a className="has-text-light" onClick={modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </a>
-                    <a className="has-text-light" onClick={modifyText('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </a>
-                    <a className="has-text-light" onClick={modifyText('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </a>
-                    <a className="has-text-light" onClick={modifyText('line')}><span className="icon is-large"><i className="fas fa-lg fa-grip-lines"></i></span> </a>
-                    <a className="has-text-light" onClick={() => document.execCommand('undo')}><span className="icon is-large"><i className="fas fa-lg fa-undo"></i></span> </a>
-                    <a className="has-text-light" onClick={() => document.execCommand('redo')}><span className="icon is-large"><i className="fas fa-lg fa-redo"></i></span> </a>
 
                 </div>
             </header>
@@ -63,12 +65,7 @@ class ToolBar extends Component {
                     align-items: center;
                     justify-content: center
                 }
-                .select-container{
-                        margin-top: -0.4rem
-                    }
-                    .input-container{
-                        margin-bottom: -1rem
-                    }
+                
                 `}</style>
         </div>
         );

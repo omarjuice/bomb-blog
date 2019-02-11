@@ -66,7 +66,7 @@ class Register extends Component {
             {(register, { data, loading, error }) => {
                 if (loading) return <Loading />;
                 if (!data) return (
-                    <form action="" onSubmit={this.onSubmit(register)} className="form has-text-centered">
+                    <form onSubmit={this.onSubmit(register)} className="form has-text-centered">
                         {loading && <Loading color="primary" size="4x" />}
                         <ErrorMessage />
                         {this.renderInput('username')}
@@ -76,7 +76,7 @@ class Register extends Component {
                         <button className="button is-success" type="submit">Sign Up</button>
                     </form>
                 )
-                return <p>{data.register ? this.props.onSuccess() : 'Not Registered'}</p>
+                return <p>{data.register ? this.props.onComplete(true) : 'Not Registered'}</p>
             }}
         </Mutation>
         )

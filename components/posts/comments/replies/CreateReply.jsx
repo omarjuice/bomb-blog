@@ -3,7 +3,7 @@ import { Mutation, Query } from 'react-apollo';
 import { CREATE_REPLY } from '../../../../apollo/mutations';
 import { AUTHENTICATED, REPLIES, CURRENT_USER } from '../../../../apollo/queries';
 import UserPhoto from '../../../auth/UserPhoto';
-import { showModal } from '../../../../apollo/clientWrites';
+import { renderModal } from '../../../../apollo/clientWrites';
 
 const update = id => {
     return (proxy, { data: { createReply } }) => {
@@ -41,7 +41,7 @@ class CreateReply extends Component {
                                 </figure>
                                 <div className="media-content">
                                     <div className="content is-size-5">
-                                        <a onClick={() => showModal({ display: 'Login', message: '', active: true })}>Log in</a>  to reply.
+                                        <a onClick={() => renderModal({ display: 'Login', message: '', active: true })}>Log in</a>  to reply.
                                     </div>
                                 </div>
                             </article>

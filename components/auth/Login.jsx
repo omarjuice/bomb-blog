@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
 import { LOGIN } from '../../apollo/mutations';
 import ErrorMessage from '../meta/ErrorMessage';
+import { renderModal } from '../../apollo/clientWrites';
 
 
 
@@ -55,15 +56,22 @@ class Login extends Component {
         return (<Mutation mutation={LOGIN} refetchQueries={[`Authenticated`, `CurrentUser`, `UserProfile`, `Comments`, `Replies`, `UserPhoto`, `ILike`, `PostAuthor`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `Likers`]} >
             {(login, { data, loading, error }) => {
                 if (!data) return (
-                    <form action="" onSubmit={this.onSubmit(login)} className="form has-text-centered">
+                    <form onSubmit={this.onSubmit(login)} className="form has-text-centered">
                         {loading && <Loading color="primary" size="4x" />}
                         <ErrorMessage />
                         {this.renderInput('username')}
                         {this.renderInput('password')}
                         <button className="button is-success" type="submit">Login</button>
+                        <button onClick={() => renderModal({ confirmation: null, display: 'Register', active: true })} className="button is-text">Sign Up</button>
                     </form>
                 )
-                return (data.login ? <p>{this.props.onSuccess()}</p> : <p>Login Failed</p>)
+                if (data.login) {
+                    this.props.onComplete(true)
+                    return <p>Success</p>
+                } else {
+                    this.props.onComplete(false)
+                    return <p>Login Failed</p>
+                }
             }}
         </Mutation>
         )

@@ -35,7 +35,6 @@ class SearchPage extends Component {
                 this.setState({ fetching: display }, async () => {
                     const newItems = await client.query({ query: gqlQueries[display], variables: { input: { search, tags, limit, cursor: newCursor } } })
                     const data = client.cache.readQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor } } })
-                    console.log(newItems)
                     data[display].cursor = newItems.data[display].cursor
                     data[display].results.push(...newItems.data[display].results)
                     client.cache.writeQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor } }, data })

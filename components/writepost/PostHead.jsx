@@ -9,7 +9,7 @@ class PostHead extends Component {
     render() {
         const { tags, title, caption } = this.props
         return (
-            <div>
+            <div className="has-text-centered">
                 <div className={`media`}>
                     <Query query={CURRENT_USER}>
                         {({ data }) => {
@@ -24,7 +24,6 @@ class PostHead extends Component {
                             }
                             return (<>
                                 <div className="media-center">
-
                                     <img src={photo_path || `/static/user_image.png`} className="author-image" />
                                 </div>
                                 <div className="media-content has-text-centered">
@@ -86,7 +85,7 @@ class PostHead extends Component {
                     </Query>
                 </div>
                 <style jsx>{`
-                .author-image {
+                    .author-image {
                         position: absolute;
                         top: -30px;
                         left: 50%;
