@@ -30,6 +30,7 @@ class UserPosts extends Component {
                                 </div>
                             )
                         }
+                        const isMe = data.user.isMe || this.props.isMe
                         return (
                             <div className="columns is-centered is-mobile">
                                 <div className="column is-full-mobile is-four-fifths-tablet is-8-desktop">
@@ -69,8 +70,15 @@ class UserPosts extends Component {
                                                     <div className="column is-half has-text-centered">
                                                         {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> : <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
                                                     </div>
+                                                    {isMe ? <div className="column is-half has-text-centered edit">
+                                                        <Link href={{ pathname: '/posts/edit', query: { id } }}><button className="button is-success"><span className="icon"><i className="fas fa-pen"></i></span></button></Link>
+                                                    </div> : ''}
+
                                                 </div>
                                                 <style jsx>{`
+                                                    .edit{
+                                                        margin-top: .7rem;
+                                                    }
                                                     small a:nth-of-type(1){
                                                         margin-left: ${likesMargin}
                                                     }

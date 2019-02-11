@@ -36,7 +36,8 @@ class UserTags extends Component {
                 {({ loading, error, data }) => {
                     if (loading) return <Loading size="2x" color="primary" />;
                     if (error) return <ErrorIcon />;
-                    const { tags, isMe, username } = data.user
+                    const { tags, username } = data.user
+                    const isMe = data.user.isMe || this.props.isMe
                     const editButton = <button className=" button is-info" onClick={this.editTags(data.user.tags.map(tag => tag.tag_name))}><i className="fas fa-pencil-alt"></i></button>
                     if (!this.state.editing) return (
                         <div>

@@ -7,7 +7,7 @@ import Details from './Details'
 import Loading from '../meta/Loading';
 import UserTags from './UserTags';
 import About from './About'
-import { USER_PROFILE } from '../../apollo/queries';
+import { USER_PROFILE, CURRENT_USER } from '../../apollo/queries';
 import ErrorIcon from '../meta/ErrorIcon';
 
 
@@ -16,7 +16,7 @@ class ProfilePage extends Component {
         return (
             <div className="main-component">
                 <Query query={USER_PROFILE} variables={{ id: Number(this.props.id) }}>
-                    {({ loading, error, data }) => {
+                    {({ loading, error, data, client }) => {
                         if (loading || error) return (
                             <div className="columns is-centered">
                                 <div className="column is-one-third has-text-centered">
@@ -30,7 +30,9 @@ class ProfilePage extends Component {
                                     `}</style>
                             </div>
                         )
-                        const { username, id, email, created_at, profile, isMe, followingMe, imFollowing } = data.user
+                        const { username, id, email, created_at, profile, followingMe, imFollowing } = data.user
+
+
                         return (
                             <div className="has-background-primary">
                                 <div className="columns is-centered is-multiline is-mobile has-background-light">
@@ -51,20 +53,32 @@ class ProfilePage extends Component {
 
                                         </div>
                                     </div>
-                                    <div className="column is-two-thirds"></div>
-                                    <div className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered">
-                                        <div id="about" className="box">
-                                            <div className="content">
-                                                {isMe ? <About userId={id} /> : (profile.about || <p><strong>{username}</strong> has nothing to say...</p>)}
-                                            </div>
-                                            <hr />
-                                            <Details details={{ isMe, imFollowing, followingMe, user_id: id }} userId={id} />
-                                            <hr />
-                                            <UserTags userId={id} />
-                                        </div>
-                                    </div>
-                                    <div className="column is-two-thirds"></div>
-                                    <Panels userId={id} />
+                                    <Query query={CURRENT_USER} ssr={false} fetchPolicy='cache-first'>
+                                        {({ data }) => {
+                                            let isMe;
+                                            try {
+                                                isMe = data.user.id === id
+                                            } catch (e) {
+                                                isMe = false
+                                            }
+                                            return (<> <div className="column is-two-thirds"></div>
+                                                <div className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered">
+                                                    <div id="about" className="box">
+                                                        <div className="content">
+                                                            {isMe ? <About userId={id} /> : (profile.about || <p><strong>{username}</strong> has nothing to say...</p>)}
+                                                        </div>
+                                                        <hr />
+                                                        <Details isMe={isMe} userId={id} />
+                                                        <hr />
+                                                        <UserTags userId={id} isMe={isMe} />
+                                                    </div>
+                                                </div>
+                                                <div className="column is-two-thirds"></div>
+                                                <Panels userId={id} isMe={isMe} />
+                                            </>
+                                            )
+                                        }}
+                                    </Query>
                                 </div>
                                 <style jsx>{`
                                     #profile-header{

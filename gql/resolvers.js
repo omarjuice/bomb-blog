@@ -20,7 +20,7 @@ const resolvers = {
         user: async (_, args, { req, Loaders }) => {
             let sessionUser = authenticate(req.session)
             let id = args.id || sessionUser
-            if (!id) throw Errors.user.notSpecified;
+            if (!id) return null;
             const user = await Loaders.users.byId.load(id)
             if (user && user.id) return user;
             throw Errors.user.notFound

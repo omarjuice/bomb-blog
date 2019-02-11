@@ -24,7 +24,7 @@ class Panels extends Component {
     }
     getDisplay = () => {
         const displays = {
-            posts: <UserPosts userId={this.props.userId} />,
+            posts: <UserPosts userId={this.props.userId} isMe={this.props.isMe} />,
             followers: <FollowPanel display="followers" userId={this.props.userId} />,
             following: <FollowPanel display="following" userId={this.props.userId} />,
             likes: <Likes userId={this.props.userId} />

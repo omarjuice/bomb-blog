@@ -11,14 +11,14 @@ import ErrorMessage from '../meta/ErrorMessage';
 class User extends Component {
     render() {
         return (
-            <Query query={CURRENT_USER}>
+            <Query query={CURRENT_USER} ssr={false}>
                 {({ loading, error, data }) => {
-                    if (loading) return <Loading />;
+                    if (loading || !data.user) return <Loading />;
                     if (error) {
                         clearError();
                         return <ErrorMessage />
                     };
-                    return (
+                    if (data.user) return (
                         <>
                             <div>
                                 <img src={data.user.profile.photo_path || '/static/user_image.png'} alt="" />

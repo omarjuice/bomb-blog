@@ -30,7 +30,8 @@ class Details extends Component {
                                 </div>
                             </div>
                         );
-                        const { isMe, followingMe, imFollowing, username, numFollowers, numFollowing } = data.user
+                        const { followingMe, imFollowing, username, numFollowers, numFollowing } = data.user
+                        const isMe = data.user.isMe || this.props.isMe
                         return (<>
 
                             {isMe ? '' : <div className="level-item has-text-centered">

@@ -7,6 +7,7 @@ import Follow from '../global/Follow';
 import Unfollow from '../global/UnFollow';
 import ErrorIcon from '../meta/ErrorIcon';
 import { FOLLOWING, FOLLOWERS } from '../../apollo/queries';
+import BombSVG from '../svg/bomb';
 
 
 const queries = { FOLLOWING, FOLLOWERS }
@@ -29,7 +30,7 @@ class FollowPanel extends Component {
                         if (data.user[display].length < 1) {
                             return (
                                 <div>
-                                    <span className="icon has-text-primary"><i className={`${display === 'following' ? 'fas' : 'far'} fa-5x fa-sad-tear`}></i></span>
+                                    <BombSVG scale={.5} face={{ happy: false }} />
                                     <hr />
                                     <h1 className="subtitle is-4 font-2">{data.user.isMe ? `You ${display === 'following' ? 'are not following anyone.' : 'have no followers'}` : `${data.user.username} has no ${display}.`}</h1>
                                     <style jsx>{`
