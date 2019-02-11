@@ -14,9 +14,10 @@ class Users extends Component {
         const { data } = this.props
         return (
             <>
-                {data.results.map(({ id, username, imFollowing, followingMe, isMe, profile, tags, created_at }) => {
+                {data.results.map(({ id, username, imFollowing, followingMe, isMe, profile, tags, created_at }, i) => {
                     return <article key={id} className="media has-text-centered">
                         <figure className="media-left">
+                            <span>{i + 1}</span>
                             <p className="image is-48x48">
                                 <img src={profile.photo_path || `/static/user_image.png`} />
                             </p>

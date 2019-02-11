@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
 import { LOGIN } from '../../apollo/mutations';
 import ErrorMessage from '../meta/ErrorMessage';
-import { renderModal } from '../../apollo/clientWrites';
+import { renderModal, clearError } from '../../apollo/clientWrites';
 
 
 
@@ -62,7 +62,7 @@ class Login extends Component {
                         {this.renderInput('username')}
                         {this.renderInput('password')}
                         <button className="button is-success" type="submit">Login</button>
-                        <button onClick={() => renderModal({ confirmation: null, display: 'Register', active: true })} className="button is-text">Sign Up</button>
+                        <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'Register', active: true }) }} className="button is-text">Sign Up</a>
                     </form>
                 )
                 if (data.login) {

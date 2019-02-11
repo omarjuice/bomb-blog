@@ -12,11 +12,12 @@ class SearchComments extends Component {
         const { data } = this.props
         return (
             <>
-                {data.results.map(comment => {
+                {data.results.map((comment, i) => {
                     const { id, post_id, commenter, created_at, last_updated, comment_text, numLikes, tags, iLike, numReplies, post } = comment
                     return <article key={id}
                         className="media">
                         <figure className="media-left">
+                            <span>{i + 1}</span>
                             <p className="image is-64x64">
                                 <img src={commenter.profile.photo_path || "/static/user_image.png"} />
                             </p>

@@ -11,7 +11,9 @@ class Tags extends Component {
                     return (
                         <article key={id} className="media has-text-centered">
                             <div className="media-content">
+                                <span>{i + 1}</span>
                                 <div className="content has-text-centered">
+
                                     <div className={`tag is-large font-2 ${this.props.inputTags.includes(tag_name) ? 'is-primary' : 'is-info'}`}>{tag_name}</div>
                                     <BombSVG scale={.1} lit={true} >{popularity}</BombSVG>
                                     <small>Created {moment.utc(Number(created_at)).local().fromNow()}</small>

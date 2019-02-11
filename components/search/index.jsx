@@ -24,21 +24,31 @@ class SearchPage extends Component {
         commentsFrame: 0,
         tagsFrame: 0
     }
-    handleScroll = (display, client, { search, tags, limit, cursor, newCursor }) => {
+    handleScroll = (display, client, { search, tags, limit, cursor }) => {
         const { options } = this.props
-        const getUpdateHeight = (cursor) => 1 - (1 / (cursor / (display === 'posts' ? 2.5 : display === 'users' ? 3 : display === 'comments' ? 2.75 : display === 'tags' ? 3.5 : 2.5)))
-        return async ({ target: { scrollTop, scrollHeight, children } }) => {
-            if (!newCursor) return
-            console.log(scrollTop, getUpdateHeight(newCursor), getUpdateHeight(newCursor) * scrollHeight, scrollTop > scrollHeight * getUpdateHeight(newCursor))
+        let avgItemHeight = null
+        const calcAvgItemHeight = (last, first, children) => {
+            const height = (last.offsetTop - first.offsetTop) / (children.length - 2)
+            console.log('AVGHEIGHT, ', height);
+            return height
+        }
+        return async ({ target: { scrollTop, lastElementChild, firstElementChild, children, scrollHeight, clientHeight } }) => {
+            if (!cursor) return
+            if (!avgItemHeight) {
+                avgItemHeight = calcAvgItemHeight(lastElementChild, firstElementChild, children)
+            }
+            const bool = scrollTop > scrollHeight - (avgItemHeight * (2 + clientHeight / avgItemHeight))
+            console.log(scrollTop, scrollHeight - (avgItemHeight * (2 + clientHeight / avgItemHeight)), bool, cursor);
             if (this.state.fetching) { return }
-            if (scrollTop + 100 > scrollHeight * getUpdateHeight(newCursor)) {
+            if (bool) {
                 this.setState({ fetching: display }, async () => {
-                    const newItems = await client.query({ query: gqlQueries[display], variables: { input: { search, tags, limit, cursor: newCursor } } })
-                    const data = client.cache.readQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor } } })
+                    const newItems = await client.query({ query: gqlQueries[display], variables: { input: { search, tags, limit, cursor } } })
+                    const data = client.cache.readQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor: 0 } } })
                     data[display].cursor = newItems.data[display].cursor
                     data[display].results.push(...newItems.data[display].results)
-                    client.cache.writeQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor } }, data })
+                    client.cache.writeQuery({ query: gqlQueries[options], variables: { input: { search, tags, limit, cursor: 0 } }, data })
                     this.setState({ fetching: null })
+                    avgItemHeight = calcAvgItemHeight(lastElementChild, firstElementChild, children)
                 })
             }
         }
@@ -104,7 +114,7 @@ class SearchPage extends Component {
 
                                 {data.posts ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'posts' ? '' : 'is-hidden-mobile'}`}>
-                                        <div className="box" onScroll={this.handleScroll('posts', client, { ...variables.input, newCursor: data.posts.cursor })}>
+                                        <div className="box" onScroll={this.handleScroll('posts', client, { ...variables.input, cursor: data.posts.cursor })}>
                                             <article className="media header">
                                                 <div className="media-content font-2 has-text-centered">
                                                     <div className="content has-text-centered">
@@ -125,7 +135,7 @@ class SearchPage extends Component {
                                 <div className={`column is-1-desktop ${data.posts ? 'is-hidden-touch' : 'is-hidden'}`}></div>
                                 {data.users ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'users' ? '' : 'is-hidden-mobile'}`}>
-                                        <div className="box" onScroll={this.handleScroll('users', client, { ...variables.input, newCursor: data.users.cursor })}>
+                                        <div className="box" onScroll={this.handleScroll('users', client, { ...variables.input, cursor: data.users.cursor })}>
                                             <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>
@@ -148,7 +158,7 @@ class SearchPage extends Component {
 
                                 {data.comments ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'comments' ? '' : 'is-hidden-mobile'}`}>
-                                        <div className="box" onScroll={this.handleScroll('comments', client, { ...variables.input, newCursor: data.comments.cursor })}>
+                                        <div className="box" onScroll={this.handleScroll('comments', client, { ...variables.input, cursor: data.comments.cursor })}>
                                             <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>
@@ -171,7 +181,7 @@ class SearchPage extends Component {
                                 <div className={`column is-1-desktop ${data.comments ? 'is-hidden-touch' : 'is-hidden'}`}></div>
                                 {data.tags ?
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'tags' ? '' : 'is-hidden-mobile'}`}>
-                                        <div className="box" onScroll={this.handleScroll('tags', client, { ...variables.input, newCursor: data.tags.cursor })}>
+                                        <div className="box" onScroll={this.handleScroll('tags', client, { ...variables.input, cursor: data.tags.cursor })}>
                                             <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>

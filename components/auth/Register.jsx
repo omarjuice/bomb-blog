@@ -4,6 +4,7 @@ import validator from 'email-validator';
 import Loading from '../meta/Loading';
 import { REGISTER } from '../../apollo/mutations';
 import ErrorMessage from '../meta/ErrorMessage';
+import { clearError } from '../../apollo/clientWrites';
 
 
 
@@ -74,6 +75,7 @@ class Register extends Component {
                         {this.renderInput('password')}
                         {this.renderInput('reenter')}
                         <button className="button is-success" type="submit">Sign Up</button>
+                        <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'Login', active: true }) }} className="button is-text">Login</a>
                     </form>
                 )
                 return <p>{data.register ? this.props.onComplete(true) : 'Not Registered'}</p>

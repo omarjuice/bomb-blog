@@ -14,7 +14,7 @@ class Posts extends Component {
 
         return (
             <>
-                {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags }) => {
+                {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags }, i) => {
                     const likes = shortenNumber(numLikes)
                     const comments = shortenNumber(numComments)
                     const likesMargin = String(likes.length * .25) + 'rem'
@@ -24,6 +24,7 @@ class Posts extends Component {
                         <article key={id} className="media has-text-centered">
                             <figure className="media-left">
                                 <p className="image is-48x48">
+                                    <span>{i + 1}</span>
                                     <img src={author.profile.photo_path || "/static/user_image.png"} />
                                 </p>
                             </figure>
