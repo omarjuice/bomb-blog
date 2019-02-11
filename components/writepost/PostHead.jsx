@@ -7,7 +7,7 @@ import moment from 'moment';
 
 class PostHead extends Component {
     render() {
-        const { getTags, title, caption } = this.props
+        const { tags, title, caption } = this.props
         return (
             <div>
                 <div className={`media`}>
@@ -70,7 +70,7 @@ class PostHead extends Component {
 
                                         <div className="column is-8-desktop is-8-tablet is-full-mobile">
                                             {<div className="tags">
-                                                {getTags().map((tag, i) => {
+                                                {tags.map((tag, i) => {
                                                     return <a key={tag} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag}</a>
                                                 })}
                                             </div>}
@@ -110,10 +110,7 @@ class PostHead extends Component {
                         color: #909AA0;
                         margin-bottom: 3rem;
                     }
-                    .post-stats{
-                        display: flex;
-                        align-items: center;
-                    }
+                    
                     #caption, #title{
                         word-break: break-word
                     }

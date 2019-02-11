@@ -15,10 +15,6 @@ class ProfilePage extends Component {
     render() {
         return (
             <div className="main-component">
-                <Link href="/">
-                    <a>home</a>
-                </Link>
-                {/* refactor fetchPolicy */}
                 <Query query={USER_PROFILE} variables={{ id: Number(this.props.id) }}>
                     {({ loading, error, data }) => {
                         if (loading || error) return (
@@ -75,6 +71,7 @@ class ProfilePage extends Component {
                                         display: flex;
                                         justify-content: center;
                                         align-items: center;
+                                        margin-top: 2rem;
                                     }
                                     .icon{
                                         margin: 10px

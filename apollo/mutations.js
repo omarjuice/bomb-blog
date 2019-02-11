@@ -122,3 +122,20 @@ export const CREATE_POST = gql`
         }
     }
 `
+export const UPDATE_POST = gql`
+    mutation UpdatePost($input: PostDetails, $id: Int!){
+        updatePost(id: $id, input: $input){
+            id
+            user_id 
+            created_at
+            last_updated 
+            title
+            caption
+            post_content
+            tags{
+                id
+                tag_name
+            }
+        }
+    }
+`

@@ -26,9 +26,7 @@ class PostPage extends Component {
     render() {
         return (
             <div className="main-component">
-                <Link href="/">
-                    <a>home</a>
-                </Link>
+
                 <Query query={POST} variables={{ id: Number(this.props.id) }}>
                     {({ loading, error, data }) => {
                         if (loading || error) return (
@@ -76,12 +74,16 @@ class PostPage extends Component {
                                                                     if (error) return <ErrorIcon size="3x" color="info" />
                                                                     const postAuthor = data.user
                                                                     return (<>
-                                                                        <Link href={{ pathname: '/profile', query: { id: user_id } }}><a>@{postAuthor.username}</a></Link>
+
+                                                                        {postAuthor.isMe ? <Link href={{ pathname: '/posts/edit', query: { id } }}><button className="button is-success is-large"><span className="icon"><i className="fas fa-pen"></i></span></button></Link> :
+                                                                            <Link href={{ pathname: '/profile', query: { id: user_id } }}><a>@{postAuthor.username}</a></Link>}
+
                                                                         <br />
                                                                         at {moment.utc(Number(created_at)).local().format(' h:mma on MMMM Do, YYYY')}
                                                                         <br />
-                                                                        {!!last_updated && `last updated: ${moment.utc(Number(last_updated)).local().format(' h:mma on \n MMMM Do, YYYY')}`}
-                                                                        {postAuthor.imFollowing ? <Unfollow userId={user_id} /> : <Follow userId={user_id} />}
+                                                                        {last_updated && <span> <i className="fas fa-pen-square"></i>{moment.utc(Number(last_updated)).local().format(' h:mma on \n MMMM Do, YYYY')}</span>}
+                                                                        <br />
+                                                                        {!postAuthor.isMe ? postAuthor.imFollowing ? <Unfollow userId={user_id} /> : <Follow userId={user_id} /> : ''}
                                                                     </>
                                                                     )
                                                                 }}
@@ -160,6 +162,7 @@ class PostPage extends Component {
                         display: flex;
                         align-items: center;
                     }
+             
       
                 `}</style>
             </div>

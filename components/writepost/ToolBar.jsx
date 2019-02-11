@@ -25,6 +25,7 @@ class ToolBar extends Component {
                     <a className="has-text-light" onClick={modifyText('bold')}><span className="icon is-large"><i className="fas fa-lg fa-bold"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('italic')}><span className="icon is-large"><i className="fas fa-lg fa-italic"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('strike')}><span className="icon is-large"><i className="fas fa-lg fa-strikethrough"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </a>
 
                     <div className="field has-addons">
@@ -43,10 +44,13 @@ class ToolBar extends Component {
                         </div>
                     </div>
                     <a className="has-text-light" onClick={modifyText('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </a>
-                    <a className="has-text-light" onClick={modifyText('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </a>
-                    <a className="has-text-light" onClick={modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('line')}><span className="icon is-large"><i className="fas fa-lg fa-grip-lines"></i></span> </a>
+                    <a className="has-text-light" onClick={() => document.execCommand('undo')}><span className="icon is-large"><i className="fas fa-lg fa-undo"></i></span> </a>
+                    <a className="has-text-light" onClick={() => document.execCommand('redo')}><span className="icon is-large"><i className="fas fa-lg fa-redo"></i></span> </a>
+
                 </div>
             </header>
             <style jsx>{`

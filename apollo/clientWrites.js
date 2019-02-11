@@ -36,6 +36,19 @@ export const clearError = () => {
         }
     })
 }
+export const createError = ({ code = '', exists = true, global = true, message = '' }) => {
+    client.writeData({
+        data: {
+            error: {
+                __typename: 'Error',
+                exists,
+                code,
+                message,
+                global
+            }
+        }
+    })
+}
 export const clearAuth = () => {
     client.writeData({
         data: {
@@ -44,7 +57,6 @@ export const clearAuth = () => {
     })
 }
 export const setSearch = ({ input, options, active, addToInput }) => {
-
     const data = client.readQuery({ query: GET_SEARCH })
     if (input !== undefined) data.search.input = input
     if (options !== undefined) data.search.options = options

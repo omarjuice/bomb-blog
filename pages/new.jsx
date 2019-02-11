@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import NoSSR from 'react-no-ssr';
-import { setSearch } from '../apollo/clientWrites';
+import { setSearch, createError } from '../apollo/clientWrites';
 import WritePost from '../components/writepost';
 import { Query } from 'react-apollo';
 import { AUTHENTICATED } from '../apollo/queries';
@@ -39,9 +39,9 @@ class New extends Component {
                         if (loading) return <Loading />
                         if (error) return <ErrorIcon />
                         if (data.authenticated) return <WritePost onSubmit={this.onSubmit} />
+                        createError({ code: 'UNAUTHENTICATED' })
                         Router.push('/')
                         return <div></div>
-
                     }}
                 </Query>
             </NoSSR>

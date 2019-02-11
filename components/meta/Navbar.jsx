@@ -25,8 +25,8 @@ class Navbar extends Component {
                             <span className="icon is-large"><BombSVG lit={true} face={{ happy: true }} /></span>
                             <img id="brand-img" src="/static/brand.svg" width="150" height="100" />
                         </a>
-                        <a className="navbar-item">
-                            <span className="icon is-large"><i className="fas fa-home fa-lg"></i></span>
+                        <a className="navbar-item" href="/posts/new" >
+                            <span className="icon is-large"><i className="fas fa-pen fa-lg"></i></span>
                         </a>
                         <a className={`navbar-item ${this.state.searchNav ? 'has-text-info' : ''}`}
                             onClick={() => this.setState({ searchNav: !this.state.searchNav, menu: !this.state.searchNav ? false : this.state.menu })}>

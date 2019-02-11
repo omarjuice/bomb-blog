@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import marked from 'marked'
 marked.setOptions({
     breaks: true,
-    sanitize: true
+    sanitize: true,
+    gfm: true
 });
 class Preview extends Component {
     state = {

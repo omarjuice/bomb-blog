@@ -24,6 +24,9 @@ class WritePost extends Component {
     componentDidMount() {
         this.markdown = document.querySelector('.markdown-body')
         this.textarea = document.querySelector('.textarea')
+        window.onbeforeunload = function () {
+            return true
+        }
     }
     modifyText = (button) => {
         return e => {
@@ -33,6 +36,7 @@ class WritePost extends Component {
             let newSelectionEnd = selectionStart
             this.textarea.focus()
             let stringToAdd = ''
+            const fillText = (filler) => selectionEnd === selectionStart ? filler : this.state.body.substring(selectionStart, selectionEnd)
             switch (button) {
                 case 'header':
                     const { value } = e.target
@@ -44,32 +48,32 @@ class WritePost extends Component {
                     document.getElementById('header-select').value = "defaultValue";
                     break;
                 case 'bold':
-                    stringToAdd += '**bold text**'
+                    stringToAdd += `**${fillText('bold text')}**`
                     newSelectionStart += 2
                     newSelectionEnd += stringToAdd.length - 2
                     break;
                 case 'italic':
-                    stringToAdd += '_italic text_'
+                    stringToAdd += `_${fillText('italic text')}_`
                     newSelectionStart += 1
                     newSelectionEnd += stringToAdd.length - 1
                     break;
                 case 'strike':
-                    stringToAdd += '~~strikethrough~~'
+                    stringToAdd += `~~${fillText('strikethrough')}~~`
                     newSelectionStart += 2
                     newSelectionEnd += stringToAdd.length - 2
                     break;
                 case 'code':
-                    stringToAdd += '\n```\n <code></code> \n```'
+                    stringToAdd += '\n```\n' + fillText('<code></code>') + '\n```'
                     newSelectionStart += 6
                     newSelectionEnd += stringToAdd.length - 5
                     break;
                 case 'link':
-                    stringToAdd += ' [link](link.com)'
+                    stringToAdd += ` [link](${fillText('https://google.com')})`
                     newSelectionStart += 8
                     newSelectionEnd += stringToAdd.length - 1
                     break;
                 case 'quote':
-                    stringToAdd += '\n> block quote';
+                    stringToAdd += `\n> ${fillText('block quote')}\n`;
                     newSelectionStart += 3
                     newSelectionEnd += stringToAdd.length
                     break;
@@ -98,9 +102,14 @@ class WritePost extends Component {
                     newSelectionEnd += 4
                     break;
                 case 'image':
-                    stringToAdd += '\n![alt text](https://google.com)'
+                    stringToAdd += `\n![alt text](${fillText('https://google.com')})`
                     newSelectionStart += 13
                     newSelectionEnd += stringToAdd.length - 1
+                    break;
+                case 'line':
+                    stringToAdd += `\n *** \n`
+                    newSelectionStart += stringToAdd.length
+                    newSelectionEnd += stringToAdd.length
                     break;
                 case 'tab':
                     stringToAdd += '&nbsp;'.repeat(4)
@@ -111,6 +120,7 @@ class WritePost extends Component {
             const body1 = this.state.body.substring(0, selectionStart) + stringToAdd
             const body2 = this.state.body.substring(selectionEnd, this.state.body.length)
             const body = body1 + body2
+            document.execCommand('insertText', false, stringToAdd)
             this.setState({ body }, () => {
                 this.textarea.setSelectionRange(newSelectionStart, newSelectionEnd)
                 this.scrollmarkdown(newSelectionStart)
@@ -141,6 +151,9 @@ class WritePost extends Component {
         if (tags.length < 1 || tagsLen < 1) {
             errors.tags = 'Your post must have at least one tag'
         }
+        if (tagsLen > 20) {
+            errors.tags = 'There are too many tags'
+        }
         if (bodyLen < 100) {
             errors.body = 'Your post must be at least 100 characters long'
         }
@@ -157,10 +170,12 @@ class WritePost extends Component {
         if (Object.values(errors).filter(e => e).length > 0) {
             return null
         }
+        window.onbeforeunload = null
         return { title, caption, tags, body }
 
     }
     render() {
+        const tags = this.getTags(this.state.tags)
         return (
             <div >
                 <div className="columns is-centered is-multiline">
@@ -185,7 +200,7 @@ class WritePost extends Component {
                                 <div className="control">
                                     <input onChange={e => { this.setState({ tags: e.target.value, head: true, errors: { ...this.state.errors, tags: null } }) }} value={this.state.tags} className={`input ${this.state.errors.tags ? 'is-primary' : ''}`} type="text" placeholder="#tags" />
                                 </div>
-                                <p className={`help ${this.state.errors.tags ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.tags.length < 1 ? 0 : this.getTags(this.state.tags).length}</span><span>{this.state.errors.tags}</span></p>
+                                <p className={`help ${tags.length < 1 || this.state.tags.length < 1 || tags.length > 20 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.tags.length < 1 ? 0 : tags.length}</span><span>{this.state.errors.tags}</span></p>
                             </div>
                             <div className="card has-text-centered">
                                 <ToolBar modifyText={this.modifyText.bind('this')} />
@@ -207,7 +222,7 @@ class WritePost extends Component {
                         </form>
                     </div>
                     <Preview body={this.state.body || '# post-body'} preview={this.state.preview} >
-                        <PostHead title={this.state.title || 'Title of Post'} caption={this.state.caption || 'I am the bomb'} getTags={this.getTags.bind(this)} />
+                        <PostHead title={this.state.title || 'Title of Post'} caption={this.state.caption || 'I am the bomb'} tags={tags} />
                     </Preview>
                     <div draggable={true} className="control preview has-text-centered is-hidden-desktop">
                         <a onClick={() => this.setState({ preview: !this.state.preview })} className="button is-large is-primary is-rounded font-2">
