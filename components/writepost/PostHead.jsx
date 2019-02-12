@@ -7,7 +7,7 @@ import moment from 'moment';
 
 class PostHead extends Component {
     render() {
-        const { tags, title, caption } = this.props
+        const { tags, title, caption, image } = this.props
         return (
             <div className="has-text-centered">
                 <div className={`media`}>
@@ -114,6 +114,9 @@ class PostHead extends Component {
                         word-break: break-word
                     }
                     `}</style>
+                {image ? <figure className="image is-128by128">
+                    <img src={image} alt="image" />
+                </figure> : null}
             </div>
         );
     }

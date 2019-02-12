@@ -23,7 +23,7 @@ class New extends Component {
             const form = validate()
             if (!form) return;
             processingSubmit = true
-            const { title, caption, tags, body } = form
+            const { title, caption, tags, body, image } = form
             let insertTags = getMatches(tags, tagRegex)
             renderModal({ display: 'Confirm', info: { prompt: 'Are you ready submit this post?' }, active: true, confirmation: null })
             const { client } = this.props
@@ -32,7 +32,7 @@ class New extends Component {
                 .subscribe({
                     async next(subscription) {
                         if (subscription.data.modal.confirmation === true) {
-                            const { data } = await client.mutate({ mutation: CREATE_POST, variables: { input: { title, caption, tags: insertTags, post_content: body } } })
+                            const { data } = await client.mutate({ mutation: CREATE_POST, variables: { input: { title, caption, tags: insertTags, post_content: body, image } } })
                             if (data.createPost) {
                                 page.waitForConfirmation.unsubscribe()
                                 hideModal()

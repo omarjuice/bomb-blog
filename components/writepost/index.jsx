@@ -11,6 +11,7 @@ class WritePost extends Component {
         caption: this.props.caption || '',
         tags: this.props.tags || '',
         body: this.props.body || '',
+        image: this.props.image || '',
         errors: {
             title: null,
             caption: null,
@@ -135,11 +136,12 @@ class WritePost extends Component {
         this.markdown.scrollTo(0, (numLinesToSelection / totalNumLines) * scrollHeight)
     }
     validate() {
-        const { title, caption, tags, body } = this.state
+        const { title, caption, tags, body, image } = this.state
         const titleLen = title.length,
             captionLen = caption.length,
             tagsLen = this.getTags(tags).length,
-            bodyLen = body.length;
+            bodyLen = body.length,
+            imageLen = image.length;
 
         let errors = {}
         if (titleLen < 1) {
@@ -166,12 +168,15 @@ class WritePost extends Component {
         if (bodyLen > 200000) {
             errors.body = 'Your post is too long'
         }
+        if (imageLen > 255) {
+            errors.image = 'Link too long'
+        }
         this.setState({ errors })
         if (Object.values(errors).filter(e => e).length > 0) {
             return null
         }
         window.onbeforeunload = null
-        return { title, caption, tags, body }
+        return { title, caption, tags, body, image }
 
     }
     componentWillUnmount() {
@@ -205,6 +210,13 @@ class WritePost extends Component {
                                 </div>
                                 <p className={`help ${tags.length < 1 || this.state.tags.length < 1 || tags.length > 20 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.tags.length < 1 ? 0 : tags.length}</span><span>{this.state.errors.tags}</span></p>
                             </div>
+                            <div className="field has-text-centered">
+                                <label className="label">Main Image</label>
+                                <div className="control">
+                                    <input onChange={e => { this.setState({ image: e.target.value, head: true, errors: { ...this.state.errors, image: null } }) }} value={this.state.image} className={`input ${this.state.errors.image ? 'is-primary' : ''}`} type="text" placeholder="Image Link" />
+                                </div>
+                                <p className={`help ${this.state.image.length > 255 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.image.length}</span><span>{this.state.errors.image}</span></p>
+                            </div>
                             <div className="card has-text-centered">
                                 <ToolBar modifyText={this.modifyText.bind('this')} />
                                 <div className="field has-text-centered">
@@ -225,7 +237,7 @@ class WritePost extends Component {
                         </form>
                     </div>
                     <Preview body={this.state.body || '# post-body'} preview={this.state.preview} >
-                        <PostHead title={this.state.title || 'Title of Post'} caption={this.state.caption || 'I am the bomb'} tags={tags} />
+                        <PostHead title={this.state.title || 'Title of Post'} caption={this.state.caption || 'I am the bomb'} tags={tags} image={this.state.image} />
                     </Preview>
                     <div draggable={true} className="control preview has-text-centered is-hidden-desktop">
                         <a onClick={() => this.setState({ preview: !this.state.preview })} className="button is-large is-primary is-rounded font-2">

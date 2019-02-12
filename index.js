@@ -19,14 +19,19 @@ const apollo = new ApolloServer({
         let user, id, operationName, variables
         try {
             user = ctx.req.session.user.id
-            id = ctx.req.session.id
-            operationName = ctx.req.body.operationName
-            variables = ctx.req.body.variables
         } catch (e) {
             user = null
+        }
+        try {
+            id = ctx.req.session.id
+        } catch (e) {
             id = null
+        }
+        try {
+            user = ctx.req.session.user.id
+            operationName = ctx.req.body.operationName
+        } catch (e) {
             operationName = null
-            variables = null
         }
         console.log('-------------------------------')
         console.log(user, id)

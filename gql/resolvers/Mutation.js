@@ -69,11 +69,11 @@ module.exports = {
         }
     },
     createPost: async (_, args, { req, Loaders, batchInserts }) => {
-        const { title, post_content, caption, tags } = args.input;
+        const { title, post_content, caption, tags, image } = args.input;
         let sessionUser = authenticate(req.session)
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         if (!title || !post_content || !caption) throw Errors.posts.missingField;
-        const { rowsAffected, insertId } = await queryDB(`INSERT INTO posts (user_id, title, caption, post_content) VALUES ?`, [[[sessionUser, title, caption, post_content]]]).catch(e => { throw Errors.database })
+        const { rowsAffected, insertId } = await queryDB(`INSERT INTO posts (user_id, title, caption, post_content, image) VALUES ?`, [[[sessionUser, title, caption, post_content, image]]]).catch(e => { throw Errors.database })
         if (rowsAffected < 1) return null;
         if (tags && tags.length > 0) {
             await batchInserts.tags.postTags(tags, insertId)
@@ -98,6 +98,7 @@ module.exports = {
         if (!post) throw Errors.posts.notFound;
         const { title, caption, post_content, user_id } = post
         if (user_id !== sessionUser) throw Errors.authorization.notAuthorized;
+        const image = args.input.image ? args.input.image : null
         const { affectedRows } =
             await queryDB(`
             UPDATE posts
@@ -105,9 +106,10 @@ module.exports = {
                 title= ?,
                 caption= ?,
                 post_content= ?,
+                image=?,
                 last_updated=NOW()
             WHERE id= ? AND user_id= ?
-        `, [args.input.title || title, args.input.caption || caption, args.input.post_content || post_content, args.id, sessionUser]).catch(e => { throw Errors.database })
+        `, [args.input.title || title, args.input.caption || caption, args.input.post_content || post_content, image, args.id, sessionUser]).catch(e => { throw Errors.database })
         if (affectedRows < 1) throw Errors.database;
         if (args.input.modTags) {
             const { modTags } = args.input;

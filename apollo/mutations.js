@@ -136,6 +136,7 @@ export const UPDATE_POST = gql`
                 id
                 tag_name
             }
+            image
         }
     }
 `

@@ -97,7 +97,7 @@ module.exports = {
         const posts =
             await queryDB(`
         SELECT 
-            tag_id, posts.id as id, title, posts.user_id, posts.created_at, last_updated, title, caption, post_content
+            tag_id, posts.id as id, title, posts.user_id, posts.created_at, last_updated, title, caption, post_content, image
         FROM posts
         INNER JOIN post_tags
             ON post_tags.post_id=posts.id

@@ -102,6 +102,7 @@ export const USER_POSTS = gql`
                 numComments
                 caption
                 iLike 
+                image
             }
             profile{
                 photo_path
@@ -170,6 +171,7 @@ export const POST = gql`
                 tag_name
             }
             numComments
+            image
         }
     }
 `
@@ -318,6 +320,7 @@ export const SEARCH_POSTS = gql`
                     id
                     tag_name
                 }
+                image
             }
         }
     }
@@ -452,6 +455,7 @@ export const SEARCH_ALL = gql`
                     id
                     tag_name
                 }
+                image
             }
         }
         comments(input: $input){

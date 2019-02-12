@@ -88,6 +88,7 @@ module.exports = gql`
       title: String!
       caption: String!
       post_content: String!
+      image: String
       numLikes: Int!
       numComments: Int!
       comments: [Comment]!
@@ -159,6 +160,7 @@ module.exports = gql`
       title: String
       caption: String
       post_content: String
+      image: String = null
       tags: [String]
       modTags: ModTags
   }

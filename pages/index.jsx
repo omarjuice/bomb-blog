@@ -16,7 +16,7 @@ class Index extends Component {
 
     render() {
         return (
-            <Home />
+            <Home data={this.props.data} />
         )
     }
 }

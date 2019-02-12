@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { setSearch, createError, renderModal } from '../apollo/clientWrites';
+import { setSearch, createError, renderModal, hideModal } from '../apollo/clientWrites';
 import { AUTHENTICATED, CURRENT_USER, POST, GET_MODAL } from '../apollo/queries';
 import Router from 'next/router'
 import { Query } from 'react-apollo';
@@ -20,10 +20,11 @@ class Edit extends Component {
         if (!query.id) {
             return redirect()
         }
-        const { data } = await apolloClient.query({ query: POST, variables: { id: Number(query.id) } })
+        const { data } = await apolloClient.query({ query: POST, variables: { id: Number(query.id) }, fetchPolicy: "network-only" })
         if (!data) {
             return redirect()
         }
+        console.log(data.post);
         return { data }
     }
     onSubmit = (validate) => {
@@ -35,7 +36,7 @@ class Edit extends Component {
             const form = validate()
             if (!form) return;
             processingSubmit = true
-            const { title, caption, tags, body } = form
+            const { title, caption, tags, body, image } = form
             let newTags = getMatches(tags, tagRegex)
             let modTags = updateTags(this.props.data.post.tags.map(tag => tag.tag_name), newTags)
             renderModal({ display: 'Confirm', info: { prompt: 'Are you ready submit these edits?' }, active: true, confirmation: null })
@@ -44,10 +45,14 @@ class Edit extends Component {
                 .subscribe({
                     async next(subscription) {
                         if (subscription.data.modal.confirmation === true) {
-                            const { data } = await client.mutate({ mutation: UPDATE_POST, variables: { id, input: { title, caption, modTags, post_content: body } } })
+                            const { data } = await client.mutate({ mutation: UPDATE_POST, variables: { id, input: { title, caption, modTags, post_content: body, image } } })
+
                             if (data.updatePost) {
+
                                 const oldData = client.cache.readQuery({ query: POST, variables: { id } })
-                                client.cache.writeQuery({ query: POST, variables: { id }, data: { ...oldData, ...data.updatePost } })
+
+                                const newData = { post: { ...oldData.post, ...data.updatePost } }
+                                client.cache.writeQuery({ query: POST, variables: { id }, data: newData })
                                 page.waitForConfirmation.unsubscribe()
                                 return Router.replace({ pathname: '/posts', query: { id } })
                             }
@@ -82,7 +87,7 @@ class Edit extends Component {
                                     return <div></div>
                                 }
                                 if (data.user.id === post.author.id) {
-                                    return <WritePost title={post.title} caption={post.caption} tags={post.tags.reduce((acc, tag) => acc + '#' + tag.tag_name + ' ', '')} body={post.post_content} onSubmit={this.onSubmit} />
+                                    return <WritePost image={post.image} title={post.title} caption={post.caption} tags={post.tags.reduce((acc, tag) => acc + '#' + tag.tag_name + ' ', '')} body={post.post_content} onSubmit={this.onSubmit} />
                                 }
                                 createError({ code: 'UNAUTHORIZED', message: 'You did not write that post.' })
                                 Router.replace('/')

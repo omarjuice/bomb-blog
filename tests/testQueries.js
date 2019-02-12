@@ -97,6 +97,7 @@ module.exports = {
                       username
                     }
                     numLikes
+                    image
                   }
             }
           }`,
@@ -113,6 +114,7 @@ module.exports = {
                   created_at
                   last_updated
                   numLikes
+                  image
               }
           }`,
     byUserID: `query ($id: Int){

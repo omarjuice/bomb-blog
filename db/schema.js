@@ -29,6 +29,7 @@ const postSchema = {
         title VARCHAR(255) NOT NULL,
         caption TEXT NOT NULL,
         post_content LONGTEXT NOT NULL,
+        image VARCHAR(255), 
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )`,
     drop: `DROP TABLE IF EXISTS posts`

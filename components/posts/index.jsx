@@ -41,7 +41,7 @@ class PostPage extends Component {
                             </div>
                         )
                         if (!data.post) return <div>DELETED</div>
-                        const { id, user_id, author, title, caption, post_content, created_at, last_updated, tags, numComments } = data.post
+                        const { id, user_id, author, title, caption, post_content, created_at, last_updated, tags, numComments, image } = data.post
                         return (<div className="columns is-centered is-mobile is-multiline">
                             <div className="column is-7-desktop is-10-tablet is-full-mobile">
                                 <div className="card article">
@@ -115,6 +115,9 @@ class PostPage extends Component {
                                                 </div>
                                             </div>
                                         </div>
+                                        {image ? <figure className="image is-128by128">
+                                            <img src={image} alt="image" />
+                                        </figure> : null}
                                         <div className="content article-body markdown-body" dangerouslySetInnerHTML={{ __html: marked.parse(post_content) }}>
 
                                         </div>
