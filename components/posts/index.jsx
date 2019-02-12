@@ -10,10 +10,12 @@ import Unfollow from '../global/UnFollow';
 import Follow from '../global/Follow';
 import Like from '../global/Like';
 import marked from 'marked'
+import DeletePost from './DeletePost';
 marked.setOptions({
     breaks: true,
     sanitize: true
 })
+
 class PostPage extends Component {
     state = {
         comments: false
@@ -38,6 +40,7 @@ class PostPage extends Component {
 
                             </div>
                         )
+                        if (!data.post) return <div>DELETED</div>
                         const { id, user_id, author, title, caption, post_content, created_at, last_updated, tags, numComments } = data.post
                         return (<div className="columns is-centered is-mobile is-multiline">
                             <div className="column is-7-desktop is-10-tablet is-full-mobile">
@@ -75,7 +78,11 @@ class PostPage extends Component {
                                                                     const postAuthor = data.user
                                                                     return (<>
 
-                                                                        {postAuthor.isMe ? <Link href={{ pathname: '/posts/edit', query: { id } }}><button className="button is-success is-large"><span className="icon"><i className="fas fa-pen"></i></span></button></Link> :
+                                                                        {postAuthor.isMe ?
+                                                                            <>
+                                                                                <DeletePost userId={user_id} id={id} />
+                                                                                <Link href={{ pathname: '/posts/edit', query: { id } }}><button className="button is-success is-large"><span className="icon"><i className="fas fa-pen"></i></span></button></Link>
+                                                                            </> :
                                                                             <Link href={{ pathname: '/profile', query: { id: user_id } }}><a>@{postAuthor.username}</a></Link>}
 
                                                                         <br />
@@ -162,7 +169,9 @@ class PostPage extends Component {
                         display: flex;
                         align-items: center;
                     }
-             
+                    .post-stats .button{
+                        margin: 0 1rem
+                    }
       
                 `}</style>
             </div>

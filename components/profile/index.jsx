@@ -34,8 +34,8 @@ class ProfilePage extends Component {
 
 
                         return (
-                            <div className="has-background-primary">
-                                <div className="columns is-centered is-multiline is-mobile has-background-light">
+                            <div>
+                                <div className="columns is-centered is-multiline is-mobile">
                                     <div id="profile-header" className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered p">
                                         <figure className="image is-128x128">
                                             <img className="is-rounded" src={profile.photo_path || "/static/user_image.png"} />

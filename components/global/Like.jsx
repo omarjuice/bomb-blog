@@ -17,6 +17,7 @@ class Like extends Component {
                 {({ loading, error, data }) => {
                     if (loading) return <Loading color="primary" size={size || 'lg'} />;
                     if (error) return <ErrorIcon color="primary" size={size || 'lg'} />
+                    if (!data.post) return <div>Not Found</div>
                     const { iLike, numLikes, id } = data.post
                     return (<>
                         {iLike ? <UnlikePost postId={id} size={size} scale={scale} /> : <LikePost postId={id} size={size} scale={scale} />}
