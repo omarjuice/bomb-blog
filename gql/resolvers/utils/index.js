@@ -1,3 +1,7 @@
+const { PubSub } = require('apollo-server-express')
+
+const pubsub = new PubSub()
+
 const authenticate = (session) => {
     let sessionUser;
     try {
@@ -7,4 +11,4 @@ const authenticate = (session) => {
     }
     return sessionUser
 }
-module.exports = authenticate
+module.exports = { authenticate, pubsub }

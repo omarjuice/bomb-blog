@@ -34,6 +34,9 @@ module.exports = gql`
       createFollow(user_id: Int!): Boolean!
       deleteFollow(user_id: Int!): Boolean!
   }
+  type Subscription{
+      newPost: Post
+  }
   type Users{
       cursor: Int
       results: [User]!

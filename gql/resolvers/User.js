@@ -1,5 +1,5 @@
 const Errors = require('../errors')
-const authenticate = require('./authenticate')
+const { authenticate } = require('./utils')
 module.exports = {
     profile: async ({ id }, _, { Loaders }) => {
         const profile = await Loaders.profiles.byId.load(id)

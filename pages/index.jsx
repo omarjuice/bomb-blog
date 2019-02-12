@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 
-import BombSVG from '../components/svg/bomb';
 import { setSearch } from '../apollo/clientWrites';
+import Home from '../components/home';
+import { SEARCH_POSTS } from '../apollo/queries';
 class Index extends Component {
-    static getInitialProps() {
+    static async getInitialProps({ apolloClient }) {
         setSearch({ active: false })
-        return {}
-    }
-    componentDidMount() {
+        const recentPosts = await apolloClient.query({ query: SEARCH_POSTS, variables: { input: { limit: 10 } } })
+        return {
+            data: {
+                recentPosts: recentPosts.data.posts
+            }
+        }
     }
 
     render() {
         return (
-            // <div><Users /></div>
-            <>
-                <BombSVG />
-            </>
-        );
+            <Home />
+        )
     }
 }
 

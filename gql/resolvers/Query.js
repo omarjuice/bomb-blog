@@ -1,6 +1,6 @@
 const { queryDB } = require('../../db/connect')
 const Errors = require('../errors')
-const authenticate = require('./authenticate')
+const { authenticate } = require('./utils')
 
 module.exports = {
     hello: () => 'Hello world!',

@@ -1,3 +1,4 @@
+const http = require('http')
 const next = require('next')
 const express = require('express')
 const app = express()
@@ -15,15 +16,21 @@ let port = process.env.PORT || 3000
 const nextApp = next({ dev, dir: __dirname })
 const apollo = new ApolloServer({
     typeDefs, resolvers, context: ctx => {
-        let user;
+        let user, id, operationName, variables
         try {
             user = ctx.req.session.user.id
+            id = ctx.req.session.id
+            operationName = ctx.req.body.operationName
+            variables = ctx.req.body.variables
         } catch (e) {
             user = null
+            id = null
+            operationName = null
+            variables = null
         }
         console.log('-------------------------------')
-        console.log(user, ctx.req.session.id)
-        console.log(ctx.req.body.operationName, ctx.req.body.variables, moment(Date.now()).format('hh:mm:ss'))
+        console.log(user, id)
+        console.log(operationName, variables, moment(Date.now()).format('hh:mm:ss'))
 
         return applyLoaders(ctx)
     }, uploads: test
@@ -69,9 +76,10 @@ const initializeServer = (app, productionEnv = false) => {
                 app.get('*', (req, res) => {
                     nextApp.render(req, res, '/')
                 })
+                const httpServer = http.createServer(app)
+                apollo.installSubscriptionHandlers(httpServer)
 
-
-                app.listen(port, () => {
+                httpServer.listen(port, () => {
                     console.log(`Listening on port ${port}`, apollo.graphqlPath)
                     if (done) {
                         done()

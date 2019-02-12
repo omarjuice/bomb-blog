@@ -80,8 +80,16 @@ class PostPage extends Component {
 
                                                                         {postAuthor.isMe ?
                                                                             <>
-                                                                                <DeletePost userId={user_id} id={id} />
-                                                                                <Link href={{ pathname: '/posts/edit', query: { id } }}><button className="button is-success is-large"><span className="icon"><i className="fas fa-pen"></i></span></button></Link>
+                                                                                <div className="columns is-centered is-mobile is-marginless">
+                                                                                    <div className="column is-3">
+                                                                                        <DeletePost userId={user_id} id={id} />
+                                                                                    </div>
+                                                                                    <div className="column is-1"></div>
+                                                                                    <div className="column is-3">
+                                                                                        <Link href={{ pathname: '/posts/edit', query: { id } }}><button className="button is-success is-large"><span className="icon"><i className="fas fa-pen"></i></span></button></Link>
+                                                                                    </div>
+                                                                                    <div className="column is-2"></div>
+                                                                                </div>
                                                                             </> :
                                                                             <Link href={{ pathname: '/profile', query: { id: user_id } }}><a>@{postAuthor.username}</a></Link>}
 
@@ -169,10 +177,7 @@ class PostPage extends Component {
                         display: flex;
                         align-items: center;
                     }
-                    .post-stats .button{
-                        margin: 0 1rem
-                    }
-      
+
                 `}</style>
             </div>
         );

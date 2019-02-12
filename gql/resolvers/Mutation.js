@@ -2,7 +2,8 @@ const { queryDB } = require('../../db/connect')
 const { compare, hashUser } = require('../../db/crypt')
 const Errors = require('../errors')
 const validator = require('email-validator')
-const authenticate = require('./authenticate')
+const { pubsub } = require('./utils')
+const { authenticate } = require('./utils')
 module.exports = {
     login: async (_, { username, password }, { req }) => {
         const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username]).catch(e => { throw Errors.database })
@@ -78,6 +79,7 @@ module.exports = {
             await batchInserts.tags.postTags(tags, insertId)
         }
         const newPost = await Loaders.posts.byId.load(insertId)
+        pubsub.publish('NEW_POST', { newPost })
         if (newPost) return newPost;
         throw Errors.database
     },

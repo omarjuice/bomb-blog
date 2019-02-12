@@ -1,10 +1,6 @@
-const { queryDB } = require('../../db/connect')
-const { compare, hashUser } = require('../../db/crypt')
-const Errors = require('../errors')
-const validator = require('email-validator')
-const authenticate = require('./authenticate')
 const Query = require('./Query')
 const Mutation = require('./Mutation')
+const Subscription = require('./Subscription')
 const User = require('./User')
 const Post = require('./Post')
 const Comment = require('./Comment')
@@ -13,9 +9,12 @@ const Profile = require('./Profile')
 const Tag = require('./Tag')
 const Follower = require('./Follower')
 const Liker = require('./Liker')
-const resolvers = {
+
+
+module.exports = {
     Query,
     Mutation,
+    Subscription,
     User,
     Post,
     Comment,
@@ -24,6 +23,4 @@ const resolvers = {
     Tag,
     Follower,
     Liker
-};
-
-module.exports = resolvers
+}

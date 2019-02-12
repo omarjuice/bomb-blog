@@ -29,7 +29,7 @@ class GlobalStyles extends Component {
                 }
                 .secondary-navbar{
                     z-index: 2;
-                    top: 4rem !important
+                    top: 3rem !important
                 }
                 #brand-img{
                     width: 80px !important
