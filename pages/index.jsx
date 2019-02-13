@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 
 import { setSearch } from '../apollo/clientWrites';
 import Home from '../components/home';
-import { SEARCH_POSTS } from '../apollo/queries';
+import { SEARCH_POSTS, TRENDING } from '../apollo/queries';
 class Index extends Component {
     static async getInitialProps({ apolloClient }) {
         setSearch({ active: false })
-        const trending = await apolloClient.query({ query: SEARCH_POSTS, variables: { input: { limit: 10, orderBy: "trending" } } })
+        const trending = await apolloClient.query({ query: TRENDING, variables: { input: { limit: 5, orderBy: "trending" } } })
         return {
             data: {
                 trending: trending.data.posts

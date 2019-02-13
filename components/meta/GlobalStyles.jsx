@@ -41,6 +41,14 @@ class GlobalStyles extends Component {
                     margin: 0 auto;
                     padding: 45px;
                 }
+                .markdown-body.markdown-narrow{
+                    box-sizing: border-box;
+                    font-size: 50%;
+                    min-width: 200px;
+                    max-width: 500px;
+                    margin: 0 auto;
+                    padding: 0
+                }
             
                 @media (max-width: 767px) {
                     .markdown-body {

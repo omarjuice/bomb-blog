@@ -500,6 +500,38 @@ export const SEARCH_ALL = gql`
         }
     }
 `
+export const TRENDING = gql`
+    query SearchPosts($input: Search!){
+        posts(input: $input){
+            cursor
+            results{
+                id
+                user_id
+                author{
+                    id
+                    isMe
+                    username
+                    profile{
+                        user_id
+                        photo_path
+                    }
+                }
+                title
+                created_at
+                last_updated
+                numLikes
+                numComments
+                caption
+                post_content
+                tags{
+                    id
+                    tag_name
+                }
+                image
+            }
+        }
+    }
+`
 export const ERROR = gql`
     query GetError{
         error @client{
