@@ -181,6 +181,7 @@ module.exports = gql`
     order: Boolean
     orderBy: String 
     tags:[String]
+    exclude: [Int] = [0]
   }
 
 `;

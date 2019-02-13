@@ -7,7 +7,8 @@ class Index extends Component {
     static async getInitialProps({ apolloClient }) {
         setSearch({ active: false })
         const trending = await apolloClient.query({ query: TRENDING, variables: { input: { limit: 5, orderBy: "trending" } } })
-        const recent = await apolloClient.query({ query: SEARCH_POSTS, variables: { input: { limit: 5, cursor: 0 } } })
+        console.log(trending)
+        const recent = await apolloClient.query({ query: SEARCH_POSTS, variables: { input: { limit: 5, cursor: 0, exclude: trending.data.posts.results.map(post => post.id) } } })
         return {
             data: {
                 trending: trending.data.posts,

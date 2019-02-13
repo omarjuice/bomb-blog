@@ -67,7 +67,7 @@ class Trending extends Component {
             <div className="container">
                 <div className="tile is-ancestor">
                     <div className="tile is-parent">
-                        <article className="tile is-child">
+                        {posts[0] ? <article className="tile is-child">
                             <Link href={{ pathname: '/posts', query: { id: posts[0].id } }}>
                                 <a>
                                     <p className="title is-4 font-2">{this.shorten(posts[0].title)}</p>
@@ -97,11 +97,11 @@ class Trending extends Component {
                                     {this.genMedia(posts[0])}
                                 </div>
                             </div>
-                        </article>
+                        </article> : ''}
                     </div>
                     <div className="tile is-vertical is-8">
                         <div className="tile is-parent">
-                            <article className="tile is-child">
+                            {posts[1] ? <article className="tile is-child">
                                 <div className="columns is-multiline is-mobile">
                                     <div className="column is-three-quarters-desktop is-full-mobile">
                                         <Link href={{ pathname: '/posts', query: { id: posts[1].id } }}>
@@ -142,12 +142,12 @@ class Trending extends Component {
                                         </Link>
                                     </div>
                                 </div>
-                            </article>
+                            </article> : ''}
                         </div>
                         <div className="tile">
 
                             <div className="tile is-parent">
-                                <article className="tile is-child">
+                                {posts[2] ? <article className="tile is-child">
                                     <div className="columns is-multiline is-mobile">
                                         <Link href={{ pathname: '/posts', query: { id: posts[2].id } }}>
                                             <a className="column is-full">
@@ -175,10 +175,10 @@ class Trending extends Component {
                                         </div>
                                     </div>
 
-                                </article>
+                                </article> : ''}
                             </div>
                             <div className="tile is-parent">
-                                <article className="tile is-child">
+                                {posts[3] ? <article className="tile is-child">
                                     <div className="columns is-multiline is-mobile">
                                         <Link href={{ pathname: '/posts', query: { id: posts[3].id } }}>
                                             <a className="column is-full">
@@ -208,7 +208,7 @@ class Trending extends Component {
                                         </div>
                                     </div>
 
-                                </article>
+                                </article> : ''}
                             </div>
                         </div>
                         {/* <div className="tile is-parent">
