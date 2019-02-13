@@ -96,6 +96,7 @@ module.exports = gql`
       tags: [Tag]!
       iLike: Boolean!
       relevance: Int
+      trending: Float
   }
   type Tag{
       id: Int!

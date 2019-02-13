@@ -24,7 +24,6 @@ class Edit extends Component {
         if (!data) {
             return redirect()
         }
-        console.log(data.post);
         return { data }
     }
     onSubmit = (validate) => {
@@ -46,11 +45,8 @@ class Edit extends Component {
                     async next(subscription) {
                         if (subscription.data.modal.confirmation === true) {
                             const { data } = await client.mutate({ mutation: UPDATE_POST, variables: { id, input: { title, caption, modTags, post_content: body, image } } })
-
                             if (data.updatePost) {
-
                                 const oldData = client.cache.readQuery({ query: POST, variables: { id } })
-
                                 const newData = { post: { ...oldData.post, ...data.updatePost } }
                                 client.cache.writeQuery({ query: POST, variables: { id }, data: newData })
                                 page.waitForConfirmation.unsubscribe()

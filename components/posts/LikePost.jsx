@@ -50,8 +50,6 @@ const update = (id, { page, userId }) => {
                 })
                 proxy.writeQuery({ query: LIKES, variables: { id: userId }, data: userLikes })
             } catch (e) { }
-
-
             return
         }
         const data = proxy.readQuery({ query: POST_LIKES, variables: { id } })

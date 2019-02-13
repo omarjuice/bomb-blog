@@ -7,7 +7,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-                {this.props.data.recentPosts.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags }, i) => {
+                {this.props.data.trending.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags }, i) => {
                     const likes = shortenNumber(numLikes)
                     const comments = shortenNumber(numComments)
                     const likesMargin = String(likes.length * .25) + 'rem'

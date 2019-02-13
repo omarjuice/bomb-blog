@@ -44,7 +44,7 @@ module.exports = {
         throw Errors.posts.notFound
     },
     posts: async (_, { input }) => {
-        const orderBy = input.orderBy === 'title' ? 'LOWER(title)' : 'created_at';
+        const orderBy = input.orderBy === 'trending' ? 'trending' : input.orderBy === 'title' ? 'LOWER(title)' : 'created_at';
         const order = input.order ? 'ASC' : 'DESC'
         const { cursor, limit, tags, search } = input
         if (tags && tags.length > 0) {
@@ -64,7 +64,16 @@ module.exports = {
             const results = await queryDB(query, [tags, `%${search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
             return { results, cursor: results.length < limit ? null : cursor + results.length }
         }
-        const query = `SELECT * FROM posts WHERE title LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
+        const query = `
+        SELECT 
+            posts.*, (COUNT(likes.created_at)/(TIMESTAMPDIFF(HOUR, posts.created_at, NOW()))*24) AS trending, COUNT(likes.created_at) AS numLikes
+        FROM posts 
+        INNER JOIN likes
+            ON posts.id = likes.post_id
+        WHERE title LIKE ? 
+        GROUP BY posts.id
+        ORDER BY ${orderBy} ${order} LIMIT ?,?
+        `
         const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
         return { results, cursor: results.length < limit ? null : cursor + results.length }
     },

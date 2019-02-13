@@ -58,15 +58,11 @@ export const clearAuth = () => {
         }
     })
 }
-export const setSearch = ({ input, options, active, addToInput }) => {
+export const setSearch = ({ input, options, active = true, addToInput = '' }) => {
     const data = client.readQuery({ query: GET_SEARCH })
     if (input !== undefined) data.search.input = input
     if (options !== undefined) data.search.options = options
     if (active !== undefined) data.search.active = active
-    if (addToInput !== undefined) {
-        data.search.addToInput = addToInput
-    } else {
-        data.search.addToInput = ''
-    }
+    data.search.addToInput = addToInput
     client.writeQuery({ query: GET_SEARCH, data })
 }

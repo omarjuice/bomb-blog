@@ -1,10 +1,12 @@
 const faker = require("faker");
+const fs = require('fs')
 const { hashPW } = require('../db/crypt')
 const { database } = require('../config')
 const { userSchema, profileSchema, postSchema, likeSchema, commentSchema, commentLikeSchema,
     replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema } = require('../db/schema')
 const { queryDB } = require('../db/connect')
 const { randomMarkdown } = require('../markdown')
+
 
 
 const seedDB = {
@@ -53,199 +55,7 @@ const seedDB = {
     ]],
     userTags: [[1, 2], [1, 6], [2, 11], [3, 4], [3, 9]],
     follows: [[1, 1], [1, 3], [1, 2], [2, 3], [2, 2], [3, 1], [3, 3]],
-    posts: [[
-        1,
-        "My blog",
-        "All the reasons why I am cool",
-        faker.date.past(),
-        `# Prosternit Quirino
-
-        ## Usum illum regem dubites nil origo inquit
-        
-        Lorem markdownum liquefacta aconiton avitis at **fatorum** septem, eminet
-        inportunusque lumina candidioribus ensem. Pudibundaque datum: pectora aetas,
-        fertis quibus vitibus, spiritus, contende. Oderit dabitur. Contulit *accepere
-        caput*.
-        
-        Signum Gyaros comes, ac sentit invadunt vivit: non tot, furtim! Tolles
-        instructa: dissimilemque diva: flumen: e vultum dentibus furibundus ubera,
-        discussisque turis carnes, non. **Mihi** atque victor metuit poenam pressit meam
-        sed erant coeptum sibi, factaque ut unus, est. Unum spectatae, tundunt tibi.
-        Rhesum et quin.
-        
-        ## Rursus aere
-        
-        Ac Iolao Famem postibus pennis, isse obiecit retro procerum coniunx lacer Iovis
-        frondibus iuvenco? Texta illo exspectabam lacrimis: est et pudori in longa,
-        foret et flexerat plausis suscitat adflatuque esse modo, coeunt?
-        
-        ## Poplite ponto
-        
-        Aut geminas capto cognoscite est discedite plumas? Impediunt poenas, videt et
-        manifestam postquam, in nemus.
-        
-        Gaudia constitit petunt *calidi maenala nec* turea qui, eundem. Hoc pereat
-        uterque possidet *turget talia* praepetibus nomina, veris? Amaris distulit
-        dedimus genus prehensis, latitantia mihi Tempe inquit, nec. Ab
-        [illa](http://www.haud-fretum.io/nisidabitur.php).
-        
-        ## In offensa voracior sinunt suae me
-        
-        Adnuit dicam aevo decrescunt instabiles dives, uti est communiter verum. Tellus
-        communis in quoniam rege requiem ortos ex hunc verti invictumque, rictus carmen
-        inpune. Obliquo sui non *quem pisce* quantum, terras, fuge.
-        
-        > Ornata sopita hinc; et in haec cognataque avertere subiectatque mediam. Ora
-        > *est est* pars spectans locoque suo, [non](http://ergo.net/) unde erroresque
-        > scylla tardius adfusaque sed in. Et orbi. Notissima ingentibus nostra dedere
-        > [humum cur](http://www.cycneia-protinus.io/sic.php) aliasque pudet se a aditus
-        > O quam admovet quoque exsatiata fugacem fiet nato. Patet Memnonis denique:
-        > coniugis volentem invito *Laomedonque* ossa crescente exululatque telis
-        > aspiciunt formosus acres?
-        
-        ## Honesta facta albentes arbore
-        
-        Nec celat vela dignos serta victor esse tumulo plantas, sum orant venientia
-        Sidonide cervice. At [conpulit plura](http://cum.com/aetherias). Quoque
-        participes vertit et insania satis. Quaecumque **tua**, est in caput capacis
-        colunt, iam neu inane.
-        
-        Mediamque Arachnes? Colles *sed aspiciunt* suos det non tetigisset Oribasos
-        lucente, tertius tibi, cum et erat. Comas spectant totidemque et tamen infelix:
-        Hyacinthe nunc per vobis et parantis spes Invidiae *terram natum*, victrixque.`
-    ], [
-        1,
-        "My other blog",
-        "Even more reasons why I am cool",
-        faker.date.past(),
-        `# Et rogant natarum gelidaeque fertur belli quo
-
-        ## Annos dura
-        
-        Lorem markdownum dempserat non tuae, sui sinit properent nobiliumque sola
-        **Pelasga**. Pomum Romulus est nec aliquo me numen vocari, obprobrium soror; cum
-        usa. Res totidemque postquam pharetrae argentea haesit haud spectacula passa
-        moenia, uterque, secundo viderat ero. Valet poenas et timor rigida subiecta
-        **est simus** versus transformat humili circa rostro: avertite Herculis Aeneas?
-        
-            homeWormAiff = recursive + process;
-            if (outputIrqUp(vlbQwertyNetwork, minimize_restore_google(dataWimax), fiber)
-                    > double_vga.drop(server, language_internal_footer -
-                    qbe_sata_menu)) {
-                http_exif(uri_cybercrime, 325765, device);
-            }
-            if (archive_remote.multitaskingNas.compression_snow_hyperlink(cpcGamma,
-                    text_monochrome) <= defaultGatewayBlog) {
-                tweet_leaf.switch_function = dsl;
-                winsVerticalIpod -= compileWebThumbnail + variable_sidebar_ripcording +
-                        kindle_odbc.white_wiki_utility.source(453734);
-            } else {
-                gigahertz -= 1;
-                ring_antivirus_desktop += internic;
-            }
-            software.wiredDataServer(-2, esportsGoogle + undo_mirror_terabyte, asp_mp);
-            if (booleanDramHexadecimal + utilitySms.party_boot(io_fsb, flat) !=
-                    system_gpu_ldap) {
-                document = 1 + 3;
-                inputSwipeFlat.bootDashboard = 29;
-            }
-        
-        ## Cedere manu aere ingens
-        
-        Dixi suci Oenopiam, et euntis e toro aptus tenet tu Thyoneus naris. Satis aer
-        forte eodem, imoque bibulas? Est illo fugat arbore canebat ponti magico: perque
-        malas tamen; *haud nec* sed numen intonat fornacibus!
-        
-        Siqua nectareis sinuavi parabantur heros dixit. Pete qui nec nominibus quarum.
-        
-        ## Norint curvi abundet insequitur bello te operosae
-        
-        De igne Alcyone, [commentaque](http://www.a-lactis.com/precatur-cognovi), palmis
-        fodiebant sinunt super: illa facta pueri ama maxime materiam huius. Ab pectora
-        supposito bracchia pressos modo crimine; nomen primus magis. Sacerdos latuere
-        nudare; tibi quid se et [magna](http://natonec.io/quod); tibi. Praetendens vela
-        cacumina tellus, latebant copia verba averserisque facit bracchia magno; et.
-        *Tacebitur herba* oraque undas talis ventus officio riget est arma tetigit.
-        
-            device = serp.sd(ocr_node_installer.cable_gopher_switch(1));
-            apple(passwordLock, delMemePython + oem / 5);
-            circuit.hyperlinkFpuIpad /= tDragSaas(logDockingSearch, 5, newsgroup);
-            hsfExpansion.json(84, iosKeystrokeWebmaster(skyscraper_error(35),
-                    intellectualNybbleLte));
-            if (software) {
-                minisite_stack.ebookBit(vdsl_flatbed_sync + input, wi);
-                cybercrime_master_gibibyte = page_bar;
-            } else {
-                dialog.bot_analyst_overwrite(gibibyteAgpDebugger(reader, tebibyteIbm,
-                        ircFrozen), bar, e_speed_firewall(system_up_c, systemSolid));
-                graphic_point_gnu = -4;
-                trimKbpsDocking.basicInstall(system_power_clock, -5);
-            }
-        
-        ## Quis nec
-        
-        [Dona bracchia](http://ulva.org/frenis), festa precibus sub regi nati genialis
-        pars quoque. Bacis exstimulat nequeunt conlapsosque Capys linguae non litore,
-        ille iuppiter fertur, crura. Atque sonantia ille silentum, Dianae. Non genuum
-        candentem convicti *cum*!
-        
-        Glaebis quid, ereptaque sequar. Diva cursus, sua inter, prius, est potestas
-        graves. Domui postquam Tellus Euboica campi praesentia equos sitis, tellus
-        subiecta me viret talaribus quoque! **Conbibitur** tertius sum eluvie femur.`
-    ], [
-        3,
-        "A blog in Latin",
-        "Lorem lorem lorem!!!",
-        faker.date.past(),
-        `# Morabar plangoris erat
-
-        ## At Cadme sic nec erat resupinus sustinet
-        
-        Lorem markdownum. Est premit misce, in versa mortale prius admonuisse ossaque
-        inserui.
-        
-        Ille oves: nescio: ense nullo! Lernaei tristi iam deiecto **colla vino**, et
-        saxi inplet ira meo mille inquit! Est semiferos parte patientia recedere,
-        figuras aera, nec *ventris* pedes.
-        
-            stickTextPlug += cdCpsFunction;
-            horizontal_servlet_internal(dramOsiMenu + pcmcia, thirdInteractiveDisk);
-            computing_cpl.rpcDslamUnix = alert;
-        
-        ## Gestasset portus
-        
-        Dempsistis amisit, **quacumque** et oscula insula alis, ipse qua animalia
-        fortibus, visi. Morati Herculeamque ductus; Damasicthona saepe sacra amori
-        habitabilis viaque sequuntur [innato emicat
-        gravet](http://visoscelus.org/sagittissucos.aspx) quicquam ense sacra femina
-        rependatur putes. Deus longius evolvit Scorpion populo, caruerunt primos posuere
-        Ultima, postquam Orithyiae videri magnum!
-        
-            core_trinitron = shareware;
-            if (driveCycle) {
-                realNewsgroupQbe /= sequence;
-                boolean_horizontal = web.dpi_dual(firmware_backside, snapshot_memory,
-                        dlcLosslessLeaf * 3);
-            }
-            var wildcard = -3 + rupRteGnu;
-        
-        Lateo tardior. Congestaque mixtus, vasti qua, flumen flectere
-        [flendo](http://inlustro.net/capiuntanimam) stridunt venit in regnorum tempora
-        largoque iacentia parva? Inprudens gelidum loquerentur ingenti auctoremque natum
-        scissaeque forumque: eras dixit cernunt **metuendus**, licet iubes iubar; mota.
-        Restabat rabida tandem acutae et cadit. Arce servet: et illi sive coepta
-        revulsum os hostis.
-        
-        - Gurgite opem populos Iuno dicunt
-        - Caput curvamine arduus est parvo enim viderat
-        - Videre natumque iurat victoria
-        
-        Restabat Nilo, metu *editus*, ora **relatis vertit** consistere parentes nisi
-        deduxit excussit **Dymantis** formosa, *nutricisque saxo Hesperio*. Negant
-        quibus crescitque quondam maiora! Quid gurgite pudor praeter: pervigilem
-        proceres aliqua removit; caputque mihi. Hectora ictae faciunt quas tibi nec ab
-        tamen corporis scitabere alis tenere neque tanta.`
-    ]],
+    posts: [],
     comments: [[
         3,
         1,
@@ -391,6 +201,10 @@ const resetDB = (done) => {
 }
 const resetTables = (done) => {
     seedDB.numUsers = 3
+    const postBodies = JSON.parse(fs.readFileSync('posts.json'))
+    postBodies.slice(0, 3).forEach(({ user_id, title, created_at, caption, post_content }, i) => {
+        seedDB.posts[i] = [user_id, title, caption, new Date(created_at), post_content]
+    })
     queryDB(`
         SET FOREIGN_KEY_CHECKS = 0;
         ${userSchema.drop};

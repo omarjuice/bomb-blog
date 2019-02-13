@@ -12,10 +12,15 @@ class Navbar extends Component {
         searchNav: false
     }
     componentDidMount() {
-        const { search: { active } } = this.props.client.cache.readQuery({ query: GET_SEARCH })
-        this.setState({
-            searchNav: active
-        })
+        const nav = this
+        this.watchSearch = this.props.client.watchQuery({ query: GET_SEARCH })
+            .subscribe({
+                next({ data }) {
+                    nav.setState({
+                        searchNav: data.search.active
+                    })
+                }
+            })
     }
     render() {
         return (

@@ -1,3 +1,4 @@
+const { authenticate } = require('./utils')
 module.exports = {
     imFollowing: async ({ id }, _, { Loaders }) => await Loaders.users.imFollowing.load(id),
     followingMe: async ({ id }, _, { Loaders }) => await Loaders.users.followingMe.load(id),

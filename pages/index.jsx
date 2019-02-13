@@ -6,10 +6,10 @@ import { SEARCH_POSTS } from '../apollo/queries';
 class Index extends Component {
     static async getInitialProps({ apolloClient }) {
         setSearch({ active: false })
-        const recentPosts = await apolloClient.query({ query: SEARCH_POSTS, variables: { input: { limit: 10 } } })
+        const trending = await apolloClient.query({ query: SEARCH_POSTS, variables: { input: { limit: 10, orderBy: "trending" } } })
         return {
             data: {
-                recentPosts: recentPosts.data.posts
+                trending: trending.data.posts
             }
         }
     }

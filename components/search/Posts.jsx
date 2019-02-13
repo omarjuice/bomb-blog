@@ -47,7 +47,7 @@ class Posts extends Component {
                                         <br />
                                         <small>
                                             <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
-                                                <span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{} </span>
+                                                <span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span>
                                             </a>
                                             <a>
                                                 <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {comments}</span>

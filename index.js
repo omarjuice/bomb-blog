@@ -16,7 +16,7 @@ let port = process.env.PORT || 3000
 const nextApp = next({ dev, dir: __dirname })
 const apollo = new ApolloServer({
     typeDefs, resolvers, context: ctx => {
-        let user, id, operationName, variables
+        let user, id, operationName, variables;
         try {
             user = ctx.req.session.user.id
         } catch (e) {
@@ -28,10 +28,14 @@ const apollo = new ApolloServer({
             id = null
         }
         try {
-            user = ctx.req.session.user.id
             operationName = ctx.req.body.operationName
         } catch (e) {
             operationName = null
+        }
+        try {
+            variables = ctx.req.body.variables
+        } catch (e) {
+            variables = null
         }
         console.log('-------------------------------')
         console.log(user, id)
