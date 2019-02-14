@@ -36,6 +36,19 @@ module.exports = gql`
   }
   type Subscription{
       newPost: Post
+      newComment: Comment
+      newFollower: User
+      newLike: NewLike
+      newReply: Reply
+      newCommentLike: NewCommentLike
+  }
+  type NewCommentLike{
+      comment: Comment
+      user: User
+  }
+  type NewLike{
+      post: Post
+      user: User
   }
   type Users{
       cursor: Int
@@ -131,6 +144,7 @@ module.exports = gql`
       user_id: Int!
       replier: User!
       comment_id: Int!
+      comment: Comment!
       reply_text: String!
       created_at: String!
       last_updated: String

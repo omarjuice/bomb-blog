@@ -131,7 +131,11 @@ module.exports = {
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         if (!post_id) throw Errors.posts.notSpecified;
         const { affectedRows } = await queryDB(`INSERT INTO likes (user_id, post_id) VALUES ?`, [[[sessionUser, post_id]]]).catch(e => 0)
-        return affectedRows > 0;
+        if (affectedRows > 0) {
+            pubsub.publish('NEW_LIKE', { user_id: sessionUser, post_id })
+            return true
+        }
+        return false
     },
     unlikePost: async (_, args, { req }) => {
         const { post_id } = args
@@ -150,7 +154,9 @@ module.exports = {
         if (tags && tags.length > 0) {
             await batchInserts.tags.commentTags(tags, insertId)
         }
-        return await Loaders.comments.byId.load(insertId)
+        const newComment = await Loaders.comments.byId.load(insertId)
+        pubsub.publish('NEW_COMMENT', { newComment })
+        return newComment
     },
     updateComment: async (_, args, { req, Loaders, batchDeletes, batchInserts }) => {
         const sessionUser = authenticate(req.session)
@@ -188,7 +194,11 @@ module.exports = {
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         const { comment_id } = args;
         const { affectedRows } = await queryDB(`INSERT INTO comment_likes (user_id, comment_id) VALUES ?`, [[[sessionUser, comment_id]]]).catch(e => 0)
-        return affectedRows > 0
+        if (affectedRows > 0) {
+            pubsub.publish('NEW_COMMENT_LIKE', { user_id: sessionUser, comment_id })
+            return true
+        }
+        return false
     },
     unlikeComment: async (_, args, { req }) => {
         const sessionUser = authenticate(req.session)
@@ -231,7 +241,11 @@ module.exports = {
             return false
         }
         const { affectedRows } = await queryDB(`INSERT IGNORE INTO follows (follower_id, followee_id) VALUES ?`, [[[sessionUser, user_id]]]).catch(e => { throw Errors.database })
-        return affectedRows > 0
+        if (affectedRows > 0) {
+            pubsub.publish('NEW_FOLLOWER', { user_id: sessionUser })
+            return true
+        }
+        return false
     },
     deleteFollow: async (_, { user_id }, { req }) => {
         const sessionUser = authenticate(req.session);
