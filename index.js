@@ -37,9 +37,14 @@ const apollo = new ApolloServer({
         } catch (e) {
             variables = null
         }
-        console.log('-------------------------------')
-        console.log(user, id)
-        console.log(operationName, variables, moment(Date.now()).format('hh:mm:ss'))
+        if (ctx.connection) {
+            console.log('--------------connection-----------------')
+            console.log(ctx.connection.operationName, ctx.connection.variables, moment(Date.now()).format('hh:mm:ss'))
+        } else {
+            console.log('--------------request-----------------')
+            console.log(user, id)
+            console.log(operationName, variables, moment(Date.now()).format('hh:mm:ss'))
+        }
 
         return applyLoaders(ctx)
     }, uploads: test

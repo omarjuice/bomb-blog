@@ -23,7 +23,6 @@ const applyLoaders = (context) => {
     } catch (e) {
         limit = null
     }
-    console.log(limit, cursor)
 
     context.Loaders = {
         users: {

@@ -6,6 +6,7 @@ import { hideModal, clearError, renderModal } from '../../apollo/clientWrites';
 import Likers from '../posts/Likers';
 import { GET_MODAL } from '../../apollo/queries';
 import Confirm from './Confirm';
+import Notifications from '../global/Notifications';
 
 
 const dismiss = (confirmation = false) => {
@@ -23,7 +24,8 @@ class Modal extends Component {
                 Login: <Login onComplete={dismiss} />,
                 Register: <Register onComplete={dismiss} />,
                 Likers: <Likers info={info} />,
-                Confirm: <Confirm info={info || {}} />
+                Confirm: <Confirm info={info || {}} />,
+                Notifications: <Notifications />
             }
             return displays[display]
         }

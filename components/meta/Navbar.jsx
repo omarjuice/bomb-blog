@@ -5,6 +5,7 @@ import SearchNav from './SearchNav';
 import { Query } from 'react-apollo';
 import { GET_SEARCH } from '../../apollo/queries';
 import Link from 'next/link';
+import { renderModal } from '../../apollo/clientWrites';
 
 class Navbar extends Component {
     state = {
@@ -42,7 +43,7 @@ class Navbar extends Component {
                             onClick={() => this.setState({ searchNav: !this.state.searchNav, menu: !this.state.searchNav ? false : this.state.menu })}>
                             <span className="icon is-large"><i className="fas fa-search fa-lg"></i></span>
                         </a>
-                        <a className="navbar-item">
+                        <a onClick={() => renderModal({ active: true, display: 'Notifications' })} className="navbar-item">
                             <span className="icon is-large"><i className="fas fa-globe fa-lg"></i></span>
                         </a>
 

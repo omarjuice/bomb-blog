@@ -68,7 +68,7 @@ class PostPage extends Component {
                                                             <Like postId={id} size="3x" scale={1.5} />
                                                         </div>
                                                     </div>
-                                                    <div className="column is-2 is-hidden-tablet"></div>
+                                                    <div className="column is-2-mobile is-1-tablet"></div>
                                                     <div className="post-stats column is-6 has-text-centered">
                                                         <div className="subtitle is-6 article-subtitle has-text-centered">
                                                             <Query query={POST_AUTHOR} variables={{ id: user_id }} ssr={false}>

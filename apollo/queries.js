@@ -1,5 +1,4 @@
 import gql from "graphql-tag";
-import Index from '../pages/index';
 
 export const USER_PROFILE = gql`
     query UserProfile($id: Int){
