@@ -49,7 +49,7 @@ class SearchNav extends Component {
                                     <input className="input" name="input" type="text" placeholder="Search or #tags" onChange={e => this.setState({ input: e.target.value })} value={this.state.input} />
                                 </p>
                                 <p className="control">
-                                    <button type="submit" className="button is-dark font-2">
+                                    <button type="submit" className="button is-info font-2">
                                         <i className="fas fa-search"></i>
                                     </button >
 

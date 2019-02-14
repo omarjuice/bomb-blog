@@ -7,6 +7,7 @@ class GlobalStyles extends Component {
                 html{
                     background-color: whitesmoke
                 }
+               
                 .font-1{
                     font-family: 'Coiny', sans-serif
                 }

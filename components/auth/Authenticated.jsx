@@ -20,7 +20,7 @@ class Authenticated extends Component {
                             </a>
                         </div>
                         <div className="navbar-item has-text-centered">
-                            <a className="button is-light font-1" onClick={() => renderModal({ display: 'Login', message: '', active: true })}>
+                            <a className="button is-info font-1" onClick={() => renderModal({ display: 'Login', message: '', active: true })}>
                                 Log in
                             </a>
                         </div>

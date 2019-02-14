@@ -62,7 +62,7 @@ class Comment extends Component {
             </div>
             {commenter.isMe ? <DeleteComment postId={post_id} commentId={id} /> : ''}
             <style jsx>{`
-                .button.is-gray{
+                .button.is-info{
                     width: 100%;
                     border: none;
                 }

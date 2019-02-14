@@ -76,13 +76,13 @@ class Trending extends Component {
                             </Link>
                             <div className="columns is-multiline is-mobile">
                                 <div className="column is-half-mobile is-full-tablet">
-                                    <Link href={{ pathname: '/posts', query: { id: posts[0].id } }}>
+                                    {posts[0].image ? <Link href={{ pathname: '/posts', query: { id: posts[0].id } }}>
                                         <a >
                                             <figure className="image is-4by3">
                                                 <img src={posts[0].image} alt="image" />
                                             </figure>
                                         </a>
-                                    </Link>
+                                    </Link> : ''}
 
                                 </div>
                                 <div className="column is-half-mobile is-full-tablet">
@@ -111,7 +111,7 @@ class Trending extends Component {
                                             </a>
                                         </Link>
                                         <div className="columns is-mobile is-multiline">
-                                            <div className="column is-half is-hidden-tablet">
+                                            {posts[1].image ? <div className="column is-half is-hidden-tablet">
                                                 <Link href={{ pathname: '/posts', query: { id: posts[1].id } }}>
                                                     <a >
                                                         <figure className="image is-4by3">
@@ -119,7 +119,7 @@ class Trending extends Component {
                                                         </figure>
                                                     </a>
                                                 </Link>
-                                            </div>
+                                            </div> : ''}
                                             <div className="column is-5-desktop is-full-tablet is-half-mobile">
                                                 {this.genTags(posts[1])}
                                             </div>
@@ -132,7 +132,7 @@ class Trending extends Component {
 
                                         </div>
                                     </div>
-                                    <div className="column is-one-quarter is-hidden-mobile">
+                                    {posts[1].image ? <div className="column is-one-quarter is-hidden-mobile">
                                         <Link href={{ pathname: '/posts', query: { id: posts[1].id } }}>
                                             <a >
                                                 <figure className="image is-4by3">
@@ -140,7 +140,7 @@ class Trending extends Component {
                                                 </figure>
                                             </a>
                                         </Link>
-                                    </div>
+                                    </div> : ''}
                                 </div>
                             </article> : ''}
                         </div>
@@ -155,14 +155,14 @@ class Trending extends Component {
                                                 <p className="subtitle is-6">{this.shorten(posts[2].caption, 200)}</p>
                                             </a>
                                         </Link>
-                                        <Link href={{ pathname: '/posts', query: { id: posts[2].id } }}>
+                                        {posts[2].image ? <Link href={{ pathname: '/posts', query: { id: posts[2].id } }}>
                                             <a className="column is-half">
 
                                                 <figure className="image is-4by3">
                                                     <img src={posts[2].image} alt="image" />
                                                 </figure>
                                             </a>
-                                        </Link>
+                                        </Link> : ''}
 
                                         <div className="column is-half">
                                             {this.genTags(posts[2])}
@@ -186,14 +186,14 @@ class Trending extends Component {
                                                 <p className="subtitle is-6">{this.shorten(posts[3].caption, 200)}</p>
                                             </a>
                                         </Link>
-                                        <Link href={{ pathname: '/posts', query: { id: posts[3].id } }}>
+                                        {posts[3].image ? <Link href={{ pathname: '/posts', query: { id: posts[3].id } }}>
                                             <a className="column is-half">
 
                                                 <figure className="image is-4by3">
                                                     <img src={posts[3].image} alt="image" />
                                                 </figure>
                                             </a>
-                                        </Link>
+                                        </Link> : ''}
 
 
 
@@ -279,9 +279,10 @@ class Trending extends Component {
                 .subtitle{
                     margin: 1rem auto
                 }
+ 
                 article.tile{
                     padding: 1rem;
-                    background-color: snow;
+                    background-color: white;
                     border-radius: 1rem;
                     box-shadow: 1px 1px 1px lightgray
                 }
