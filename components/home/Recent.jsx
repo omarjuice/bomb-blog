@@ -24,7 +24,7 @@ class Recent extends Component {
                                 <div className="content">
                                     <p>
 
-                                        <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-2">{title} </strong></a></Link>
+                                        <Link href={{ pathname: '/posts', query: { id } }}><a className="has-text-dark"><strong className="font-2">{title} </strong></a></Link>
                                         <br />
                                         {caption}
                                         <br />

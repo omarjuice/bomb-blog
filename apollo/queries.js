@@ -141,6 +141,17 @@ export const CURRENT_USER = gql`
         }
     }
 `
+export const CURRENT_USER_TAGS = gql`
+    query CurrentUserTags{
+        user{
+            id
+            tags{
+                id
+                tag_name
+            }
+        }
+    }
+`
 export const USERS = gql`
     query Users($limit: Int, $order: Boolean, $orderBy: String, $search: String){
         users(limit: $limit, order: $order, orderBy: $orderBy, search: $search){
