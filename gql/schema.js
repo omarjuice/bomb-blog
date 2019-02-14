@@ -69,6 +69,7 @@ module.exports = gql`
       isMe: Boolean!
       imFollowing: Boolean!
       followingMe: Boolean!
+      followingPosts(cursor: Int = 0, limit: Int=5): Posts!
       relevance: Int
   }
   type Profile{

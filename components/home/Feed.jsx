@@ -7,7 +7,7 @@ import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
 import { renderModal, setSearch } from '../../apollo/clientWrites';
 
-class Recent extends Component {
+class Feed extends Component {
     render() {
         const { data } = this.props
         return (
@@ -34,11 +34,10 @@ class Recent extends Component {
                                             </a>
                                         </Link>
                                         <br />
-                                        {this.props.showTags && tags.slice(0, 8).map((tag, i) => (
+                                        {tags.slice(0, 8).map((tag, i) => (
                                             <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
-                                        ))}
-                                        {
-                                            this.props.showTags && tags.length > 7 ? <span className="tag">...</span> : ''
+                                        ))}{
+                                            tags.length > 7 ? <span className="tag">...</span> : ''
                                         }
                                         <br />
                                         <small>
@@ -99,4 +98,5 @@ class Recent extends Component {
     }
 }
 
-export default Recent;
+export default Feed;
+

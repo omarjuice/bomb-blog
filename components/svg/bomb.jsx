@@ -5,7 +5,7 @@ class BombSVG extends Component {
     render() {
         const fill = this.props.lit ? '#3F3B3C' : 'lightgray'
         const scale = this.props.scale || 1
-        const secondaryColor = this.props.face && this.props.face.happy ? "#d9230f" : '#0fc5d9'
+        const secondaryColor = this.props.face && this.props.face.happy ? "#cc0000" : '#0fc5d9'
         return (<div className="has-text-centered">
             <svg id="bomb-svg" xmlns="http://www.w3.org/2000/svg" width={`${(scale) * 100}%`} height={`${(550 / 600) * 100 * (scale)}%`} viewBox="150 0 600 550"
                 preserveAspectRatio="xMidYMid meet">

@@ -123,10 +123,10 @@ class Trending extends Component {
                                             <div className="column is-5-desktop is-full-tablet is-half-mobile">
                                                 {this.genTags(posts[1])}
                                             </div>
-                                            <div className="column is-3-desktop is-one-third-mobile stats">
+                                            <div className="column is-2-desktop is-one-third-mobile stats">
                                                 {this.genStats(posts[1])}
                                             </div>
-                                            <div className="column is-4-desktop is-two-thirds-mobile">
+                                            <div className="column is-5-desktop is-two-thirds-mobile">
                                                 {this.genMedia(posts[1])}
                                             </div>
 

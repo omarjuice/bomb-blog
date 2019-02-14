@@ -23,6 +23,7 @@ module.exports = {
         }, {})
         return keys.map(key => userPosts[key] || [])
     },
+
     batchPostLikes: async keys => {
         const likes =
             await queryDB(`

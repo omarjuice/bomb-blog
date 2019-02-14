@@ -12,28 +12,19 @@ const applyLoaders = (context) => {
     } catch (e) {
         id = null
     }
-    context.cursors = {
-        users: {
-            followers: null,
-            following: null,
-            likesPosts: null
-        },
-        posts: {
-            byUserId: null,
-            comments: null,
-            likers: null
-        },
-        comments: {
-            replies: null,
-            likers: null
-        }
+    let cursor, limit;
+    try {
+        cursor = context.req.body.variables.input.cursor
+    } catch (e) {
+        cursor = null
     }
-    context.cursors.setCursor = function (root, field, cursor = 0) {
-        this[root][field] = cursor
+    try {
+        limit = context.req.body.variables.input.limit
+    } catch (e) {
+        limit = null
     }
-    context.setLoader = function () {
+    console.log(limit, cursor)
 
-    }
     context.Loaders = {
         users: {
             byId: new DataLoader(keys => users.batchUsers(keys)),
