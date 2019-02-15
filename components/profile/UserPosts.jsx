@@ -54,15 +54,19 @@ class UserPosts extends Component {
                                                             <br />
                                                             {caption}
                                                             <br />
-                                                            <small>
-                                                                <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
-                                                                    <span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-heart"></i>{likes} </span>
-                                                                </a>
-                                                                <a>
-                                                                    <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {comments}</span>
-                                                                </a>
-                                                                <span>{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
-                                                            </small>
+                                                            <nav className="level is-mobile">
+                                                                <div className="level-left">
+                                                                    <a className="level-item  has-text-primary has-text-weight-bold" onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                                        <span className="icon"><i className="fas fa-bomb"></i> </span>
+                                                                        {likes}
+                                                                    </a>
+                                                                    <a className="level-item has-text-weight-bold has-text-info">
+                                                                        <span className="icon "><i className="fas fa-comments"></i> </span>
+                                                                        {comments}
+                                                                    </a>
+                                                                    <span className="level-item">{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
+                                                                </div>
+                                                            </nav>
                                                         </p>
                                                     </div>
                                                 </div>

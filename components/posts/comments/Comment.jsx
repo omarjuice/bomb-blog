@@ -39,7 +39,7 @@ class Comment extends Component {
                                 <>
                                     <br />
                                     {(tags.map((tag, i) => {
-                                        return <a key={tag.id} className={`tag is-rounded is-small font-2 is-medium ${i % 2 === 1 ? 'is-info' : 'is-primary'}`}>{tag.tag_name}</a>
+                                        return <a key={tag.id} className={`tag is-small font-2 ${i % 2 === 1 ? 'is-info' : 'is-primary'}`}>{tag.tag_name}</a>
                                     }))}
                                 </> : ''
                             }

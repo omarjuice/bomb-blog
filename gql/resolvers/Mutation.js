@@ -214,6 +214,7 @@ module.exports = {
         const { affectedRows, insertId } = await queryDB(`INSERT INTO replies (comment_id, user_id, reply_text) VALUES ?`, [[[comment_id, sessionUser, reply_text]]]).catch(e => { throw Errors.database })
         if (affectedRows < 1) throw Errors.authorization.notAuthorized;
         const [newReply] = await queryDB(`SELECT * FROM replies WHERE id = ?`, [insertId])
+        pubsub.publish('NEW_REPLY', { newReply })
         return newReply
     },
     deleteReply: async (_, args, { req, Loaders }) => {
@@ -223,7 +224,7 @@ module.exports = {
         const { affectedRows } = await queryDB(`DELETE FROM replies WHERE id= ? AND user_id= ?`, [reply_id, sessionUser]).catch(e => { throw Errors.database })
         return affectedRows > 0
     },
-    updateReply: async (_, args, { req, Loaders }) => {
+    updateReply: async (_, args, { req }) => {
         const sessionUser = authenticate(req.session);
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         const { reply_id, reply_text } = args;

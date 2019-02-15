@@ -54,7 +54,7 @@ const initializeServer = (app, productionEnv = false) => {
         nextApp.prepare()
             .then(() => {
                 app.use(session({
-                    name: 'glob-session',
+                    name: 'blog-session',
                     secret: process.env.SESSION_SECRET,
                     resave: false,
                     saveUninitialized: true,

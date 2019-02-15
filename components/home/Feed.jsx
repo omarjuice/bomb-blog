@@ -22,7 +22,7 @@ class Feed extends Component {
                         <article key={id} className="media has-text-centered">
                             <div className="media-content">
                                 <div className="content">
-                                    <p>
+                                    <div>
 
                                         <Link href={{ pathname: '/posts', query: { id } }}><a className="has-text-dark"><strong className="font-2">{title} </strong></a></Link>
                                         <br />
@@ -40,16 +40,20 @@ class Feed extends Component {
                                             tags.length > 7 ? <span className="tag">...</span> : ''
                                         }
                                         <br />
-                                        <small>
-                                            <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
-                                                <span className="icon has-text-primary has-text-weight-bold"><i className="fas fa-bomb"></i>{likes} </span>
-                                            </a>
-                                            <a>
-                                                <span className="icon has-text-weight-bold has-text-info"><i className="fas fa-comments"></i> {comments}</span>
-                                            </a>
-                                            <time>{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</time>
-                                        </small>
-                                    </p>
+                                        <nav className="level is-mobile">
+                                            <div className="level-left">
+                                                <a className="level-item  has-text-primary has-text-weight-bold" onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                    <span className="icon"><i className="fas fa-bomb"></i> </span>
+                                                    {likes}
+                                                </a>
+                                                <a className="level-item has-text-weight-bold has-text-info">
+                                                    <span className="icon "><i className="fas fa-comments"></i> </span>
+                                                    {comments}
+                                                </a>
+                                                <span className="level-item">{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
+                                            </div>
+                                        </nav>
+                                    </div>
                                 </div>
                             </div>
                             {/* <div className="media-right columns is-multiline is-mobile is-centered">
@@ -67,13 +71,9 @@ class Feed extends Component {
 
                             <style jsx>{`
 
-                                small a:nth-of-type(1){
-                                    margin-left: ${likesMargin}
-                                }
-                                small a:nth-of-type(2){
-                                    margin-left: ${commentsMargin};
-                                    margin-right: ${timeMargin}
-                                }
+                               .media-content{
+                                   padding: 1rem
+                               }
                                 `}</style>
                         </article>
                     )

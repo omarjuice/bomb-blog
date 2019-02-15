@@ -37,19 +37,12 @@ module.exports = gql`
   type Subscription{
       newPost: Post
       newComment: Comment
-      newFollower: User
+      newFollower: NewFollower
       newLike: NewLike
       newReply: Reply
       newCommentLike: NewCommentLike
   }
-  type NewCommentLike{
-      comment: Comment
-      user: User
-  }
-  type NewLike{
-      post: Post
-      user: User
-  }
+ 
   type Users{
       cursor: Int
       results: [User]!
@@ -166,6 +159,20 @@ module.exports = gql`
       imFollowing: Boolean!
       isMe: Boolean!
       profile: Profile!
+  }
+  type NewCommentLike{
+      comment: Comment
+      user: User
+      liked_at: String 
+  }
+  type NewLike{
+      post: Post
+      user: User
+      liked_at: String
+  }
+  type NewFollower{
+      user: User
+      followed_at: String
   }
   input ProfileDetails {
       about: String
