@@ -9,7 +9,7 @@ const Profile = require('./Profile')
 const Tag = require('./Tag')
 const Follower = require('./Follower')
 const Liker = require('./Liker')
-
+const Notifications = require('./Notifications')
 
 module.exports = {
     Query,
@@ -22,5 +22,6 @@ module.exports = {
     Profile,
     Tag,
     Follower,
-    Liker
+    Liker,
+    Notifications
 }

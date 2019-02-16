@@ -497,6 +497,147 @@ module.exports = {
        }
       }
     }`
+  },
+  notifications: {
+    all: `query{
+      notifications{
+        lastVisited
+        newPosts{
+          id
+          title
+        }
+        newComments{
+          id
+          comment_text
+          post_id
+        }
+        newLikes{
+          user{
+            id
+            username
+          }
+          post{
+            id
+            title
+          }
+          liked_at
+        }
+        newCommentLikes{
+          comment{
+            id
+            comment_text
+          }
+          user{
+            username
+          }
+          liked_at
+        }
+        newReplies{
+          id
+          reply_text
+        }
+        newFollowers{
+          user{
+            id
+            username
+          }
+          followed_at
+        }
+      }
+    } 
+    `,
+    lastVisited: `query{
+      notifications{
+        lastVisited
+      }
+    }
+    `,
+    newPosts: `query{
+      notifications{
+        lastVisited
+        newPosts{
+          id
+          user_id
+          title
+          caption
+          post_content
+          created_at
+        }
+      }
+    }  
+    `,
+    newComments: `query{
+      notifications{
+        lastVisited
+        newComments{
+          id
+          comment_text
+          user_id
+          post_id
+          created_at
+        }
+      }
+    }
+    `,
+    newLikes: `query{
+      notifications{
+        lastVisited
+        newLikes{
+          user{
+            id
+            username
+          }
+          post{
+            id
+            title
+          }
+          liked_at
+        }
+      }
+    }
+    `,
+    newCommentLikes: `query{
+      notifications{
+        lastVisited
+        newCommentLikes{
+          comment{
+            id
+            comment_text
+          }
+          user{
+            id
+            username
+          }
+          liked_at
+        }
+      }
+    }
+    `,
+    newReplies: `query{
+      notifications{
+        lastVisited
+        newReplies{
+          id
+          reply_text
+          comment_id
+        }
+      }
+    }
+    `,
+    newFollowers: `query{
+      notifications{
+        lastVisited
+        newFollowers{
+          user{
+            id
+            username
+          }
+          followed_at
+        }
+      }
+    }
+    
+    `
   }
 
 }

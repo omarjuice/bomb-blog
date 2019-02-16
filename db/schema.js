@@ -4,7 +4,8 @@ const userSchema = {
         email VARCHAR(255) UNIQUE NOT NULL,
         username VARCHAR(25) UNIQUE NOT NULL,
         pswd CHAR(60) NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW()
+        created_at TIMESTAMP DEFAULT NOW(),
+        last_login TIMESTAMP
     )`,
     drop: `DROP TABLE IF EXISTS users`
 

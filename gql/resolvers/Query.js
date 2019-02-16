@@ -131,5 +131,15 @@ module.exports = {
         const query = `SELECT * FROM comments WHERE comment_text LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
         const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
         return { results, cursor: results.length < limit ? null : cursor + results.length }
+    },
+    notifications: (_, args, { req }) => {
+
+        if (req.session.user) {
+            if (req.session.user.lastVisited) {
+                return { lastVisited: req.session.user.lastVisited }
+            }
+            return { lastVisited: 1 }
+        }
+        return { lastVisited: null }
     }
 }

@@ -5,6 +5,7 @@ import { USER_TAGS } from '../../apollo/queries';
 import { UPDATE_PROFILE } from '../../apollo/mutations';
 import ErrorIcon from '../meta/ErrorIcon';
 import { getMatches, updateTags, tagRegex } from '../../utils';
+import { setSearch } from '../../apollo/clientWrites';
 
 class UserTags extends Component {
     state = {
@@ -43,7 +44,7 @@ class UserTags extends Component {
                         <div>
                             {tags.length > 0 ? <div className="tags">
                                 {tags.map((tag, i) => {
-                                    return <span key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : ''}`}>{tag.tag_name}</span>
+                                    return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : ''}`}>{tag.tag_name}</a>
                                 })}
                                 {isMe ? editButton : ''}
                             </div> : isMe ? <><p className="content">You have no tags. What are you interested in?</p>{editButton}</> : <p className="content">{username} has no tags.</p>}

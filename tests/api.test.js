@@ -251,30 +251,6 @@ module.exports = function () {
         })
     })
     describe('GQL: GET posts', () => {
-        // it('Should get all posts and the author', done => {
-        //     queryDB(`INSERT IGNORE INTO posts (user_id, title, caption, created_at, post_content) VALUES ?`, [seedDB.manyPosts(100)])
-        //         .then(({ affectedRows }) => {
-        //             const limit = 50;
-        //             const cursor = 20
-        //             const order = true;
-        //             const orderBy = 'created_at';
-        //             reqGQL({ query: queries.posts.all, variables: { input: { limit, order, orderBy, cursor } } })
-        //                 .expect(({ body }) => {
-        //                     console.log(body.data.posts)
-        //                     body.data.posts.results.forEach(({ id, title, caption, user_id, author, numLikes }) => {
-        //                         expect(typeof id).toBe('number')
-        //                         expect(typeof user_id).toBe('number')
-        //                         expect(typeof title).toBe('string')
-        //                         expect(typeof caption).toBe('string')
-        //                         expect(typeof author.username).toBe('string')
-        //                         expect(typeof numLikes).toBe('number')
-        //                     })
-        //                     expect(body.data.posts.results.length).toBe(50)
-        //                     expect(body.data.posts.cursor).toBe(70)
-
-        //                 }).end(done)
-        //         }).catch(e => done(e))
-        // })
         it('Should search all posts', done => {
             reqGQL({ query: queries.posts.all, variables: { input: { search: "latin" } } })
                 .expect(({ body }) => {
@@ -1283,6 +1259,143 @@ module.exports = function () {
                     expect(body.data.comments.cursor).toBe(2)
                     expect(body.data.comments.results.length).toBe(2)
                 }).end(done)
+        })
+    })
+    describe('GQL: NOTIFICATIONS,', () => {
+        it('Should get the last visit time of a user', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.notifications.lastVisited })
+                    .expect(({ body }) => {
+                        expect(typeof body.data.notifications.lastVisited).toBe('number')
+                    }).end(finished)
+            )
+        })
+        it('Should return null authenticated time if user is not authenticated', done => {
+            reqGQL({ query: queries.notifications.all })
+                .expect(({ body: { data: { notifications: { lastVisited, newPosts, newComments, newLikes, newCommentLikes, newReplies, newFollowers } } } }) => {
+                    expect(lastVisited).toBe(null)
+                    expect(newPosts).toEqual([])
+                    expect(newComments).toEqual([])
+                    expect(newLikes).toEqual([])
+                    expect(newCommentLikes).toEqual([])
+                    expect(newReplies).toEqual([])
+                    expect(newFollowers).toEqual([])
+                }).end(done)
+        })
+        it('Should get the latest posts from the users following', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.notifications.newPosts })
+                    .expect(({ body }) => {
+                        expect(typeof body.data.notifications.lastVisited).toBe('number')
+                        expect(body.data.notifications.newPosts.length).toBeGreaterThan(0)
+                        for (let post of body.data.notifications.newPosts) {
+                            expect(post).toMatchObject({
+                                id: expect.any(Number),
+                                title: expect.any(String),
+                                caption: expect.any(String),
+                                user_id: expect.any(Number),
+                                post_content: expect.any(String),
+                                created_at: expect.any(String)
+                            })
+                        }
+                    }).end(finished)
+            )
+        })
+        it('Should get the latest comments on the users posts', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.notifications.newComments })
+                    .expect(({ body }) => {
+                        expect(typeof body.data.notifications.lastVisited).toBe('number')
+                        expect(body.data.notifications.newComments.length).toBeGreaterThan(0)
+                        for (let comment of body.data.notifications.newComments) {
+                            expect(comment).toMatchObject({
+                                id: expect.any(Number),
+                                comment_text: expect.any(String),
+                                user_id: expect.any(Number),
+                                post_id: expect.any(Number),
+                                created_at: expect.any(String)
+                            })
+                        }
+                    }).end(finished)
+            )
+        })
+        it('Should get the latest likes on the users posts', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.notifications.newLikes })
+                    .expect(({ body }) => {
+                        expect(typeof body.data.notifications.lastVisited).toBe('number')
+                        expect(body.data.notifications.newLikes.length).toBeGreaterThan(0)
+                        for (let like of body.data.notifications.newLikes) {
+                            expect(like).toMatchObject({
+                                user: {
+                                    id: expect.any(Number),
+                                    username: expect.any(String)
+                                },
+                                post: {
+                                    id: expect.any(Number),
+                                    title: expect.any(String)
+                                },
+                                liked_at: expect.any(String)
+                            })
+                        }
+                    }).end(finished)
+            )
+        })
+        it('Should get the latest likes on the users comments', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.notifications.newCommentLikes })
+                    .expect(({ body }) => {
+                        expect(typeof body.data.notifications.lastVisited).toBe('number')
+                        expect(body.data.notifications.newCommentLikes.length).toBeGreaterThan(0)
+                        for (let commentLike of body.data.notifications.newCommentLikes) {
+                            expect(commentLike).toMatchObject({
+                                user: {
+                                    id: expect.any(Number),
+                                    username: expect.any(String)
+                                },
+                                comment: {
+                                    id: expect.any(Number),
+                                    comment_text: expect.any(String)
+                                },
+                                liked_at: expect.any(String)
+                            })
+                        }
+                    }).end(finished)
+            )
+        })
+        it('Should get the latest replies on the users comments', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.notifications.newReplies })
+                    .expect(({ body }) => {
+                        expect(typeof body.data.notifications.lastVisited).toBe('number')
+                        expect(body.data.notifications.newReplies.length).toBeGreaterThan(0)
+                        for (let reply of body.data.notifications.newReplies) {
+                            expect(reply).toMatchObject({
+                                id: expect.any(Number),
+                                reply_text: expect.any(String),
+                                comment_id: expect.any(Number)
+                            })
+                        }
+                    }).end(finished)
+            )
+        })
+        it('Should get the latest followers', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.notifications.newFollowers })
+                    .expect(({ body }) => {
+                        expect(typeof body.data.notifications.lastVisited).toBe('number')
+                        expect(body.data.notifications.newFollowers.length).toBeGreaterThan(0)
+                        for (let follower of body.data.notifications.newFollowers) {
+                            expect(follower).toMatchObject({
+                                user: {
+                                    id: expect.any(Number),
+                                    username: expect.any(String)
+                                },
+                                followed_at: expect.any(String)
+                            })
+                        }
+                    }).end(finished)
+            )
         })
     })
 }

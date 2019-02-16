@@ -11,6 +11,7 @@ import Follow from '../global/Follow';
 import Like from '../global/Like';
 import marked from 'marked'
 import DeletePost from './DeletePost';
+import { setSearch } from '../../apollo/clientWrites';
 marked.setOptions({
     breaks: true,
     sanitize: true
@@ -108,7 +109,7 @@ class PostPage extends Component {
                                                     <div className="column is-8-desktop is-8-tablet is-full-mobile">
                                                         {<div className="tags">
                                                             {tags.map((tag, i) => {
-                                                                return <a key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
+                                                                return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
                                                             })}
                                                         </div>}
                                                     </div>

@@ -304,48 +304,6 @@ class Notifications extends Component {
 
                     }}
                 </Query>
-                {/* <Subscription subscription={NEW_POST}>
-                    {({ data, loading, error }) => {
-                        if (error) console.log(error);
-                        if (loading || error) return <div></div>
-                        return <h4>{data.newPost.title}</h4>
-                    }}
-                </Subscription>
-                <Subscription subscription={NEW_COMMENT}>
-                    {({ data, loading, error }) => {
-                        if (error) console.log(error);
-                        if (loading || error) return <div></div>
-                        return <h4>{data.newComment.comment_text}</h4>
-                    }}
-                </Subscription>
-                <Subscription subscription={NEW_LIKE}>
-                    {({ data, loading, error }) => {
-                        if (error) console.log(error);
-                        if (loading || error) return <div></div>
-                        return <h4>{data.newLike.user.username}, {data.newLike.post.title}</h4>
-                    }}
-                </Subscription>
-                <Subscription subscription={NEW_COMMENT_LIKE}>
-                    {({ data, loading, error }) => {
-                        if (error) console.log(error);
-                        if (loading || error) return <div></div>
-                        return <h4>{data.newCommentLike.comment.comment_text}, {data.newCommentLike.user.username}</h4>
-                    }}
-                </Subscription>
-                <Subscription subscription={NEW_REPLY}>
-                    {({ data, loading, error }) => {
-                        if (error) console.log(error);
-                        if (loading || error) return <div></div>
-                        return <h4>{data.newReply.replier.username}, {data.newReply.reply_text}</h4>
-                    }}
-                </Subscription>
-                <Subscription subscription={NEW_FOLLOWER}>
-                    {({ data, loading, error }) => {
-                        if (error) console.log(error);
-                        if (loading || error) return <div></div>
-                        return <h4>{data.newFollower.username}</h4>
-                    }}
-                </Subscription> */}
 
             </div>
         );

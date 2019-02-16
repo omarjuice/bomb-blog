@@ -18,27 +18,33 @@ const seedDB = {
         "a@z.com",
         "alpha",
         '1',
+        new Date(1000)
     ], [
         "b@y.com",
         "beta",
         '2',
+        new Date(1000)
     ], [
         "c@x.com",
         "gamma",
-        '3'
+        '3',
+        new Date(1000)
     ]],
     usersHashed: [[
         "a@z.com",
         "alpha",
         '1',
+        new Date(1000)
     ], [
         "b@y.com",
         "beta",
         '2',
+        new Date(1000)
     ], [
         "c@x.com",
         "gamma",
-        '3'
+        '3',
+        new Date(1000)
     ]],
     profiles: [[
         1,
@@ -128,14 +134,14 @@ const seedDB = {
     },
     manyUsers: function (num) {
         // this.numUsers = num
-        return Array(num).fill("x").map(() => [faker.internet.email(), faker.internet.userName(), faker.internet.password(), faker.date.past()])
+        return Array(num).fill("x").map((_, i) => [faker.internet.email(), faker.internet.userName(), String(i + 4), faker.date.past()])
     },
     manyProfiles: function () {
         return Array(this.numUsers - 3).fill("x").map((_, i) => [i + 4, faker.lorem.sentence(Math.floor(Math.random() * 20)), Math.random() < .75 ? faker.internet.avatar() : null])
     },
     manyFollows: function (num) {
         let users = this.numUsers;
-        return Array(num).fill("x").map(() => [Math.floor(Math.random() * users) + 1, Math.floor(Math.random() * users) + 1])
+        return Array(num).fill("x").map(() => [Math.floor(Math.random() * users) + 1, Math.floor(Math.random() * users) + 1, faker.date.past()])
     },
     manyPosts: function (num) {
         let users = this.numUsers
@@ -155,10 +161,10 @@ const seedDB = {
     manyReplies: function (num) {
         let users = this.numUsers
         let comments = this.numComments
-        return Array(num).fill("x").map(() => [Math.floor(Math.random() * users) + 1, Math.floor(Math.random() * comments) + 1, faker.lorem.words(Math.floor(Math.random() * 20))])
+        return Array(num).fill("x").map(() => [Math.floor(Math.random() * users) + 1, Math.floor(Math.random() * comments) + 1, faker.lorem.words(Math.floor(Math.random() * 20)), faker.date.past()])
     },
     manyTags: function (num) {
-        return Array(num).fill("x").map(() => [faker.random.word().toLowerCase().replace(/\s+/g, '')])
+        return Array(num).fill("x").map(() => [faker.random.word().toLowerCase().replace(/\s+/g, ''), faker.date.past()])
     },
     manyUserTags: function (num) {
         let tags = this.numTags;
@@ -178,12 +184,12 @@ const seedDB = {
     manyLikes: function (num) {
         let users = this.numUsers;
         let posts = this.numPosts;
-        return Array(num).fill("x").map(() => [Math.floor(Math.random() * users) + 1, Math.floor(Math.random() * posts) + 1])
+        return Array(num).fill("x").map(() => [Math.floor(Math.random() * users) + 1, Math.floor(Math.random() * posts) + 1, faker.date.past()])
     },
     manyCommentLikes: function (num) {
         let users = this.numUsers
         let comments = this.numComments;
-        return Array(num).fill("x").map(() => [Math.floor(Math.random() * users) + 1, Math.floor(Math.random() * comments) + 1])
+        return Array(num).fill("x").map(() => [Math.floor(Math.random() * users) + 1, Math.floor(Math.random() * comments) + 1, faker.date.past()])
     }
 }
 
@@ -234,7 +240,7 @@ const resetTables = (done) => {
         queryDB(commentTagSchema.create),
         queryDB(userTagSchema.create)
     ]))
-        .then(() => queryDB(`INSERT INTO users (email, username, pswd) VALUES ?`, [seedDB.usersHashed])
+        .then(() => queryDB(`INSERT INTO users (email, username, pswd, created_at) VALUES ?`, [seedDB.usersHashed])
             .then(() => queryDB(`INSERT INTO profiles (user_id, about, photo_path) VALUES ?`, [seedDB.profiles]))
             .then(() => queryDB(`INSERT INTO follows (followee_id, follower_id) VALUES ?`, [seedDB.follows]))
             .then(() => queryDB(`INSERT INTO tags (tag_name) VALUES ?`, [seedDB.tags]))

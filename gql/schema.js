@@ -12,6 +12,7 @@ module.exports = gql`
     tags(input: Search! ): Tags!
     comment(id: Int!): Comment
     comments(input: Search!): Comments!
+    notifications: Notifications
   }
   type Mutation {
       login (username: String, password: String): Boolean!
@@ -41,6 +42,15 @@ module.exports = gql`
       newLike: NewLike
       newReply: Reply
       newCommentLike: NewCommentLike
+  }
+  type Notifications{
+      lastVisited: Int
+      newPosts: [Post]!
+      newComments: [Comment]!
+      newLikes: [NewLike]!
+      newCommentLikes: [NewCommentLike]!
+      newReplies: [Reply]!
+      newFollowers: [NewFollower]!
   }
  
   type Users{

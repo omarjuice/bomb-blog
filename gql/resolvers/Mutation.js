@@ -4,6 +4,7 @@ const Errors = require('../errors')
 const validator = require('email-validator')
 const { pubsub } = require('./utils')
 const { authenticate } = require('./utils')
+const moment = require('moment')
 module.exports = {
     login: async (_, { username, password }, { req }) => {
         const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username]).catch(e => { throw Errors.database })
@@ -11,7 +12,12 @@ module.exports = {
             const { username, pswd, id, email, created_at } = user
             if (await compare(password, pswd)) {
                 req.session.user = { id, username, email, created_at }
+                req.session.user.lastLoginTime = moment(user.last_login || user.created_at).unix()
+                req.session.user.lastVisited = req.session.user.lastLoginTime
+                req.session.user.loginTime = Date.now()
+                req.session.user.visited = req.session.user.loginTime
                 req.session.save()
+                queryDB(`UPDATE users SET last_login=NOW() WHERE id=?`, [user.id])
                 return true
             }
             throw Errors.login.invalid
@@ -27,6 +33,10 @@ module.exports = {
             const [newUser] = await queryDB(`SELECT username, email, id, created_at FROM users WHERE id= ?`, [insertId]).catch(e => { throw Errors.database })
             await queryDB(`INSERT INTO profiles (user_id) VALUES ?`, [[[newUser.id]]]).catch(e => { throw Errors.database })
             req.session.user = { ...newUser }
+            req.session.user.lastLoginTime = 1;
+            req.session.user.lastVisited = 1;
+            req.session.user.loginTime = Date.now()
+            req.session.user.visited = req.session.user.loginTime
             return true
         }
         throw Errors.register.alreadyExists

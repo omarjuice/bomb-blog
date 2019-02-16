@@ -16,7 +16,7 @@ let port = process.env.PORT || 3000
 const nextApp = next({ dev, dir: __dirname })
 const apollo = new ApolloServer({
     typeDefs, resolvers, context: ctx => {
-        let user, id, operationName, variables;
+        let user, id, operationName, variables, lastVisited, visited;
         try {
             user = ctx.req.session.user.id
         } catch (e) {
@@ -37,11 +37,22 @@ const apollo = new ApolloServer({
         } catch (e) {
             variables = null
         }
+        try {
+            lastVisited = ctx.req.session.user.lastVisited
+        } catch (e) {
+            lastVisited = null
+        }
+        try {
+            visited = ctx.req.session.user.visited
+        } catch (e) {
+            visited = null
+        }
         if (ctx.connection) {
             console.log('--------------connection-----------------')
             console.log(ctx.connection.operationName, ctx.connection.variables, moment(Date.now()).format('hh:mm:ss'))
         } else {
             console.log('--------------request-----------------')
+            console.log('VISITED: ', visited && moment(visited).format('hh:mm:ss'), ' LAST VISITED: ', lastVisited && moment(lastVisited).format('hh:mm:ss'))
             console.log(user, id)
             console.log(operationName, variables, moment(Date.now()).format('hh:mm:ss'))
         }
@@ -63,9 +74,22 @@ const initializeServer = (app, productionEnv = false) => {
                         maxAge: !test ? 1000 * 60 * 60 * 24 * 30 : 60000
                     }
                 }))
+                app.use((req, res, next) => {
+                    if (req.session.user) {
+                        if (req.session.user.visited) {
+                            if (Date.now() - req.session.user.visited > 86400) {
+                                req.session.user.lastVisited = req.session.user.visited
+                            }
+                        }
+                        req.session.user.visited = Date.now()
+                    }
+
+                    next()
+                })
                 if (productionEnv) { app.set('trust proxy', 1) }
                 apollo.applyMiddleware({ app })
                 app.get('/', (req, res) => {
+
                     nextApp.render(req, res, '/')
                 })
                 app.get('/profile', (req, res) => {
