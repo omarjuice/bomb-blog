@@ -183,6 +183,7 @@ module.exports = gql`
   type NewFollower{
       user: User
       followed_at: String
+      followed_id: Int
   }
   input ProfileDetails {
       about: String

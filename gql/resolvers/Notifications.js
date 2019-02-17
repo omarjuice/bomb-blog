@@ -27,10 +27,10 @@ module.exports = {
         FROM comments
         INNER JOIN posts
             on comments.post_id = posts.id
-        WHERE posts.user_id = ? AND UNIX_TIMESTAMP(comments.created_at) > ?
+        WHERE posts.user_id = ? AND UNIX_TIMESTAMP(comments.created_at) > ? AND comments.user_id != ?
         ORDER BY comments.created_at DESC 
         `
-        return await queryDB(query, [sessionUser, lastVisited], null, true)
+        return await queryDB(query, [sessionUser, lastVisited, sessionUser], null, true)
     },
     newLikes: async ({ lastVisited }, _, { req, Loaders }) => {
         if (!lastVisited) return []
@@ -41,10 +41,10 @@ module.exports = {
         FROM likes
         INNER JOIN posts
             ON posts.id = likes.post_id
-        WHERE posts.user_id = ? AND UNIX_TIMESTAMP(likes.created_at) > ?
+        WHERE posts.user_id = ? AND UNIX_TIMESTAMP(likes.created_at) > ? AND likes.user_id != ?
         ORDER BY liked_at DESC
         `
-        const likes = await queryDB(query, [sessionUser, lastVisited], null, true)
+        const likes = await queryDB(query, [sessionUser, lastVisited, sessionUser], null, true)
 
         return await likes.map(async ({ liked_at, id, user_id, title, caption, created_at, last_updated, post_content, image, liker_id }) => {
             return {
@@ -65,10 +65,10 @@ module.exports = {
         FROM comment_likes
         INNER JOIN comments
             ON comments.id=comment_likes.comment_id
-        WHERE comments.user_id=? AND UNIX_TIMESTAMP(comment_likes.created_at) > ?
+        WHERE comments.user_id=? AND UNIX_TIMESTAMP(comment_likes.created_at) > ? AND comment_likes.user_id != ?
         ORDER BY comment_likes.created_at DESC
         `
-        const likes = await queryDB(query, [sessionUser, lastVisited], null, true)
+        const likes = await queryDB(query, [sessionUser, lastVisited, sessionUser], null, true)
         return await likes.map(async ({ liked_at, id, user_id, comment_text, created_at, post_id, last_updated, liker_id }) => {
             return {
                 comment: {
@@ -88,10 +88,10 @@ module.exports = {
         FROM replies
         INNER JOIN comments 
             ON replies.comment_id = comments.id
-        WHERE comments.user_id = ? AND UNIX_TIMESTAMP(replies.created_at) > ?
+        WHERE comments.user_id = ? AND UNIX_TIMESTAMP(replies.created_at) > ? AND replies.user_id != ?
         ORDER BY replies.created_at DESC
         `
-        return await queryDB(query, [sessionUser, lastVisited], null, true)
+        return await queryDB(query, [sessionUser, lastVisited, sessionUser], null, true)
     },
     newFollowers: async ({ lastVisited }, _, { req }) => {
         if (!lastVisited) return []

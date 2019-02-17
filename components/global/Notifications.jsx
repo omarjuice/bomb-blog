@@ -11,6 +11,7 @@ import Comment from '../posts/comments/Comment';
 import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
 import LinkWrap from './LinkWrap';
+import { renderModal } from '../../apollo/clientWrites';
 class Notifications extends Component {
 
     genNewComment = ({ id, commenter, post, comment_text, tags, created_at }) => {

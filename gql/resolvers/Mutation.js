@@ -253,7 +253,7 @@ module.exports = {
         }
         const { affectedRows } = await queryDB(`INSERT IGNORE INTO follows (follower_id, followee_id) VALUES ?`, [[[sessionUser, user_id]]]).catch(e => { throw Errors.database })
         if (affectedRows > 0) {
-            pubsub.publish('NEW_FOLLOWER', { user_id: sessionUser })
+            pubsub.publish('NEW_FOLLOWER', { user_id: sessionUser, followed_id: user_id })
             return true
         }
         return false
