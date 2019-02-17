@@ -50,7 +50,8 @@ const defaults = {
         options: '',
         active: false,
         addToInput: ''
-    }
+    },
+    numNotifications: 0
 }
 const cache = new InMemoryCache()
 

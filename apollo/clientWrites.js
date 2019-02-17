@@ -69,6 +69,13 @@ export const clearAuth = () => {
         }
     })
 }
+export const setNumNotifications = (numNotifications) => {
+    client.writeData({
+        data: {
+            numNotifications
+        }
+    })
+}
 export const setSearch = ({ input, options, active = true, addToInput = '' }) => {
     const data = client.readQuery({ query: GET_SEARCH })
     if (input !== undefined) data.search.input = input

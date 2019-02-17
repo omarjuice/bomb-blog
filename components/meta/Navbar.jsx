@@ -3,9 +3,10 @@ import BombSVG from '../svg/bomb';
 import Authenticated from '../auth/Authenticated';
 import SearchNav from './SearchNav';
 import { Query } from 'react-apollo';
-import { GET_SEARCH, NOTIFICATIONS } from '../../apollo/queries';
+import { GET_SEARCH, NOTIFICATIONS, GET_NUM_NOTIFICATIONS } from '../../apollo/queries';
 import Link from 'next/link';
 import { renderModal } from '../../apollo/clientWrites';
+import { shortenNumber } from '../../utils';
 
 class Navbar extends Component {
     state = {
@@ -46,9 +47,14 @@ class Navbar extends Component {
                             onClick={() => this.setState({ searchNav: !this.state.searchNav, menu: !this.state.searchNav ? false : this.state.menu })}>
                             <span className="icon is-large"><i className="fas fa-search fa-lg"></i></span>
                         </a>
-                        <a onClick={() => renderModal({ active: true, display: 'Notifications' })} className="navbar-item">
-                            <span className="icon is-large"><i className="fas fa-globe fa-lg"></i></span>
-                        </a>
+                        <Query query={GET_NUM_NOTIFICATIONS}>
+                            {({ data }) => {
+                                return <a onClick={() => renderModal({ active: true, display: 'Notifications' })} className="navbar-item has-text-centered">
+                                    <span className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}><i className="fas fa-globe fa-lg"></i></span>
+                                    <span className={`has-text-weight-bold`}>{data && data.numNotifications ? shortenNumber(data.numNotifications) : '0'}</span>
+                                </a>
+                            }}
+                        </Query>
 
                         <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu, searchNav: !this.state.menu ? false : this.state.searchNav })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                             <span aria-hidden="true"></span>
@@ -77,6 +83,11 @@ class Navbar extends Component {
                     .navbar-item{
                         margin-top: -1rem;
                         margin-bottom: -1rem
+                    }
+                    @media only screen and (max-width: 400px){
+                        .navbar-item{
+                            margin-left: -0.5rem;
+                        }
                     }
                     `}</style>
             </div>

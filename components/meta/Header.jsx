@@ -20,7 +20,7 @@ class Header extends Component {
 
                 <GlobalStyles />
                 <Navbar client={this.props.client} />
-                <Modal />
+                <Modal client={this.props.client} />
                 <ErrorMessage globalScope={true} />
                 <style jsx>{`
                     .navbar-menu{

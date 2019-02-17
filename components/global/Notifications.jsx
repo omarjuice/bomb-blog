@@ -12,44 +12,7 @@ import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
 import LinkWrap from './LinkWrap';
 class Notifications extends Component {
-    state = {
-        listChildren: []
-    }
-    componentDidMount() {
-        const notifs = this
-        this.commentListener = client.subscribe({ query: NEW_COMMENT }).subscribe({
-            next({ data }) {
-                notifs.setState({ listChildren: [notifs.genNewComment(data.newComment), ...notifs.state.listChildren] })
-            }
-        })
-        this.postListener = client.subscribe({ query: NEW_POST }).subscribe({
-            next({ data }) {
-                notifs.setState({ listChildren: [notifs.genNewPost(data.newPost), ...notifs.state.listChildren] })
-            }
-        })
-        this.likeListener = client.subscribe({ query: NEW_LIKE }).subscribe({
-            next({ data }) {
-                notifs.setState({ listChildren: [notifs.genNewLike(data.newLike), ...notifs.state.listChildren] })
-            },
 
-        })
-        this.replyListener = client.subscribe({ query: NEW_REPLY }).subscribe({
-            next({ data }) {
-                notifs.setState({ listChildren: [notifs.genNewReply(data.newReply), ...notifs.state.listChildren] })
-            }
-        })
-        this.commentLikeListener = client.subscribe({ query: NEW_COMMENT_LIKE }).subscribe({
-            next({ data }) {
-                notifs.setState({ listChildren: [notifs.genNewCommentLike(data.newCommentLike), ...notifs.state.listChildren] })
-            }
-        })
-        this.followListener = client.subscribe({ query: NEW_FOLLOWER }).subscribe({
-            next({ data }) {
-                notifs.setState({ listChildren: [notifs.genNewFollow(data.newFollower), ...notifs.state.listChildren] })
-            }
-        })
-        return null
-    }
     genNewComment = ({ id, commenter, post, comment_text, tags, created_at }) => {
         return (
             <article key={`comment-${id}`} className="media">
@@ -316,14 +279,7 @@ class Notifications extends Component {
             </article>
         )
     }
-    componentWillUnmount() {
-        this.postListener.unsubscribe()
-        this.commentListener.unsubscribe()
-        this.commentLikeListener.unsubscribe()
-        this.likeListener.unsubscribe()
-        this.followListener.unsubscribe()
-        this.replyListener.unsubscribe()
-    }
+
     render() {
         let typeMap = {}
         typeMap.Post = this.genNewPost;

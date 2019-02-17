@@ -728,3 +728,8 @@ export const GET_SEARCH = gql`
         }
     }
 `
+export const GET_NUM_NOTIFICATIONS = gql`
+    query GetNumNotifications{
+        numNotifications @client
+    }
+`
