@@ -103,7 +103,8 @@ class Home extends Component {
                                                         </div>
                                                     )
                                                 }
-                                                return (
+
+                                                if (data.user) return (
                                                     <div onScroll={this.handleScroll('feed', client, { cursor: data.user.followingPosts.cursor, limit: 5 }, FOLLOWEE_POSTS)} className="column is-two-thirds recent">
                                                         <article className="media">
                                                             <div className="media-content font-2 has-text-centered">

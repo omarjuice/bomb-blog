@@ -5,6 +5,7 @@ import Loading from '../meta/Loading';
 import { AUTHENTICATED } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 class Authenticated extends Component {
+
     render() {
         return (
             <Query query={AUTHENTICATED} ssr={false} >

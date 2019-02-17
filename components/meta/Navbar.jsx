@@ -3,7 +3,7 @@ import BombSVG from '../svg/bomb';
 import Authenticated from '../auth/Authenticated';
 import SearchNav from './SearchNav';
 import { Query } from 'react-apollo';
-import { GET_SEARCH } from '../../apollo/queries';
+import { GET_SEARCH, NOTIFICATIONS } from '../../apollo/queries';
 import Link from 'next/link';
 import { renderModal } from '../../apollo/clientWrites';
 
@@ -14,7 +14,8 @@ class Navbar extends Component {
     }
     componentDidMount() {
         const nav = this
-        this.watchSearch = this.props.client.watchQuery({ query: GET_SEARCH })
+        const { client } = this.props
+        this.watchSearch = client.watchQuery({ query: GET_SEARCH })
             .subscribe({
                 next({ data }) {
                     nav.setState({
@@ -22,6 +23,8 @@ class Navbar extends Component {
                     })
                 }
             })
+
+
     }
     render() {
         return (

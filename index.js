@@ -47,6 +47,7 @@ const apollo = new ApolloServer({
         } catch (e) {
             visited = null
         }
+
         if (ctx.connection) {
             console.log('--------------connection-----------------')
             console.log(ctx.connection.operationName, ctx.connection.variables, moment(Date.now()).format('hh:mm:ss'))
@@ -77,13 +78,12 @@ const initializeServer = (app, productionEnv = false) => {
                 app.use((req, res, next) => {
                     if (req.session.user) {
                         if (req.session.user.visited) {
-                            if (Date.now() - req.session.user.visited > 86400) {
+                            if (Date.now() / 1000 - req.session.user.visited > 86400) {
                                 req.session.user.lastVisited = req.session.user.visited
                             }
                         }
-                        req.session.user.visited = Date.now()
+                        req.session.user.visited = Math.floor(Date.now() / 1000)
                     }
-
                     next()
                 })
                 if (productionEnv) { app.set('trust proxy', 1) }

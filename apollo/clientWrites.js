@@ -51,6 +51,17 @@ export const createError = ({ code = '', exists = true, global = true, message =
         }
     })
 }
+export const setNotifications = (notifications = '') => {
+    client.writeData({
+        data: {
+            notificationList: {
+                __typename: 'NotificationList',
+                notifications
+            }
+        }
+    })
+
+}
 export const clearAuth = () => {
     client.writeData({
         data: {

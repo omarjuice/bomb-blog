@@ -49,7 +49,7 @@ class UserPosts extends Component {
                                                 </figure>
                                                 <div className="media-content">
                                                     <div className="content">
-                                                        <p>
+                                                        <div>
                                                             <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-2">{title} </strong></a></Link>
                                                             <br />
                                                             {caption}
@@ -67,7 +67,7 @@ class UserPosts extends Component {
                                                                     <span className="level-item">{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
                                                                 </div>
                                                             </nav>
-                                                        </p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div className="media-right columns is-multiline is-mobile is-centered">

@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+import Link from 'next/link'
 import { Subscription, Query } from 'react-apollo'
 import moment from 'moment'
 import client from '../../apollo/client';
 import { NEW_POST, NEW_COMMENT, NEW_LIKE, NEW_COMMENT_LIKE, NEW_REPLY, NEW_FOLLOWER } from '../../apollo/subscriptions';
-import { AUTHENTICATED } from '../../apollo/queries';
+import { AUTHENTICATED, NOTIFICATIONS } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import Comment from '../posts/comments/Comment';
 import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
+import LinkWrap from './LinkWrap';
 class Notifications extends Component {
     state = {
         listChildren: []
@@ -51,17 +53,23 @@ class Notifications extends Component {
     genNewComment = ({ id, commenter, post, comment_text, tags, created_at }) => {
         return (
             <article key={`comment-${id}`} className="media">
-                <figure className="media-left">
-                    <p className="image is-64x64">
-                        <img src={commenter.profile.photo_path || '/static/user_image.png'} />
-                    </p>
-                </figure>
+                <LinkWrap href={{ pathname: '/profile', query: { id: commenter.id } }}>
+                    <figure className="media-left">
+                        <p className="image is-48x48">
+                            <img src={commenter.profile.photo_path || '/static/user_image.png'} />
+                        </p>
+                    </figure>
+                </LinkWrap>
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <a><strong>{commenter.username}</strong></a> commented on your post:
+                            <LinkWrap href={{ pathname: '/profile', query: { id: commenter.id } }}>
+                                <strong>{commenter.username}</strong>
+                            </LinkWrap> commented on your post:
                         <br />
-                            <strong className="is-size-5"><em>{post.title}</em></strong>
+                            <LinkWrap href={{ pathname: '/posts', query: { id: post.id } }}>
+                                <strong className="is-size-5"><em>{post.title}</em></strong>
+                            </LinkWrap>
                             <br />
 
                             <div className="message is-info">
@@ -69,7 +77,7 @@ class Notifications extends Component {
                                     <span className="icon has-text-info"><i className="fas fa-comment"></i></span>
                                     {comment_text}
                                     <br />
-                                    {tags && tags.map((tag, i) => <div key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag font-2'}>{tag.tag_name}</div>)}
+                                    {tags && tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag font-2'}>{tag.tag_name}</span>)}
                                 </p>
                             </div>
 
@@ -93,23 +101,27 @@ class Notifications extends Component {
         return (
             <article key={`post-${id}`} className="media">
                 <figure className="media-left">
-                    <p className="image is-64x64">
-                        <img src={author.profile.photo_path || '/static/user_image.png'} />
-                    </p>
+                    <LinkWrap href={{ pathname: '/profile', query: { id: author.id } }}>
+                        <p className="image is-48x48">
+                            <img src={author.profile.photo_path || '/static/user_image.png'} />
+                        </p>
+                    </LinkWrap>
                 </figure>
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <a><strong>{author.username}</strong></a> posted:
-                                                    <br />
-                            <strong className="is-size-5"><em>{title}</em></strong>
+                            <LinkWrap href={{ pathname: '/profile', query: { id: author.id } }}><strong>{author.username}</strong></LinkWrap> posted:
                             <br />
-                            {caption}
-                            <br />
-                            {image && <figure className="image is-4by3">
-                                <img src={image} alt="" />
-                            </figure>}
-                            {tags.map((tag, i) => <div key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag is-info font-2'}>tag</div>)}
+                            <LinkWrap href={{ pathname: '/posts', query: { id } }}>
+                                <strong className="is-size-5"><em>{title}</em></strong>
+                                <br />
+                                {caption}
+                                <br />
+                                {image && <figure className="image is-4by3">
+                                    <img src={image} alt="" />
+                                </figure>}
+                            </LinkWrap>
+                            {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag is-info font-2'}>tag</span>)}
 
                         </div>
                     </div>
@@ -128,17 +140,23 @@ class Notifications extends Component {
     genNewLike = ({ user, post, liked_at }) => {
         return (
             <article key={`like-${user.id}-${post.id}`} className="media">
-                <figure className="media-left">
-                    <p className="image is-64x64">
-                        <img src={user.profile.photo_path || "/static/user_image.png"} />
-                    </p>
-                </figure>
+                <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
+                    <figure className="media-left">
+                        <p className="image is-48x48">
+                            <img src={user.profile.photo_path || "/static/user_image.png"} />
+                        </p>
+                    </figure>
+                </LinkWrap>
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <a><strong>{user.username}</strong></a> liked your post:
+                            <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
+                                <strong>{user.username}</strong>
+                            </LinkWrap> liked your post:
                         <br />
-                            <strong className="is-size-5"><em>{post.title}</em></strong>
+                            <LinkWrap href={{ pathname: '/posts', query: { id: post.id } }}>
+                                <strong className="is-size-5"><em>{post.title}</em></strong>
+                            </LinkWrap>
                             <br />
                             <BombSVG scale={0.1} lit={true} />
 
@@ -160,27 +178,33 @@ class Notifications extends Component {
     genNewCommentLike = ({ user, comment, liked_at }) => {
         return (
             <article key={`comment-like-${user.id}-${comment.id}`} className="media">
-                <figure className="media-left">
-                    <p className="image is-64x64">
-                        <img src={user.profile.photo_path || "/static/user_image.png"} />
-                    </p>
-                </figure>
+                <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
+                    <figure className="media-left">
+                        <p className="image is-48x48">
+                            <img src={user.profile.photo_path || "/static/user_image.png"} />
+                        </p>
+                    </figure>
+                </LinkWrap>
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <a><strong>{user.username}</strong></a> liked your comment:
+                            <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
+                                <strong>{user.username}</strong>
+                            </LinkWrap> liked your comment:
                                             <br />
                             <div className="message is-dark">
                                 <p className="message-body">
                                     <span className="icon"><i className="fas fa-comment"></i></span>
                                     {comment.comment_text}
                                     <br />
-                                    {comment.tags.map((tag, i) => <div key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag is-info font-2'}>{tag.tag_name}</div>)}
+                                    {comment.tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag is-info font-2'}>{tag.tag_name}</span>)}
                                 </p>
                             </div>
                             <br />
                             On
-                            <strong className="is-size-5"><em> {comment.post.title}</em></strong>
+                            <LinkWrap href={{ pathname: '/posts', query: { id: comment.post.id } }}>
+                                <strong className="is-size-5"><em> {comment.post.title}</em></strong>
+                            </LinkWrap>
                             <br />
                             <BombSVG scale={0.1} lit={true} />
 
@@ -202,16 +226,20 @@ class Notifications extends Component {
     genNewReply = ({ id, reply_text, replier, comment, created_at }) => {
         return (
             <article key={`reply-${id}`} className="media">
-                <figure className="media-left">
-                    <p className="image is-64x64">
-                        <img src={replier.profile.photo_path || "/static/user_image.png"} />
-                    </p>
-                </figure>
+                <LinkWrap href={{ pathname: '/profile', query: { id: replier.id } }}>
+                    <figure className="media-left">
+                        <p className="image is-48x48">
+                            <img src={replier.profile.photo_path || "/static/user_image.png"} />
+                        </p>
+                    </figure>
+                </LinkWrap>
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <a><strong>{replier.username}</strong></a> replied to your comment:
-                                            <br />
+                            <LinkWrap href={{ pathname: '/profile', query: { id: replier.id } }}>
+                                <strong>{replier.username}</strong>
+                            </LinkWrap> replied to your comment:
+                            <br />
                             <div className="media">
                                 <div className="media-content">
                                     <div className="message content is-dark">
@@ -236,7 +264,9 @@ class Notifications extends Component {
                             </div>
 
                             <br />
-                            On <strong className="is-size-5"><em>{comment.post.title}</em></strong>
+                            On <LinkWrap href={{ pathname: '/posts', query: { id: comment.post.id } }}>
+                                <strong className="is-size-5"><em>{comment.post.title}</em></strong>
+                            </LinkWrap>
                         </div>
                     </div>
                     <nav className="level is-mobile">
@@ -254,16 +284,20 @@ class Notifications extends Component {
     genNewFollow = ({ user: { id, username, profile }, followed_at }) => {
         return (
             <article key={`follow-${id}`} className="media">
-                <figure className="media-left">
-                    <p className="image is-64x64">
-                        <img src={profile.photo_path || '/static/user_image.png'} />
-                    </p>
-                </figure>
+                <LinkWrap href={{ pathname: '/profile', query: { id } }}>
+                    <figure className="media-left">
+                        <p className="image is-48x48">
+                            <img src={profile.photo_path || '/static/user_image.png'} />
+                        </p>
+                    </figure>
+                </LinkWrap>
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <a><strong>{username}</strong></a> followed you
-                                            <br />
+                            <LinkWrap href={{ pathname: '/profile', query: { id } }}>
+                                <strong>{username}</strong>
+                            </LinkWrap> followed you
+                            <br />
                             <p className="has-text-centered">
                                 <span className="icon is-large has-text-success"><i className="fas fa-user fa-2x"></i></span>
                             </p>
@@ -291,20 +325,55 @@ class Notifications extends Component {
         this.replyListener.unsubscribe()
     }
     render() {
+        let typeMap = {}
+        typeMap.Post = this.genNewPost;
+        typeMap.Comment = this.genNewComment;
+        typeMap.NewLike = this.genNewLike;
+        typeMap.NewCommentLike = this.genNewCommentLike;
+        typeMap.Reply = this.genNewReply;
+        typeMap.NewFollower = this.genNewFollow;
         return (
-            <div>
-                <Query query={AUTHENTICATED}>
-                    {({ loading, error, data, client }) => {
-                        if (loading) return <Loading />;
-                        if (error) return <ErrorIcon />;
-                        return <div className="tile is-vertical">
-                            {this.state.listChildren}
+            <div className={`tile is-vertical ${this.props.active ? '' : 'is-hidden'}`}>
+                {!this.props.lastVisited ? <article className="media">
+                    <figure className="media-left">
+                        <div className="image is-64x64">
+                            <BombSVG lit={true} face={{ happy: true }} />
+                        </div>
+                    </figure>
+                    <div className="media-content font-2 has-text-centered">
+                        <div className="content has-text-centered">
+                            <h3 className="subtitile is-3">
+                                <a onClick={() => renderModal({ active: true, display: 'Login' })}> Log in to see your notifications</a>
+                            </h3>
+                            <br />
+                            Or
+                        <br />
+                            <h5 className="subtitle is-5">
+                                <a onClick={() => renderModal({ active: true, display: 'Register' })}> Sign Up</a>
+                            </h5>
 
                         </div>
+                    </div>
+                </article> : ''}
+                {this.props.lastVisited && (this.props.data.length < 1 ? <article className="media">
+                    <figure className="media-left">
+                        <div className="image is-64x64">
+                            <BombSVG lit={false} face={{ happy: false }} />
+                        </div>
+                    </figure>
+                    <div className="media-content font-2 has-text-centered">
+                        <div className="content has-text-centered">
+                            <h3 className="subtitile is-3">
+                                You have no new notifications.
+                        </h3>
 
-                    }}
-                </Query>
-
+                        </div>
+                    </div>
+                </article> :
+                    this.props.data.map((notif, i) => {
+                        return typeMap[notif.__typename](notif)
+                    })
+                )}
             </div>
         );
     }

@@ -6,11 +6,13 @@ import GlobalStyles from './GlobalStyles';
 import ErrorMessage from './ErrorMessage';
 import BombSVG from '../svg/bomb';
 import Navbar from './Navbar';
+import { NOTIFICATIONS } from '../../apollo/queries'
 
 class Header extends Component {
     state = {
         menu: false
     }
+
 
     render() {
         return (

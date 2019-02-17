@@ -14,7 +14,7 @@ module.exports = {
                 req.session.user = { id, username, email, created_at }
                 req.session.user.lastLoginTime = moment(user.last_login || user.created_at).unix()
                 req.session.user.lastVisited = req.session.user.lastLoginTime
-                req.session.user.loginTime = Date.now()
+                req.session.user.loginTime = Math.floor(Date.now() / 1000)
                 req.session.user.visited = req.session.user.loginTime
                 req.session.save()
                 queryDB(`UPDATE users SET last_login=NOW() WHERE id=?`, [user.id])
@@ -35,7 +35,7 @@ module.exports = {
             req.session.user = { ...newUser }
             req.session.user.lastLoginTime = 1;
             req.session.user.lastVisited = 1;
-            req.session.user.loginTime = Date.now()
+            req.session.user.loginTime = Math.floor(Date.now() / 1000)
             req.session.user.visited = req.session.user.loginTime
             return true
         }
