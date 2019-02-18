@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const NEW_POST = gql`
-    subscription NewPost{
-        newPost{
+    subscription NewPost($id: Int!){
+        newPost(id:$id){
             id
             title
             caption
@@ -24,8 +24,8 @@ export const NEW_POST = gql`
 }
 `
 export const NEW_COMMENT = gql`
-    subscription NewComment{
-        newComment{
+    subscription NewComment($id: Int!){
+        newComment(id:$id){
             id
             comment_text
             post{
@@ -49,8 +49,8 @@ export const NEW_COMMENT = gql`
     }
 `
 export const NEW_LIKE = gql`
-    subscription NewLike{
-        newLike{
+    subscription NewLike($id: Int!){
+        newLike(id:$id){
             user{
                 id
                 username
@@ -69,8 +69,8 @@ export const NEW_LIKE = gql`
     }
 `
 export const NEW_REPLY = gql`
-    subscription NewReply{
-        newReply{
+    subscription NewReply($id: Int!){
+        newReply(id:$id){
             id
             reply_text
             replier{
@@ -94,8 +94,8 @@ export const NEW_REPLY = gql`
     }
 `
 export const NEW_COMMENT_LIKE = gql`
-    subscription NewCommentLike{
-        newCommentLike{
+    subscription NewCommentLike($id: Int!){
+        newCommentLike(id:$id){
             user{
                 id
                 username
@@ -122,8 +122,8 @@ export const NEW_COMMENT_LIKE = gql`
     }
 `
 export const NEW_FOLLOWER = gql`
-    subscription NewFollower{
-        newFollower{
+    subscription NewFollower($id: Int!){
+        newFollower(id:$id){
             user{
                 id
                 username

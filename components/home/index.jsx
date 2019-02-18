@@ -82,7 +82,7 @@ class Home extends Component {
                     <div className="columns is-tablet">
                         <Query query={AUTHENTICATED} ssr={false}>
                             {({ loading, error, data }) => {
-                                if (loading || error) {
+                                if (loading || error || !data) {
                                     return (
                                         <div className="column is-two-thirds has-text-centered load-error">
                                             {loading && <Loading size="5x" />}
@@ -95,7 +95,7 @@ class Home extends Component {
                                         <Query query={FOLLOWEE_POSTS} variables={{ limit: 5, cursor: 0 }} ssr={false}>
                                             {({ loading, error, data, client }) => {
                                                 if (error) console.log(error)
-                                                if (loading || error) {
+                                                if (loading || error || !data || !data.user) {
                                                     return (
                                                         <div className="column is-two-thirds has-text-centered load-error">
                                                             {loading && <Loading size="5x" />}
@@ -179,7 +179,7 @@ class Home extends Component {
                                 if (!data.authenticated) return (
                                     <Query query={SEARCH_POSTS} variables={{ input: inputRecent }} ssr={false}>
                                         {({ loading, error, data, client }) => {
-                                            if (loading || error) {
+                                            if (loading || error || !data) {
                                                 return (
                                                     <div className="column is-two-thirds has-text-centered load-error">
                                                         {loading && <Loading size="5x" />}

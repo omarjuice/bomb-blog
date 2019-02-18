@@ -15,9 +15,6 @@ class Feed extends Component {
                 {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags, image }, i) => {
                     const likes = shortenNumber(numLikes)
                     const comments = shortenNumber(numComments)
-                    const likesMargin = String(likes.length * .25) + 'rem'
-                    const commentsMargin = String(comments.length * .4) + 'rem'
-                    const timeMargin = String(comments.length * .25) + 'rem'
                     return (
                         <article key={id} className="media has-text-centered">
                             <div className="media-content">
@@ -33,6 +30,7 @@ class Feed extends Component {
                                                 {author.isMe ? <strong>You</strong> : <em>{author.username}</em>}
                                             </a>
                                         </Link>
+
                                         <br />
                                         {tags.slice(0, 8).map((tag, i) => (
                                             <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
@@ -56,23 +54,28 @@ class Feed extends Component {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="media-right columns is-multiline is-mobile is-centered">
-                                    <div className="column is-half has-text-centered">
-                                        {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
-                                    </div>
+                            {/* <div className="media-right columns is-mobile">
+                                <div className="column is-half">
+                                    {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
+                                </div>
 
-                                </div> */}
+                            </div> */}
 
                             <div className="media-right">
-                                {image ? <p className="image is-128x128">
-                                    <img src={image} alt="image" />
-                                </p> : ''}
+                                <p className="image is-128x128">
+                                    {image && <img src={image} alt="image" />}
+
+                                </p>
+                                {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
                             </div>
 
                             <style jsx>{`
 
                                .media-content{
                                    padding: 1rem
+                               }
+                               .image-container{
+                                   width: 75%;
                                }
                                 `}</style>
                         </article>

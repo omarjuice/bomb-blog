@@ -36,12 +36,12 @@ module.exports = gql`
       deleteFollow(user_id: Int!): Boolean!
   }
   type Subscription{
-      newPost: Post
-      newComment: Comment
-      newFollower: NewFollower
-      newLike: NewLike
-      newReply: Reply
-      newCommentLike: NewCommentLike
+      newPost(id: Int!): Post
+      newComment(id: Int!): Comment
+      newFollower(id:Int!): NewFollower
+      newLike(id:Int!): NewLike
+      newReply(id: Int!): Reply
+      newCommentLike(id: Int!): NewCommentLike
   }
   type Notifications{
       lastVisited: Int

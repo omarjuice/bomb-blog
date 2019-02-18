@@ -78,13 +78,17 @@ class Notifications extends Component {
                             <br />
                             <LinkWrap href={{ pathname: '/posts', query: { id } }}>
                                 <strong className="is-size-5"><em>{title}</em></strong>
+
+                                {image && <>
+                                    <br /> <figure className="image is-4by3">
+                                        <img src={image} alt="" />
+                                    </figure> </>
+                                }
                                 <br />
-                                {caption}
-                                <br />
-                                {image && <figure className="image is-4by3">
-                                    <img src={image} alt="" />
-                                </figure>}
                             </LinkWrap>
+                            {caption}
+                            <br />
+
                             {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag is-info font-2'}>tag</span>)}
 
                         </div>
@@ -327,8 +331,9 @@ class Notifications extends Component {
                         </div>
                     </div>
                 </article> :
-                    this.props.data.map((notif, i) => {
-                        return typeMap[notif.__typename](notif)
+                    this.props.data.map((key, i) => {
+                        const data = this.props.notificationMap[key]
+                        return typeMap[data.__typename](data)
                     })
                 )}
             </div>

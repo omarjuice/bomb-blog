@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import User from './User';
 import { LOGOUT } from '../../apollo/mutations';
+import { setNumNotifications } from '../../apollo/clientWrites';
 
 
 class Logout extends Component {
@@ -18,7 +19,7 @@ class Logout extends Component {
 
                             </div>
                             <div className="navbar-item has-text-centered">
-                                <button className="button is-warning font-1" onClick={logout}>Logout</button>
+                                <button className="button is-warning font-1" onClick={() => { logout(); setNumNotifications(0) }}>Logout</button>
                             </div>
                         </>
                     )

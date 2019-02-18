@@ -15,9 +15,6 @@ class Recent extends Component {
                 {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags, image }, i) => {
                     const likes = shortenNumber(numLikes)
                     const comments = shortenNumber(numComments)
-                    const likesMargin = String(likes.length * .25) + 'rem'
-                    const commentsMargin = String(comments.length * .4) + 'rem'
-                    const timeMargin = String(comments.length * .25) + 'rem'
                     return (
                         <article key={id} className="media has-text-centered">
                             <div className="media-content">
@@ -71,16 +68,7 @@ class Recent extends Component {
                                 </p> : ''}
                             </div>
 
-                            <style jsx>{`
 
-                                small a:nth-of-type(1){
-                                    margin-left: ${likesMargin}
-                                }
-                                small a:nth-of-type(2){
-                                    margin-left: ${commentsMargin};
-                                    margin-right: ${timeMargin}
-                                }
-                                `}</style>
                         </article>
                     )
                 })}

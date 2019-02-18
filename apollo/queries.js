@@ -573,6 +573,7 @@ export const FOLLOWEE_POSTS = gql`
                     tag_name
                 }
                 image
+                iLike
             }
             }
         }

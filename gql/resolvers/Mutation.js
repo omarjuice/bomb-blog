@@ -89,8 +89,14 @@ module.exports = {
             await batchInserts.tags.postTags(tags, insertId)
         }
         const newPost = await Loaders.posts.byId.load(insertId)
-        pubsub.publish('NEW_POST', { newPost })
-        if (newPost) return newPost;
+        if (newPost) {
+            Loaders.users.followers.load(newPost.user_id)
+                .then((followers) => {
+                    console.log(followers)
+                    pubsub.publish('NEW_POST', { newPost, followers: followers.map(follower => follower.id) })
+                })
+            return newPost
+        }
         throw Errors.database
     },
     deletePost: async (_, args, { req }) => {
@@ -135,14 +141,19 @@ module.exports = {
         if (newPost) return newPost;
         throw Errors.posts.notFound
     },
-    likePost: async (_, args, { req }) => {
+    likePost: async (_, args, { req, Loaders }) => {
         let sessionUser = authenticate(req.session)
         let { post_id } = args
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         if (!post_id) throw Errors.posts.notSpecified;
         const { affectedRows } = await queryDB(`INSERT INTO likes (user_id, post_id) VALUES ?`, [[[sessionUser, post_id]]]).catch(e => 0)
         if (affectedRows > 0) {
-            pubsub.publish('NEW_LIKE', { user_id: sessionUser, post_id })
+            Loaders.users.byId.load(sessionUser)
+                .then(async (user) => {
+                    const post = await Loaders.posts.byId.load(post_id)
+                    pubsub.publish('NEW_LIKE', { user, post, liked_at: String(Date.now()) })
+                })
+
             return true
         }
         return false
@@ -165,7 +176,10 @@ module.exports = {
             await batchInserts.tags.commentTags(tags, insertId)
         }
         const newComment = await Loaders.comments.byId.load(insertId)
-        pubsub.publish('NEW_COMMENT', { newComment })
+        Loaders.posts.byId.load(newComment.post_id)
+            .then((post) => {
+                pubsub.publish('NEW_COMMENT', { newComment, post })
+            })
         return newComment
     },
     updateComment: async (_, args, { req, Loaders, batchDeletes, batchInserts }) => {
@@ -192,20 +206,24 @@ module.exports = {
         }
         return await Loaders.comments.byId.load(comment_id)
     },
-    deleteComment: async (_, args, { req, Loaders }) => {
+    deleteComment: async (_, args, { req }) => {
         const sessionUser = authenticate(req.session)
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         const { comment_id } = args
         const { affectedRows } = await queryDB(`DELETE FROM comments WHERE id= ? AND user_id= ? `, [comment_id, sessionUser]).catch(e => { throw Errors.database })
         return affectedRows > 0
     },
-    likeComment: async (_, args, { req }) => {
+    likeComment: async (_, args, { req, Loaders }) => {
         const sessionUser = authenticate(req.session)
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         const { comment_id } = args;
         const { affectedRows } = await queryDB(`INSERT INTO comment_likes (user_id, comment_id) VALUES ?`, [[[sessionUser, comment_id]]]).catch(e => 0)
         if (affectedRows > 0) {
-            pubsub.publish('NEW_COMMENT_LIKE', { user_id: sessionUser, comment_id })
+            Loaders.users.byId.load(sessionUser)
+                .then(async (user) => {
+                    const comment = await Loaders.comments.byId.load(comment_id)
+                    pubsub.publish('NEW_COMMENT_LIKE', { user, comment, liked_at: String(Date.now()) })
+                })
             return true
         }
         return false
@@ -224,7 +242,10 @@ module.exports = {
         const { affectedRows, insertId } = await queryDB(`INSERT INTO replies (comment_id, user_id, reply_text) VALUES ?`, [[[comment_id, sessionUser, reply_text]]]).catch(e => { throw Errors.database })
         if (affectedRows < 1) throw Errors.authorization.notAuthorized;
         const [newReply] = await queryDB(`SELECT * FROM replies WHERE id = ?`, [insertId])
-        pubsub.publish('NEW_REPLY', { newReply })
+        Loaders.comments.byId.load(comment_id)
+            .then((comment) => {
+                pubsub.publish('NEW_REPLY', { newReply, comment })
+            })
         return newReply
     },
     deleteReply: async (_, args, { req, Loaders }) => {
@@ -245,7 +266,7 @@ module.exports = {
         const [updatedReply] = await queryDB(`SELECT * FROM replies WHERE id = ?`, [reply_id])
         return updatedReply
     },
-    createFollow: async (_, { user_id }, { req }) => {
+    createFollow: async (_, { user_id }, { req, Loaders }) => {
         const sessionUser = authenticate(req.session);
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         if (sessionUser === user_id) {
@@ -253,7 +274,10 @@ module.exports = {
         }
         const { affectedRows } = await queryDB(`INSERT IGNORE INTO follows (follower_id, followee_id) VALUES ?`, [[[sessionUser, user_id]]]).catch(e => { throw Errors.database })
         if (affectedRows > 0) {
-            pubsub.publish('NEW_FOLLOWER', { user_id: sessionUser, followed_id: user_id })
+            Loaders.users.byId.load(sessionUser)
+                .then((user) => {
+                    pubsub.publish('NEW_FOLLOWER', { user, followed_id: user_id, followed_at: String(Date.now()) })
+                })
             return true
         }
         return false
