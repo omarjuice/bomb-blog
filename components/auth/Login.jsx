@@ -53,7 +53,7 @@ class Login extends Component {
         )
     }
     render() {
-        return (<Mutation mutation={LOGIN} refetchQueries={[`Authenticated`, `CurrentUser`, `UserProfile`, `Comments`, `Replies`, `UserPhoto`, `ILike`, `PostAuthor`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `Likers`, `Notifications`]} >
+        return (<Mutation mutation={LOGIN} refetchQueries={[`Authenticated`, `CurrentUser`, `UserProfile`, `Comments`, `Replies`, `UserPhoto`, `ILike`, `PostAuthor`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `Likers`, `Notifications`, `FolloweePosts`]} >
             {(login, { data, loading, error }) => {
                 if (!data) return (
                     <form onSubmit={this.onSubmit(login)} className="form has-text-centered">

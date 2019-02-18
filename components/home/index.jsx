@@ -10,6 +10,7 @@ import { SEARCH_POSTS, AUTHENTICATED, CURRENT_USER, CURRENT_USER_TAGS, FOLLOWEE_
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import Feed from './Feed';
+import BombSVG from '../svg/bomb';
 
 const gqlQueries = {
     posts: SEARCH_POSTS
@@ -17,7 +18,7 @@ const gqlQueries = {
 class Home extends Component {
     state = {
         fetching: false,
-
+        active: 'trending'
     }
     handleScroll = (display, client, { limit, cursor, exclude, tags }, query = SEARCH_POSTS) => {
         const input = { limit, cursor }
@@ -74,10 +75,17 @@ class Home extends Component {
         const inputSuggested = { cursor: 0, limit: 5, tags: [] }
         return (
             <div>
-                <Trending posts={this.props.data.trending.results} />
+                <div className="tabs is-hidden-tablet">
+                    <ul>
+                        <li onClick={() => this.setState({ active: 'trending' })} className={this.state.active === 'trending' ? 'is-active' : ''}><a>Trending</a></li>
+                        <li onClick={() => this.setState({ active: 'feed' })} className={this.state.active === 'feed' ? 'is-active' : ''}><a>Feed</a></li>
+                        <li onClick={() => this.setState({ active: 'suggested' })} className={this.state.active === 'suggested' ? 'is-active' : ''}><a>Suggested</a></li>
+                    </ul>
+                </div>
+                <Trending active={this.state.active === 'trending'} posts={this.props.data.trending.results} />
                 <br />
 
-                <hr />
+                <hr className="is-hidden-mobile" />
                 <div className="container">
                     <div className="columns is-tablet">
                         <Query query={AUTHENTICATED} ssr={false}>
@@ -93,45 +101,54 @@ class Home extends Component {
                                 if (data.authenticated) return (
                                     <>
                                         <Query query={FOLLOWEE_POSTS} variables={{ limit: 5, cursor: 0 }} ssr={false}>
-                                            {({ loading, error, data, client }) => {
-                                                if (error) console.log(error)
+                                            {({ loading, error, data, client, startPolling, stopPolling }) => {
+                                                if (data && data.user === undefined) {
+                                                    startPolling(1000)
+                                                }
+                                                if (data && data.user === null) {
+                                                    stopPolling()
+                                                }
                                                 if (loading || error || !data || !data.user) {
+
                                                     return (
-                                                        <div className="column is-two-thirds has-text-centered load-error">
+                                                        <div className={`column is-two-thirds has-text-centered load-error ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
                                                             {loading && <Loading size="5x" />}
                                                             {error && <ErrorIcon size="5x" />}
                                                         </div>
                                                     )
                                                 }
 
-                                                if (data.user) return (
-                                                    <div onScroll={this.handleScroll('feed', client, { cursor: data.user.followingPosts.cursor, limit: 5 }, FOLLOWEE_POSTS)} className="column is-two-thirds recent">
-                                                        <article className="media">
-                                                            <div className="media-content font-2 has-text-centered">
-                                                                <div className="content">
-                                                                    <h1 className="title is-4">Feed</h1>
-                                                                </div>
-                                                            </div>
-                                                        </article>
-                                                        <Feed data={data.user.followingPosts} end={!data.user.followingPosts.cursor} />
-
-                                                        {this.state.fetching === 'feed' && (
+                                                if (data.user) {
+                                                    stopPolling()
+                                                    return (
+                                                        <div onScroll={this.handleScroll('feed', client, { cursor: data.user.followingPosts.cursor, limit: 5 }, FOLLOWEE_POSTS)} className={`column is-two-thirds recent ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
                                                             <article className="media">
                                                                 <div className="media-content font-2 has-text-centered">
-                                                                    <div className="content has-text-centered">
-                                                                        <Loading size="4x" style="margin-top:2rem" />
+                                                                    <div className="content">
+                                                                        <h1 className="title is-4">Feed</h1>
                                                                     </div>
                                                                 </div>
-                                                            </article>)}
-                                                    </div>
-                                                )
+                                                            </article>
+                                                            <Feed data={data.user.followingPosts} end={!data.user.followingPosts.cursor} />
+
+                                                            {this.state.fetching === 'feed' && (
+                                                                <article className="media">
+                                                                    <div className="media-content font-2 has-text-centered">
+                                                                        <div className="content has-text-centered">
+                                                                            <Loading size="4x" style="margin-top:2rem" />
+                                                                        </div>
+                                                                    </div>
+                                                                </article>)}
+                                                        </div>
+                                                    )
+                                                }
                                             }}
                                         </Query>
                                         <Query query={CURRENT_USER_TAGS} ssr={false} fetchPolicy={"network-only"}>
                                             {({ loading, error, data }) => {
                                                 if (loading || error) {
                                                     return (
-                                                        <div className="column is-one-third has-text-centered load-error">
+                                                        <div className={`column is-one-third has-text-centered load-error ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                             {loading && <Loading size="5x" />}
                                                             {error && <ErrorIcon size="5x" />}
                                                         </div>
@@ -150,7 +167,7 @@ class Home extends Component {
                                                         }
                                                         data.posts.results = data.posts.results.filter(post => !post.author.isMe)
                                                         return (
-                                                            <div onScroll={this.handleScroll('posts', client, { ...inputSuggested, cursor: data.posts.cursor })} className="column is-one-third recent notification">
+                                                            <div onScroll={this.handleScroll('posts', client, { ...inputSuggested, cursor: data.posts.cursor })} className={`column is-one-third recent notification ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                                 <article className="media">
                                                                     <div className="media-content font-2 has-text-centered">
                                                                         <div className="content">
@@ -181,14 +198,14 @@ class Home extends Component {
                                         {({ loading, error, data, client }) => {
                                             if (loading || error || !data) {
                                                 return (
-                                                    <div className="column is-two-thirds has-text-centered load-error">
+                                                    <div className={`column is-two-thirds has-text-centered load-error ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                         {loading && <Loading size="5x" />}
                                                         {error && <ErrorIcon size="5x" />}
                                                     </div>
                                                 )
                                             }
                                             return (<>
-                                                <div onScroll={this.handleScroll('posts', client, { ...inputRecent, cursor: data.posts.cursor })} className="column is-two-thirds recent">
+                                                <div onScroll={this.handleScroll('posts', client, { ...inputRecent, cursor: data.posts.cursor })} className={`column is-two-thirds recent ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                     <article className="media">
                                                         <div className="media-content font-2 has-text-centered">
                                                             <div className="content">
@@ -206,13 +223,22 @@ class Home extends Component {
                                                             </div>
                                                         </article>)}
                                                 </div>
-                                                <div className="column is-one-third">
+                                                <div className={`column is-one-third ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
                                                     <div className="tile is-vertical notification has-text-centered font-2">
+                                                        <div className="columns is-mobile">
+                                                            <div className="column is-half">
+                                                                <div className="has-text-centered">
+                                                                    <BombSVG lit={true} face={{ happy: true }} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="column login is-half">
+                                                                <a className="subtitle is-4" onClick={() => renderModal({ active: true, display: 'Login' })}>Login</a>
+                                                                <p className="subtitle is-4">OR</p>
+                                                                <a className="subtitle is-4" onClick={() => renderModal({ active: true, display: 'Register' })}>Sign Up</a>
+                                                                <p className="subtitle">To see your Feed</p>
+                                                            </div>
+                                                        </div>
 
-                                                        <a className="subtitle is-4" onClick={() => renderModal({ active: true, display: 'Login' })}>Login</a>
-                                                        <p className="subtitle is-4">OR</p>
-                                                        <a className="subtitle is-4" onClick={() => renderModal({ active: true, display: 'Register' })}>Sign Up</a>
-                                                        <p className="subtitle">To see your Feed</p>
                                                     </div>
                                                 </div>
                                             </>
@@ -236,6 +262,9 @@ class Home extends Component {
                         height: 12px;
                         border: 0;
                         box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+                    }
+                    .login{
+                        margin-top: 2rem
                     }
                     `}</style>
             </div>

@@ -547,34 +547,34 @@ export const FOLLOWEE_POSTS = gql`
     query FolloweePosts($cursor: Int = 0, $limit: Int = 5 ){   
         user{
             id
-        followingPosts(cursor: $cursor, limit: $limit){
-            cursor
-            results{
-                id
-                user_id
-                author{
+            followingPosts(cursor: $cursor, limit: $limit){
+                cursor
+                results{
                     id
-                    isMe
-                    username
-                    profile{
-                        user_id
-                        photo_path
+                    user_id
+                    author{
+                        id
+                        isMe
+                        username
+                        profile{
+                            user_id
+                            photo_path
+                            }
                         }
+                    title
+                    created_at
+                    last_updated
+                    numLikes
+                    numComments
+                    caption
+                    post_content
+                    tags{
+                        id
+                        tag_name
                     }
-                title
-                created_at
-                last_updated
-                numLikes
-                numComments
-                caption
-                post_content
-                tags{
-                    id
-                    tag_name
+                    image
+                    iLike
                 }
-                image
-                iLike
-            }
             }
         }
 }

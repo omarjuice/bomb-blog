@@ -64,7 +64,7 @@ class Trending extends Component {
     render() {
         const { posts } = this.props
         return (<div>
-            <div className="container">
+            <div className={`container ${this.props.active ? '' : 'is-hidden-mobile'}`}>
                 <div className="tile is-ancestor">
                     <div className="tile is-parent">
                         {posts[0] ? <article className="tile is-child">
