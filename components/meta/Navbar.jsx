@@ -49,8 +49,8 @@ class Navbar extends Component {
                         </a>
                         <Query query={GET_NUM_NOTIFICATIONS}>
                             {({ data }) => {
-                                return <a onClick={() => renderModal({ active: true, display: 'Notifications' })} className="navbar-item has-text-centered">
-                                    <span className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}><i className="fas fa-globe fa-lg"></i></span>
+                                return <a onClick={() => renderModal({ active: true, display: 'Notifications' })} className="navbar-item has-text-centered notifs">
+                                    <span className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}><i className="fas fa-globe "></i></span>
                                     <span className={`has-text-weight-bold`}>{data && data.numNotifications ? shortenNumber(data.numNotifications) : '0'}</span>
                                 </a>
                             }}
@@ -84,10 +84,12 @@ class Navbar extends Component {
                         margin-top: -1rem;
                         margin-bottom: -1rem
                     }
-                    @media only screen and (max-width: 400px){
-                        .navbar-item{
-                            margin-left: -0.5rem;
-                        }
+                    .notifs{
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .notifs .has-text-weight-bold{
+                        margin: -1rem auto;  
                     }
                     `}</style>
             </div>

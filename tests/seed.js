@@ -18,33 +18,39 @@ const seedDB = {
         "a@z.com",
         "alpha",
         '1',
-        new Date(1000)
+        new Date(1000),
+        'user'
     ], [
         "b@y.com",
         "beta",
         '2',
-        new Date(1000)
+        new Date(1000),
+        'user'
     ], [
         "c@x.com",
         "gamma",
         '3',
-        new Date(1000)
+        new Date(1000),
+        'admin'
     ]],
     usersHashed: [[
         "a@z.com",
         "alpha",
         '1',
-        new Date(1000)
+        new Date(1000),
+        'user'
     ], [
         "b@y.com",
         "beta",
         '2',
-        new Date(1000)
+        new Date(1000),
+        'user'
     ], [
         "c@x.com",
         "gamma",
         '3',
-        new Date(1000)
+        new Date(1000),
+        'admin'
     ]],
     profiles: [[
         1,
@@ -209,7 +215,7 @@ const resetTables = (done) => {
     seedDB.numUsers = 3
     const postBodies = JSON.parse(fs.readFileSync('posts.json'))
     postBodies.slice(0, 3).forEach(({ user_id, title, created_at, caption, post_content }, i) => {
-        seedDB.posts[i] = [user_id, title, caption, new Date(created_at), post_content]
+        seedDB.posts[i] = [user_id, title, caption, new Date(created_at), post_content, i === 0, i === 0 ? faker.date.past() : null]
     })
     queryDB(`
         SET FOREIGN_KEY_CHECKS = 0;
@@ -238,13 +244,13 @@ const resetTables = (done) => {
         queryDB(tagSchema.create),
         queryDB(postTagSchema.create),
         queryDB(commentTagSchema.create),
-        queryDB(userTagSchema.create)
+        queryDB(userTagSchema.create),
     ]))
-        .then(() => queryDB(`INSERT INTO users (email, username, pswd, created_at) VALUES ?`, [seedDB.usersHashed])
+        .then(() => queryDB(`INSERT INTO users (email, username, pswd, created_at, privilege) VALUES ?`, [seedDB.usersHashed])
             .then(() => queryDB(`INSERT INTO profiles (user_id, about, photo_path) VALUES ?`, [seedDB.profiles]))
             .then(() => queryDB(`INSERT INTO follows (followee_id, follower_id) VALUES ?`, [seedDB.follows]))
             .then(() => queryDB(`INSERT INTO tags (tag_name) VALUES ?`, [seedDB.tags]))
-            .then(() => queryDB(`INSERT INTO posts (user_id, title, caption, created_at, post_content) VALUES ?`, [seedDB.posts]))
+            .then(() => queryDB(`INSERT INTO posts (user_id, title, caption, created_at, post_content, featured, featured_at) VALUES ?`, [seedDB.posts]))
             .then(() => Promise.all([
                 queryDB(`INSERT INTO likes (user_id, post_id) VALUES ?`, [seedDB.likes]),
                 queryDB(`INSERT INTO comments (user_id, post_id, comment_text, created_at) VALUES ?`, [seedDB.comments]),

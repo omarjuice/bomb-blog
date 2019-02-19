@@ -2,8 +2,7 @@ const { queryDB } = require('../../db/connect')
 const { compare, hashUser } = require('../../db/crypt')
 const Errors = require('../errors')
 const validator = require('email-validator')
-const { pubsub } = require('./utils')
-const { authenticate } = require('./utils')
+const { pubsub, authenticate, authenticateAdmin } = require('./utils')
 const moment = require('moment')
 module.exports = {
     login: async (_, { username, password }, { req }) => {
@@ -16,6 +15,9 @@ module.exports = {
                 req.session.user.lastVisited = req.session.user.lastLoginTime
                 req.session.user.loginTime = Math.floor(Date.now() / 1000)
                 req.session.user.visited = req.session.user.loginTime
+                if (user.privilege === 'admin') {
+                    req.session.user.admin = true
+                }
                 req.session.save()
                 queryDB(`UPDATE users SET last_login=NOW() WHERE id=?`, [user.id])
                 return true
@@ -289,6 +291,25 @@ module.exports = {
             return false
         }
         const { affectedRows } = await queryDB(`DELETE IGNORE FROM follows WHERE follower_id= ? AND followee_id= ?`, [sessionUser, user_id]).catch(e => { throw (e) })
+        return affectedRows > 0
+    },
+    featurePost: async (_, { id }, { req, Loaders }) => {
+        const admin = authenticateAdmin(req.session)
+        if (!admin) throw Errors.authorization.notAuthorized;
+        const { affectedRows } = await queryDB(`UPDATE posts SET featured=?, featured_at=NOW() WHERE id=?`, [true, id], null, true)
+        if (affectedRows > 0) {
+            Loaders.posts.byId.load(id)
+                .then(({ featured_at, ...post }) => {
+                    pubsub.publish('FEATURED_POST', { post, featured_at })
+                })
+            return true
+        }
+        return false
+    },
+    unfeaturePost: async (_, { id }, { req, Loaders }) => {
+        const admin = authenticateAdmin(req.session)
+        if (!admin) throw Errors.authorization.notAuthorized
+        const { affectedRows } = await queryDB(`UPDATE posts SET featured=?, featured_at=NULL WHERE id=?`, [false, id], null, true)
         return affectedRows > 0
     }
 }

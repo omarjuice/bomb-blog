@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import Link from 'next/link';
-import Trending from './Trending'
+import Featured from './Featured'
 import Recent from './Recent';
 import { setSearch, renderModal } from '../../apollo/clientWrites';
 import { shortenNumber } from '../../utils';
@@ -12,23 +12,20 @@ import ErrorIcon from '../meta/ErrorIcon';
 import Feed from './Feed';
 import BombSVG from '../svg/bomb';
 
-const gqlQueries = {
-    posts: SEARCH_POSTS
-}
+
 class Home extends Component {
     state = {
         fetching: false,
-        active: 'trending'
+        active: 'featured'
     }
-    handleScroll = (display, client, { limit, cursor, exclude, tags }, query = SEARCH_POSTS) => {
+    handleScroll = (display, client, { limit, cursor, exclude, tags, orderBy }, query = SEARCH_POSTS) => {
         const input = { limit, cursor }
         if (tags) {
             input.tags = tags
         }
-        else if (exclude) {
+        else if (exclude || orderBy) {
             input.exclude = exclude
         }
-
         let avgItemHeight = null
         const calcAvgItemHeight = (last, first, children) => {
             const height = (last.offsetTop - first.offsetTop) / (children.length - 2)
@@ -71,18 +68,18 @@ class Home extends Component {
     }
     render() {
         const { trending } = this.props.data
-        const inputRecent = { cursor: 0, limit: 5, exclude: trending.results.map(post => post.id) }
+        const inputTrending = { cursor: 0, limit: 5, exclude: trending.results.map(post => post.id), orderBy: "trending" }
         const inputSuggested = { cursor: 0, limit: 5, tags: [] }
         return (
             <div>
                 <div className="tabs is-hidden-tablet">
                     <ul>
-                        <li onClick={() => this.setState({ active: 'trending' })} className={this.state.active === 'trending' ? 'is-active' : ''}><a>Trending</a></li>
+                        <li onClick={() => this.setState({ active: 'featured' })} className={this.state.active === 'featured' ? 'is-active' : ''}><a>Featured</a></li>
                         <li onClick={() => this.setState({ active: 'feed' })} className={this.state.active === 'feed' ? 'is-active' : ''}><a>Feed</a></li>
                         <li onClick={() => this.setState({ active: 'suggested' })} className={this.state.active === 'suggested' ? 'is-active' : ''}><a>Suggested</a></li>
                     </ul>
                 </div>
-                <Trending active={this.state.active === 'trending'} posts={this.props.data.trending.results} />
+                <Featured active={this.state.active === 'featured'} posts={this.props.data.trending.results} />
                 <br />
 
                 <hr className="is-hidden-mobile" />
@@ -194,7 +191,7 @@ class Home extends Component {
                                     </>
                                 )
                                 if (!data.authenticated) return (
-                                    <Query query={SEARCH_POSTS} variables={{ input: inputRecent }} ssr={false}>
+                                    <Query query={SEARCH_POSTS} variables={{ input: inputTrending }} ssr={false}>
                                         {({ loading, error, data, client }) => {
                                             if (loading || error || !data) {
                                                 return (
@@ -205,7 +202,7 @@ class Home extends Component {
                                                 )
                                             }
                                             return (<>
-                                                <div onScroll={this.handleScroll('posts', client, { ...inputRecent, cursor: data.posts.cursor })} className={`column is-two-thirds recent ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
+                                                <div onScroll={this.handleScroll('posts', client, { ...inputTrending, cursor: data.posts.cursor })} className={`column is-two-thirds recent ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                     <article className="media">
                                                         <div className="media-content font-2 has-text-centered">
                                                             <div className="content">

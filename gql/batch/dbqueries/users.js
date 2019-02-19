@@ -3,7 +3,7 @@ const bool = !['test', 'production'].includes(process.env.NODE_ENV)
 
 module.exports = {
     batchUsers: async keys => {
-        const users = await queryDB(`SELECT id, username, created_at, email FROM users WHERE id IN (?)`, [keys], null, bool)
+        const users = await queryDB(`SELECT id, username, created_at, email, privilege FROM users WHERE id IN (?)`, [keys], null, bool)
         const Users = users.reduce((acc, user) => {
             if (!user) return acc;
             acc[user.id] = user

@@ -1,6 +1,6 @@
 
-const testAPI = require('./api.test')
+const testGQL = require('./gql.test')
 const testDB = require('./db.test')
 
-testAPI()
+testGQL()
 // testDB()

@@ -43,6 +43,13 @@ module.exports = {
             () => pubsub.asyncIterator('NEW_REPLY'),
             ({ comment, newReply }, { id }, ) => comment.user_id === id && newReply.user_id !== id
         )
+    },
+    featuredPost: {
+        resolve: payload => payload,
+        subscribe: withFilter(
+            () => pubsub.asyncIterator('FEATURED_POST'),
+            ({ post }, { id }) => post.user_id === id
+        )
     }
 
 }

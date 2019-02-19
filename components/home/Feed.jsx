@@ -6,13 +6,14 @@ import moment from 'moment'
 import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
 import { renderModal, setSearch } from '../../apollo/clientWrites';
+import FeaturePost from '../admin/FeaturePost';
 
 class Feed extends Component {
     render() {
         const { data } = this.props
         return (
             <>
-                {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags, image }, i) => {
+                {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags, image, featured }, i) => {
                     const likes = shortenNumber(numLikes)
                     const comments = shortenNumber(numComments)
                     return (
@@ -67,6 +68,7 @@ class Feed extends Component {
 
                                 </p>
                                 {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
+                                <FeaturePost featured={featured} id={id} />
                             </div>
 
                             <style jsx>{`

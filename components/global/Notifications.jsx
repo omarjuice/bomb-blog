@@ -14,9 +14,9 @@ import LinkWrap from './LinkWrap';
 import { renderModal } from '../../apollo/clientWrites';
 class Notifications extends Component {
 
-    genNewComment = ({ id, commenter, post, comment_text, tags, created_at }) => {
+    genNewComment = (key, { id, commenter, post, comment_text, tags, created_at }) => {
         return (
-            <article key={`comment-${id}`} className="media">
+            <article key={key} className="media">
                 <LinkWrap href={{ pathname: '/profile', query: { id: commenter.id } }}>
                     <figure className="media-left">
                         <p className="image is-48x48">
@@ -61,9 +61,9 @@ class Notifications extends Component {
             </article>
         )
     }
-    genNewPost = ({ id, title, caption, author, tags, image, created_at }) => {
+    genNewPost = (key, { id, title, caption, author, tags, image, created_at }) => {
         return (
-            <article key={`post-${id}`} className="media">
+            <article key={key} className="media">
                 <figure className="media-left">
                     <LinkWrap href={{ pathname: '/profile', query: { id: author.id } }}>
                         <p className="image is-48x48">
@@ -105,9 +105,9 @@ class Notifications extends Component {
             </article>
         )
     }
-    genNewLike = ({ user, post, liked_at }) => {
+    genNewLike = (key, { user, post, liked_at }) => {
         return (
-            <article key={`like-${user.id}-${post.id}`} className="media">
+            <article key={key} className="media">
                 <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
                     <figure className="media-left">
                         <p className="image is-48x48">
@@ -143,9 +143,9 @@ class Notifications extends Component {
             </article>
         )
     }
-    genNewCommentLike = ({ user, comment, liked_at }) => {
+    genNewCommentLike = (key, { user, comment, liked_at }) => {
         return (
-            <article key={`comment-like-${user.id}-${comment.id}`} className="media">
+            <article key={key} className="media">
                 <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
                     <figure className="media-left">
                         <p className="image is-48x48">
@@ -191,9 +191,9 @@ class Notifications extends Component {
             </article>
         )
     }
-    genNewReply = ({ id, reply_text, replier, comment, created_at }) => {
+    genNewReply = (key, { id, reply_text, replier, comment, created_at }) => {
         return (
-            <article key={`reply-${id}`} className="media">
+            <article key={key} className="media">
                 <LinkWrap href={{ pathname: '/profile', query: { id: replier.id } }}>
                     <figure className="media-left">
                         <p className="image is-48x48">
@@ -249,9 +249,9 @@ class Notifications extends Component {
             </article>
         )
     }
-    genNewFollow = ({ user: { id, username, profile }, followed_at }) => {
+    genNewFollow = (key, { user: { id, username, profile }, followed_at }) => {
         return (
-            <article key={`follow-${id}`} className="media">
+            <article key={key} className="media">
                 <LinkWrap href={{ pathname: '/profile', query: { id } }}>
                     <figure className="media-left">
                         <p className="image is-48x48">
@@ -276,11 +276,39 @@ class Notifications extends Component {
                             <span className="level-item has-text-grey">
                                 {moment.utc(Number(followed_at)).local().fromNow()}
                             </span>
-                            {/* <p className="level-item has-text-primary"><span className="icon"><i className="fas fa-bomb"></i></span>{300000}</p> */}
                         </div>
                     </nav>
                 </div>
 
+            </article>
+        )
+    }
+    genFeatured = (key, { post: { id, title }, featured_at }) => {
+        return (
+            <article key={key} className="media">
+                <figure className="media-left">
+                    <div className="image is-64x64">
+                        <BombSVG lit={true} face={{ happy: true }} />
+                    </div>
+                </figure>
+                <div className="media-content">
+                    <div className="content">
+                        <p className="title is-5">
+                            Your post has been <LinkWrap href="/">featured!</LinkWrap>
+                        </p>
+                        <br />
+                        <LinkWrap href={{ pathname: '/posts', query: { id } }}>
+                            <strong className="is-size-5"><em>{title}</em></strong>
+                        </LinkWrap>
+                    </div>
+                    <nav className="level is-mobile">
+                        <div className="level-left">
+                            <span className="level-item has-text-grey">
+                                {moment.utc(Number(featured_at)).local().fromNow()}
+                            </span>
+                        </div>
+                    </nav>
+                </div>
             </article>
         )
     }
@@ -293,6 +321,7 @@ class Notifications extends Component {
         typeMap.NewCommentLike = this.genNewCommentLike;
         typeMap.Reply = this.genNewReply;
         typeMap.NewFollower = this.genNewFollow;
+        typeMap.FeaturedPost = this.genFeatured;
         return (
             <div className={`tile is-vertical ${this.props.active ? '' : 'is-hidden'}`}>
                 {!this.props.lastVisited ? <article className="media">
@@ -332,8 +361,11 @@ class Notifications extends Component {
                     </div>
                 </article> :
                     this.props.data.map((key, i) => {
-                        const data = this.props.notificationMap[key]
-                        return typeMap[data.__typename](data)
+                        if (key) {
+                            const data = this.props.notificationMap[key]
+                            return typeMap[data.__typename](key, data)
+                        }
+                        return null
                     })
                 )}
             </div>

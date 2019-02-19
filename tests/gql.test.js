@@ -5,7 +5,7 @@ module.exports = function () {
     const { ApolloServer } = require('apollo-server-express')
     const session = require('express-session')
     const app = express()
-    const { port } = require('../')
+    const { port } = require('..')
     const queries = require('./testQueries')
     const typeDefs = require('../gql/schema')
     const resolvers = require('../gql/resolvers')
@@ -1394,6 +1394,117 @@ module.exports = function () {
                                 followed_at: expect.any(String)
                             })
                         }
+                    }).end(finished)
+            )
+        })
+        it('Should get the users featured posts', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.notifications.featuredPosts })
+                    .expect(({ body }) => {
+                        expect(typeof body.data.notifications.lastVisited).toBe('number')
+                        expect(body.data.notifications.featuredPosts.length).toBe(1)
+                        expect(body.data.notifications.featuredPosts[0]).toMatchObject({
+                            post: {
+                                id: 1,
+                            },
+                            featured_at: expect.any(String)
+                        })
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: ADMIN', () => {
+        it('Should return false if a user is not an admin', done => {
+            chainReqGQL(done, { query: queries.login.success[0] },
+                (finished) => reqGQL({ query: queries.admin.isAdmin })
+                    .expect(({ body }) => {
+                        expect(body.data.isAdmin).toBe(false)
+                    }).end(finished)
+            )
+
+        })
+        it('Should return true if a user is an admin', done => {
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.admin.isAdmin })
+                    .expect(({ body }) => {
+                        expect(body.data.isAdmin).toBe(true)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: Feature', () => {
+        it('Should return featured posts', done => {
+            reqGQL({ query: queries.posts.all, variables: { input: { featured: true } } })
+                .expect(({ body }) => {
+                    expect(body.data.posts.results.length).toBe(1)
+                    expect(body.data.posts.results[0]).toMatchObject({
+                        id: 1,
+                        featured: true,
+                        featured_at: expect.any(String)
+                    })
+                }).end(done)
+        })
+    })
+    describe('GQL: Add Featured Posts', () => {
+        it('Should allow an admin feature a new post', done => {
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.admin.featurePost, variables: { id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.data.featurePost).toBe(true)
+                    }).end(finished)
+            )
+        })
+        it('Should get all featured posts after adding', done => {
+            chainReqGQL(done, { query: queries.login.success[2] },
+                { query: queries.admin.featurePost, variables: { id: 2 } },
+                (finished) => reqGQL({ query: queries.posts.all, variables: { input: { featured: true } } })
+                    .expect(({ body }) => {
+                        expect(body.data.posts.results.length).toBe(2)
+                        for (let post of body.data.posts.results) {
+                            expect(post).toMatchObject({
+                                featured: true,
+                                featured_at: expect.any(String)
+                            })
+                        }
+                    }).end(finished)
+            )
+        })
+        it('Should not allow non-admin to feature posts', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.admin.featurePost, variables: { id: 2 } })
+                    .expect(({ body }) => {
+                        expect(body.errors).toBeTruthy()
+                        const [{ message }] = body.errors
+                        expect(message).toBe(Errors.authorization.notAuthorized.message)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: Remove Featured Posts', () => {
+        it('Should allow an admin to unfeature a post', done => {
+            chainReqGQL(done, { query: queries.login.success[2] },
+                (finished) => reqGQL({ query: queries.admin.unfeaturePost, variables: { id: 1 } })
+                    .expect(({ body }) => {
+                        expect(body.data.unfeaturePost).toBe(true)
+                    }).end(finished)
+            )
+        })
+        it('Should get all feautured posts after adding', done => {
+            chainReqGQL(done, { query: queries.login.success[2] },
+                { query: queries.admin.unfeaturePost, variables: { id: 1 } },
+                (finished) => reqGQL({ query: queries.posts.all, variables: { input: { featured: true } } })
+                    .expect(({ body }) => {
+                        expect(body.data.posts.results.length).toBe(0)
+                    }).end(finished)
+            )
+        })
+        it('Should not allow a non admin to unfeature a post', done => {
+            chainReqGQL(done, { query: queries.login.success[1] },
+                (finished) => reqGQL({ query: queries.admin.unfeaturePost, variables: { id: 1 } })
+                    .expect(({ body }) => {
+                        expect(body.errors).toBeTruthy()
+                        const [{ message }] = body.errors
+                        expect(message).toBe(Errors.authorization.notAuthorized.message)
                     }).end(finished)
             )
         })

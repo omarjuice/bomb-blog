@@ -136,3 +136,17 @@ export const NEW_FOLLOWER = gql`
         }
     }
 `
+export const FEATURED_POST = gql`
+    subscription FeaturedPost($id: Int!){
+        featuredPost(id: $id){
+            post{
+                id
+                title
+                caption
+                image
+                featured
+            }
+            featured_at
+        }
+    }
+`

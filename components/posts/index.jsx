@@ -12,6 +12,7 @@ import Like from '../global/Like';
 import marked from 'marked'
 import DeletePost from './DeletePost';
 import { setSearch } from '../../apollo/clientWrites';
+import FeaturePost from '../admin/FeaturePost';
 marked.setOptions({
     breaks: true,
     sanitize: true
@@ -42,7 +43,7 @@ class PostPage extends Component {
                             </div>
                         )
                         if (!data.post) return <div>DELETED</div>
-                        const { id, user_id, author, title, caption, post_content, created_at, last_updated, tags, numComments, image } = data.post
+                        const { id, user_id, author, title, caption, post_content, created_at, last_updated, tags, numComments, image, featured } = data.post
                         return (<div className="columns is-centered is-mobile is-multiline">
                             <div className="column is-7-desktop is-10-tablet is-full-mobile">
                                 <div className="card article">
@@ -93,7 +94,7 @@ class PostPage extends Component {
                                                                                 </div>
                                                                             </> :
                                                                             <Link href={{ pathname: '/profile', query: { id: user_id } }}><a>@{postAuthor.username}</a></Link>}
-
+                                                                        <FeaturePost id={id} featured={featured} />
                                                                         <br />
                                                                         at {moment.utc(Number(created_at)).local().format(' h:mma on MMMM Do, YYYY')}
                                                                         <br />

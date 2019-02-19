@@ -5,7 +5,9 @@ const userSchema = {
         username VARCHAR(25) UNIQUE NOT NULL,
         pswd CHAR(60) NOT NULL,
         created_at TIMESTAMP DEFAULT NOW(),
-        last_login TIMESTAMP
+        last_login TIMESTAMP,
+        privilege VARCHAR(20) DEFAULT 'user',
+        CHECK(privilege IN ('bot', 'user', 'admin'))
     )`,
     drop: `DROP TABLE IF EXISTS users`
 
@@ -30,7 +32,9 @@ const postSchema = {
         title VARCHAR(255) NOT NULL,
         caption TEXT NOT NULL,
         post_content LONGTEXT NOT NULL,
-        image VARCHAR(255), 
+        image VARCHAR(255),
+        featured BOOLEAN DEFAULT 0, 
+        featured_at TIMESTAMP DEFAULT NULL,
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )`,
     drop: `DROP TABLE IF EXISTS posts`
@@ -134,7 +138,8 @@ const followSchema = {
 }
 
 
+
 module.exports = {
     userSchema, profileSchema, postSchema, likeSchema, commentSchema, commentLikeSchema,
-    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema
+    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema,
 }

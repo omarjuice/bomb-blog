@@ -145,3 +145,13 @@ export const DELETE_POST = gql`
         deletePost(id:$id)
     }
 `
+export const FEATURE_POST = gql`
+    mutation FeauturePost($id: Int!){
+        featurePost(id: $id)
+    }
+`
+export const UNFEATURE_POST = gql`
+    mutation UnfeaturePost($id: Int!){
+        unfeaturePost(id: $id)
+    }
+`

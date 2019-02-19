@@ -4,6 +4,7 @@ module.exports = gql`
   type Query {
     hello: String
     authenticated: Boolean!
+    isAdmin: Boolean!
     user(id: Int, username: String): User
     users(input: Search!): Users!
     post(id: Int!): Post
@@ -22,6 +23,8 @@ module.exports = gql`
       createPost(input: PostDetails): Post!
       deletePost(id: Int!): Boolean!
       updatePost(id: Int!, input: PostDetails): Post!
+      featurePost(id:Int!): Boolean!
+      unfeaturePost(id: Int!): Boolean!
       likePost(post_id: Int!): Boolean!
       unlikePost(post_id: Int!): Boolean!
       createComment(post_id: Int!, comment_text: String!, tags: [String]): Comment!
@@ -42,6 +45,7 @@ module.exports = gql`
       newLike(id:Int!): NewLike
       newReply(id: Int!): Reply
       newCommentLike(id: Int!): NewCommentLike
+      featuredPost(id: Int!): FeaturedPost
   }
   type Notifications{
       lastVisited: Int
@@ -51,6 +55,7 @@ module.exports = gql`
       newCommentLikes: [NewCommentLike]!
       newReplies: [Reply]!
       newFollowers: [NewFollower]!
+      featuredPosts: [FeaturedPost]!
   }
  
   type Users{
@@ -71,13 +76,14 @@ module.exports = gql`
   }
   type User{
       id: Int!
+      username: String!
+      email: String!
+      created_at: String!
+      privilege: String
       followers: [Follower]!
       following: [Follower]!
       numFollowers: Int!
       numFollowing: Int!
-      username: String!
-      email: String!
-      created_at: String!
       profile: Profile!
       posts: [Post]!
       tags: [Tag]!
@@ -106,6 +112,8 @@ module.exports = gql`
       caption: String!
       post_content: String!
       image: String
+      featured: Boolean!
+      featured_at: String
       numLikes: Int!
       numComments: Int!
       comments: [Comment]!
@@ -185,6 +193,10 @@ module.exports = gql`
       followed_at: String
       followed_id: Int
   }
+  type FeaturedPost{
+      post: Post!
+      featured_at: String!
+  }
   input ProfileDetails {
       about: String
       photo_path: String
@@ -215,6 +227,6 @@ module.exports = gql`
     orderBy: String 
     tags:[String]
     exclude: [Int] = [0]
+    featured: Boolean
   }
-
 `;

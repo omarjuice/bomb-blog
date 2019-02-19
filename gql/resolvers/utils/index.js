@@ -11,4 +11,15 @@ const authenticate = (session) => {
     }
     return sessionUser
 }
-module.exports = { authenticate, pubsub }
+const authenticateAdmin = (session) => {
+    let admin;
+    try {
+        if (session.user.admin) {
+            admin = session.user.id
+        }
+    } catch (e) {
+        admin = null
+    }
+    return admin
+}
+module.exports = { authenticate, pubsub, authenticateAdmin }

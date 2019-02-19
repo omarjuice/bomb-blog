@@ -22,6 +22,11 @@ export const USER_PROFILE = gql`
         }
     }
 `
+export const IS_ADMIN = gql`
+    query IsAdmin{
+        isAdmin
+    }
+`
 export const FOLLOWERS = gql`
     query Followers($id: Int){
         user(id: $id){
@@ -83,6 +88,7 @@ export const LIKES = gql`
                 numComments
                 created_at
                 iLike
+                featured
             }
             isMe
         }
@@ -103,6 +109,7 @@ export const USER_POSTS = gql`
                 caption
                 iLike 
                 image
+                featured
             }
             profile{
                 photo_path
@@ -183,6 +190,7 @@ export const POST = gql`
             }
             numComments
             image
+            featured
         }
     }
 `
@@ -332,6 +340,7 @@ export const SEARCH_POSTS = gql`
                     tag_name
                 }
                 image
+                featured
             }
         }
     }
@@ -467,6 +476,7 @@ export const SEARCH_ALL = gql`
                     tag_name
                 }
                 image
+                featured
             }
         }
         comments(input: $input){
@@ -511,6 +521,7 @@ export const SEARCH_ALL = gql`
         }
     }
 `
+
 export const TRENDING = gql`
     query SearchPosts($input: Search!){
         posts(input: $input){
@@ -539,6 +550,7 @@ export const TRENDING = gql`
                     tag_name
                 }
                 image
+                featured
             }
         }
     }
@@ -574,11 +586,13 @@ export const FOLLOWEE_POSTS = gql`
                     }
                     image
                     iLike
+                    featured
                 }
             }
         }
 }
 `
+
 export const NOTIFICATIONS = gql`
     query Notifications {
        notifications{
@@ -694,6 +708,15 @@ export const NOTIFICATIONS = gql`
                 }
             }
             followed_at
+        }
+        featuredPosts{
+            post{
+                id
+                title
+                caption
+                featured
+            }
+            featured_at
         }
        }
     }

@@ -8,7 +8,7 @@ import { setNumNotifications } from '../../apollo/clientWrites';
 class Logout extends Component {
     render() {
         return (
-            <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`, `User`, `UserProfile`, `Post`, `Comments`, `UserPhoto`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `CurrentUser`, `Notifications`]}>
+            <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`, `User`, `UserProfile`, `Post`, `Comments`, `UserPhoto`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `CurrentUser`, `Notifications`, `IsAdmin`]}>
                 {(logout, { loading, error, data, client }) => {
                     if (loading) return <button>Loading...</button>;
                     if (error) return <button>{error.message.replace(/GraphQL error: /g, '')}</button>

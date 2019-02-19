@@ -1,4 +1,4 @@
-import { NEW_COMMENT, NEW_POST, NEW_LIKE, NEW_REPLY, NEW_COMMENT_LIKE, NEW_FOLLOWER } from "./subscriptions";
+import { NEW_COMMENT, NEW_POST, NEW_LIKE, NEW_REPLY, NEW_COMMENT_LIKE, NEW_FOLLOWER, FEATURED_POST } from "./subscriptions";
 import { NOTIFICATIONS } from "./queries";
 import { setNumNotifications } from "./clientWrites";
 
@@ -20,8 +20,8 @@ class NotificationManager {
                 }
             }
             combinedNotifications = combinedNotifications.sort((a, b) => {
-                let aTime = a.created_at || a.liked_at || a.followed_at
-                let bTime = b.created_at || b.liked_at || b.followed_at
+                let aTime = a.created_at || a.liked_at || a.followed_at || a.featured_at
+                let bTime = b.created_at || b.liked_at || b.followed_at || b.featured_at
                 return Number(aTime) > Number(bTime) ? -1 : 1
             })
             this.allNotifications = combinedNotifications.map(notification => this._addNotificationAndReturnKey(notification))
@@ -43,9 +43,11 @@ class NotificationManager {
             case 'NewLike':
                 return `like-${data.user.id}-${data.post.id}`;
             case 'NewCommentLike':
-                return `commentLike-${data.user.id}-${data.comment.id}`
+                return `commentLike-${data.user.id}-${data.comment.id}`;
             case 'NewFollower':
                 return `follower-${data.user.id}`
+            case 'FeaturedPost':
+                return `featured-${data.post.id}`
         }
     }
     _addNotificationAndReturnKey(data) {
@@ -81,6 +83,9 @@ class NotificationManager {
             }
             this.followListener = {
                 base: this.client.subscribe({ query: NEW_FOLLOWER, variables: { id } })
+            }
+            this.featuredListener = {
+                base: this.client.subscribe({ query: FEATURED_POST, variables: { id } })
             }
             this._generated = true
         }
@@ -151,6 +156,17 @@ class NotificationManager {
                     }
                 }
             })
+            this.featuredListener.subscription = this.featuredListener.base.subscribe({
+                next({ data: { featuredPost } }) {
+                    if (featuredPost) {
+                        console.log(featuredPost)
+                        const data = client.readQuery({ query: NOTIFICATIONS })
+                        data.notifications.featuredPosts.push(featuredPost)
+                        client.writeQuery({ query: NOTIFICATIONS, data })
+                        manager._newNotification(featuredPost)
+                    }
+                }
+            })
             this._subscribed = true
         }
         return this
@@ -163,6 +179,7 @@ class NotificationManager {
             this.commentLikeListener.subscription.unsubscribe()
             this.replyListener.subscription.unsubscribe()
             this.followListener.subscription.unsubscribe()
+            this.featuredListener.subscription.unsubscribe()
             this._subscribed = false
         }
         return this

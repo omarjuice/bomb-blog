@@ -110,6 +110,19 @@ module.exports = {
         return followers.map(({ followed_at, ...user }) => {
             return { user, followed_at }
         })
+    },
+    featuredPosts: async ({ lastVisited }, _, { req }) => {
+        if (!lastVisited) return []
+        const sessionUser = authenticate(req.session)
+        const query = `
+        SELECT 
+           *
+        FROM posts 
+        WHERE featured=1 AND posts.user_id=? AND UNIX_TIMESTAMP(featured_at) > ?
+        ORDER BY featured_at DESC
+        `
+        const featuredPosts = await queryDB(query, [sessionUser, lastVisited], null, true)
+        return featuredPosts.map(({ featured_at, ...post }) => { return { featured_at, post } })
     }
 
 }

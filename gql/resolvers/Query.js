@@ -1,10 +1,11 @@
 const { queryDB } = require('../../db/connect')
 const Errors = require('../errors')
-const { authenticate } = require('./utils')
+const { authenticate, authenticateAdmin } = require('./utils')
 
 module.exports = {
     hello: () => 'Hello world!',
     authenticated: (_, args, { req }) => !!authenticate(req.session),
+    isAdmin: (_, args, { req }) => !!authenticateAdmin(req.session),
     user: async (_, args, { req, Loaders }) => {
         let sessionUser = authenticate(req.session)
         let id = args.id || sessionUser
@@ -46,7 +47,9 @@ module.exports = {
     posts: async (_, { input }) => {
         const orderBy = input.orderBy === 'trending' ? 'trending' : input.orderBy === 'title' ? 'LOWER(title)' : 'created_at';
         const order = input.order ? 'ASC' : 'DESC'
+        const featured = typeof input.featured === 'boolean' ? input.featured ? [1] : [0] : [1, 0]
         const { cursor, limit, tags, search } = input
+
         let { exclude } = input
         if (tags && tags.length > 0) {
             const query = `
@@ -57,12 +60,12 @@ module.exports = {
                 ON post_tags.post_id=posts.id
             INNER JOIN tags
                 ON tags.id = post_tags.tag_id
-            WHERE tag_name IN (?) AND posts.id NOT IN (?) AND posts.title LIKE ?
+            WHERE tag_name IN (?) AND posts.id NOT IN (?) AND posts.title LIKE ? AND posts.featured IN (?)
             GROUP BY posts.id
             ORDER BY relevance DESC, created_at ${order}
             LIMIT ?,?
             `
-            const results = await queryDB(query, [tags, exclude, `%${search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+            const results = await queryDB(query, [tags, exclude, `%${search || ''}%`, featured, cursor, limit], null, true).catch(e => { console.log(e) })
             return { results, cursor: results.length < limit ? null : cursor + results.length }
         }
         const query = `
@@ -71,11 +74,11 @@ module.exports = {
         FROM posts 
         INNER JOIN likes
             ON posts.id = likes.post_id
-        WHERE posts.id NOT IN (?) AND title LIKE ? 
+        WHERE posts.id NOT IN (?) AND title LIKE ? AND posts.featured IN (?)
         GROUP BY posts.id
         ORDER BY ${orderBy} ${order} LIMIT ?,?
         `
-        const results = await queryDB(query, [exclude, `%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+        const results = await queryDB(query, [exclude, `%${input.search || ''}%`, featured, cursor, limit], null, true).catch(e => { console.log(e) })
         return { results, cursor: results.length < limit ? null : cursor + results.length }
     },
     tag: async (_, { id }, { Loaders }) => {

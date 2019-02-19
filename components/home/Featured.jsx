@@ -4,7 +4,8 @@ import marked from 'marked'
 import Link from 'next/link';
 import { setSearch, renderModal } from '../../apollo/clientWrites';
 import { shortenNumber, getMatches } from '../../utils';
-class Trending extends Component {
+import FeaturePost from '../admin/FeaturePost';
+class Featured extends Component {
     shorten = (text, maxLen = 100) => {
         if (text.length > maxLen) {
             return text.split(' ').reduce((acc, word) => {
@@ -54,10 +55,12 @@ class Trending extends Component {
         )
     }
     genStats = (post, size = 'large') => {
+        console.log(post.id, post.featured);
         return (
             <>
                 <a onClick={() => renderModal({ active: true, display: 'Likers', info: { type: 'post', id: post.id } })} className="has-text-weight-bold has-text-primary"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-bomb ${size === 'large' ? 'fa-2x' : ''}`}></i></span>{shortenNumber(post.numLikes)}</a>
                 <p className="has-text-weight-bold has-text-info"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-comment ${size === 'large' ? 'fa-2x' : ''}`}></i></span>{shortenNumber(post.numComments)}</p>
+                <FeaturePost featured={post.featured} id={post.id} />
             </>
         )
     }
@@ -294,4 +297,4 @@ class Trending extends Component {
     }
 }
 
-export default Trending;
+export default Featured;

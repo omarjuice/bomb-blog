@@ -98,6 +98,8 @@ module.exports = {
                     }
                     numLikes
                     image
+                    featured
+                    featured_at
                   }
             }
           }`,
@@ -115,6 +117,8 @@ module.exports = {
                   last_updated
                   numLikes
                   image
+                  featured
+                  featured_at
               }
           }`,
     byUserID: `query ($id: Int){
@@ -145,6 +149,8 @@ module.exports = {
               post_content
               created_at
               numLikes
+              featured
+              featured_at
             }
           }`,
     delete: `mutation ($id: Int!){
@@ -164,6 +170,8 @@ module.exports = {
                 title
                 caption
                 post_content
+                featured
+                featured_at
                 last_updated
                 numLikes
             }
@@ -181,6 +189,8 @@ module.exports = {
           post_content
           created_at
           last_updated
+          featured
+          featured_at
           numLikes
           likers{ username }
           numComments
@@ -212,6 +222,8 @@ module.exports = {
           post_content
           created_at
           last_updated
+          featured
+          featured_at
           numLikes
           likers{ username }
           numComments
@@ -258,6 +270,8 @@ module.exports = {
           numLikes
           likers{ username }
           numComments
+          featured
+          featured_at
           comments{
             id
             user_id
@@ -293,6 +307,8 @@ module.exports = {
             tag_name
           }
           post_content
+          featured
+          featured_at
           created_at
           last_updated
           numLikes
@@ -562,6 +578,8 @@ module.exports = {
           caption
           post_content
           created_at
+          featured
+          featured_at
         }
       }
     }  
@@ -636,8 +654,30 @@ module.exports = {
         }
       }
     }
-    
-    `
+    `,
+    featuredPosts: `query{
+      notifications{
+        lastVisited
+        featuredPosts{
+          post{
+            id
+            featured
+          }
+          featured_at
+        }
+      }
+    }`
+  },
+  admin: {
+    isAdmin: `query{
+      isAdmin
+    }`,
+    featurePost: `mutation($id: Int!){
+      featurePost(id: $id)
+    }`,
+    unfeaturePost: `mutation($id: Int!){
+      unfeaturePost(id: $id)
+    }`
   }
 
 }
