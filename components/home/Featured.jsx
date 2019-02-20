@@ -55,7 +55,6 @@ class Featured extends Component {
         )
     }
     genStats = (post, size = 'large') => {
-        console.log(post.id, post.featured);
         return (
             <>
                 <a onClick={() => renderModal({ active: true, display: 'Likers', info: { type: 'post', id: post.id } })} className="has-text-weight-bold has-text-primary"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-bomb ${size === 'large' ? 'fa-2x' : ''}`}></i></span>{shortenNumber(post.numLikes)}</a>

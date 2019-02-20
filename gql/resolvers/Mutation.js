@@ -1,9 +1,10 @@
+const validator = require('email-validator')
+const moment = require('moment')
 const { queryDB } = require('../../db/connect')
 const { compare, hashUser } = require('../../db/crypt')
 const Errors = require('../errors')
-const validator = require('email-validator')
-const { pubsub, authenticate, authenticateAdmin } = require('./utils')
-const moment = require('moment')
+const { pubsub, authenticate, authenticateAdmin, storeFS, deleteFS } = require('./utils')
+
 module.exports = {
     login: async (_, { username, password }, { req }) => {
         const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username]).catch(e => { throw Errors.database })
@@ -65,6 +66,9 @@ module.exports = {
                 last_updated = NOW() 
             WHERE user_id = ?`, [args.input.about !== undefined ? args.input.about : about, args.input.photo_path || photo_path, id]).catch(e => { throw Errors.database })
         if (affectedRows > 0) {
+            if (photo_path && args.input.photo_path) {
+                deleteFS('.' + photo_path)
+            }
             if (args.input.modTags) {
                 const { addTags, deleteTags } = args.input.modTags;
                 if (addTags && addTags.length > 0) {
@@ -311,5 +315,14 @@ module.exports = {
         if (!admin) throw Errors.authorization.notAuthorized
         const { affectedRows } = await queryDB(`UPDATE posts SET featured=?, featured_at=NULL WHERE id=?`, [false, id], null, true)
         return affectedRows > 0
+    },
+    uploadImage: async (_, { image }) => {
+        const { filename, createReadStream } = await image
+        const stream = createReadStream()
+        const { path, id, error } = await storeFS({ stream, filename }).catch(error => { return { error } })
+        if (error) {
+            return null
+        }
+        return path.slice(1)
     }
 }

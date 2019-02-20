@@ -155,3 +155,8 @@ export const UNFEATURE_POST = gql`
         unfeaturePost(id: $id)
     }
 `
+export const UPLOAD_IMAGE = gql`
+    mutation UploadImage($image: Upload!){
+        uploadImage(image: $image)
+    }
+`

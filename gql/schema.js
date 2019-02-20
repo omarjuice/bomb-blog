@@ -37,6 +37,7 @@ module.exports = gql`
       updateReply(reply_id: Int!, reply_text: String!): Reply!
       createFollow(user_id: Int!): Boolean!
       deleteFollow(user_id: Int!): Boolean!
+      uploadImage(image: Upload!): String
   }
   type Subscription{
       newPost(id: Int!): Post
@@ -47,6 +48,7 @@ module.exports = gql`
       newCommentLike(id: Int!): NewCommentLike
       featuredPost(id: Int!): FeaturedPost
   }
+  
   type Notifications{
       lastVisited: Int
       newPosts: [Post]!
@@ -229,4 +231,5 @@ module.exports = gql`
     exclude: [Int] = [0]
     featured: Boolean
   }
+  scalar Upload
 `;

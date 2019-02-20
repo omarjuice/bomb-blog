@@ -12,7 +12,7 @@
   "author": "Omar Juice",
   "license": "ISC",
   "devDependencies": {
-    "expect": "^23.6.0",
+    "expect": "^24.1.0",
     "mocha": "^5.2.0",
     "supertest": "^3.3.0"
   },
@@ -24,6 +24,7 @@
     "apollo-link-state": "^0.4.2",
     "apollo-link-ws": "^1.0.14",
     "apollo-server-express": "^2.3.1",
+    "apollo-upload-client": "^10.0.0",
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "dataloader": "^1.4.0",
@@ -34,7 +35,9 @@
     "faker": "^4.1.0",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
+    "graphql-upload": "^8.0.4",
     "marked": "^0.6.0",
+    "mkdirp": "^0.5.1",
     "moment": "^2.24.0",
     "mysql": "^2.16.0",
     "next": "^7.0.2",
@@ -42,6 +45,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-no-ssr": "^1.1.0",
+    "shortid": "^2.2.14",
     "subscriptions-transport-ws": "^0.9.15"
   }
 }

@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
+import { createUploadLink, } from 'apollo-upload-client'
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
@@ -11,10 +12,10 @@ import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const wsLink = process.browser ? new SubscriptionClient('ws://localhost:3000/graphql', {
-    reconnect: true,
+    reconnect: true
 }, WebSocket) : null
 
-const httpLink = new HttpLink({
+const httpLink = createUploadLink({
     uri: 'http://localhost:3000/graphql',
     fetch,
     credentials: 'same-origin'

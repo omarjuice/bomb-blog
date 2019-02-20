@@ -2,20 +2,24 @@ const http = require('http')
 const next = require('next')
 const express = require('express')
 const app = express()
-const { ApolloServer } = require('apollo-server-express')
+const { ApolloServer, makeExecutableSchema } = require('apollo-server-express')
+const { graphqlUploadExpress } = require('graphql-upload')
 const session = require('express-session')
 const typeDefs = require('./gql/schema');
 const resolvers = require('./gql/resolvers')
 const applyLoaders = require('./gql/batch')
 const moment = require('moment')
+require('mkdirp').sync('./static/uploads')
 const { queryDB } = require('./db/connect')
 const dev = process.env.NODE_ENV !== 'production'
 const test = process.env.NODE_ENV === 'test'
 let port = process.env.PORT || 3000
-
 const nextApp = next({ dev, dir: __dirname })
+
+
+const schema = makeExecutableSchema({ typeDefs, resolvers })
 const apollo = new ApolloServer({
-    typeDefs, resolvers, context: ctx => {
+    schema, context: ctx => {
         let user, id, operationName, variables, lastVisited, visited;
         try {
             user = ctx.req.session.user.id
@@ -65,6 +69,7 @@ const initializeServer = (app, productionEnv = false) => {
     return (done = null) => {
         nextApp.prepare()
             .then(() => {
+                app.use(graphqlUploadExpress())
                 app.use(session({
                     name: 'blog-session',
                     secret: process.env.SESSION_SECRET,
@@ -135,6 +140,6 @@ if (test) {
     queryDB(`USE blog`).then(() => initializeServer(app, !dev)()).catch(e => console.log(e))
 }
 
-module.exports = { nextApp, port, initializeServer, app }
+module.exports = { nextApp, port, initializeServer, app, }
 
 
