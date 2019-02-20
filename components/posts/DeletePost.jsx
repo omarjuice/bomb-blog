@@ -32,8 +32,7 @@ class DeletePost extends Component {
                             await deletePost({ variables: { id } })
                             component.waitForConfirmation.unsubscribe()
                             hideModal()
-
-                            return Router.back()
+                            return Router.replace({ pathname: '/profile', query: { id: userId } })
                         }
                         if (data.modal.confirmation = false) {
                             component.waitForConfirmation.unsubscribe()

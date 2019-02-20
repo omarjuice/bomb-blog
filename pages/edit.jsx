@@ -6,7 +6,7 @@ import { Query } from 'react-apollo';
 import Loading from '../components/meta/Loading';
 import ErrorIcon from '../components/meta/ErrorIcon';
 import WritePost from '../components/writepost/index';
-import { UPDATE_POST } from '../apollo/mutations';
+import { UPDATE_POST, UPLOAD_IMAGE } from '../apollo/mutations';
 import { updateTags, getMatches, tagRegex } from '../utils';
 
 class Edit extends Component {
@@ -35,7 +35,7 @@ class Edit extends Component {
             const form = validate()
             if (!form) return;
             processingSubmit = true
-            const { title, caption, tags, body, image } = form
+            const { title, caption, tags, body, image, imageType, upload } = form
             let newTags = getMatches(tags, tagRegex)
             let modTags = updateTags(this.props.data.post.tags.map(tag => tag.tag_name), newTags)
             renderModal({ display: 'Confirm', info: { prompt: 'Are you ready submit these edits?' }, active: true, confirmation: null })
@@ -44,7 +44,15 @@ class Edit extends Component {
                 .subscribe({
                     async next(subscription) {
                         if (subscription.data.modal.confirmation === true) {
-                            const { data } = await client.mutate({ mutation: UPDATE_POST, variables: { id, input: { title, caption, modTags, post_content: body, image } } })
+                            let imagePath;
+                            if (imageType && upload.file) {
+                                console.log('uploading');
+                                const { data: { uploadImage } } = await client.mutate({ mutation: UPLOAD_IMAGE, variables: { image: upload.file } })
+                                imagePath = uploadImage
+                            } else {
+                                imagePath = image
+                            }
+                            const { data } = await client.mutate({ mutation: UPDATE_POST, variables: { id, input: { title, caption, modTags, post_content: body, image: imagePath } } })
                             if (data.updatePost) {
                                 const oldData = client.cache.readQuery({ query: POST, variables: { id } })
                                 const newData = { post: { ...oldData.post, ...data.updatePost } }
@@ -83,7 +91,7 @@ class Edit extends Component {
                                     return <div></div>
                                 }
                                 if (data.user.id === post.author.id) {
-                                    return <WritePost image={post.image} title={post.title} caption={post.caption} tags={post.tags.reduce((acc, tag) => acc + '#' + tag.tag_name + ' ', '')} body={post.post_content} onSubmit={this.onSubmit} />
+                                    return <WritePost uploaded={/\/static\/uploads\//.test(post.image)} image={post.image} title={post.title} caption={post.caption} tags={post.tags.reduce((acc, tag) => acc + '#' + tag.tag_name + ' ', '')} body={post.post_content} onSubmit={this.onSubmit} />
                                 }
                                 createError({ code: 'UNAUTHORIZED', message: 'You did not write that post.' })
                                 Router.replace('/')

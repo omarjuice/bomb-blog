@@ -105,11 +105,16 @@ module.exports = {
         }
         throw Errors.database
     },
-    deletePost: async (_, args, { req }) => {
+    deletePost: async (_, args, { req, Loaders }) => {
         let sessionUser = authenticate(req.session)
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
+        const { image } = await Loaders.posts.byId.load(args.id)
         const { affectedRows } = await queryDB(`DELETE FROM posts WHERE id= ? AND user_id= ?`, [args.id, sessionUser]).catch(e => { throw Errors.database })
-        return affectedRows > 0;
+        if (affectedRows > 0) {
+            deleteFS('.' + image)
+            return true
+        };
+        return false
     },
     updatePost: async (_, args, { req, Loaders, batchInserts, batchDeletes }) => {
         let sessionUser = authenticate(req.session)
@@ -121,6 +126,9 @@ module.exports = {
         const { title, caption, post_content, user_id } = post
         if (user_id !== sessionUser) throw Errors.authorization.notAuthorized;
         const image = args.input.image ? args.input.image : null
+        if (image && post.image) {
+            deleteFS('.' + post.image)
+        }
         const { affectedRows } =
             await queryDB(`
             UPDATE posts

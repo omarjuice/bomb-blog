@@ -92,8 +92,8 @@ class Feed extends Component {
                     <div className="media-content font-2 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
-                                No {data.results.length > 0 ? 'more' : ''} Posts to show...
-                        </h3>
+                                {data.results.length > 0 ? 'No more posts to show...' : 'You arent following anyone yet!'}
+                            </h3>
 
                         </div>
                     </div>

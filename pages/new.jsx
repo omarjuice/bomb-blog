@@ -7,8 +7,9 @@ import { AUTHENTICATED, GET_MODAL } from '../apollo/queries';
 import Router from 'next/router'
 import Loading from '../components/meta/Loading';
 import ErrorIcon from '../components/meta/ErrorIcon';
-import { CREATE_POST } from '../apollo/mutations';
+import { CREATE_POST, UPLOAD_IMAGE } from '../apollo/mutations';
 import { getMatches, tagRegex } from '../utils';
+import UploadImage from '../components/profile/UploadImage';
 
 class New extends Component {
     static getInitialProps() {
@@ -23,7 +24,7 @@ class New extends Component {
             const form = validate()
             if (!form) return;
             processingSubmit = true
-            const { title, caption, tags, body, image } = form
+            const { title, caption, tags, body, image, imageType, upload } = form
             let insertTags = getMatches(tags, tagRegex)
             renderModal({ display: 'Confirm', info: { prompt: 'Are you ready submit this post?' }, active: true, confirmation: null })
             const { client } = this.props
@@ -32,7 +33,14 @@ class New extends Component {
                 .subscribe({
                     async next(subscription) {
                         if (subscription.data.modal.confirmation === true) {
-                            const { data } = await client.mutate({ mutation: CREATE_POST, variables: { input: { title, caption, tags: insertTags, post_content: body, image } } })
+                            let imagePath;
+                            if (imageType) {
+                                const { data: { uploadImage } } = await client.mutate({ mutation: UPLOAD_IMAGE, variables: { image: upload.file } })
+                                imagePath = uploadImage
+                            } else {
+                                imagePath = image
+                            }
+                            const { data } = await client.mutate({ mutation: CREATE_POST, variables: { input: { title, caption, tags: insertTags, post_content: body, image: imagePath } } })
                             if (data.createPost) {
                                 page.waitForConfirmation.unsubscribe()
                                 hideModal()

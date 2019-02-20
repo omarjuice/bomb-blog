@@ -51,6 +51,9 @@ module.exports = {
         const { cursor, limit, tags, search } = input
 
         let { exclude } = input
+        if (!exclude || !exclude.length) {
+            exclude = [0]
+        }
         if (tags && tags.length > 0) {
             const query = `
             SELECT 

@@ -12,6 +12,12 @@ class WritePost extends Component {
         tags: this.props.tags || '',
         body: this.props.body || '',
         image: this.props.image || '',
+        imageType: this.props.uploaded,
+        upload: {
+            valid: false,
+            file: null,
+            name: this.props.uploaded ? 'uploaded image' : ''
+        },
         errors: {
             title: null,
             caption: null,
@@ -79,8 +85,12 @@ class WritePost extends Component {
                     newSelectionEnd += stringToAdd.length
                     break;
                 case 'table':
-                    const rows = Math.floor(document.getElementById('input-table-rows').value)
-                    const cols = Math.floor(document.getElementById('input-table-cols').value)
+                    let rows = Math.floor(document.getElementById('input-table-rows').value)
+                    let cols = Math.floor(document.getElementById('input-table-cols').value)
+                    if (rows > 25) rows = 25
+                    if (rows < 1) rows = 1
+                    if (cols > 5) cols = 5
+                    if (cols < 1) cols = 1
                     if (typeof rows !== 'number' || rows < 1 || typeof cols !== 'number' || cols < 1) {
                         return
                     }
@@ -136,7 +146,7 @@ class WritePost extends Component {
         this.markdown.scrollTo(0, (numLinesToSelection / totalNumLines) * scrollHeight)
     }
     validate() {
-        const { title, caption, tags, body, image } = this.state
+        const { title, caption, tags, body, image, imageType, upload } = this.state
         const titleLen = title.length,
             captionLen = caption.length,
             tagsLen = this.getTags(tags).length,
@@ -168,15 +178,22 @@ class WritePost extends Component {
         if (bodyLen > 200000) {
             errors.body = 'Your post is too long'
         }
-        if (imageLen > 255) {
+        if (!imageType && imageLen > 255) {
             errors.image = 'Link too long'
+        }
+        if (imageType && upload.size > 10000000) {
+            errors.image = 'Image too large'
+        }
+        if (!this.props.uploaded && imageType && (!upload.file || !upload.valid)) {
+            console.log(upload)
+            errors.image = 'No valid file uploaded'
         }
         this.setState({ errors })
         if (Object.values(errors).filter(e => e).length > 0) {
             return null
         }
         window.onbeforeunload = null
-        return { title, caption, tags, body, image }
+        return { title, caption, tags, body, image, imageType, upload }
 
     }
     componentWillUnmount() {
@@ -210,12 +227,55 @@ class WritePost extends Component {
                                 </div>
                                 <p className={`help ${tags.length < 1 || this.state.tags.length < 1 || tags.length > 20 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.tags.length < 1 ? 0 : tags.length}</span><span>{this.state.errors.tags}</span></p>
                             </div>
+
                             <div className="field has-text-centered">
                                 <label className="label">Main Image</label>
-                                <div className="control">
-                                    <input onChange={e => { this.setState({ image: e.target.value, head: true, errors: { ...this.state.errors, image: null } }) }} value={this.state.image} className={`input ${this.state.errors.image ? 'is-primary' : ''}`} type="text" placeholder="Image Link" />
+                                <div className="field has-addons has-addons-centered">
+                                    <p className="control ">
+                                        <a onClick={() => this.setState({ imageType: false })} className={`button is-link ${!this.state.imageType ? 'is-static' : ''}`}>
+                                            <span className="icon is-small">
+                                                <i className="fas fa-link"></i>
+                                            </span>
+                                        </a>
+                                    </p>
+                                    <p className="control">
+                                        <a onClick={() => this.setState({ imageType: true })} className={`button is-info ${this.state.imageType ? 'is-static' : ''}`}>
+                                            <span className="icon is-small">
+                                                <i className="fas fa-upload"></i>
+                                            </span>
+                                        </a>
+                                    </p>
                                 </div>
-                                <p className={`help ${this.state.image.length > 255 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.image.length}</span><span>{this.state.errors.image}</span></p>
+                                <div className="control">
+
+                                    {this.state.imageType ?
+                                        <>
+                                            <div className="file is-centered">
+                                                <label className="file-label">
+                                                    <input accept=".jpeg,.jpg,.png" onChange={({ target: { validity: { valid }, files: [file] } }) => {
+                                                        this.setState({
+                                                            upload: {
+                                                                valid,
+                                                                name: file.name,
+                                                                file,
+                                                                size: file.size
+                                                            }
+                                                        })
+                                                    }} className="file-input" type="file" name="resume" />
+                                                    <span className="file-cta">
+                                                        <span className="file-icon">
+                                                            <i className="fas fa-upload"></i>
+                                                        </span>
+                                                        <span className="file-label">
+                                                            {this.state.upload.name.slice(0, 20) || 'Choose a file'}
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </> :
+                                        <input onChange={e => { this.setState({ image: e.target.value, head: true, errors: { ...this.state.errors, image: null } }) }} value={this.state.image} className={`input ${this.state.errors.image ? 'is-primary' : ''}`} type="text" placeholder="Image Link" />}
+                                </div>
+                                <p className={`help ${!this.state.imageType && this.state.image.length > 255 ? 'is-primary' : ''}`}><span className="is-pulled-left">{!this.state.imageType && this.state.image.length}</span><span>{this.state.errors.image}</span></p>
                             </div>
                             <div className="card has-text-centered">
                                 <ToolBar modifyText={this.modifyText.bind('this')} />
@@ -237,9 +297,9 @@ class WritePost extends Component {
                         </form>
                     </div>
                     <Preview body={this.state.body || '# post-body'} preview={this.state.preview} >
-                        <PostHead title={this.state.title || 'Title of Post'} caption={this.state.caption || 'I am the bomb'} tags={tags} image={this.state.image} />
+                        <PostHead title={this.state.title || 'Title of Post'} caption={this.state.caption || 'I am the bomb'} tags={tags} image={this.state.imageType && this.state.upload.file ? URL.createObjectURL(this.state.upload.file) : this.state.image} />
                     </Preview>
-                    <div draggable={true} className="control preview has-text-centered is-hidden-desktop">
+                    <div className="control preview has-text-centered is-hidden-desktop">
                         <a onClick={() => this.setState({ preview: !this.state.preview })} className="button is-large is-primary is-rounded font-2">
                             <span className="icon">{this.state.preview ? <i className="fas fa-pencil-alt"></i> : <i className="far fa-eye"></i>}</span>
                         </a>
