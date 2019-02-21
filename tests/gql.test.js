@@ -2,9 +2,10 @@ module.exports = function () {
     const expect = require('expect');
     const request = require('supertest')
     const express = require('express')
-    const { ApolloServer } = require('apollo-server-express')
+    const { ApolloServer, makeExecutableSchema } = require('apollo-server-express')
     const session = require('express-session')
     const app = express()
+    const { graphqlUploadExpress } = require('graphql-upload')
     const { port } = require('..')
     const queries = require('./testQueries')
     const typeDefs = require('../gql/schema')
@@ -13,10 +14,11 @@ module.exports = function () {
     const { seedDB, resetDB, resetTables } = require('./seed')
     const { queryDB } = require('../db/connect')
     const applyLoaders = require('../gql/batch')
-
-    const apollo = new ApolloServer({ typeDefs, resolvers, context: (ctx) => applyLoaders(ctx), uploads: true })
+    const schema = makeExecutableSchema({ typeDefs, resolvers })
+    const apollo = new ApolloServer({ schema, context: (ctx) => applyLoaders(ctx), uploads: true })
     let agent;
     before(done => {
+        app.use(graphqlUploadExpress())
         app.use(session({
             name: 'glob-session-test',
             secret: process.env.SESSION_SECRET,
@@ -1509,4 +1511,58 @@ module.exports = function () {
             )
         })
     })
+    describe('GQL: secretQuestion', () => {
+        it('Should get the secret question for the user', done => {
+            reqGQL({ query: queries.passwordReset.question, variables: { username: 'alpha' } })
+                .expect(({ body }) => {
+                    expect(body.data.secretQuestion).toBeTruthy()
+                    expect(body.data.secretQuestion.id).toBe(1)
+                    expect(typeof body.data.secretQuestion.question).toBe('string')
+                }).end(done)
+        })
+    })
+    describe('GQL: passwordReset', () => {
+        it('Should return true for a correct answer', done => {
+            reqGQL({ query: queries.passwordReset.answer, variables: { id: 1, secretAnswer: 'alpha', newPassword: 'newpassword' } })
+                .expect(({ body }) => {
+                    expect(body.data.passwordReset).toBe(true)
+                }).end(done)
+        })
+        it('Should return false for a wrong answer', done => {
+            reqGQL({ query: queries.passwordReset.answer, variables: { id: 1, secretAnswer: 'beta', newPassword: 'newpassword' } })
+                .expect(({ body }) => {
+                    expect(body.data.passwordReset).toBe(false)
+                }).end(done)
+        })
+        it('Should reset the password of the user', done => {
+            chainReqGQL(done, { query: queries.passwordReset.answer, variables: { id: 1, secretAnswer: 'alpha', newPassword: 'newpassword' } },
+                (finished) => reqGQL({ query: queries.login.custom, variables: { username: 'alpha', password: 'newpassword' } })
+                    .expect(({ body }) => {
+                        expect(body.data.login).toBe(true)
+                    }).end(finished)
+            )
+        })
+    })
+    describe('GQL: createSecret', () => {
+        it('Should create a new secret after the user has registered', done => {
+            chainReqGQL(done, { query: queries.register, variables: { input: { username: 'delta', password: '4', email: 'delta@w.com' } } },
+                (finished) => reqGQL({ query: queries.passwordReset.createSecret, variables: { question: 'What is your name', answer: 'delta' } })
+                    .expect(({ body }) => {
+                        expect(body.data.createSecret).toBe(true)
+                    }).end(finished)
+            )
+        })
+        it('Should allow the new user to change their password', done => {
+            chainReqGQL(done, { query: queries.register, variables: { input: { username: 'delta', password: '4', email: 'delta@w.com' } } },
+                { query: queries.passwordReset.createSecret, variables: { question: 'What is your name', answer: 'delta' } },
+                { query: queries.logout },
+                { query: queries.passwordReset.answer, variables: { id: 4, secretAnswer: 'delta', newPassword: 'newpassword' } },
+                (finished) => reqGQL({ query: queries.login.custom, variables: { username: 'delta', password: 'newpassword' } })
+                    .expect(({ body }) => {
+                        expect(body.data.login).toBe(true)
+                    }).end(finished)
+            )
+        })
+    })
+
 }

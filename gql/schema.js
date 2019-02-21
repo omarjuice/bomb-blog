@@ -14,10 +14,12 @@ module.exports = gql`
     comment(id: Int!): Comment
     comments(input: Search!): Comments!
     notifications: Notifications
+    secretQuestion(username: String!): SecretQuestion!
   }
   type Mutation {
       login (username: String, password: String): Boolean!
       register (input: Register!): Boolean!
+      createSecret(question: String!, answer: String!): Boolean!
       logout: Boolean!
       updateProfile(id: Int, input: ProfileDetails): Profile
       createPost(input: PostDetails): Post!
@@ -38,6 +40,7 @@ module.exports = gql`
       createFollow(user_id: Int!): Boolean!
       deleteFollow(user_id: Int!): Boolean!
       uploadImage(image: Upload!): String
+      passwordReset(id: Int, secretAnswer: String!, newPassword: String!): Boolean!
   }
   type Subscription{
       newPost(id: Int!): Post
@@ -198,6 +201,10 @@ module.exports = gql`
   type FeaturedPost{
       post: Post!
       featured_at: String!
+  }
+  type SecretQuestion{
+      id: Int!
+      question: String!
   }
   input ProfileDetails {
       about: String

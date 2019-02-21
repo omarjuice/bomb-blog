@@ -19,7 +19,12 @@ module.exports = {
         mutation{
             login(username:"beta", password:"1234567")
           }
-        `
+        `,
+    custom: `mutation($username: String!, $password:String!){
+      login(username: $username, password: $password)
+    }
+    
+    `
   },
   logout: `mutation { logout }`,
   user: {
@@ -677,6 +682,20 @@ module.exports = {
     }`,
     unfeaturePost: `mutation($id: Int!){
       unfeaturePost(id: $id)
+    }`
+  },
+  passwordReset: {
+    question: `query($username: String!){
+      secretQuestion(username: $username){
+        id
+        question
+      }
+    }`,
+    answer: `mutation($id: Int!, $secretAnswer: String!, $newPassword:String! ){
+      passwordReset(id: $id, secretAnswer: $secretAnswer, newPassword: $newPassword)
+    }`,
+    createSecret: `mutation($question: String!, $answer: String!){
+      createSecret(question: $question, answer: $answer)
     }`
   }
 

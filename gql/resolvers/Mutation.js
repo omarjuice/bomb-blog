@@ -1,7 +1,7 @@
 const validator = require('email-validator')
 const moment = require('moment')
 const { queryDB } = require('../../db/connect')
-const { compare, hashUser } = require('../../db/crypt')
+const { compare, hashUser, hashPW } = require('../../db/crypt')
 const Errors = require('../errors')
 const { pubsub, authenticate, authenticateAdmin, storeFS, deleteFS } = require('./utils')
 
@@ -48,6 +48,13 @@ module.exports = {
         if (!req.session.user) return true;
         req.session.user = null;
         return true
+    },
+    createSecret: async (_, { question, answer }, { req }) => {
+        const sessionUser = authenticate(req.session)
+        if (!sessionUser) throw Errors.authentication.notLoggedIn
+        const insert = [sessionUser, question, await hashPW(answer)]
+        const { affectedRows } = await queryDB(`INSERT INTO user_secrets (user_id, question, answer) VALUES ?`, [[insert]])
+        return affectedRows > 0
     },
     updateProfile: async (_, args, { req, Loaders, batchDeletes, batchInserts }) => {
         let id = authenticate(req.session)
@@ -332,5 +339,14 @@ module.exports = {
             return null
         }
         return path.slice(1)
+    },
+    passwordReset: async (_, { id, secretAnswer, newPassword }) => {
+        const [{ answer }] = await queryDB(`SELECT answer FROM user_secrets WHERE user_id=?`, [id])
+        if (await compare(secretAnswer, answer)) {
+            const pswd = await hashPW(newPassword)
+            await queryDB(`UPDATE users SET pswd=? WHERE id=?`, [pswd, id])
+            return true
+        }
+        return false
     }
 }

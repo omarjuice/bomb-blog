@@ -139,7 +139,6 @@ module.exports = {
         return { results, cursor: results.length < limit ? null : cursor + results.length }
     },
     notifications: (_, args, { req }) => {
-
         if (req.session.user) {
             if (req.session.user.lastVisited) {
                 return { lastVisited: req.session.user.lastVisited }
@@ -147,5 +146,17 @@ module.exports = {
             return { lastVisited: 1 }
         }
         return { lastVisited: null }
+    },
+    secretQuestion: async (_, { username }) => {
+        const query = `
+        SELECT 
+            id, question
+        FROM user_secrets
+        INNER join users
+            on user_secrets.user_id = users.id
+        WHERE users.username = ?
+        `
+        const [secretQuestion] = await queryDB(query, [username], null, true)
+        return secretQuestion
     }
 }

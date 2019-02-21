@@ -136,10 +136,20 @@ const followSchema = {
     )`,
     drop: `DROP TABLE IF EXISTS follows`
 }
+const userSecretSchema = {
+    create: `CREATE table user_secrets(
+        user_id INT NOT NULL,
+        question VARCHAR(255) NOT NULL,
+        answer CHAR(60) NOT NULL,
+        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+        PRIMARY KEY(user_id) 
+    )`,
+    drop: `DROP TABLE IF EXISTS user_secrets`
+}
 
 
 
 module.exports = {
     userSchema, profileSchema, postSchema, likeSchema, commentSchema, commentLikeSchema,
-    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema,
+    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema, userSecretSchema
 }

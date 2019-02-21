@@ -3,7 +3,7 @@ const fs = require('fs')
 const { hashPW } = require('../db/crypt')
 const { database } = require('../config')
 const { userSchema, profileSchema, postSchema, likeSchema, commentSchema, commentLikeSchema,
-    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema } = require('../db/schema')
+    replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema, userSecretSchema } = require('../db/schema')
 const { queryDB } = require('../db/connect')
 const { randomMarkdown } = require('../markdown')
 
@@ -126,6 +126,16 @@ const seedDB = {
         [2, 11], [2, 9],
         [3, 4], [3, 5], [3, 1]
     ],
+    userSecrets: [
+        [1, 'Whats your name?', 'alpha'],
+        [2, 'Whats your name?', 'beta'],
+        [3, 'Whats your name?', 'gamma'],
+    ],
+    userSecretsHashed: [
+        [1, 'Whats your name?', 'alpha'],
+        [2, 'Whats your name?', 'beta'],
+        [3, 'Whats your name?', 'gamma'],
+    ],
     hashUsers: function (users) {
         return new Promise((resolve, reject) => {
             users.forEach((user) => {
@@ -204,8 +214,9 @@ const resetDB = (done) => {
     const query1 = `DROP DATABASE IF EXISTS ${database}`;
     const query2 = `CREATE DATABASE IF NOT EXISTS ${database}`;
     seedDB.hashUsers(seedDB.usersHashed).then(() => {
-        return queryDB(query1)
+        return seedDB.hashUsers(seedDB.userSecretsHashed)
     })
+        .then(() => queryDB(query1))
         .then(() => queryDB(query2))
         .then(() => queryDB(`USE ${database}`))
         .then(() => Promise.all([queryDB(userSchema.create), queryDB(postSchema.create)]))
@@ -231,6 +242,7 @@ const resetTables = (done) => {
         ${postTagSchema.drop};
         ${commentTagSchema.drop};
         ${userTagSchema.drop};
+        ${userSecretSchema.drop};
         SET FOREIGN_KEY_CHECKS = 1;
   `).then(() => Promise.all([
         queryDB(userSchema.create),
@@ -245,6 +257,7 @@ const resetTables = (done) => {
         queryDB(postTagSchema.create),
         queryDB(commentTagSchema.create),
         queryDB(userTagSchema.create),
+        queryDB(userSecretSchema.create)
     ]))
         .then(() => queryDB(`INSERT INTO users (email, username, pswd, created_at, privilege) VALUES ?`, [seedDB.usersHashed])
             .then(() => queryDB(`INSERT INTO profiles (user_id, about, photo_path) VALUES ?`, [seedDB.profiles]))
@@ -260,7 +273,8 @@ const resetTables = (done) => {
                 queryDB(`INSERT INTO comment_tags (comment_id, tag_id) VALUES ?`, [seedDB.comment_tags]),
                 queryDB(`INSERT INTO user_tags (user_id, tag_id) VALUES ?`, [seedDB.userTags]),
                 queryDB(`INSERT INTO comment_likes (user_id, comment_id) VALUES ?`, [seedDB.comment_likes]),
-                queryDB(`INSERT INTO replies (user_id, comment_id, reply_text) VALUES ?`, [seedDB.replies])
+                queryDB(`INSERT INTO replies (user_id, comment_id, reply_text) VALUES ?`, [seedDB.replies]),
+                queryDB(`INSERT INTO user_secrets (user_id, question, answer) VALUES ?`, [seedDB.userSecretsHashed])
             ]))
             .then(() => done()).catch(e => {
                 if (done) {
