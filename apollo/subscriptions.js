@@ -150,3 +150,11 @@ export const FEATURED_POST = gql`
         }
     }
 `
+export const APP_MESSAGE = gql`
+    subscription AppMessage($id: Int!){
+        appMessage(id: $id){
+            message
+            created_at
+        }
+    }
+`

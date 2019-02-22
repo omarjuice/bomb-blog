@@ -80,7 +80,7 @@ module.exports = function () {
         it('Should register a new user', done => {
             reqGQL({ query: queries.register, variables: { input } })
                 .expect(({ body }) => {
-                    expect(body.data.register).toBe(true)
+                    expect(body.data.register).toBe(4)
                 }).end(done)
         })
         it('Should not register a new user with an invalid email', done => {
@@ -1552,11 +1552,11 @@ module.exports = function () {
                     }).end(finished)
             )
         })
-        it('Should allow the new user to change their password', done => {
+        it('Should allow the new user to change their password and be tolerant of answers', done => {
             chainReqGQL(done, { query: queries.register, variables: { input: { username: 'delta', password: '4', email: 'delta@w.com' } } },
                 { query: queries.passwordReset.createSecret, variables: { question: 'What is your name', answer: 'delta' } },
                 { query: queries.logout },
-                { query: queries.passwordReset.answer, variables: { id: 4, secretAnswer: 'delta', newPassword: 'newpassword' } },
+                { query: queries.passwordReset.answer, variables: { id: 4, secretAnswer: 'dEl.t A', newPassword: 'newpassword' } },
                 (finished) => reqGQL({ query: queries.login.custom, variables: { username: 'delta', password: 'newpassword' } })
                     .expect(({ body }) => {
                         expect(body.data.login).toBe(true)

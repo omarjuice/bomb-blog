@@ -718,6 +718,10 @@ export const NOTIFICATIONS = gql`
             }
             featured_at
         }
+        appMessages{
+            message
+            created_at
+        }
        }
     }
 `

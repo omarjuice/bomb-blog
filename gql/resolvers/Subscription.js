@@ -50,6 +50,15 @@ module.exports = {
             () => pubsub.asyncIterator('FEATURED_POST'),
             ({ post }, { id }) => post.user_id === id
         )
+    },
+    appMessage: {
+        resolve: ({ user_id, ...appMessage }) => {
+            console.log(appMessage)
+            return appMessage
+        },
+        subscribe: withFilter(
+            () => pubsub.asyncIterator('APP_MESSAGE'),
+            ({ user_id }, { id }) => user_id === id
+        )
     }
-
 }

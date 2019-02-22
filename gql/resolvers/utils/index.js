@@ -44,4 +44,5 @@ const deleteFS = path => {
         fs.exists(path, exists => exists ? fs.unlink(path, resolve) : null)
     })
 }
-module.exports = { authenticate, pubsub, authenticateAdmin, storeFS, deleteFS }
+const simplifyString = str => str.replace(/\s|\W/g, '').toLowerCase()
+module.exports = { authenticate, pubsub, authenticateAdmin, storeFS, deleteFS, simplifyString }

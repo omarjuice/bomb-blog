@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import Link from 'next/link'
-import { Subscription, Query } from 'react-apollo'
 import moment from 'moment'
-import client from '../../apollo/client';
-import { NEW_POST, NEW_COMMENT, NEW_LIKE, NEW_COMMENT_LIKE, NEW_REPLY, NEW_FOLLOWER } from '../../apollo/subscriptions';
-import { AUTHENTICATED, NOTIFICATIONS } from '../../apollo/queries';
-import Loading from '../meta/Loading';
-import ErrorIcon from '../meta/ErrorIcon';
-import Comment from '../posts/comments/Comment';
 import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
 import LinkWrap from './LinkWrap';
@@ -312,6 +304,32 @@ class Notifications extends Component {
             </article>
         )
     }
+    genMessage = (key, { message, created_at }) => {
+        return (
+            <article key={key} className="media">
+                <figure className="media-left">
+                    <div className="image is-64x64">
+                        <BombSVG lit={true} face={{ happy: true }} />
+                    </div>
+                </figure>
+                <div className="media-content">
+                    <div className="content">
+                        <br />
+                        <p className="title is-4 font-2">
+                            {message}
+                        </p>
+                    </div>
+                    <nav className="level is-mobile">
+                        <div className="level-left">
+                            <span className="level-item has-text-grey">
+                                {moment.utc(Number(created_at)).local().fromNow()}
+                            </span>
+                        </div>
+                    </nav>
+                </div>
+            </article>
+        )
+    }
 
     render() {
         let typeMap = {}
@@ -322,6 +340,7 @@ class Notifications extends Component {
         typeMap.Reply = this.genNewReply;
         typeMap.NewFollower = this.genNewFollow;
         typeMap.FeaturedPost = this.genFeatured;
+        typeMap.AppMessage = this.genMessage
         return (
             <div className={`tile is-vertical ${this.props.active ? '' : 'is-hidden'}`}>
                 {!this.props.lastVisited ? <article className="media">
@@ -363,6 +382,7 @@ class Notifications extends Component {
                     this.props.data.map((key, i) => {
                         if (key) {
                             const data = this.props.notificationMap[key]
+                            console.log(key, data)
                             return typeMap[data.__typename](key, data)
                         }
                         return null

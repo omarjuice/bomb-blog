@@ -3,7 +3,7 @@ const moment = require('moment')
 const { queryDB } = require('../../db/connect')
 const { compare, hashUser, hashPW } = require('../../db/crypt')
 const Errors = require('../errors')
-const { pubsub, authenticate, authenticateAdmin, storeFS, deleteFS } = require('./utils')
+const { pubsub, authenticate, authenticateAdmin, storeFS, deleteFS, simplifyString } = require('./utils')
 
 module.exports = {
     login: async (_, { username, password }, { req }) => {
@@ -40,7 +40,7 @@ module.exports = {
             req.session.user.lastVisited = 1;
             req.session.user.loginTime = Math.floor(Date.now() / 1000)
             req.session.user.visited = req.session.user.loginTime
-            return true
+            return insertId
         }
         throw Errors.register.alreadyExists
     },
@@ -52,7 +52,7 @@ module.exports = {
     createSecret: async (_, { question, answer }, { req }) => {
         const sessionUser = authenticate(req.session)
         if (!sessionUser) throw Errors.authentication.notLoggedIn
-        const insert = [sessionUser, question, await hashPW(answer)]
+        const insert = [sessionUser, question, await hashPW(simplifyString(answer))]
         const { affectedRows } = await queryDB(`INSERT INTO user_secrets (user_id, question, answer) VALUES ?`, [[insert]])
         return affectedRows > 0
     },
@@ -342,7 +342,7 @@ module.exports = {
     },
     passwordReset: async (_, { id, secretAnswer, newPassword }) => {
         const [{ answer }] = await queryDB(`SELECT answer FROM user_secrets WHERE user_id=?`, [id])
-        if (await compare(secretAnswer, answer)) {
+        if (await compare(simplifyString(secretAnswer), answer)) {
             const pswd = await hashPW(newPassword)
             await queryDB(`UPDATE users SET pswd=? WHERE id=?`, [pswd, id])
             return true

@@ -123,6 +123,7 @@ module.exports = {
         `
         const featuredPosts = await queryDB(query, [sessionUser, lastVisited], null, true)
         return featuredPosts.map(({ featured_at, ...post }) => { return { featured_at, post } })
-    }
+    },
+    appMessages: () => []
 
 }

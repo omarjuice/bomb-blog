@@ -18,7 +18,7 @@ module.exports = gql`
   }
   type Mutation {
       login (username: String, password: String): Boolean!
-      register (input: Register!): Boolean!
+      register (input: Register!): Int!
       createSecret(question: String!, answer: String!): Boolean!
       logout: Boolean!
       updateProfile(id: Int, input: ProfileDetails): Profile
@@ -50,6 +50,7 @@ module.exports = gql`
       newReply(id: Int!): Reply
       newCommentLike(id: Int!): NewCommentLike
       featuredPost(id: Int!): FeaturedPost
+      appMessage(id: Int!): AppMessage!
   }
   
   type Notifications{
@@ -61,6 +62,7 @@ module.exports = gql`
       newReplies: [Reply]!
       newFollowers: [NewFollower]!
       featuredPosts: [FeaturedPost]!
+      appMessages: [AppMessage]!
   }
  
   type Users{
@@ -205,6 +207,10 @@ module.exports = gql`
   type SecretQuestion{
       id: Int!
       question: String!
+  }
+  type AppMessage{
+      message: String!
+      created_at: String!
   }
   input ProfileDetails {
       about: String

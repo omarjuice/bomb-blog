@@ -1,17 +1,18 @@
-import { NEW_COMMENT, NEW_POST, NEW_LIKE, NEW_REPLY, NEW_COMMENT_LIKE, NEW_FOLLOWER, FEATURED_POST } from "./subscriptions";
+import { NEW_COMMENT, NEW_POST, NEW_LIKE, NEW_REPLY, NEW_COMMENT_LIKE, NEW_FOLLOWER, FEATURED_POST, APP_MESSAGE } from "./subscriptions";
 import { NOTIFICATIONS } from "./queries";
 import { setNumNotifications } from "./clientWrites";
 
 class NotificationManager {
     constructor(client) {
         this.client = client
+        this.userId = null
         this._subscribed = false
         this._generated = false
         this.notificationMap = {}
         this.allNotifications = []
     }
     store(notifications) {
-        if (this.allNotifications.length < 1) {
+        if (this.allNotifications.length < 2) {
             let combinedNotifications = []
             let { lastVisited, ...notifs } = notifications
             for (let key in notifs) {
@@ -47,7 +48,9 @@ class NotificationManager {
             case 'NewFollower':
                 return `follower-${data.user.id}`
             case 'FeaturedPost':
-                return `featured-${data.post.id}`
+                return `featured-${data.post.id}`;
+            case 'AppMessage':
+                return `message-${data.created_at}`
         }
     }
     _addNotificationAndReturnKey(data) {
@@ -65,7 +68,9 @@ class NotificationManager {
         this._update()
     }
     generate(id) {
+        if (this.userId !== id) { this._reset() }
         if (!this._generated) {
+            this.userId = id
             this.commentListener = {
                 base: this.client.subscribe({ query: NEW_COMMENT, variables: { id } })
             }
@@ -87,12 +92,30 @@ class NotificationManager {
             this.featuredListener = {
                 base: this.client.subscribe({ query: FEATURED_POST, variables: { id } })
             }
+            this.appMessageListener = {
+                base: this.client.subscribe({ query: APP_MESSAGE, variables: { id } })
+            }
             this._generated = true
         }
         return this
     }
+    _reset() {
+        this.commentListener = null;
+        this.postListener = null;
+        this.likeListener = null;
+        this.replyListener = null;
+        this.commentLikeListener = null;
+        this.featuredListener = null;
+        this.appMessageListener = null
+        this.userId = null
+        this._subscribed = false
+        this._generated = false
+        this.notificationMap = {}
+        this.allNotifications = []
+    }
+
     subscribe() {
-        if (!this._subscribed) {
+        if (!this._subscribed && this._generated) {
             const { client } = this
             const manager = this
             this.commentListener.subscription = this.commentListener.base.subscribe({
@@ -159,11 +182,20 @@ class NotificationManager {
             this.featuredListener.subscription = this.featuredListener.base.subscribe({
                 next({ data: { featuredPost } }) {
                     if (featuredPost) {
-                        console.log(featuredPost)
                         const data = client.readQuery({ query: NOTIFICATIONS })
                         data.notifications.featuredPosts.push(featuredPost)
                         client.writeQuery({ query: NOTIFICATIONS, data })
                         manager._newNotification(featuredPost)
+                    }
+                }
+            })
+            this.appMessageListener.subscription = this.appMessageListener.base.subscribe({
+                next({ data: { appMessage } }) {
+                    if (appMessage) {
+                        const data = client.readQuery({ query: NOTIFICATIONS })
+                        data.notifications.appMessages.push(appMessage)
+                        client.writeQuery({ query: NOTIFICATIONS, data })
+                        manager._newNotification(appMessage)
                     }
                 }
             })
@@ -180,6 +212,7 @@ class NotificationManager {
             this.replyListener.subscription.unsubscribe()
             this.followListener.subscription.unsubscribe()
             this.featuredListener.subscription.unsubscribe()
+            this.appMessageListener.subscription.unsubscribe()
             this._subscribed = false
         }
         return this

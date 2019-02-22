@@ -25,6 +25,11 @@ export const REGISTER = gql`
         register(input: $input)
     }
 `
+export const CREATE_SECRET = gql`
+    mutation CreateSecret($question: String!, $answer: String! ){
+        createSecret(question: $question, answer: $answer )
+    }
+`
 export const UPDATE_PROFILE = gql`
     mutation UpdateProfile($input: ProfileDetails){
             updateProfile(input: $input){

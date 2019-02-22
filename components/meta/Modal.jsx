@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import Login from '../auth/Login';
 import Register from '../auth/Register';
 import { Query } from 'react-apollo';
-import { hideModal, clearError, renderModal, setNumNotifications } from '../../apollo/clientWrites';
+import { clearError, renderModal } from '../../apollo/clientWrites';
 import Likers from '../posts/Likers';
 import { GET_MODAL, NOTIFICATIONS, CURRENT_USER } from '../../apollo/queries';
 import Confirm from './Confirm';
 import Notifications from '../global/Notifications';
-import { NEW_COMMENT, NEW_POST, NEW_LIKE, NEW_REPLY, NEW_COMMENT_LIKE, NEW_FOLLOWER } from '../../apollo/subscriptions';
 import NotificationManager from '../../apollo/notificationManager';
 
 
