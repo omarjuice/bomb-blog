@@ -7,7 +7,7 @@ const { pubsub, authenticate, authenticateAdmin, storeFS, deleteFS, simplifyStri
 
 module.exports = {
     login: async (_, { username, password }, { req }) => {
-        const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username]).catch(e => { throw Errors.database })
+        const [user] = await queryDB(`SELECT * FROM users WHERE username= ? OR email=?`, [username, username]).catch(e => { throw Errors.database })
         if (user) {
             const { username, pswd, id, email, created_at } = user
             if (await compare(password, pswd)) {

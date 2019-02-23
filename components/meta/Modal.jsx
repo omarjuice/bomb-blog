@@ -8,6 +8,7 @@ import { GET_MODAL, NOTIFICATIONS, CURRENT_USER } from '../../apollo/queries';
 import Confirm from './Confirm';
 import Notifications from '../global/Notifications';
 import NotificationManager from '../../apollo/notificationManager';
+import PasswordReset from '../auth/PasswordReset';
 
 
 const dismiss = (confirmation = false) => {
@@ -41,8 +42,9 @@ class Modal extends Component {
                 info = JSON.parse(info)
             }
             const displays = {
-                Login: <Login onComplete={dismiss} />,
+                Login: <Login onComplete={dismiss} info={info} />,
                 Register: <Register onComplete={dismiss} />,
+                PasswordReset: <PasswordReset client={this.props.client} />,
                 Likers: <Likers info={info} />,
                 Confirm: <Confirm info={info || {}} />,
             }

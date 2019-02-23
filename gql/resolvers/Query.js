@@ -154,9 +154,12 @@ module.exports = {
         FROM user_secrets
         INNER join users
             on user_secrets.user_id = users.id
-        WHERE users.username = ?
+        WHERE users.username = ? OR users.email= ?
         `
-        const [secretQuestion] = await queryDB(query, [username], null, true)
-        return secretQuestion
+        const [secretQuestion] = await queryDB(query, [username, username], null, true)
+        if (secretQuestion) {
+            return secretQuestion
+        }
+        return null
     }
 }

@@ -14,7 +14,7 @@ module.exports = gql`
     comment(id: Int!): Comment
     comments(input: Search!): Comments!
     notifications: Notifications
-    secretQuestion(username: String!): SecretQuestion!
+    secretQuestion(username: String!): SecretQuestion
   }
   type Mutation {
       login (username: String, password: String): Boolean!

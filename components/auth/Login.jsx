@@ -9,61 +9,65 @@ import { renderModal, clearError } from '../../apollo/clientWrites';
 
 class Login extends Component {
     state = {
-        touched: false,
-        username: '',
+        username: this.props.info ? this.props.info.username : '',
         password: '',
-        formErrors: {
-            username: false,
-            password: false
+        errors: {
+            username: null,
+            password: null
         },
     }
     onSubmit = (login) => {
         return async e => {
             e.preventDefault()
             const { username, password } = this.state;
-            if (!username || !password) {
-                return this.setState({
-                    formErrors: {
-                        username: !username,
-                        password: !password
-                    }
+            const errors = {}
+            if (!username) {
+                errors.username = 'Please enter a username'
+            }
+            if (!password) {
+                errors.password = 'Please enter a password'
+            }
+
+            if (!Object.values(errors).length) {
+                await login({
+                    variables: { username: this.state.username, password: this.state.password }
                 })
             }
-            await login({
-                variables: { username: this.state.username, password: this.state.password }
-            })
         }
-    }
-    renderInput = (field) => {
-        const icons = {
-            username: 'user',
-            password: 'lock',
-        }
-        return (
-            <div className="field">
-                <label className="label">{field} </label>
-                <div className="control has-icons-left">
-                    <input type="text" className={`input ${this.state.formErrors[field] && 'is-danger'}`} onChange={e => this.setState({ [field]: e.target.value })} />
-                    <span className="icon is-small is-left">
-                        <i className={`fas fa-${icons[field]}`}></i>
-                    </span>
-                </div>
-            </div>
-
-        )
     }
     render() {
         return (<Mutation mutation={LOGIN} refetchQueries={[`Authenticated`, `CurrentUser`, `UserProfile`, `Comments`, `Replies`, `UserPhoto`, `ILike`, `PostAuthor`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `Likers`, `Notifications`, `FolloweePosts`, `IsAdmin`]} >
             {(login, { data, loading, error }) => {
                 if (!data) return (
-                    <form onSubmit={this.onSubmit(login)} className="form has-text-centered">
-                        {loading && <Loading color="primary" size="4x" />}
-                        <ErrorMessage />
-                        {this.renderInput('username')}
-                        {this.renderInput('password')}
-                        <button className="button is-success" type="submit">Login</button>
-                        <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'Register', active: true }) }} className="button is-text">Sign Up</a>
-                    </form>
+                    <div>
+                        <form onSubmit={this.onSubmit(login)} className="form has-text-centered">
+                            {loading && <Loading color="primary" size="4x" />}
+                            <ErrorMessage />
+                            <div className="field">
+                                <label className="label">Username</label>
+                                <div className="control has-icons-left">
+                                    <input type="text" className={`input ${this.state.errors.username && 'is-danger'}`} value={this.state.username} onChange={e => this.setState({ username: e.target.value, errors: { ...this.state.errors, username: null } })} />
+                                    <span className="icon is-small is-left">
+                                        <i className={`fas fa-user`}></i>
+                                    </span>
+                                </div>
+                                <p className="help">{this.state.errors.username}</p>
+                            </div>
+                            <div className="field">
+                                <label className="label">Password</label>
+                                <div className="control has-icons-left">
+                                    <input type="password" className={`input ${this.state.errors.password && 'is-danger'}`} value={this.state.password} onChange={e => this.setState({ password: e.target.value, errors: { ...this.state.errors, password: null } })} />
+                                    <span className="icon is-small is-left">
+                                        <i className={`fas fa-lock`}></i>
+                                    </span>
+                                </div>
+                                <p className="help">{this.state.errors.password}</p>
+                            </div>
+                            <button className={`button is-success ${loading && 'is-loading'}`} type="submit">Login</button>
+                            <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'Register', active: true }) }} className="button is-text">Sign Up</a>
+                        </form>
+                        <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'PasswordReset', active: true }) }} className="button is-text">Forgot your password?</a>
+                    </div>
                 )
                 if (data.login) {
                     this.props.onComplete(true)

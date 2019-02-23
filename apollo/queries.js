@@ -725,6 +725,14 @@ export const NOTIFICATIONS = gql`
        }
     }
 `
+export const GET_QUESTION = gql`
+    query($username: String!){
+        secretQuestion(username: $username){
+            id
+            question
+        }
+    }
+`
 export const ERROR = gql`
     query GetError{
         error @client{

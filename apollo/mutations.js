@@ -165,3 +165,8 @@ export const UPLOAD_IMAGE = gql`
         uploadImage(image: $image)
     }
 `
+export const PASSWORD_RESET = gql`
+    mutation PasswordReset($id: Int!, $secretAnswer: String!, $newPassword: String!){
+        passwordReset(id: $id, secretAnswer: $secretAnswer, newPassword: $newPassword)
+    }
+`
