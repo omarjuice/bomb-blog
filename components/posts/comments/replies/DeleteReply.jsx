@@ -24,6 +24,10 @@ class DeleteReply extends Component {
             await deleteReply({
                 variables: {
                     reply_id: this.props.replyId
+                },
+                optimisticResponse: {
+                    __typename: "Mutation",
+                    deleteReply: true
                 }
             })
         }

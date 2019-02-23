@@ -41,9 +41,10 @@ const update = (id, comment_id) => {
 class LikeComment extends Component {
     render() {
         return (
-            <Mutation mutation={LIKE_COMMENT} variables={{ comment_id: this.props.commentId }} update={update(this.props.postId, this.props.commentId)}>
-                {(likeComment, { loading, error }) => {
-                    if (loading) return <Loading />
+            <Mutation mutation={LIKE_COMMENT} variables={{ comment_id: this.props.commentId }}
+                update={update(this.props.postId, this.props.commentId)}
+                optimisticResponse={{ __typename: "Mutation", likeComment: true }}>
+                {(likeComment, { error }) => {
                     if (error) return <ErrorIcon />
                     return (
                         <a onClick={likeComment}

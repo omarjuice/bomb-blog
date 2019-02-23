@@ -4,6 +4,7 @@ import Loading from '../meta/Loading';
 import { FOLLOW } from '../../apollo/mutations';
 import ErrorIcon from '../meta/ErrorIcon';
 import { FOLLOWERS, FOLLOWING, USER_PROFILE, CURRENT_USER } from '../../apollo/queries';
+import Unfollow from './UnFollow';
 
 const update = (id, bool) => {
     return (proxy, { data: { createFollow } }) => {
@@ -57,9 +58,10 @@ class Follow extends Component {
     render() {
         const { userId } = this.props
         const size = this.props.size === 'large' ? 'fa-3x' : 'fa-lg'
-        return <Mutation mutation={FOLLOW} variables={{ user_id: userId }} ssr={false} update={update(userId, this.props.page === 'profile')}>
-            {(createFollow, { error, loading, data }) => {
-                if (loading) return <Loading size={size} color="link" />
+        return <Mutation mutation={FOLLOW} variables={{ user_id: userId }}
+            update={update(userId, this.props.page === 'profile')}
+            optimisticResponse={{ __typename: "Mutation", createFollow: true }}>
+            {(createFollow, { error, data }) => {
                 if (error) return <ErrorIcon size={size} color="link" />
                 if (!data || (data && !data.createFollow) || this.props.page === 'profile') return (
                     <a onClick={createFollow}>
@@ -69,7 +71,7 @@ class Follow extends Component {
                     </a>
                 )
                 if (data && data.createFollow) {
-                    return <span className="icon has-text-success"><i className={`${size} fas fa-check`}></i></span>
+                    return <Unfollow size={this.props.size} userId={userId} />
                 }
             }}
         </Mutation>

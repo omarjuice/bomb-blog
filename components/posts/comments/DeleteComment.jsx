@@ -26,6 +26,10 @@ class DeleteComment extends Component {
             await deleteComment({
                 variables: {
                     comment_id: this.props.commentId
+                },
+                optimisticResponse: {
+                    __typename: "Mutation",
+                    deleteComment: true
                 }
             })
         }
@@ -34,8 +38,7 @@ class DeleteComment extends Component {
         return (
             <div className="media-right">
                 <Mutation mutation={DELETE_COMMENT} update={update(this.props.postId, this.props.commentId)} >
-                    {(deleteComment, { loading, error, data }) => {
-                        if (loading) return <Loading size="2x" />;
+                    {(deleteComment, { error, data }) => {
                         if (error) return <ErrorIcon size="2x" />
                         if (data && data.deleteComment) {
                             return <span className="has-text-warning has-text-weight-bold">DELETED</span>

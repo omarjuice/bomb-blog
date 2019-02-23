@@ -21,7 +21,18 @@ class UpdateReply extends Component {
             if (this.state.input === this.props.initial || this.state.input.length < 1) {
                 return this.props.stopEdit()
             }
-            await updateReply({ variables: { reply_id: this.props.replyId, reply_text: this.state.input } })
+            await updateReply({
+                variables: { reply_id: this.props.replyId, reply_text: this.state.input },
+                optimisticResponse: {
+                    __typename: "Mutation",
+                    updateReply: {
+                        id: this.props.replyId,
+                        comment_id: this.props.commentId,
+                        reply_text: this.state.input,
+                        last_updated: String(Date.now())
+                    }
+                }
+            })
             this.props.stopEdit()
         }
     }

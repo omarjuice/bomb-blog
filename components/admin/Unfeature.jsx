@@ -9,9 +9,8 @@ class Unfeature extends Component {
     render() {
         const { id } = this.props
         return (
-            <Mutation mutation={UNFEATURE_POST}>
-                {(unfeaturePost, { loading, error, data }) => {
-                    if (loading) return <Loading />
+            <Mutation mutation={UNFEATURE_POST} optimisticResponse={{ __typename: "Mutation", unfeaturePost: true }}>
+                {(unfeaturePost, { error, data }) => {
                     if (error) return <ErrorIcon />
                     if (data && data.unfeaturePost) {
                         return <Feature id={id} />

@@ -9,9 +9,8 @@ class Feature extends Component {
     render() {
         const { id } = this.props
         return (
-            <Mutation mutation={FEATURE_POST}>
-                {(featurePost, { loading, error, data }) => {
-                    if (loading) return <Loading />
+            <Mutation mutation={FEATURE_POST} optimisticResponse={{ __typename: "Mutation", featurePost: true }}>
+                {(featurePost, { error, data }) => {
                     if (error) return <ErrorIcon />
 
                     if (data && data.featurePost) {

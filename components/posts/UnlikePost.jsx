@@ -5,6 +5,7 @@ import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import { POST_LIKES, USER_POSTS, LIKES, CURRENT_USER, LIKERS } from '../../apollo/queries';
 import BombSVG from '../svg/bomb';
+import LikePost from './LikePost';
 
 const update = (id, { page, userId }) => {
     return (proxy, { data: { unlikePost } }) => {
@@ -59,10 +60,14 @@ const update = (id, { page, userId }) => {
 class UnlikePost extends Component {
     render() {
         return (
-            <Mutation mutation={UNLIKE_POST} variables={{ post_id: this.props.postId }} update={update(this.props.postId, this.props.pageDetails || {})}>
-                {(unlikePost, { loading, error }) => {
-                    if (loading) return <Loading color="primary" size={this.props.size} />
+            <Mutation mutation={UNLIKE_POST} variables={{ post_id: this.props.postId }}
+                update={update(this.props.postId, this.props.pageDetails || {})}
+                optimisticResponse={{ __typename: "Mutation", unlikePost: true }}>
+                {(unlikePost, { loading, error, data }) => {
                     if (error) return <ErrorIcon color="primary" size={this.props.size} />
+                    if (data && data.unlikePost) {
+                        return <LikePost size={this.props.size} postId={this.props.postId} />
+                    }
                     return (
                         <a onClick={unlikePost} className="has-text-primary has-text-centered">
                             <span className="icon is-large">
