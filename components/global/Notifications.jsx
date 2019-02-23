@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment'
-import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
+import BombSVG from '../svg/bomb';
 import LinkWrap from './LinkWrap';
 import { renderModal } from '../../apollo/clientWrites';
 class Notifications extends Component {

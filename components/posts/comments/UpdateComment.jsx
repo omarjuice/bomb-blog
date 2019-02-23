@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { UPDATE_COMMENT } from '../../../apollo/mutations';
 import { Mutation } from 'react-apollo';
 import { updateTags, getMatches, tagRegex } from '../../../utils';
 import { COMMENTS } from '../../../apollo/queries';
+import { UPDATE_COMMENT } from '../../../apollo/mutations';
 
 const update = (id, comment_id) => {
     return (proxy, { data: updateComment }) => {

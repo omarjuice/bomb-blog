@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import moment from 'moment'
-import marked from 'marked'
 import Link from 'next/link';
-import { setSearch, renderModal } from '../../apollo/clientWrites';
-import { shortenNumber, getMatches } from '../../utils';
 import FeaturePost from '../admin/FeaturePost';
+import { shortenNumber, getMatches } from '../../utils';
+import { setSearch, renderModal } from '../../apollo/clientWrites';
 class Featured extends Component {
     shorten = (text, maxLen = 100) => {
         if (text.length > maxLen) {

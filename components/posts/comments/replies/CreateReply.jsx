@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Mutation, Query } from 'react-apollo';
+import UserPhoto from '../../../auth/UserPhoto';
 import { CREATE_REPLY } from '../../../../apollo/mutations';
 import { AUTHENTICATED, REPLIES, CURRENT_USER } from '../../../../apollo/queries';
-import UserPhoto from '../../../auth/UserPhoto';
 import { renderModal } from '../../../../apollo/clientWrites';
 
 const update = id => {

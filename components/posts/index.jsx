@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
 import { Query } from 'react-apollo';
-import { POST, POST_AUTHOR } from '../../apollo/queries';
+import Link from 'next/link';
+import marked from 'marked'
+import moment from 'moment'
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
-import moment from 'moment'
 import Comments from './comments';
 import Unfollow from '../global/UnFollow';
 import Follow from '../global/Follow';
 import Like from '../global/Like';
-import marked from 'marked'
 import DeletePost from './DeletePost';
-import { setSearch } from '../../apollo/clientWrites';
 import FeaturePost from '../admin/FeaturePost';
+import { POST, POST_AUTHOR } from '../../apollo/queries';
+import { setSearch } from '../../apollo/clientWrites';
 marked.setOptions({
     breaks: true,
     sanitize: true

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
+import { Query } from 'react-apollo';
+import Link from 'next/link';
+import { shortenNumber } from '../../utils';
 import BombSVG from '../svg/bomb';
 import Authenticated from '../auth/Authenticated';
 import SearchNav from './SearchNav';
-import { Query } from 'react-apollo';
-import { GET_SEARCH, NOTIFICATIONS, GET_NUM_NOTIFICATIONS } from '../../apollo/queries';
-import Link from 'next/link';
+import { GET_SEARCH, GET_NUM_NOTIFICATIONS } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
-import { shortenNumber } from '../../utils';
 
 class Navbar extends Component {
     state = {

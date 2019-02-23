@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo';
+import { getMatches, updateTags, tagRegex } from '../../utils';
 import Loading from '../meta/Loading';
+import ErrorIcon from '../meta/ErrorIcon';
 import { USER_TAGS } from '../../apollo/queries';
 import { UPDATE_PROFILE } from '../../apollo/mutations';
-import ErrorIcon from '../meta/ErrorIcon';
-import { getMatches, updateTags, tagRegex } from '../../utils';
 import { setSearch } from '../../apollo/clientWrites';
 
 class UserTags extends Component {

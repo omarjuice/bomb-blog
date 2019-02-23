@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import moment from 'moment'
 import Link from 'next/link'
+import moment from 'moment'
 import Loading from '../meta/Loading';
 import Follow from '../global/Follow';
 import Unfollow from '../global/UnFollow';
 import ErrorIcon from '../meta/ErrorIcon';
-import { FOLLOWING, FOLLOWERS } from '../../apollo/queries';
 import BombSVG from '../svg/bomb';
+import { FOLLOWING, FOLLOWERS } from '../../apollo/queries';
 
 
 const queries = { FOLLOWING, FOLLOWERS }

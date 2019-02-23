@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+import { Query } from 'react-apollo';
+import NotificationManager from '../../apollo/notificationManager';
 import Login from '../auth/Login';
 import Register from '../auth/Register';
-import { Query } from 'react-apollo';
-import { clearError, renderModal } from '../../apollo/clientWrites';
+import PasswordReset from '../auth/PasswordReset';
 import Likers from '../posts/Likers';
-import { GET_MODAL, NOTIFICATIONS, CURRENT_USER } from '../../apollo/queries';
 import Confirm from './Confirm';
 import Notifications from '../global/Notifications';
-import NotificationManager from '../../apollo/notificationManager';
-import PasswordReset from '../auth/PasswordReset';
+import { GET_MODAL, NOTIFICATIONS, CURRENT_USER } from '../../apollo/queries';
+import { clearError, renderModal } from '../../apollo/clientWrites';
 
 
 const dismiss = (confirmation = false) => {

@@ -1,5 +1,5 @@
 import client from './client'
-import { GET_SEARCH, GET_MODAL } from './queries';
+import { GET_SEARCH } from './queries';
 export const renderModal = ({ active = false, message = '', confirmation = null, info = {}, display = '' }) => {
     if (info) {
         info = JSON.stringify(info)

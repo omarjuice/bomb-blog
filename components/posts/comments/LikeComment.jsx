@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { LIKE_COMMENT } from '../../../apollo/mutations';
 import { Mutation } from 'react-apollo';
-import Loading from '../../meta/Loading';
 import ErrorIcon from '../../meta/ErrorIcon';
+import { LIKE_COMMENT } from '../../../apollo/mutations';
 import { COMMENTS, COMMENT_LIKERS, CURRENT_USER } from '../../../apollo/queries';
 
 const update = (id, comment_id) => {

@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import Link from 'next/link'
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import moment from 'moment'
 import Panels from './Panels';
 import Details from './Details'
 import Loading from '../meta/Loading';
 import UserTags from './UserTags';
 import About from './About'
-
-import { USER_PROFILE, CURRENT_USER } from '../../apollo/queries';
 import ErrorIcon from '../meta/ErrorIcon';
 import UploadImage from './UploadImage';
+import { USER_PROFILE, CURRENT_USER } from '../../apollo/queries';
 
 
 class ProfilePage extends Component {

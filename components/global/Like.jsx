@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import { POST_LIKES } from '../../apollo/queries';
+import { shortenNumber } from '../../utils';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import LikePost from '../posts/LikePost';
 import UnlikePost from '../posts/UnlikePost';
-import { shortenNumber } from '../../utils';
+import { POST_LIKES } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 
 class Like extends Component {

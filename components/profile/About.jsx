@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { USER_PROFILE } from '../../apollo/queries';
 import Loading from '../meta/Loading';
-import { UPDATE_PROFILE } from '../../apollo/mutations';
 import ErrorIcon from '../meta/ErrorIcon';
+import { USER_PROFILE } from '../../apollo/queries';
+import { UPDATE_PROFILE } from '../../apollo/mutations';
 
 const update = id => {
     return (proxy, { data: { updateProfile } }) => {

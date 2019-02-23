@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import { Mutation } from 'react-apollo';
+import Router from 'next/router';
+import { GET_MODAL, USER_POSTS } from '../../apollo/queries';
 import { DELETE_POST } from '../../apollo/mutations';
 import { renderModal, hideModal } from '../../apollo/clientWrites';
-import { GET_MODAL, USER_POSTS, POST, SEARCH_POSTS } from '../../apollo/queries';
-import Router from 'next/router';
-import { Mutation } from 'react-apollo';
 
 const update = (id, userId) => {
     return proxy => {

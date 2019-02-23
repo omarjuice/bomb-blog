@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
-import UnlikePost from '../posts/UnlikePost';
-import LikePost from '../posts/LikePost';
 import moment from 'moment'
 import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';

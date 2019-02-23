@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import moment from 'moment'
-import Link from 'next/link';
 import Featured from './Featured'
 import Recent from './Recent';
-import { setSearch, renderModal } from '../../apollo/clientWrites';
-import { shortenNumber } from '../../utils';
 import { Query } from 'react-apollo';
-import { SEARCH_POSTS, AUTHENTICATED, CURRENT_USER, CURRENT_USER_TAGS, FOLLOWEE_POSTS } from '../../apollo/queries';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import Feed from './Feed';
 import BombSVG from '../svg/bomb';
+import { SEARCH_POSTS, AUTHENTICATED, CURRENT_USER_TAGS, FOLLOWEE_POSTS } from '../../apollo/queries';
 
 
 class Home extends Component {

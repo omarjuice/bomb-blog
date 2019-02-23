@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import Loading from '../meta/Loading';
-import { UNFOLLOW } from '../../apollo/mutations';
 import ErrorIcon from '../meta/ErrorIcon';
-import { FOLLOWING, CURRENT_USER, USER_PROFILE, FOLLOWERS } from '../../apollo/queries';
 import Follow from './Follow';
+import { FOLLOWING, CURRENT_USER, USER_PROFILE, FOLLOWERS } from '../../apollo/queries';
+import { UNFOLLOW } from '../../apollo/mutations';
 
 const update = (id, bool) => {
     return (proxy, { data: { deleteFollow } }) => {

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import moment from 'moment'
 import Loading from '../meta/Loading';
-import { USER_POSTS } from '../../apollo/queries';
 import Link from 'next/link';
 import LikePost from '../posts/LikePost';
 import UnlikePost from '../posts/UnlikePost';
 import { shortenNumber } from '../../utils';
+import { USER_POSTS } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 
 

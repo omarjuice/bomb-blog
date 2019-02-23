@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import { UNLIKE_COMMENT } from '../../../apollo/mutations';
-import Loading from '../../meta/Loading';
 import ErrorIcon from '../../meta/ErrorIcon';
 import { COMMENTS, COMMENT_LIKERS, CURRENT_USER } from '../../../apollo/queries';
+import { UNLIKE_COMMENT } from '../../../apollo/mutations';
 
 const update = (id, comment_id) => {
     return (proxy, { data: { unlikeComment } }) => {

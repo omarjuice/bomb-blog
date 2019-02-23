@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import UserPhoto from '../../auth/UserPhoto';
 import { Query, Mutation } from 'react-apollo';
+import { getMatches, tagRegex } from '../../../utils';
+import UserPhoto from '../../auth/UserPhoto';
 import { AUTHENTICATED, COMMENTS, POST, CURRENT_USER } from '../../../apollo/queries';
 import { renderModal } from '../../../apollo/clientWrites';
 import { CREATE_COMMENT } from '../../../apollo/mutations';
-import { getMatches, tagRegex } from '../../../utils';
 
 const update = id => {
     return (proxy, { data: { createComment } }) => {

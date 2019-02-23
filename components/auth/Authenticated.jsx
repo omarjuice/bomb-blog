@@ -5,11 +5,10 @@ import Loading from '../meta/Loading';
 import { AUTHENTICATED } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 class Authenticated extends Component {
-
     render() {
         return (
             <Query query={AUTHENTICATED} ssr={false} >
-                {({ loading, error, data, client }) => {
+                {({ loading, data }) => {
                     if (loading) return (
                         <div className="navbar-item has-text-centered">
                             <div><Loading size="2x" /></div>

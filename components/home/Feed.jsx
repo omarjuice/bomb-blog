@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
+import moment from 'moment'
+import { shortenNumber } from '../../utils';
 import UnlikePost from '../posts/UnlikePost';
 import LikePost from '../posts/LikePost';
-import moment from 'moment'
 import BombSVG from '../svg/bomb';
-import { shortenNumber } from '../../utils';
-import { renderModal, setSearch } from '../../apollo/clientWrites';
 import FeaturePost from '../admin/FeaturePost';
+import { renderModal, setSearch } from '../../apollo/clientWrites';
 
 class Feed extends Component {
     render() {

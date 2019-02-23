@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import Loading from '../meta/Loading';
 import { LOGIN } from '../../apollo/mutations';
+import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import { renderModal, clearError } from '../../apollo/clientWrites';
 

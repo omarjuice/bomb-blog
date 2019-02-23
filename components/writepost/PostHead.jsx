@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import BombSVG from '../svg/bomb';
-import Follow from '../global/Follow';
 import { Query } from 'react-apollo';
-import { CURRENT_USER } from '../../apollo/queries';
 import moment from 'moment';
+import BombSVG from '../svg/bomb';
+import { CURRENT_USER } from '../../apollo/queries';
 
 class PostHead extends Component {
     render() {

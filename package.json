@@ -17,6 +17,7 @@
     "supertest": "^3.3.0"
   },
   "dependencies": {
+    "animejs": "^3.0.1",
     "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
     "apollo-link-error": "^1.1.7",

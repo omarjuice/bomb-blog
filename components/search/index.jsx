@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { getMatches } from '../../utils/index';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
-import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL, SEARCH_COMMENTS, SEARCH_TAGS } from '../../apollo/queries';
 import { Query } from 'react-apollo';
 import Posts from './Posts';
 import Users from './Users';
 import Comments from './Comments'
 import Tags from './Tags';
+import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL, SEARCH_COMMENTS, SEARCH_TAGS } from '../../apollo/queries';
 const gqlQueries = {
     users: SEARCH_USERS,
     posts: SEARCH_POSTS,

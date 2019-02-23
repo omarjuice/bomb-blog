@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import Loading from '../meta/Loading';
-import { FOLLOW } from '../../apollo/mutations';
-import ErrorIcon from '../meta/ErrorIcon';
-import { FOLLOWERS, FOLLOWING, USER_PROFILE, CURRENT_USER } from '../../apollo/queries';
 import Unfollow from './UnFollow';
+import { FOLLOW } from '../../apollo/mutations';
+import { FOLLOWERS, FOLLOWING, USER_PROFILE, CURRENT_USER } from '../../apollo/queries';
+import ErrorIcon from '../meta/ErrorIcon';
 
 const update = (id, bool) => {
     return (proxy, { data: { createFollow } }) => {

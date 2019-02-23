@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
-import { POST_LIKES, USER_POSTS, LIKES, CURRENT_USER, LIKERS } from '../../apollo/queries';
-import { LIKE_POST } from '../../apollo/mutations';
 import BombSVG from '../svg/bomb';
 import UnlikePost from './UnlikePost';
+import { POST_LIKES, USER_POSTS, LIKES, CURRENT_USER, LIKERS } from '../../apollo/queries';
+import { LIKE_POST } from '../../apollo/mutations';
 
 const update = (id, { page, userId }) => {
     return (proxy, { data: likePost }) => {

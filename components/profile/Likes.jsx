@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import moment from 'moment'
 import Link from 'next/link';
+import moment from 'moment'
+import { shortenNumber } from '../../utils';
 import Loading from '../meta/Loading';
-import { LIKES } from '../../apollo/queries';
 import ErrorIcon from '../meta/ErrorIcon';
 import UnlikePost from '../posts/UnlikePost';
 import LikePost from '../posts/LikePost';
-import { shortenNumber } from '../../utils';
+import { LIKES } from '../../apollo/queries';
 
 
 class Likes extends Component {

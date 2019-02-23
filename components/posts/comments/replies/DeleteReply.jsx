@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import { DELETE_REPLY } from '../../../../apollo/mutations';
 import Loading from '../../../meta/Loading';
 import ErrorIcon from '../../../meta/ErrorIcon';
 import { REPLIES } from '../../../../apollo/queries';
+import { DELETE_REPLY } from '../../../../apollo/mutations';
 
 const update = (id, reply_id) => {
     return (proxy, { data: { deleteReply } }) => {

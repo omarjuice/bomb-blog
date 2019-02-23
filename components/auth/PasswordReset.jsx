@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
-import { renderModal, clearError } from '../../apollo/clientWrites';
 import { PASSWORD_RESET } from '../../apollo/mutations';
 import { GET_QUESTION } from '../../apollo/queries';
+import { renderModal, clearError } from '../../apollo/clientWrites';
 class PasswordReset extends Component {
     state = {
         id: null,

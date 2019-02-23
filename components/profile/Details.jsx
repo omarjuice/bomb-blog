@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Unfollow from '../global/UnFollow';
-import Follow from '../global/Follow'
 import { Query } from 'react-apollo';
-import { USER_PROFILE } from '../../apollo/queries';
+import Follow from '../global/Follow'
+import Unfollow from '../global/UnFollow';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
+import { USER_PROFILE } from '../../apollo/queries';
 
 class Details extends Component {
 

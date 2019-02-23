@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { GET_SEARCH } from '../../apollo/queries';
 import { setSearch } from '../../apollo/clientWrites';
 
 

@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import Head from 'next/head'
 import Modal from './Modal';
-import Authenticated from '../auth/Authenticated';
 import GlobalStyles from './GlobalStyles';
 import ErrorMessage from './ErrorMessage';
-import BombSVG from '../svg/bomb';
 import Navbar from './Navbar';
-import { NOTIFICATIONS } from '../../apollo/queries'
 
 class Header extends Component {
     state = {
@@ -17,7 +13,6 @@ class Header extends Component {
     render() {
         return (
             <div>
-
                 <GlobalStyles />
                 <Navbar client={this.props.client} />
                 <Modal client={this.props.client} />

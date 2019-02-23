@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
 import moment from 'moment'
+import { shortenNumber } from '../../utils';
 import BombSVG from '../svg/bomb';
 import LikeComment from '../posts/comments/LikeComment';
 import UnlikeComment from '../posts/comments/UnlikeComment';
 import { renderModal, setSearch } from '../../apollo/clientWrites';
-import { shortenNumber } from '../../utils';
 
 class SearchComments extends Component {
     render() {

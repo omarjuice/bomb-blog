@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import { FEATURE_POST } from '../../apollo/mutations';
 import Unfeature from './Unfeature';
-import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 
 class Feature extends Component {

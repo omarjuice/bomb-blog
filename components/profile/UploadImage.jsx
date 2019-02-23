@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { UPLOAD_IMAGE, UPDATE_PROFILE } from '../../apollo/mutations';
 import { Mutation } from 'react-apollo';
-import client from '../../apollo/client';
 import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import { USER_PROFILE } from '../../apollo/queries';
+import { UPLOAD_IMAGE, UPDATE_PROFILE } from '../../apollo/mutations';
 
 const update = (proxy, { data: { updateProfile } }) => {
     const id = updateProfile.user_id

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Link from 'next/link'
 import { Query } from 'react-apollo';
 import Loading from '../meta/Loading';
+import ErrorMessage from '../meta/ErrorMessage';
 import { CURRENT_USER } from '../../apollo/queries';
 import { clearError } from '../../apollo/clientWrites';
-import ErrorMessage from '../meta/ErrorMessage';
 
 
 
