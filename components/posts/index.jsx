@@ -110,7 +110,7 @@ class PostPage extends Component {
                                                     <div className="column is-8-desktop is-8-tablet is-full-mobile">
                                                         {<div className="tags">
                                                             {tags.map((tag, i) => {
-                                                                return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
+                                                                return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-dark'}`}>{tag.tag_name}</a>
                                                             })}
                                                         </div>}
                                                     </div>
@@ -129,7 +129,7 @@ class PostPage extends Component {
                             </div>
                             <div className="column is-6-desktop is-8-tablet is-12-mobile">
                                 <div className="has-text-centered">
-                                    <a onClick={this.toggleComments} className="has-text-info">
+                                    <a onClick={this.toggleComments} className="has-text-grey">
                                         <span className="icon">
                                             <i className="fas fa-comment-dots fa-4x"></i>
                                         </span>

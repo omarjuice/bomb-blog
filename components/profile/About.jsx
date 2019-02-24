@@ -46,7 +46,7 @@ class About extends Component {
                     if (!this.state.editing) return (
                         <div>
                             <p>{data.user.profile.about || 'Let others know something about you!'}</p>
-                            <button className="button is-info" onClick={this.editAbout(data.user.profile.about)}><i className="fas fa-pen-alt"></i></button>
+                            <button className="button is-dark" onClick={this.editAbout(data.user.profile.about)}><i className="fas fa-pen-alt"></i></button>
                         </div>
                     )
                     return (
@@ -59,7 +59,7 @@ class About extends Component {
                                         <form action="" onSubmit={this.handleSubmit(updateProfile)}>
                                             <textarea className="textarea" value={this.state.input}
                                                 onChange={e => this.setState({ input: e.target.value })}></textarea>
-                                            <button type="submit" className="button is-info">Submit</button>
+                                            <button type="submit" className="button is-dark">Submit</button>
                                         </form>
                                     )
                                     return <p>DONE</p>

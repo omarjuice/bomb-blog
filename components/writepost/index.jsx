@@ -239,7 +239,7 @@ class WritePost extends Component {
                                         </a>
                                     </p>
                                     <p className="control">
-                                        <a onClick={() => this.setState({ imageType: true })} className={`button is-info ${this.state.imageType ? 'is-static' : ''}`}>
+                                        <a onClick={() => this.setState({ imageType: true })} className={`button is-dark ${this.state.imageType ? 'is-static' : ''}`}>
                                             <span className="icon is-small">
                                                 <i className="fas fa-upload"></i>
                                             </span>

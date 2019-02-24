@@ -48,7 +48,7 @@ class UpdateReply extends Component {
                         </div>
                         <div className="field">
                             <p className="control">
-                                <button type="submit" className={`button is-info is-outlined ${loading && 'is-loading'}`}>Submit</button>
+                                <button type="submit" className={`button is-dark is-outlined ${loading && 'is-loading'}`}>Submit</button>
                             </p>
                         </div>
                     </form>)

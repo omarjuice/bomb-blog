@@ -5,7 +5,7 @@ class GlobalStyles extends Component {
         return (
             <style jsx global>{`
                 html{
-                    background-color: #f9f5fb !important;
+                    background-color: #f0f0f0 !important;
                 }
 
                 .font-1{

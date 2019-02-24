@@ -46,7 +46,7 @@ class Navbar extends Component {
                                 <span className="icon is-large"><i className="fas fa-pen fa-lg"></i></span>
                             </a>
                         </Link>
-                        <a className={`navbar-item ${this.state.searchNav ? 'has-text-info' : ''}`}
+                        <a className={`navbar-item ${this.state.searchNav ? 'has-text-grey' : ''}`}
                             onClick={() => this.setState({ searchNav: !this.state.searchNav, menu: !this.state.searchNav ? false : this.state.menu })}>
                             <span className="icon is-large"><i className="fas fa-search fa-lg"></i></span>
                         </a>

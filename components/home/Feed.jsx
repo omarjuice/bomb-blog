@@ -34,7 +34,7 @@ class Feed extends Component {
 
                                         <br />
                                         {tags.slice(0, 8).map((tag, i) => (
-                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
+                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-dark'}`}>{tag.tag_name}</a>
                                         ))}{
                                             tags.length > 7 ? <span className="tag">...</span> : ''
                                         }
@@ -45,7 +45,7 @@ class Feed extends Component {
                                                     <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                     {likes}
                                                 </a>
-                                                <a className="level-item has-text-weight-bold has-text-info">
+                                                <a className="level-item has-text-weight-bold has-text-grey">
                                                     <span className="icon "><i className="fas fa-comments"></i> </span>
                                                     {comments}
                                                 </a>

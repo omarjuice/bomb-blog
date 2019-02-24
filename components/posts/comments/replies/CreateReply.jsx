@@ -66,7 +66,7 @@ class CreateReply extends Component {
                                             </div>
                                             <div className="field">
                                                 <p className="control">
-                                                    <button type="submit" className={`button is-info is-outlined ${loading && 'is-loading'}`}>Reply</button>
+                                                    <button type="submit" className={`button is-dark is-outlined ${loading && 'is-loading'}`}>Reply</button>
                                                 </p>
                                             </div>
                                         </form>

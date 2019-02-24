@@ -117,7 +117,7 @@ class Home extends Component {
                                                 if (data.user) {
                                                     stopPolling()
                                                     return (
-                                                        <div onScroll={this.handleScroll('feed', client, { cursor: data.user.followingPosts.cursor, limit: 5 }, FOLLOWEE_POSTS)} className={`column is-two-thirds recent ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
+                                                        <div onScroll={this.handleScroll('feed', client, { cursor: data.user.followingPosts.cursor, limit: 5 }, FOLLOWEE_POSTS)} className={`column is-two-thirds recent box ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
                                                             <article className="media">
                                                                 <div className="media-content font-1 has-text-centered">
                                                                     <div className="content">
@@ -162,7 +162,7 @@ class Home extends Component {
                                                         }
                                                         data.posts.results = data.posts.results.filter(post => !post.author.isMe)
                                                         return (
-                                                            <div onScroll={this.handleScroll('posts', client, { ...inputSuggested, cursor: data.posts.cursor })} className={`column is-one-third recent notification ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
+                                                            <div onScroll={this.handleScroll('posts', client, { ...inputSuggested, cursor: data.posts.cursor })} className={`column is-one-third recent box ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                                 <article className="media">
                                                                     <div className="media-content font-1 has-text-centered">
                                                                         <div className="content">
@@ -219,7 +219,7 @@ class Home extends Component {
                                                         </article>)}
                                                 </div>
                                                 <div className={`column is-one-third ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
-                                                    <div className="tile is-vertical notification has-text-centered font-1">
+                                                    <div className="tile is-vertical has-text-centered font-1">
                                                         <div className="columns is-mobile">
                                                             <div className="column is-half">
                                                                 <div className="has-text-centered">
@@ -248,6 +248,8 @@ class Home extends Component {
                     .recent{
                         height: 85vh;
                         overflow: scroll;
+                        background-color: #f9f9f9;
+                        padding: .5rem;
                         -webkit-overflow-scrolling: touch
                     }
                     .load-error{
@@ -260,6 +262,12 @@ class Home extends Component {
                     }
                     .login{
                         margin-top: 2rem
+                    }
+                    .recent:nth-of-type(1){
+                        margin-right: .5rem
+                    }
+                    .recent:nth-of-type(2){
+                        margin-left: .5rem
                     }
                     `}</style>
             </div>

@@ -48,7 +48,7 @@ class UploadImage extends Component {
                         <form onSubmit={this.onSubmit(uploadImage, client)} className="has-text-centered">
                             <div className="field has-addons has-addons-centered has-text-centered">
                                 <div className="control">
-                                    <div className="file is-info is-centered">
+                                    <div className="file is-dark is-centered">
                                         <label className="file-label">
                                             <input className="file-input" type="file" name="image" accept=".jpeg,.jpg,.png"
                                                 onChange={this.onChange} />

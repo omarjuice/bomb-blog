@@ -14,14 +14,14 @@ class Tags extends Component {
                                 <span>{i + 1}</span>
                                 <div className="content has-text-centered">
 
-                                    <div className={`tag is-large font-1 ${this.props.inputTags.includes(tag_name) ? 'is-primary' : 'is-info'}`}>{tag_name}</div>
+                                    <div className={`tag is-large font-1 ${this.props.inputTags.includes(tag_name) ? 'is-primary' : 'is-dark'}`}>{tag_name}</div>
                                     <BombSVG scale={.1} lit={true} >{popularity}</BombSVG>
                                     <small>Created {moment.utc(Number(created_at)).local().fromNow()}</small>
                                 </div>
                             </div>
                             <div className="media-right columns is-multiline is-mobile is-centered">
                                 <div className="column is-half has-text-centered">
-                                    <a onClick={() => setSearch({ addToInput: ` #${tag_name}`, active: true })} className="has-text-dark"><span className="icon is-large"><i className="fas fa-search fa-2x"></i></span></a>
+                                    <a onClick={() => setSearch({ addToInput: ` #${tag_name}`, active: true })} className="has-text-grey"><span className="icon is-large"><i className="fas fa-search fa-2x"></i></span></a>
                                 </div>
                             </div>
                             <style jsx>{`

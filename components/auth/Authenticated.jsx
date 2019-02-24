@@ -15,12 +15,12 @@ class Authenticated extends Component {
                         </div>)
                     return data && data.authenticated ? <Logout deactivateMenu={this.props.deactivateMenu} /> : <>
                         <div className="navbar-item has-text-centered">
-                            <a className="button is-info " onClick={() => { renderModal({ display: 'Register', message: '', active: true }); this.props.deactivateMenu() }}>
+                            <a className="button is-dark " onClick={() => { renderModal({ display: 'Register', message: '', active: true }); this.props.deactivateMenu() }}>
                                 <strong>Sign up</strong>
                             </a>
                         </div>
                         <div className="navbar-item has-text-centered">
-                            <a className="button is-info " onClick={() => { renderModal({ display: 'Login', message: '', active: true }); this.props.deactivateMenu() }}>
+                            <a className="button is-dark " onClick={() => { renderModal({ display: 'Login', message: '', active: true }); this.props.deactivateMenu() }}>
                                 Log in
                             </a>
                         </div>

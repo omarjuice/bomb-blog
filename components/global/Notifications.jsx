@@ -28,9 +28,9 @@ class Notifications extends Component {
                             </LinkWrap>
                             <br />
 
-                            <div className="message is-info">
+                            <div className="message is-dark">
                                 <p className="message-body">
-                                    <span className="icon has-text-info"><i className="fas fa-comment"></i></span>
+                                    <span className="icon has-text-grey"><i className="fas fa-comment"></i></span>
                                     {comment_text}
                                     <br />
                                     {tags && tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag font-1'}>{tag.tag_name}</span>)}
@@ -81,7 +81,7 @@ class Notifications extends Component {
                             {caption}
                             <br />
 
-                            {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-info font-1'}>tag</span>)}
+                            {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-dark font-1'}>tag</span>)}
 
                         </div>
                     </div>
@@ -157,7 +157,7 @@ class Notifications extends Component {
                                     <span className="icon"><i className="fas fa-comment"></i></span>
                                     {comment.comment_text}
                                     <br />
-                                    {comment.tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-info font-1'}>{tag.tag_name}</span>)}
+                                    {comment.tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-dark font-1'}>{tag.tag_name}</span>)}
                                 </p>
                             </div>
                             <br />
@@ -211,9 +211,9 @@ class Notifications extends Component {
                                     </div>
                                     <div className="media">
                                         <div className="media-content">
-                                            <div className="message is-info">
+                                            <div className="message is-dark">
                                                 <p className="message-body">
-                                                    <span className="icon has-text-info"><i className="fas fa-reply"></i></span>
+                                                    <span className="icon has-text-grey"><i className="fas fa-reply"></i></span>
                                                     {reply_text}
                                                     <br />
                                                 </p>

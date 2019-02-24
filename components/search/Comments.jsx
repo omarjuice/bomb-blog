@@ -46,8 +46,8 @@ class SearchComments extends Component {
                                     <br />
                                     <small>{iLike ? <UnlikeComment commentId={id} postId={post_id} /> : <LikeComment commentId={id} postId={post_id} />} · {last_updated ? <i className="fas fa-pen-square"></i> : ''} {moment.utc(Number(last_updated || created_at)).local().fromNow(true)}</small> ·
                                 <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'comment', id } })} className="has-text-primary"><span className="icon">{iLike ? <BombSVG lit={true} scale={1.2} /> : <BombSVG lit={false} scale={1.2} />}</span><span className="has-text-primary">{shortenNumber(numLikes)}</span></a> ·
-                                        <span className="icon has-text-info"><i className="fas fa-reply"></i></span>
-                                    <span className="has-text-info">{shortenNumber(numReplies)}</span>
+                                        <span className="icon has-text-grey"><i className="fas fa-reply"></i></span>
+                                    <span className="has-text-grey">{shortenNumber(numReplies)}</span>
                                 </div>}
                             </div>
                         </div>

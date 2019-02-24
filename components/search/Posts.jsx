@@ -52,7 +52,7 @@ class Posts extends Component {
                                                     <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                     {likes}
                                                 </a>
-                                                <a className="level-item has-text-weight-bold has-text-info">
+                                                <a className="level-item has-text-weight-bold has-text-grey">
                                                     <span className="icon "><i className="fas fa-comments"></i> </span>
                                                     {comments}
                                                 </a>

@@ -65,7 +65,7 @@ class Follow extends Component {
                 if (!data || (data && !data.createFollow) || this.props.page === 'profile') return (
                     <a onClick={createFollow}>
                         <span className="icon hover-icon">
-                            <i className={`fas ${size} fa-user-plus has-text-info`}></i>
+                            <i className={`fas ${size} fa-user-plus has-text-grey`}></i>
                         </span>
                     </a>
                 )

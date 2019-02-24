@@ -47,7 +47,7 @@ class PostHead extends Component {
                                                         </span>
                                                     </a>
                                                     <br />
-                                                    <a className="is-size-4  has-text-dark underline">0</a>
+                                                    <a className="is-size-4  has-text-grey underline">0</a>
                                                 </>
                                             </div>
                                         </div>
@@ -60,7 +60,7 @@ class PostHead extends Component {
                                                 <br />
 
                                                 <span className="icon hover-icon">
-                                                    <i className={`fas fa-lg fa-user-plus has-text-info`}></i>
+                                                    <i className={`fas fa-lg fa-user-plus has-text-grey`}></i>
                                                 </span>
 
                                             </div>
@@ -69,7 +69,7 @@ class PostHead extends Component {
                                         <div className="column is-8-desktop is-8-tablet is-full-mobile">
                                             {<div className="tags">
                                                 {tags.map((tag, i) => {
-                                                    return <a key={tag} className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag}</a>
+                                                    return <a key={tag} className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-dark'}`}>{tag}</a>
                                                 })}
                                             </div>}
                                         </div>

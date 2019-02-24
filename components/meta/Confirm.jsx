@@ -8,7 +8,7 @@ class Confirm extends Component {
                 <h1 className="title is-4">{this.props.info.prompt || 'Are You Sure ?'}</h1>
                 <div className="columns is-mobile">
                     <div className="column">
-                        <button onClick={() => renderModal({ confirmation: true })} className="button font-1 is-large is-info">
+                        <button onClick={() => renderModal({ confirmation: true })} className="button font-1 is-large is-dark">
                             Yes
                 </button>
                     </div>
