@@ -13,14 +13,14 @@ class Authenticated extends Component {
                         <div className="navbar-item has-text-centered">
                             <div><Loading size="2x" /></div>
                         </div>)
-                    return data && data.authenticated ? <Logout /> : <>
+                    return data && data.authenticated ? <Logout deactivateMenu={this.props.deactivateMenu} /> : <>
                         <div className="navbar-item has-text-centered">
-                            <a className="button is-info font-1" onClick={() => renderModal({ display: 'Register', message: '', active: true })}>
+                            <a className="button is-info " onClick={() => { renderModal({ display: 'Register', message: '', active: true }); this.props.deactivateMenu() }}>
                                 <strong>Sign up</strong>
                             </a>
                         </div>
                         <div className="navbar-item has-text-centered">
-                            <a className="button is-info font-1" onClick={() => renderModal({ display: 'Login', message: '', active: true })}>
+                            <a className="button is-info " onClick={() => { renderModal({ display: 'Login', message: '', active: true }); this.props.deactivateMenu() }}>
                                 Log in
                             </a>
                         </div>

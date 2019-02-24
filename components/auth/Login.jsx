@@ -46,7 +46,7 @@ class Login extends Component {
                             <div className="field">
                                 <label className="label">Username</label>
                                 <div className="control has-icons-left">
-                                    <input type="text" className={`input ${this.state.errors.username && 'is-danger'}`} value={this.state.username} onChange={e => this.setState({ username: e.target.value, errors: { ...this.state.errors, username: null } })} />
+                                    <input type="text" className={`input ${this.state.errors.username && 'is-danger'}`} value={this.state.username || ''} onChange={e => this.setState({ username: e.target.value, errors: { ...this.state.errors, username: null } })} />
                                     <span className="icon is-small is-left">
                                         <i className={`fas fa-user`}></i>
                                     </span>

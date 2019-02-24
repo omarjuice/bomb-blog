@@ -26,7 +26,7 @@ class PostHead extends Component {
                                     <img src={photo_path || `/static/user_image.png`} className="author-image" />
                                 </div>
                                 <div className="media-content has-text-centered">
-                                    <p id="title" className="title is-1 article-title font-2">{title}</p>
+                                    <p id="title" className="title is-1 article-title font-1">{title}</p>
                                     <div className="caption content is-size-3">
                                         <div className="columns is-mobile is-centered">
                                             <div className="column is-1"><i className="fas fa-quote-left fa-pull-left"></i></div>
@@ -47,7 +47,7 @@ class PostHead extends Component {
                                                         </span>
                                                     </a>
                                                     <br />
-                                                    <a className="is-size-4 font-1 has-text-dark underline">0</a>
+                                                    <a className="is-size-4  has-text-dark underline">0</a>
                                                 </>
                                             </div>
                                         </div>
@@ -69,7 +69,7 @@ class PostHead extends Component {
                                         <div className="column is-8-desktop is-8-tablet is-full-mobile">
                                             {<div className="tags">
                                                 {tags.map((tag, i) => {
-                                                    return <a key={tag} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag}</a>
+                                                    return <a key={tag} className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag}</a>
                                                 })}
                                             </div>}
                                         </div>

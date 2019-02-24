@@ -14,7 +14,7 @@ class Tags extends Component {
                                 <span>{i + 1}</span>
                                 <div className="content has-text-centered">
 
-                                    <div className={`tag is-large font-2 ${this.props.inputTags.includes(tag_name) ? 'is-primary' : 'is-info'}`}>{tag_name}</div>
+                                    <div className={`tag is-large font-1 ${this.props.inputTags.includes(tag_name) ? 'is-primary' : 'is-info'}`}>{tag_name}</div>
                                     <BombSVG scale={.1} lit={true} >{popularity}</BombSVG>
                                     <small>Created {moment.utc(Number(created_at)).local().fromNow()}</small>
                                 </div>
@@ -42,7 +42,7 @@ class Tags extends Component {
                             <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
-                    <div className="media-content font-2 has-text-centered">
+                    <div className="media-content font-1 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 No {data.results.length > 0 ? 'more' : ''} Tags to show...

@@ -60,7 +60,7 @@ class Modal extends Component {
                             <div className="modal-background" onClick={() => dismiss(false)}></div>
                             <div className="modal-card">
                                 <header className="modal-card-head has-text-centered has-background-primary">
-                                    <p className="modal-card-title has-text-white font-2">{message || display}</p>
+                                    <p className="modal-card-title has-text-white font-1">{message || display}</p>
                                     <button className="delete" aria-label="close" onClick={() => dismiss(false)}></button>
                                 </header>
                                 <section className="modal-card-body has-text-centered">

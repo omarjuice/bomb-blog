@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
                     <link rel="stylesheet" href="/static/bulma.css"></link>
                     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
                         crossOrigin="anonymous"></link>
-                    <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Coiny" rel="stylesheet"></link>
+                    <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Days+One" rel="stylesheet"></link>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css"></link>
 
                     <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png" />

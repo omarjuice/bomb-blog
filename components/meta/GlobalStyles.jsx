@@ -5,12 +5,10 @@ class GlobalStyles extends Component {
         return (
             <style jsx global>{`
                 html{
-                    background-color: whitesmoke
+                    background-color: #f9f5fb !important;
                 }
+
                 .font-1{
-                    font-family: 'Coiny', sans-serif
-                }
-                .font-2{
                     font-family: 'Baloo Thambi', sans-serif;
                 }
                 .hover-icon{

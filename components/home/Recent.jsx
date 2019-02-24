@@ -19,7 +19,7 @@ class Recent extends Component {
                                 <div className="content">
                                     <div>
 
-                                        <Link href={{ pathname: '/posts', query: { id } }}><a className="has-text-dark"><strong className="font-2">{title} </strong></a></Link>
+                                        <Link href={{ pathname: '/posts', query: { id } }}><a className="has-text-dark"><strong className="font-1">{title} </strong></a></Link>
                                         <br />
                                         {caption}
                                         <br />
@@ -30,7 +30,7 @@ class Recent extends Component {
                                         </Link>
                                         <br />
                                         {this.props.showTags && tags.slice(0, 8).map((tag, i) => (
-                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
+                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
                                         ))}
                                         {
                                             this.props.showTags && tags.length > 7 ? <span className="tag">...</span> : ''
@@ -76,7 +76,7 @@ class Recent extends Component {
                             <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
-                    <div className="media-content font-2 has-text-centered">
+                    <div className="media-content font-1 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 No {data.results.length > 0 ? 'more' : ''} Posts to show...

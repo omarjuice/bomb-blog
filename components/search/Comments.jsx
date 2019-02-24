@@ -32,7 +32,7 @@ class SearchComments extends Component {
                                     </Link>
                                     <br />
                                     <span className="icon"><i className="fas fa-long-arrow-alt-right"></i></span> <Link href={{ pathname: '/posts', query: { id: post.id } }} >
-                                        <a className="font-2">
+                                        <a className="font-1">
                                             {post.title}
                                         </a>
                                     </Link>
@@ -41,7 +41,7 @@ class SearchComments extends Component {
 
                                     <br />
                                     {tags.map((tag, i) => (
-                                        <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
+                                        <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
                                     ))}
                                     <br />
                                     <small>{iLike ? <UnlikeComment commentId={id} postId={post_id} /> : <LikeComment commentId={id} postId={post_id} />} · {last_updated ? <i className="fas fa-pen-square"></i> : ''} {moment.utc(Number(last_updated || created_at)).local().fromNow(true)}</small> ·
@@ -60,7 +60,7 @@ class SearchComments extends Component {
                             <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
-                    <div className="media-content font-2 has-text-centered">
+                    <div className="media-content font-1 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 No {data.results.length > 0 ? 'more' : ''} Comments to show...

@@ -39,7 +39,7 @@ class Comment extends Component {
                                 <>
                                     <br />
                                     {(tags.map((tag, i) => {
-                                        return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-small font-2 ${i % 2 === 1 ? 'is-info' : 'is-primary'}`}>{tag.tag_name}</a>
+                                        return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-small font-1 ${i % 2 === 1 ? 'is-info' : 'is-primary'}`}>{tag.tag_name}</a>
                                     }))}
                                 </> : ''
                             }

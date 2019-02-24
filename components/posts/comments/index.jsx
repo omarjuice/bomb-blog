@@ -19,7 +19,7 @@ class Comments extends Component {
                                 <div>
                                     {data.post.comments.length < 1 ?
                                         <>
-                                            <div className="is-size-5 font-2">Be the first to comment on this post!</div>
+                                            <div className="is-size-5 font-1">Be the first to comment on this post!</div>
                                         </> : ''}
                                     {data.post.comments.map((comment) => <Comment key={comment.id} {...comment} />)}
                                 </div>

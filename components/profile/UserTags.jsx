@@ -44,7 +44,7 @@ class UserTags extends Component {
                         <div>
                             {tags.length > 0 ? <div className="tags">
                                 {tags.map((tag, i) => {
-                                    return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : ''}`}>{tag.tag_name}</a>
+                                    return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
                                 })}
                                 {isMe ? editButton : ''}
                             </div> : isMe ? <><p className="content">You have no tags. What are you interested in?</p>{editButton}</> : <p className="content">{username} has no tags.</p>}

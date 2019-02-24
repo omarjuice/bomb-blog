@@ -9,8 +9,9 @@ const typeDefs = require('./gql/schema');
 const resolvers = require('./gql/resolvers')
 const applyLoaders = require('./gql/batch')
 const moment = require('moment')
-require('mkdirp').sync('./static/uploads')
 const { queryDB } = require('./db/connect')
+require('mkdirp').sync('./static/uploads')
+
 const dev = process.env.NODE_ENV !== 'production'
 const test = process.env.NODE_ENV === 'test'
 let port = process.env.PORT || 3000
@@ -63,7 +64,7 @@ const apollo = new ApolloServer({
         }
 
         return applyLoaders(ctx)
-    }, uploads: test
+    }
 })
 const initializeServer = (app, productionEnv = false) => {
     return (done = null) => {

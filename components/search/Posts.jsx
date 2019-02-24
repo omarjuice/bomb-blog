@@ -14,7 +14,7 @@ class Posts extends Component {
 
         return (
             <>
-                {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags }, i) => {
+                {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags, image }, i) => {
                     const likes = shortenNumber(numLikes)
                     const comments = shortenNumber(numComments)
                     const likesMargin = String(likes.length * .25) + 'rem'
@@ -31,7 +31,7 @@ class Posts extends Component {
                             <div className="media-content">
                                 <div className="content">
                                     <p>
-                                        <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-2">{title} </strong></a></Link>
+                                        <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-1">{title} </strong></a></Link>
                                         <br />
                                         {caption}
                                         <br />
@@ -42,9 +42,10 @@ class Posts extends Component {
                                         </Link>
                                         <br />
                                         {tags.map((tag, i) => (
-                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
+                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
                                         ))}
                                         <br />
+
                                         <nav className="level is-mobile">
                                             <div className="level-left">
                                                 <a className="level-item  has-text-primary has-text-weight-bold" onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
@@ -87,7 +88,7 @@ class Posts extends Component {
                             <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
-                    <div className="media-content font-2 has-text-centered">
+                    <div className="media-content font-1 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 No {data.results.length > 0 ? 'more' : ''} Posts to show...

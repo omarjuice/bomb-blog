@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "expect": "^24.1.0",
+    "faker": "^4.1.0",
     "mocha": "^5.2.0",
     "supertest": "^3.3.0"
   },
@@ -26,14 +27,12 @@
     "apollo-link-ws": "^1.0.14",
     "apollo-server-express": "^2.3.1",
     "apollo-upload-client": "^10.0.0",
-    "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
     "email-validator": "^2.0.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "faker": "^4.1.0",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "graphql-upload": "^8.0.4",
@@ -45,7 +44,6 @@
     "next-with-apollo": "^3.3.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "react-no-ssr": "^1.1.0",
     "shortid": "^2.2.14",
     "subscriptions-transport-ws": "^0.9.15"
   }

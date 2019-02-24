@@ -27,7 +27,7 @@ class User extends Component {
 
                                 <Link href={{ pathname: '/profile', query: { id: data.user.id } }}>
 
-                                    <a id="greeting" className="has-text-light font-2 has-text-centered">
+                                    <a onClick={this.props.deactivateMenu} id="greeting" className="has-text-light font-1 has-text-centered">
                                         <p><strong>{(loading && <Loading style="margin" size="2x" />) || data.user.username}</strong></p>
                                     </a>
 

@@ -15,11 +15,10 @@ class Logout extends Component {
                     if (!data) return (
                         <>
                             <div className="navbar-item has-text-centered">
-                                <User />
-
+                                <User deactivateMenu={this.props.deactivateMenu} />
                             </div>
                             <div className="navbar-item has-text-centered">
-                                <button className="button is-warning font-1" onClick={() => { logout(); setNumNotifications(0) }}>Logout</button>
+                                <button className="button is-warning " onClick={() => { logout(); setNumNotifications(0) }}>Logout</button>
                             </div>
                         </>
                     )

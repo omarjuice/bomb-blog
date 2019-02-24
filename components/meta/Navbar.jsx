@@ -24,8 +24,11 @@ class Navbar extends Component {
                     })
                 }
             })
-
-
+    }
+    deactivateMenu() {
+        this.setState({
+            menu: false
+        })
     }
     render() {
         return (
@@ -67,7 +70,7 @@ class Navbar extends Component {
                         <div className="navbar-start">
                         </div>
                         <div className="navbar-end">
-                            <Authenticated />
+                            <Authenticated deactivateMenu={this.deactivateMenu.bind(this)} />
                         </div>
                     </div>
                 </nav>

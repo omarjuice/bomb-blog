@@ -22,7 +22,7 @@ class Feed extends Component {
                                 <div className="content">
                                     <div>
 
-                                        <Link href={{ pathname: '/posts', query: { id } }}><a className="has-text-dark"><strong className="font-2">{title} </strong></a></Link>
+                                        <Link href={{ pathname: '/posts', query: { id } }}><a className="has-text-dark"><strong className="font-1">{title} </strong></a></Link>
                                         <br />
                                         {caption}
                                         <br />
@@ -34,7 +34,7 @@ class Feed extends Component {
 
                                         <br />
                                         {tags.slice(0, 8).map((tag, i) => (
-                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
+                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
                                         ))}{
                                             tags.length > 7 ? <span className="tag">...</span> : ''
                                         }
@@ -67,8 +67,8 @@ class Feed extends Component {
                                     {image && <img src={image} alt="image" />}
 
                                 </p>
-                                {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
-                                <FeaturePost featured={featured} id={id} />
+                                {/* {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
+                                <FeaturePost featured={featured} id={id} /> */}
                             </div>
 
                             <style jsx>{`
@@ -89,7 +89,7 @@ class Feed extends Component {
                             <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
-                    <div className="media-content font-2 has-text-centered">
+                    <div className="media-content font-1 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 {data.results.length > 0 ? 'No more posts to show...' : 'You arent following anyone yet!'}

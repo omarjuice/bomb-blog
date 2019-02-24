@@ -116,7 +116,7 @@ class SearchPage extends Component {
                                     <div className={`column is-one-third-desktop is-half-tablet is-full-mobile ${this.state.active === 'posts' ? '' : 'is-hidden-mobile'}`}>
                                         <div className="box" onScroll={this.handleScroll('posts', client, { ...variables.input, cursor: data.posts.cursor })}>
                                             <article className="media header">
-                                                <div className="media-content font-2 has-text-centered">
+                                                <div className="media-content font-1 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <h2 className="subtitle is-3 is-hidden-mobile">Posts</h2>
                                                     </div>
@@ -124,7 +124,7 @@ class SearchPage extends Component {
                                             </article>
                                             <Posts data={data.posts} input={variables.input} end={!data.posts.cursor} inputTags={variables.input.tags} />
                                             {this.state.fetching === 'posts' && <article className="media">
-                                                <div className="media-content font-2 has-text-centered">
+                                                <div className="media-content font-1 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <Loading size="4x" style="margin-top:2rem" />
                                                     </div>
@@ -139,7 +139,7 @@ class SearchPage extends Component {
                                             <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>
-                                                <div className="media-content font-2 has-text-centered">
+                                                <div className="media-content font-1 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <h2 className="subtitle is-3 is-hidden-mobile">Users</h2>
                                                     </div>
@@ -147,7 +147,7 @@ class SearchPage extends Component {
                                             </article>
                                             <Users data={data.users} input={variables.input} end={!data.users.cursor} inputTags={variables.input.tags} />
                                             {this.state.fetching === 'users' && <article className="media">
-                                                <div className="media-content font-2 has-text-centered">
+                                                <div className="media-content font-1 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <Loading size="4x" style="margin-top:2rem" />
                                                     </div>
@@ -162,7 +162,7 @@ class SearchPage extends Component {
                                             <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>
-                                                <div className="media-content font-2 has-text-centered">
+                                                <div className="media-content font-1 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <h2 className="subtitle is-3 is-hidden-mobile">Comments</h2>
                                                     </div>
@@ -170,7 +170,7 @@ class SearchPage extends Component {
                                             </article>
                                             <Comments data={data.comments} input={variables.input} end={!data.comments.cursor} inputTags={variables.input.tags} />
                                             {this.state.fetching === 'comments' && <article className="media">
-                                                <div className="media-content font-2 has-text-centered">
+                                                <div className="media-content font-1 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <Loading size="4x" style="margin-top:2rem" />
                                                     </div>
@@ -185,7 +185,7 @@ class SearchPage extends Component {
                                             <article className="media header">
                                                 <figure className="media-left">
                                                 </figure>
-                                                <div className="media-content font-2 has-text-centered">
+                                                <div className="media-content font-1 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <h2 className="subtitle is-3 is-hidden-mobile">Tags</h2>
                                                     </div>
@@ -193,7 +193,7 @@ class SearchPage extends Component {
                                             </article>
                                             <Tags data={data.tags} input={variables.input} end={!data.tags.cursor} inputTags={variables.input.tags} />
                                             {this.state.fetching === 'tags' && <article className="media">
-                                                <div className="media-content font-2 has-text-centered">
+                                                <div className="media-content font-1 has-text-centered">
                                                     <div className="content has-text-centered">
                                                         <Loading size="4x" style="margin-top:2rem" />
                                                     </div>

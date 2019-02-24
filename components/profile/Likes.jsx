@@ -27,7 +27,7 @@ class Likes extends Component {
                                 <div>
                                     <span className="icon has-text-primary"><i className="far fa-5x fa-heart"></i></span>
                                     <hr />
-                                    <h1 className="subtitle font-2">{data.user.isMe ? 'You have no likes. Go show some love.' : `${data.user.username} doesn't like anything...`}</h1>
+                                    <h1 className="subtitle font-1">{data.user.isMe ? <><span>You have no likes.</span> <Link href="/"><a>Go show some love.</a></Link> </> : `${data.user.username} doesn't like anything...`}</h1>
                                 </div>
                             )
                         }
@@ -50,7 +50,7 @@ class Likes extends Component {
                                                 <div className="media-content">
                                                     <div className="content">
                                                         <div>
-                                                            <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-2">{title} </strong></a></Link>
+                                                            <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-1">{title} </strong></a></Link>
                                                             <br />
                                                             By <Link href={{ pathname: '/profile', query: { id: author.id } }} >
                                                                 <a>

@@ -7,6 +7,7 @@ import ErrorIcon from '../meta/ErrorIcon';
 import Feed from './Feed';
 import BombSVG from '../svg/bomb';
 import { SEARCH_POSTS, AUTHENTICATED, CURRENT_USER_TAGS, FOLLOWEE_POSTS } from '../../apollo/queries';
+import { renderModal } from '../../apollo/clientWrites';
 
 
 class Home extends Component {
@@ -21,6 +22,7 @@ class Home extends Component {
         }
         else if (exclude || orderBy) {
             input.exclude = exclude
+            input.orderBy = orderBy
         }
         let avgItemHeight = null
         const calcAvgItemHeight = (last, first, children) => {
@@ -56,6 +58,7 @@ class Home extends Component {
                         this.setState({ fetching: null })
                         avgItemHeight = null
                     } catch (e) {
+                        console.log(e)
                         this.setState({ fetching: null })
                     }
                 })
@@ -116,17 +119,16 @@ class Home extends Component {
                                                     return (
                                                         <div onScroll={this.handleScroll('feed', client, { cursor: data.user.followingPosts.cursor, limit: 5 }, FOLLOWEE_POSTS)} className={`column is-two-thirds recent ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
                                                             <article className="media">
-                                                                <div className="media-content font-2 has-text-centered">
+                                                                <div className="media-content font-1 has-text-centered">
                                                                     <div className="content">
                                                                         <h1 className="title is-4">Feed</h1>
                                                                     </div>
                                                                 </div>
                                                             </article>
                                                             <Feed data={data.user.followingPosts} end={!data.user.followingPosts.cursor} />
-
                                                             {this.state.fetching === 'feed' && (
                                                                 <article className="media">
-                                                                    <div className="media-content font-2 has-text-centered">
+                                                                    <div className="media-content font-1 has-text-centered">
                                                                         <div className="content has-text-centered">
                                                                             <Loading size="4x" style="margin-top:2rem" />
                                                                         </div>
@@ -139,7 +141,7 @@ class Home extends Component {
                                         </Query>
                                         <Query query={CURRENT_USER_TAGS} ssr={false} fetchPolicy={"network-only"}>
                                             {({ loading, error, data }) => {
-                                                if (loading || error) {
+                                                if (loading || error || !data || !data.user) {
                                                     return (
                                                         <div className={`column is-one-third has-text-centered load-error ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                             {loading && <Loading size="5x" />}
@@ -162,7 +164,7 @@ class Home extends Component {
                                                         return (
                                                             <div onScroll={this.handleScroll('posts', client, { ...inputSuggested, cursor: data.posts.cursor })} className={`column is-one-third recent notification ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                                 <article className="media">
-                                                                    <div className="media-content font-2 has-text-centered">
+                                                                    <div className="media-content font-1 has-text-centered">
                                                                         <div className="content">
                                                                             <h1 className="title is-4">Suggested</h1>
                                                                         </div>
@@ -171,7 +173,7 @@ class Home extends Component {
                                                                 <Recent data={data.posts} showTags={false} end={!data.posts.cursor} />
                                                                 {this.state.fetching === 'posts' && (
                                                                     <article className="media">
-                                                                        <div className="media-content font-2 has-text-centered">
+                                                                        <div className="media-content font-1 has-text-centered">
                                                                             <div className="content has-text-centered">
                                                                                 <Loading size="4x" style="margin-top:2rem" />
                                                                             </div>
@@ -200,7 +202,7 @@ class Home extends Component {
                                             return (<>
                                                 <div onScroll={this.handleScroll('posts', client, { ...inputTrending, cursor: data.posts.cursor })} className={`column is-two-thirds recent ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                     <article className="media">
-                                                        <div className="media-content font-2 has-text-centered">
+                                                        <div className="media-content font-1 has-text-centered">
                                                             <div className="content">
                                                                 <h1 className="title is-4">Recent</h1>
                                                             </div>
@@ -209,7 +211,7 @@ class Home extends Component {
                                                     <Recent data={data.posts} showTags={true} end={!data.posts.cursor} />
                                                     {this.state.fetching === 'posts' && (
                                                         <article className="media">
-                                                            <div className="media-content font-2 has-text-centered">
+                                                            <div className="media-content font-1 has-text-centered">
                                                                 <div className="content has-text-centered">
                                                                     <Loading size="4x" style="margin-top:2rem" />
                                                                 </div>
@@ -217,7 +219,7 @@ class Home extends Component {
                                                         </article>)}
                                                 </div>
                                                 <div className={`column is-one-third ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
-                                                    <div className="tile is-vertical notification has-text-centered font-2">
+                                                    <div className="tile is-vertical notification has-text-centered font-1">
                                                         <div className="columns is-mobile">
                                                             <div className="column is-half">
                                                                 <div className="has-text-centered">

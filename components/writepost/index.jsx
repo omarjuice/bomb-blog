@@ -291,7 +291,7 @@ class WritePost extends Component {
                             <p className={`help ${this.state.body.length < 100 || this.state.body.length > 200000 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.body.length}</span><span>{this.state.errors.body}</span></p>
                             <div className="field submit">
                                 <div className="control">
-                                    <button type="submit" className="button is-success is-large font-2">Submit</button>
+                                    <button type="submit" className="button is-success is-large font-1">Submit</button>
                                 </div>
                             </div>
                         </form>
@@ -300,7 +300,7 @@ class WritePost extends Component {
                         <PostHead title={this.state.title || 'Title of Post'} caption={this.state.caption || 'I am the bomb'} tags={tags} image={this.state.imageType && this.state.upload.file ? URL.createObjectURL(this.state.upload.file) : this.state.image} />
                     </Preview>
                     <div className="control preview has-text-centered is-hidden-desktop">
-                        <a onClick={() => this.setState({ preview: !this.state.preview })} className="button is-large is-primary is-rounded font-2">
+                        <a onClick={() => this.setState({ preview: !this.state.preview })} className="button is-large is-primary is-rounded font-1">
                             <span className="icon">{this.state.preview ? <i className="fas fa-pencil-alt"></i> : <i className="far fa-eye"></i>}</span>
                         </a>
                     </div>

@@ -50,7 +50,7 @@ class ProfilePage extends Component {
                             <div>
 
                                 <div className="columns is-centered is-multiline is-mobile">
-                                    <div id="profile-header" className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered p">
+                                    <div id="profile-header" className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered">
                                         <figure className="image is-128x128">
                                             <img className="is-rounded" src={this.state.image || profile.photo_path || "/static/user_image.png"} />
                                             <Query query={CURRENT_USER} ssr={false}>
@@ -63,7 +63,7 @@ class ProfilePage extends Component {
                                                     }
                                                     return isMe ? <a onClick={() => this.setState({ editingImage: !this.state.editingImage })} className="edit has-text-grey">
                                                         <span className="icon">
-                                                            {this.state.editingImage ? <i className="fas fa-times-circle fa-lg"></i> : <i className="fas fa-pen-square fa-lg"></i>}
+                                                            {this.state.editingImage ? <i className="fas fa-times-circle fa-lg"></i> : <i className="fas fa-camera-retro fa-2x"></i>}
                                                         </span>
                                                     </a> : ''
                                                 }}

@@ -34,7 +34,7 @@ class Users extends Component {
                                     {profile.about}
                                     <br />
                                     {tags.map((tag, i) => (
-                                        <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
+                                        <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
                                     ))}
                                     <br />
                                     <small>Since {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</small>
@@ -65,7 +65,7 @@ class Users extends Component {
                             <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
-                    <div className="media-content font-2 has-text-centered">
+                    <div className="media-content font-1 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 No {data.results.length > 0 ? 'more' : ''} Users to show...

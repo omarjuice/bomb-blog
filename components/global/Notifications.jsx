@@ -33,7 +33,7 @@ class Notifications extends Component {
                                     <span className="icon has-text-info"><i className="fas fa-comment"></i></span>
                                     {comment_text}
                                     <br />
-                                    {tags && tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag font-2'}>{tag.tag_name}</span>)}
+                                    {tags && tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag font-1'}>{tag.tag_name}</span>)}
                                 </p>
                             </div>
 
@@ -81,7 +81,7 @@ class Notifications extends Component {
                             {caption}
                             <br />
 
-                            {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag is-info font-2'}>tag</span>)}
+                            {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-info font-1'}>tag</span>)}
 
                         </div>
                     </div>
@@ -157,7 +157,7 @@ class Notifications extends Component {
                                     <span className="icon"><i className="fas fa-comment"></i></span>
                                     {comment.comment_text}
                                     <br />
-                                    {comment.tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-2' : 'tag is-info font-2'}>{tag.tag_name}</span>)}
+                                    {comment.tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-info font-1'}>{tag.tag_name}</span>)}
                                 </p>
                             </div>
                             <br />
@@ -315,7 +315,7 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <br />
-                        <p className="title is-4 font-2">
+                        <p className="title is-4 font-1">
                             {message}
                         </p>
                     </div>
@@ -349,7 +349,7 @@ class Notifications extends Component {
                             <BombSVG lit={true} face={{ happy: true }} />
                         </div>
                     </figure>
-                    <div className="media-content font-2 has-text-centered">
+                    <div className="media-content font-1 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 <a onClick={() => renderModal({ active: true, display: 'Login' })}> Log in to see your notifications</a>
@@ -370,7 +370,7 @@ class Notifications extends Component {
                             <BombSVG lit={false} face={{ happy: false }} />
                         </div>
                     </figure>
-                    <div className="media-content font-2 has-text-centered">
+                    <div className="media-content font-1 has-text-centered">
                         <div className="content has-text-centered">
                             <h3 className="subtitile is-3">
                                 You have no new notifications.

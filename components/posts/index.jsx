@@ -53,7 +53,7 @@ class PostPage extends Component {
                                                 <img src={author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${author.username}'s picture`} />
                                             </div>
                                             <div className="media-content has-text-centered">
-                                                <p className="title is-1 article-title font-2">{title}</p>
+                                                <p className="title is-1 article-title font-1">{title}</p>
                                                 <div className="caption content is-size-3">
                                                     <div className="columns is-mobile is-centered">
                                                         <div className="column is-1"><i className="fas fa-quote-left fa-pull-left"></i></div>
@@ -110,7 +110,7 @@ class PostPage extends Component {
                                                     <div className="column is-8-desktop is-8-tablet is-full-mobile">
                                                         {<div className="tags">
                                                             {tags.map((tag, i) => {
-                                                                return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-2 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
+                                                                return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
                                                             })}
                                                         </div>}
                                                     </div>
@@ -134,7 +134,7 @@ class PostPage extends Component {
                                             <i className="fas fa-comment-dots fa-4x"></i>
                                         </span>
                                     </a>
-                                    {this.state.comments ? <Comments id={id} /> : <h1 className="title is-4 font-1">Comments: {numComments}</h1>}
+                                    {this.state.comments ? <Comments id={id} /> : <h1 className="title is-4 ">Comments: {numComments}</h1>}
                                 </div>
                             </div>
 

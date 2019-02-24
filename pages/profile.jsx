@@ -16,9 +16,7 @@ class Profile extends Component {
     }
     render() {
         return (
-            <>
-                <ProfilePage id={this.props.id} />
-            </>
+            <ProfilePage id={this.props.id} />
         );
     }
 }

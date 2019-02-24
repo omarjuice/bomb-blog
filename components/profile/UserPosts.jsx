@@ -26,7 +26,8 @@ class UserPosts extends Component {
                                 <div>
                                     <span className="icon has-text-primary"><i className="fas fa-5x fa-bomb"></i></span>
                                     <hr />
-                                    <h1 className="subtitle font-2 is-4">{data.user.isMe ? 'You have no Posts...' : `${data.user.username} has no Posts...`}</h1>
+                                    <h1 className="subtitle font-1 is-4">{data.user.isMe ? 'You have no Posts...' : `${data.user.username} has no Posts...`}</h1>
+                                    {data.user.isMe ? <Link href="/posts/new"><a className="subtitle font-1 is-3 has-text-link">Write one.</a></Link> : ''}
                                 </div>
                             )
                         }
@@ -50,7 +51,7 @@ class UserPosts extends Component {
                                                 <div className="media-content">
                                                     <div className="content">
                                                         <div>
-                                                            <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-2">{title} </strong></a></Link>
+                                                            <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-1">{title} </strong></a></Link>
                                                             <br />
                                                             {caption}
                                                             <br />

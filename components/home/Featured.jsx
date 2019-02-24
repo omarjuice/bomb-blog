@@ -17,20 +17,17 @@ class Featured extends Component {
         }
         return text
     }
-    genMedia = (post, size = 'large') => {
+    genMedia = (post = 'large') => {
         return (
             <article className="media">
-                <figure className="media-left">
-                    <p className={`image ${size === 'large' ? 'is-48x48' : 'is-32x32'}`}>
-                        <img src={post.author.profile.photo_path || '/static/user_image.png'} alt="" />
-                    </p>
-                </figure>
                 <div className="media-content">
                     <div className="content">
                         <p>
                             <Link href={{ pathname: '/profile', query: { id: post.author.id } }}>
                                 <a >
-                                    {post.author.username}
+                                    <i>
+                                        {post.author.username}
+                                    </i>
                                 </a>
                             </Link>
                             <br />
@@ -47,7 +44,7 @@ class Featured extends Component {
         return (
             <>
                 {post.tags.slice(0, 10).map((tag, i) => (
-                    <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-2 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
+                    <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-info'}`}>{tag.tag_name}</a>
                 ))}
                 {post.tags.length > 10 ? <div className="tag">...</div> : ''}
             </>
@@ -55,23 +52,30 @@ class Featured extends Component {
     }
     genStats = (post, size = 'large') => {
         return (
-            <>
-                <a onClick={() => renderModal({ active: true, display: 'Likers', info: { type: 'post', id: post.id } })} className="has-text-weight-bold has-text-primary"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-bomb ${size === 'large' ? 'fa-2x' : ''}`}></i></span>{shortenNumber(post.numLikes)}</a>
-                <p className="has-text-weight-bold has-text-info"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-comment ${size === 'large' ? 'fa-2x' : ''}`}></i></span>{shortenNumber(post.numComments)}</p>
-                <FeaturePost featured={post.featured} id={post.id} />
-            </>
+            <div className="columns is-mobile is-multiline stats">
+                <div className="column is-narrow is-paddingless">
+                    <a onClick={() => renderModal({ active: true, display: 'Likers', info: { type: 'post', id: post.id } })} className="has-text-weight-bold has-text-primary"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-bomb ${size === 'large' ? 'fa-2x' : ''}`}></i></span><span className="stat-num">{shortenNumber(post.numLikes)}</span></a>
+                </div>
+                <div className="column is-narrow is-paddingless">
+                    <p className="has-text-weight-bold has-text-info"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-comment ${size === 'large' ? 'fa-2x' : ''}`}></i></span><span className="stat-num">{shortenNumber(post.numComments)}</span></p>
+                    <FeaturePost featured={post.featured} id={post.id} />
+                </div>
+            </div>
         )
     }
     render() {
         const { posts } = this.props
         return (<div>
-            <div className={`container ${this.props.active ? '' : 'is-hidden-mobile'}`}>
+            <div className={` ${this.props.active ? '' : 'is-hidden-mobile'}`}>
                 <div className="tile is-ancestor">
-                    <div className="tile is-parent">
+                    <div className="tile is-parent is-3">
                         {posts[0] ? <article className="tile is-child">
+                            <div className="media-center">
+                                <img src={posts[0].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[0].author.username}'s picture`} />
+                            </div>
                             <Link href={{ pathname: '/posts', query: { id: posts[0].id } }}>
                                 <a>
-                                    <p className="title is-4 font-2">{this.shorten(posts[0].title)}</p>
+                                    <p className="title is-4 font-1">{this.shorten(posts[0].title)}</p>
                                     <p className="subtitle is-6">{this.shorten(posts[0].caption, 200)}</p>
                                 </a>
                             </Link>
@@ -87,49 +91,59 @@ class Featured extends Component {
 
                                 </div>
                                 <div className="column is-half-mobile is-full-tablet">
+                                    <div className="columns is-mobile is-multiline">
+                                        <div className="column is-full-mobile is-half-tablet">
+                                            {this.genStats(posts[0])}
+                                        </div>
+                                        <div className="column is-full-mobile is-half-tablet">
+                                            {this.genMedia(posts[0])}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="column is-full">
                                     {this.genTags(posts[0])}
-                                </div>
-                                <div className="column is-one-third stats">
-
-                                    {this.genStats(posts[0])}
-                                </div>
-
-                                <div className="column is-two-thirds">
-                                    {this.genMedia(posts[0])}
                                 </div>
                             </div>
                         </article> : ''}
                     </div>
-                    <div className="tile is-vertical is-8">
+                    <div className="tile is-vertical">
                         <div className="tile is-parent">
                             {posts[1] ? <article className="tile is-child">
+                                <div className="media-center">
+                                    <img src={posts[1].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[0].author.username}'s picture`} />
+                                </div>
                                 <div className="columns is-multiline is-mobile">
                                     <div className="column is-three-quarters-desktop is-full-mobile">
                                         <Link href={{ pathname: '/posts', query: { id: posts[1].id } }}>
                                             <a>
-                                                <p className="title is-4 font-2">{this.shorten(posts[1].title)}</p>
+                                                <p className="title is-4 font-1">{this.shorten(posts[1].title)}</p>
                                                 <p className="subtitle is-6">{this.shorten(posts[1].caption, 200)}</p>
                                             </a>
                                         </Link>
                                         <div className="columns is-mobile is-multiline">
-                                            {posts[1].image ? <div className="column is-half is-hidden-tablet">
+                                            {posts[1].image ? <div className="column is-half-mobile is-hidden-tablet">
                                                 <Link href={{ pathname: '/posts', query: { id: posts[1].id } }}>
-                                                    <a >
+                                                    <a>
                                                         <figure className="image is-4by3">
                                                             <img src={posts[1].image} alt="image" />
                                                         </figure>
                                                     </a>
                                                 </Link>
                                             </div> : ''}
-                                            <div className="column is-5-desktop is-full-tablet is-half-mobile">
+                                            <div className="column is-7-desktop is-half-mobile">
+                                                <div className="columns is-mobile is-multiline">
+                                                    <div className="column">
+                                                        {this.genStats(posts[1])}
+                                                    </div>
+                                                    <div className="column">
+                                                        {this.genMedia(posts[1])}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="column is-5-desktop is-full-tablet is-full-mobile">
                                                 {this.genTags(posts[1])}
                                             </div>
-                                            <div className="column is-2-desktop is-one-third-mobile stats">
-                                                {this.genStats(posts[1])}
-                                            </div>
-                                            <div className="column is-5-desktop is-two-thirds-mobile">
-                                                {this.genMedia(posts[1])}
-                                            </div>
+
 
                                         </div>
                                     </div>
@@ -149,41 +163,45 @@ class Featured extends Component {
 
                             <div className="tile is-parent">
                                 {posts[2] ? <article className="tile is-child">
+                                    <div className="media-center">
+                                        <img src={posts[2].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[0].author.username}'s picture`} />
+                                    </div>
                                     <div className="columns is-multiline is-mobile">
                                         <Link href={{ pathname: '/posts', query: { id: posts[2].id } }}>
                                             <a className="column is-full">
-                                                <p className="title is-4 font-2">{this.shorten(posts[2].title)}</p>
+                                                <p className="title is-4 font-1">{this.shorten(posts[2].title)}</p>
                                                 <p className="subtitle is-6">{this.shorten(posts[2].caption, 200)}</p>
                                             </a>
                                         </Link>
                                         {posts[2].image ? <Link href={{ pathname: '/posts', query: { id: posts[2].id } }}>
                                             <a className="column is-half">
-
                                                 <figure className="image is-4by3">
                                                     <img src={posts[2].image} alt="image" />
                                                 </figure>
                                             </a>
                                         </Link> : ''}
-
                                         <div className="column is-half">
-                                            {this.genTags(posts[2])}
-                                        </div>
-                                        <div className="column is-one-third stats">
                                             {this.genStats(posts[2])}
-                                        </div>
-                                        <div className="column is-two-thirds">
                                             {this.genMedia(posts[2])}
                                         </div>
+
+                                        <div className="column is-full">
+                                            {this.genTags(posts[2])}
+                                        </div>
+
                                     </div>
 
                                 </article> : ''}
                             </div>
                             <div className="tile is-parent">
                                 {posts[3] ? <article className="tile is-child">
+                                    <div className="media-center">
+                                        <img src={posts[3].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[0].author.username}'s picture`} />
+                                    </div>
                                     <div className="columns is-multiline is-mobile">
                                         <Link href={{ pathname: '/posts', query: { id: posts[3].id } }}>
                                             <a className="column is-full">
-                                                <p className="title is-4 font-2">{this.shorten(posts[3].title)}</p>
+                                                <p className="title is-4 font-1">{this.shorten(posts[3].title)}</p>
                                                 <p className="subtitle is-6">{this.shorten(posts[3].caption, 200)}</p>
                                             </a>
                                         </Link>
@@ -199,95 +217,103 @@ class Featured extends Component {
 
 
                                         <div className="column is-half">
-                                            {this.genTags(posts[3])}
-                                        </div>
-                                        <div className="column is-one-third stats">
                                             {this.genStats(posts[3])}
-                                        </div>
-                                        <div className="column is-two-thirds">
                                             {this.genMedia(posts[3])}
+                                        </div>
+                                        <div className="column is-full">
+                                            {this.genTags(posts[3])}
                                         </div>
                                     </div>
 
                                 </article> : ''}
                             </div>
                         </div>
-                        {/* <div className="tile is-parent">
-                            <article className="tile is-child">
-                                <div className="columns is-multiline is-mobile">
-                                    <div className="column is-three-quarters-desktop is-full-mobile">
-                                        <Link href={{ pathname: '/posts', query: { id: posts[4].id } }}>
-                                            <a>
-                                                <p className="title is-4 font-2">{this.shorten(posts[4].title)}</p>
-                                                <p className="subtitle is-6">{this.shorten(posts[4].caption, 200)}</p>
-                                            </a>
-                                        </Link>
-
-                                        <div className="columns is-mobile is-multiline">
-                                            <div className="column is-half is-hidden-tablet">
-                                                <Link href={{ pathname: '/posts', query: { id: posts[4].id } }}>
-                                                    <a >
-                                                        <figure className="image is-4by3">
-                                                            <img src={posts[4].image} alt="image" />
-                                                        </figure>
-                                                    </a>
-                                                </Link>
-
-                                            </div>
-                                            <div className="column is-6-desktop is-full-tablet is-half-mobile">
-                                                {this.genTags(posts[4])}
-                                            </div>
-                                            <div className="column is-2-desktop is-one-third-mobile stats">
-                                                {this.genStats(posts[4])}
-                                            </div>
-                                            <div className="column is-4-desktop is-two-thirds-mobile">
-                                                {this.genMedia(posts[4])}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div className="column is-one-quarter is-hidden-mobile">
-                                        <Link href={{ pathname: '/posts', query: { id: posts[4].id } }}>
-                                            <a >
-                                                <figure className="image is-4by3">
-                                                    <img src={posts[4].image} alt="image" />
-                                                </figure>
-                                            </a>
-                                        </Link>
-
-                                    </div>
+                    </div>
+                    {posts[4] ? <div className="tile is-parent is-3">
+                        <article className="tile is-child">
+                            <div className="media-center">
+                                <img src={posts[4].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[4].author.username}'s picture`} />
+                            </div>
+                            <Link href={{ pathname: '/posts', query: { id: posts[4].id } }}>
+                                <a>
+                                    <p className="title is-4 font-1">{this.shorten(posts[4].title)}</p>
+                                    <p className="subtitle is-6">{this.shorten(posts[4].caption, 200)}</p>
+                                </a>
+                            </Link>
+                            <div className="columns is-multiline is-mobile">
+                                <div className="column is-half-mobile is-full-tablet">
+                                    {posts[4].image ? <Link href={{ pathname: '/posts', query: { id: posts[4].id } }}>
+                                        <a >
+                                            <figure className="image is-4by3">
+                                                <img src={posts[4].image} alt="image" />
+                                            </figure>
+                                        </a>
+                                    </Link> : ''}
 
                                 </div>
-                            </article>
-                        </div> */}
-
-                    </div>
+                                <div className="column is-half-mobile is-full-tablet">
+                                    <div className="columns is-mobile is-multiline">
+                                        <div className="column is-full-mobile is-half-tablet">
+                                            {this.genStats(posts[4])}
+                                        </div>
+                                        <div className="column is-full-mobile is-half-tablet">
+                                            {this.genMedia(posts[4])}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="column is-full">
+                                    {this.genTags(posts[4])}
+                                </div>
+                            </div>
+                        </article>
+                    </div> : ''}
 
                 </div>
 
             </div>
             <style jsx>{`
+                .tile.is-ancestor{
+                    margin-top: 2rem;
+                }
+                .author-image {
+                        position: relative;
+                        top: -30px;
+                        left: 50%;
+                        width: 60px;
+                        height: 60px;
+                        margin-left: -30px;
+                        border: 3px solid #ccc;
+                        border-radius: 50%;
+                        box-shadow: 0px 1px 1px gray
+                    }
 
                 .title{
+                    margin-top: -2rem;
                     hyphens: auto
                 }
                 .media .media-content .content{
                     word-break: break-all
                 }
-                .stats{
-                    margin-top: -1rem;
+                .stats .column{
+                    margin: -1rem auto;
                 }
+
+            
                 .subtitle{
                     margin: 1rem auto
                 }
  
                 article.tile{
                     padding: 1rem;
-                    background-color: white;
+                    background-color: #F9F9F9;
                     border-radius: 1rem;
-                    box-shadow: 1px 1px 1px lightgray
+                    box-shadow: 0px 0px 1px gray
                 }
-
+                @media only screen and (min-width: 768px ){
+                    .tile.is-ancestor{
+                        padding: 1rem;
+                    }
+                }
                 `}</style>
         </div>
 
