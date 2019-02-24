@@ -17,14 +17,16 @@ class ErrorMessage extends Component {
                     return (
                         <div className="columns is-centered is-mobile">
                             <div className="column is-two-fifths-desktop is-two-thirds-tablet is-10-mobile">
-                                <article className={`message is-warning ${!data.error.exists && 'is-invisible'}`}>
+                                <article className={`message is-dark ${!data.error.exists && 'is-invisible'}`}>
                                     <div className="message-header">
-                                        <p>{data.error.code}</p>
-                                        <button className="delete" aria-label="delete"
+                                        <p ></p>
+                                        <button className="delete is-pulled-right" aria-label="delete"
                                             onClick={clearError}></button>
                                     </div>
                                     <div className="message-body">
+
                                         {this.messageComponents[data.error.code] || data.error.message || 'ERROR MESSAGE'}
+
                                     </div>
                                 </article>
                             </div>

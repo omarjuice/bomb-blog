@@ -12,6 +12,7 @@ import { renderModal } from '../../apollo/clientWrites';
 
 class Home extends Component {
     state = {
+        tabs: false,
         fetching: false,
         active: 'featured'
     }
@@ -71,13 +72,14 @@ class Home extends Component {
         const inputSuggested = { cursor: 0, limit: 5, tags: [] }
         return (
             <div>
-                <div className="tabs is-hidden-tablet">
+                {this.state.tabs ? <div className="tabs is-hidden-tablet is-toggle is-right">
                     <ul>
                         <li onClick={() => this.setState({ active: 'featured' })} className={this.state.active === 'featured' ? 'is-active' : ''}><a>Featured</a></li>
                         <li onClick={() => this.setState({ active: 'feed' })} className={this.state.active === 'feed' ? 'is-active' : ''}><a>Feed</a></li>
                         <li onClick={() => this.setState({ active: 'suggested' })} className={this.state.active === 'suggested' ? 'is-active' : ''}><a>Suggested</a></li>
                     </ul>
-                </div>
+                </div> : ''}
+                <a onClick={() => this.setState({ tabs: !this.state.tabs })} className="has-text-link tabs-toggle is-hidden-tablet" ><span className="icon is-large"><i className="fas fa-ellipsis-h fa-2x"></i></span></a>
                 <Featured active={this.state.active === 'featured'} posts={this.props.data.trending.results} />
                 <br />
 
@@ -200,7 +202,7 @@ class Home extends Component {
                                                 )
                                             }
                                             return (<>
-                                                <div onScroll={this.handleScroll('posts', client, { ...inputTrending, cursor: data.posts.cursor })} className={`column is-two-thirds recent ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
+                                                <div onScroll={this.handleScroll('posts', client, { ...inputTrending, cursor: data.posts.cursor })} className={`column is-two-thirds recent box ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
                                                     <article className="media">
                                                         <div className="media-content font-1 has-text-centered">
                                                             <div className="content">
@@ -250,7 +252,9 @@ class Home extends Component {
                         overflow: scroll;
                         background-color: #f9f9f9;
                         padding: .5rem;
-                        -webkit-overflow-scrolling: touch
+                        -webkit-overflow-scrolling: touch;
+                        z-index: 2;
+                        margin-top: 2rem;
                     }
                     .load-error{
                         margin-top: 2rem;
@@ -268,6 +272,18 @@ class Home extends Component {
                     }
                     .recent:nth-of-type(2){
                         margin-left: .5rem
+                    }
+                    .tabs-toggle, .tabs{
+                        position: fixed;
+                        top: 3.2rem;
+                        z-index: 2;
+                    }
+                    .tabs{
+                        background-color: #f0f0f0;
+                        left: 0
+                    }
+                    .tabs-toggle{
+                        right: 1rem;
                     }
                     `}</style>
             </div>

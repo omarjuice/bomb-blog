@@ -19,7 +19,7 @@ class Featured extends Component {
     }
     genMedia = (post = 'large') => {
         return (
-            <article className="media">
+            <article className="media author">
                 <div className="media-content">
                     <div className="content">
                         <p>
@@ -132,10 +132,10 @@ class Featured extends Component {
                                             </div> : ''}
                                             <div className="column is-7-desktop is-half-mobile">
                                                 <div className="columns is-mobile is-multiline">
-                                                    <div className="column">
+                                                    <div className="column is-full">
                                                         {this.genStats(posts[1])}
                                                     </div>
-                                                    <div className="column">
+                                                    <div className="column is-full">
                                                         {this.genMedia(posts[1])}
                                                     </div>
                                                 </div>
@@ -284,7 +284,8 @@ class Featured extends Component {
                         margin-left: -30px;
                         border: 3px solid #ccc;
                         border-radius: 50%;
-                        box-shadow: 0px 1px 1px gray
+                        box-shadow: 0px 1px 1px gray;
+                        z-index: 3;
                     }
 
                 .title{
@@ -298,11 +299,10 @@ class Featured extends Component {
                     margin: -1rem auto;
                 }
 
-            
                 .subtitle{
                     margin: 1rem auto
                 }
- 
+   
                 article.tile{
                     padding: 1rem;
                     background-color: #F9F9F9;

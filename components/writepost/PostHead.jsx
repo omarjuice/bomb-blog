@@ -40,15 +40,13 @@ class PostHead extends Component {
                                         <div className="column is-2 is-1-mobile"></div>
                                         <div className="column is-2 has-text-centered">
                                             <div>
-                                                <>
-                                                    <a className="has-text-primary has-text-centered">
-                                                        <span className="icon is-large">
-                                                            <BombSVG lit={true} scale={this.props.scale || 1.2} />
-                                                        </span>
-                                                    </a>
-                                                    <br />
-                                                    <a className="is-size-4  has-text-grey underline">0</a>
-                                                </>
+                                                <a className="has-text-primary has-text-centered">
+                                                    <span className="icon is-large">
+                                                        <BombSVG lit={true} scale={this.props.scale || 1.2} />
+                                                    </span>
+                                                </a>
+                                                <br />
+                                                <a className="is-size-4  has-text-grey underline">0</a>
                                             </div>
                                         </div>
                                         <div className="column is-2 is-hidden-tablet"></div>
@@ -60,7 +58,7 @@ class PostHead extends Component {
                                                 <br />
 
                                                 <span className="icon hover-icon">
-                                                    <i className={`fas fa-lg fa-user-plus has-text-grey`}></i>
+                                                    <i className={`fas fa-lg fa-user-plus has-text-info`}></i>
                                                 </span>
 
                                             </div>

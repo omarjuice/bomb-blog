@@ -208,7 +208,7 @@ class SearchPage extends Component {
                 </div>
                 <style jsx>{`
                 .columns{
-                    margin-top: 5rem;
+                    margin-top: 2rem;
                 }
                 .box{
                     padding: 2rem;

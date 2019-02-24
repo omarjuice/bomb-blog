@@ -46,7 +46,6 @@ class Edit extends Component {
                         if (subscription.data.modal.confirmation === true) {
                             let imagePath;
                             if (imageType && upload.file) {
-                                console.log('uploading');
                                 const { data: { uploadImage } } = await client.mutate({ mutation: UPLOAD_IMAGE, variables: { image: upload.file } })
                                 imagePath = uploadImage
                             } else {
@@ -83,7 +82,7 @@ class Edit extends Component {
                     if (data.authenticated) return (
                         <Query query={CURRENT_USER}>
                             {({ loading, error, data }) => {
-                                if (loading) return <Loading />
+                                if (loading || !data || !data.user) return <Loading />
                                 if (error) return <ErrorIcon />
                                 if (!data) {
                                     createError({ code: 'UNAUTHENTICATED' })

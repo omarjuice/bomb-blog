@@ -10,7 +10,7 @@ class Preview extends Component {
         head: true
     }
     render() {
-        const { preview, toggleHead, body } = this.props
+        const { preview, body } = this.props
         const { head } = this.state
         return (
             <div className={`column is-5-desktop is-10-tablet is-full-mobile ${preview ? '' : 'is-hidden-touch'}`}>
@@ -27,8 +27,8 @@ class Preview extends Component {
                         margin-top: 3rem;
                     }
                     .markdown-body{
-                        height: ${head ? '35vh' : '80vh'};
-                        overflow: scroll;
+                        height: ${head ? 'auto' : '80vh'};
+                        overflow: ${head ? 'auto' : 'scroll'};
                     }
                     #toggle-header{
                         position: absolute;

@@ -726,7 +726,7 @@ export const NOTIFICATIONS = gql`
     }
 `
 export const GET_QUESTION = gql`
-    query($username: String!){
+    query GetQuestion($username: String!){
         secretQuestion(username: $username){
             id
             question
@@ -734,38 +734,38 @@ export const GET_QUESTION = gql`
     }
 `
 export const ERROR = gql`
-    query GetError{
-        error @client{
-            exists
-            message
-            code
-            global
-        }
+query GetError{
+    error @client{
+        exists
+        message
+        code
+        global
     }
+}
 `
 export const GET_MODAL = gql`
-    query GetModal{
-        modal @client{
-            active
-            message
-            display
-            info
-            confirmation
-        }
+query GetModal{
+    modal @client{
+        active
+        message
+        display
+        info
+        confirmation
     }
+}
 `
 export const GET_SEARCH = gql`
-    query GetSearch{
-        search @client{
-            input
-            options
-            active
-            addToInput
-        }
+query GetSearch{
+    search @client{
+        input
+        options
+        active
+        addToInput
     }
+}
 `
 export const GET_NUM_NOTIFICATIONS = gql`
-    query GetNumNotifications{
-        numNotifications @client
-    }
+query GetNumNotifications{
+    numNotifications @client
+}
 `

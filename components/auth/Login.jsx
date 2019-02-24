@@ -66,7 +66,7 @@ class Login extends Component {
                             <button className={`button is-success ${loading && 'is-loading'}`} type="submit">Login</button>
                             <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'Register', active: true }) }} className="button is-text">Sign Up</a>
                         </form>
-                        <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'PasswordReset', active: true }) }} className="button is-text">Forgot your password?</a>
+                        <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'PasswordReset', active: true, message: 'Reset your password' }) }} className="button is-text">Forgot your password?</a>
                     </div>
                 )
                 if (data.login) {
