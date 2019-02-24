@@ -9,7 +9,7 @@ class Notifications extends Component {
     genNewComment = (key, { id, commenter, post, comment_text, tags, created_at }) => {
         return (
             <article key={key} className="media">
-                <LinkWrap href={{ pathname: '/profile', query: { id: commenter.id } }}>
+                <LinkWrap toggleModal={true} profile={commenter}>
                     <figure className="media-left">
                         <p className="image is-48x48">
                             <img src={commenter.profile.photo_path || '/static/user_image.png'} />
@@ -19,11 +19,11 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <LinkWrap href={{ pathname: '/profile', query: { id: commenter.id } }}>
+                            <LinkWrap toggleModal={true} profile={commenter}>
                                 <strong>{commenter.username}</strong>
                             </LinkWrap> commented on your post:
                         <br />
-                            <LinkWrap href={{ pathname: '/posts', query: { id: post.id } }}>
+                            <LinkWrap toggleModal={true} post={post}>
                                 <strong className="is-size-5"><em>{post.title}</em></strong>
                             </LinkWrap>
                             <br />
@@ -57,7 +57,7 @@ class Notifications extends Component {
         return (
             <article key={key} className="media">
                 <figure className="media-left">
-                    <LinkWrap href={{ pathname: '/profile', query: { id: author.id } }}>
+                    <LinkWrap toggleModal={true} profile={author}>
                         <p className="image is-48x48">
                             <img src={author.profile.photo_path || '/static/user_image.png'} />
                         </p>
@@ -66,9 +66,9 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <LinkWrap href={{ pathname: '/profile', query: { id: author.id } }}><strong>{author.username}</strong></LinkWrap> posted:
+                            <LinkWrap toggleModal={true} profile={author} ><strong>{author.username}</strong></LinkWrap> posted:
                             <br />
-                            <LinkWrap href={{ pathname: '/posts', query: { id } }}>
+                            <LinkWrap toggleModal={true} post={{ id, title }}>
                                 <strong className="is-size-5"><em>{title}</em></strong>
 
                                 {image && <>
@@ -81,7 +81,7 @@ class Notifications extends Component {
                             {caption}
                             <br />
 
-                            {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-dark font-1'}>tag</span>)}
+                            {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-dark font-1'}>{tag.tag_name}</span>)}
 
                         </div>
                     </div>
@@ -100,7 +100,7 @@ class Notifications extends Component {
     genNewLike = (key, { user, post, liked_at }) => {
         return (
             <article key={key} className="media">
-                <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
+                <LinkWrap toggleModal={true} profile={user}>
                     <figure className="media-left">
                         <p className="image is-48x48">
                             <img src={user.profile.photo_path || "/static/user_image.png"} />
@@ -110,11 +110,11 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
+                            <LinkWrap toggleModal={true} profile={user}>
                                 <strong>{user.username}</strong>
                             </LinkWrap> liked your post:
                         <br />
-                            <LinkWrap href={{ pathname: '/posts', query: { id: post.id } }}>
+                            <LinkWrap toggleModal={true} post={post}>
                                 <strong className="is-size-5"><em>{post.title}</em></strong>
                             </LinkWrap>
                             <br />
@@ -138,7 +138,7 @@ class Notifications extends Component {
     genNewCommentLike = (key, { user, comment, liked_at }) => {
         return (
             <article key={key} className="media">
-                <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
+                <LinkWrap toggleModal={true} profile={user} >
                     <figure className="media-left">
                         <p className="image is-48x48">
                             <img src={user.profile.photo_path || "/static/user_image.png"} />
@@ -148,7 +148,7 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <LinkWrap href={{ pathname: '/profile', query: { id: user.id } }}>
+                            <LinkWrap toggleModal={true} profile={user}>
                                 <strong>{user.username}</strong>
                             </LinkWrap> liked your comment:
                                             <br />
@@ -161,8 +161,8 @@ class Notifications extends Component {
                                 </p>
                             </div>
                             <br />
-                            On
-                            <LinkWrap href={{ pathname: '/posts', query: { id: comment.post.id } }}>
+                            <span className="icon"><i className="fas fa-long-arrow-alt-right"></i></span>
+                            <LinkWrap toggleModal={true} post={comment.post}>
                                 <strong className="is-size-5"><em> {comment.post.title}</em></strong>
                             </LinkWrap>
                             <br />
@@ -186,7 +186,7 @@ class Notifications extends Component {
     genNewReply = (key, { id, reply_text, replier, comment, created_at }) => {
         return (
             <article key={key} className="media">
-                <LinkWrap href={{ pathname: '/profile', query: { id: replier.id } }}>
+                <LinkWrap toggleModal={true} profile={replier}>
                     <figure className="media-left">
                         <p className="image is-48x48">
                             <img src={replier.profile.photo_path || "/static/user_image.png"} />
@@ -196,7 +196,7 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <LinkWrap href={{ pathname: '/profile', query: { id: replier.id } }}>
+                            <LinkWrap toggleModal={true} profile={replier}>
                                 <strong>{replier.username}</strong>
                             </LinkWrap> replied to your comment:
                             <br />
@@ -224,7 +224,7 @@ class Notifications extends Component {
                             </div>
 
                             <br />
-                            On <LinkWrap href={{ pathname: '/posts', query: { id: comment.post.id } }}>
+                            <span className="icon"><i className="fas fa-long-arrow-alt-right"></i></span> <LinkWrap toggleModal={true} post={comment.post}>
                                 <strong className="is-size-5"><em>{comment.post.title}</em></strong>
                             </LinkWrap>
                         </div>
@@ -244,7 +244,7 @@ class Notifications extends Component {
     genNewFollow = (key, { user: { id, username, profile }, followed_at }) => {
         return (
             <article key={key} className="media">
-                <LinkWrap href={{ pathname: '/profile', query: { id } }}>
+                <LinkWrap toggleModal={true} profile={{ id, username }}>
                     <figure className="media-left">
                         <p className="image is-48x48">
                             <img src={profile.photo_path || '/static/user_image.png'} />
@@ -254,7 +254,7 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <LinkWrap href={{ pathname: '/profile', query: { id } }}>
+                            <LinkWrap toggleModal={true} profile={{ id, username }}>
                                 <strong>{username}</strong>
                             </LinkWrap> followed you
                             <br />
@@ -286,10 +286,10 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <p className="title is-5">
-                            Your post has been <LinkWrap href="/">featured!</LinkWrap>
+                            Your post has been <LinkWrap toggleModal={true} href="/">featured!</LinkWrap>
                         </p>
                         <br />
-                        <LinkWrap href={{ pathname: '/posts', query: { id } }}>
+                        <LinkWrap toggleModal={true} post={{ id, title }}>
                             <strong className="is-size-5"><em>{title}</em></strong>
                         </LinkWrap>
                     </div>

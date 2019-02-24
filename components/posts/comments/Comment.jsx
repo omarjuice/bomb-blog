@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment'
-import Link from 'next/link'
 import Replies from './replies';
 import DeleteComment from './DeleteComment';
 import UpdateComment from './UpdateComment';
@@ -8,6 +7,7 @@ import UnlikeComment from './UnlikeComment';
 import LikeComment from './LikeComment';
 import BombSVG from '../../svg/bomb';
 import { renderModal, setSearch } from '../../../apollo/clientWrites';
+import LinkWrap from '../../global/LinkWrap';
 
 class Comment extends Component {
     state = {
@@ -28,11 +28,11 @@ class Comment extends Component {
                 <div className="content">
                     {this.state.editing ? <UpdateComment postId={post_id} commentId={id} stopEdit={() => this.setState({ editing: false })} initialInput={comment_text} initialTags={tags.map(tag => tag.tag_name)} />
                         : <div>
-                            <Link href={{ pathname: '/profile', query: { id: commenter.id } }} >
+                            <LinkWrap profile={commenter}>
                                 <a>
                                     {commenter.isMe ? <em>You</em> : <strong>{commenter.username}</strong>}
                                 </a>
-                            </Link>
+                            </LinkWrap>
                             <br />
                             {comment_text}
                             {tags.length > 0 ?

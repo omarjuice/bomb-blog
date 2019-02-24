@@ -13,6 +13,7 @@ import DeletePost from './DeletePost';
 import FeaturePost from '../admin/FeaturePost';
 import { POST, POST_AUTHOR } from '../../apollo/queries';
 import { setSearch } from '../../apollo/clientWrites';
+import LinkWrap from '../global/LinkWrap';
 marked.setOptions({
     breaks: true,
     sanitize: true
@@ -93,7 +94,7 @@ class PostPage extends Component {
                                                                                     <div className="column is-2"></div>
                                                                                 </div>
                                                                             </> :
-                                                                            <Link href={{ pathname: '/profile', query: { id: user_id } }}><a>@{postAuthor.username}</a></Link>}
+                                                                            <LinkWrap profile={postAuthor}><a>@{postAuthor.username}</a></LinkWrap>}
                                                                         <FeaturePost id={id} featured={featured} />
                                                                         <br />
                                                                         at {moment.utc(Number(created_at)).local().format(' h:mma on MMMM Do, YYYY')}

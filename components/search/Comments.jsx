@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
 import moment from 'moment'
 import { shortenNumber } from '../../utils';
 import BombSVG from '../svg/bomb';
 import LikeComment from '../posts/comments/LikeComment';
 import UnlikeComment from '../posts/comments/UnlikeComment';
 import { renderModal, setSearch } from '../../apollo/clientWrites';
+import LinkWrap from '../global/LinkWrap';
 
 class SearchComments extends Component {
     render() {
@@ -25,17 +25,17 @@ class SearchComments extends Component {
                         <div className="media-content">
                             <div className="content">
                                 {<div>
-                                    <Link href={{ pathname: '/profile', query: { id: commenter.id } }} >
+                                    <LinkWrap profile={commenter} >
                                         <a>
                                             {commenter.isMe ? <em>You</em> : <strong>{commenter.username}</strong>}
                                         </a>
-                                    </Link>
+                                    </LinkWrap>
                                     <br />
-                                    <span className="icon"><i className="fas fa-long-arrow-alt-right"></i></span> <Link href={{ pathname: '/posts', query: { id: post.id } }} >
+                                    <span className="icon"><i className="fas fa-long-arrow-alt-right"></i></span> <LinkWrap post={post}>
                                         <a className="font-1">
                                             {post.title}
                                         </a>
-                                    </Link>
+                                    </LinkWrap>
                                     <br />
                                     {comment_text}
 

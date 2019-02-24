@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
 import moment from 'moment'
 import { shortenNumber } from '../../utils';
-import UnlikePost from '../posts/UnlikePost';
-import LikePost from '../posts/LikePost';
 import BombSVG from '../svg/bomb';
-import FeaturePost from '../admin/FeaturePost';
 import { renderModal, setSearch } from '../../apollo/clientWrites';
+import LinkWrap from '../global/LinkWrap';
 
 class Feed extends Component {
     render() {
@@ -22,15 +19,15 @@ class Feed extends Component {
                                 <div className="content">
                                     <div>
 
-                                        <Link href={{ pathname: '/posts', query: { id } }}><a className="has-text-dark"><strong className="font-1">{title} </strong></a></Link>
+                                        <LinkWrap post={{ id, title }}><a className="has-text-dark"><strong className="font-1">{title} </strong></a></LinkWrap>
                                         <br />
                                         {caption}
                                         <br />
-                                        <Link href={{ pathname: '/profile', query: { id: author.id } }} >
+                                        <LinkWrap profile={author} >
                                             <a>
                                                 {author.isMe ? <strong>You</strong> : <em>{author.username}</em>}
                                             </a>
-                                        </Link>
+                                        </LinkWrap>
 
                                         <br />
                                         {tags.slice(0, 8).map((tag, i) => (

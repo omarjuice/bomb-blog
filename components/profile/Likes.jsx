@@ -8,6 +8,7 @@ import ErrorIcon from '../meta/ErrorIcon';
 import UnlikePost from '../posts/UnlikePost';
 import LikePost from '../posts/LikePost';
 import { LIKES } from '../../apollo/queries';
+import LinkWrap from '../global/LinkWrap';
 
 
 class Likes extends Component {
@@ -50,14 +51,14 @@ class Likes extends Component {
                                                 <div className="media-content">
                                                     <div className="content">
                                                         <div>
-                                                            <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-1">{title} </strong></a></Link>
+                                                            <LinkWrap post={{ id, title }}><a><strong className="font-1">{title} </strong></a></LinkWrap>
                                                             <br />
-                                                            By <Link href={{ pathname: '/profile', query: { id: author.id } }} >
+                                                            By <LinkWrap profile={author} >
                                                                 <a>
 
                                                                     {author.isMe ? <strong>You</strong> : <em>{author.username}</em>}
                                                                 </a>
-                                                            </Link>
+                                                            </LinkWrap>
                                                             <br />
                                                             <nav className="level is-mobile">
                                                                 <div className="level-left">

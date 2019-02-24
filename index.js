@@ -64,7 +64,7 @@ const apollo = new ApolloServer({
         }
 
         return applyLoaders(ctx)
-    }
+    }, uploads: false
 })
 const initializeServer = (app, productionEnv = false) => {
     return (done = null) => {
@@ -98,7 +98,18 @@ const initializeServer = (app, productionEnv = false) => {
 
                     nextApp.render(req, res, '/')
                 })
+                app.get('/posts/new', (req, res) => {
+                    nextApp.render(req, res, '/new')
+                })
+                app.get('/posts/edit', (req, res) => {
+                    const { query } = req
+                    nextApp.render(req, res, '/edit', query)
+                })
                 app.get('/profile', (req, res) => {
+                    const { query } = req
+                    nextApp.render(req, res, '/profile', query)
+                })
+                app.get('/profile/:slug', (req, res) => {
                     const { query } = req
                     nextApp.render(req, res, '/profile', query)
                 })
@@ -106,12 +117,9 @@ const initializeServer = (app, productionEnv = false) => {
                     const { query } = req;
                     nextApp.render(req, res, '/posts', query)
                 })
-                app.get('/posts/new', (req, res) => {
-                    nextApp.render(req, res, '/new')
-                })
-                app.get('/posts/edit', (req, res) => {
-                    const { query } = req
-                    nextApp.render(req, res, '/edit', query)
+                app.get('/posts/:slug', (req, res) => {
+                    const { query } = req;
+                    nextApp.render(req, res, '/posts', query)
                 })
                 app.get('/search', (req, res) => {
                     const { query } = req

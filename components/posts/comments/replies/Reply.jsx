@@ -3,6 +3,7 @@ import Link from 'next/link'
 import moment from 'moment'
 import DeleteReply from './DeleteReply';
 import UpdateReply from './UpdateReply';
+import LinkWrap from '../../../global/LinkWrap';
 class Reply extends Component {
     state = {
         editing: false
@@ -18,11 +19,11 @@ class Reply extends Component {
                 </figure>
                 <div className="media-content">
                     <div className="content">
-                        <Link href={{ pathname: '/profile', query: { id: replier.id } }} >
+                        <LinkWrap profile={replier} >
                             <a>
                                 {replier.isMe ? <em>You</em> : <strong>{replier.username}</strong>}
                             </a>
-                        </Link>
+                        </LinkWrap>
                         <br />
                         {!this.state.editing ? reply_text : <UpdateReply commentId={comment_id} replyId={id} initial={reply_text} stopEdit={() => this.setState({ editing: false })} />}
                         <br />

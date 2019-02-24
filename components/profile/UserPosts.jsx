@@ -8,6 +8,7 @@ import UnlikePost from '../posts/UnlikePost';
 import { shortenNumber } from '../../utils';
 import { USER_POSTS } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
+import LinkWrap from '../global/LinkWrap';
 
 
 class UserPosts extends Component {
@@ -51,7 +52,7 @@ class UserPosts extends Component {
                                                 <div className="media-content">
                                                     <div className="content">
                                                         <div>
-                                                            <Link href={{ pathname: '/posts', query: { id } }}><a><strong className="font-1">{title} </strong></a></Link>
+                                                            <LinkWrap post={{ id, title }}><a><strong className="font-1">{title} </strong></a></LinkWrap>
                                                             <br />
                                                             {caption}
                                                             <br />

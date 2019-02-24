@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import Link from 'next/link'
 import moment from 'moment'
 import Loading from '../meta/Loading';
 import Follow from '../global/Follow';
@@ -8,6 +7,7 @@ import Unfollow from '../global/UnFollow';
 import ErrorIcon from '../meta/ErrorIcon';
 import BombSVG from '../svg/bomb';
 import { FOLLOWING, FOLLOWERS } from '../../apollo/queries';
+import LinkWrap from '../global/LinkWrap';
 
 
 const queries = { FOLLOWING, FOLLOWERS }
@@ -53,11 +53,11 @@ class FollowPanel extends Component {
                                     <div className="media-content">
                                         <div className="content">
                                             <p>
-                                                <Link href={{ pathname: '/profile', query: { id: id } }} >
+                                                <LinkWrap profile={{ id, username }}>
                                                     <a>
                                                         <strong>{isMe ? <em>You</em> : username} </strong>
                                                     </a>
-                                                </Link>
+                                                </LinkWrap>
 
                                                 <br />
                                                 <small>

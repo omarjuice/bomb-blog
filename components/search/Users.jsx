@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
 import moment from 'moment'
 import Unfollow from '../global/UnFollow';
 import Follow from '../global/Follow';
 import BombSVG from '../svg/bomb';
 import { setSearch } from '../../apollo/clientWrites';
+import LinkWrap from '../global/LinkWrap';
 
 class Users extends Component {
     state = {
@@ -25,11 +25,11 @@ class Users extends Component {
                         <div className="media-content">
                             <div className="content">
                                 <p>
-                                    <Link href={{ pathname: '/profile', query: { id: id } }} >
+                                    <LinkWrap profile={{ id, username }} >
                                         <a>
                                             <strong>{isMe ? <em>You</em> : username} </strong>
                                         </a>
-                                    </Link>
+                                    </LinkWrap>
                                     <br />
                                     {profile.about}
                                     <br />

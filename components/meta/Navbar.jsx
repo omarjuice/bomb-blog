@@ -83,6 +83,9 @@ class Navbar extends Component {
                     #brand-img{
                         margin-left: -1rem
                     }
+                    .navbar-brand{
+                        margin-left: -1rem;
+                    }
                     .navbar-item{
                         margin-top: -1rem;
                         margin-bottom: -1rem

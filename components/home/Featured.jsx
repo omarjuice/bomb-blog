@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import moment from 'moment'
-import Link from 'next/link';
 import FeaturePost from '../admin/FeaturePost';
 import { shortenNumber, getMatches } from '../../utils';
 import { setSearch, renderModal } from '../../apollo/clientWrites';
+import LinkWrap from '../global/LinkWrap';
 class Featured extends Component {
     shorten = (text, maxLen = 100) => {
         if (text.length > maxLen) {
@@ -23,13 +23,13 @@ class Featured extends Component {
                 <div className="media-content">
                     <div className="content">
                         <p>
-                            <Link href={{ pathname: '/profile', query: { id: post.author.id } }}>
+                            <LinkWrap profile={post.author}>
                                 <a >
                                     <i>
                                         {post.author.username}
                                     </i>
                                 </a>
-                            </Link>
+                            </LinkWrap>
                             <br />
                             <small>{moment.utc(Number(post.created_at)).local().fromNow()}</small>
                             <br />
@@ -63,6 +63,20 @@ class Featured extends Component {
             </div>
         )
     }
+    genHead = (post, column = false) => {
+        return (
+            <LinkWrap post={post} >
+                <a className={column ? 'column is-full' : null}>
+                    <div>
+                        <p className="title is-4 font-1">{this.shorten(post.title)}</p>
+                        <p className="subtitle is-6">{this.shorten(post.caption, 200)}</p>
+                    </div>
+                </a>
+            </LinkWrap>
+        )
+    }
+
+
     render() {
         const { posts } = this.props
         return (<div>
@@ -73,21 +87,17 @@ class Featured extends Component {
                             <div className="media-center">
                                 <img src={posts[0].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[0].author.username}'s picture`} />
                             </div>
-                            <Link href={{ pathname: '/posts', query: { id: posts[0].id } }}>
-                                <a>
-                                    <p className="title is-4 font-1">{this.shorten(posts[0].title)}</p>
-                                    <p className="subtitle is-6">{this.shorten(posts[0].caption, 200)}</p>
-                                </a>
-                            </Link>
+                            {this.genHead(posts[0])}
+                            <br />
                             <div className="columns is-multiline is-mobile">
                                 <div className="column is-half-mobile is-full-tablet">
-                                    {posts[0].image ? <Link href={{ pathname: '/posts', query: { id: posts[0].id } }}>
+                                    {posts[0].image ? <LinkWrap post={posts[0]}>
                                         <a >
                                             <figure className="image is-4by3">
                                                 <img src={posts[0].image} alt="image" />
                                             </figure>
                                         </a>
-                                    </Link> : ''}
+                                    </LinkWrap> : ''}
 
                                 </div>
                                 <div className="column is-half-mobile is-full-tablet">
@@ -114,21 +124,17 @@ class Featured extends Component {
                                 </div>
                                 <div className="columns is-multiline is-mobile">
                                     <div className="column is-three-quarters-desktop is-full-mobile">
-                                        <Link href={{ pathname: '/posts', query: { id: posts[1].id } }}>
-                                            <a>
-                                                <p className="title is-4 font-1">{this.shorten(posts[1].title)}</p>
-                                                <p className="subtitle is-6">{this.shorten(posts[1].caption, 200)}</p>
-                                            </a>
-                                        </Link>
+                                        {this.genHead(posts[1])}
+                                        <br />
                                         <div className="columns is-mobile is-multiline">
                                             {posts[1].image ? <div className="column is-half-mobile is-hidden-tablet">
-                                                <Link href={{ pathname: '/posts', query: { id: posts[1].id } }}>
+                                                <LinkWrap post={posts[1]}>
                                                     <a>
                                                         <figure className="image is-4by3">
                                                             <img src={posts[1].image} alt="image" />
                                                         </figure>
                                                     </a>
-                                                </Link>
+                                                </LinkWrap>
                                             </div> : ''}
                                             <div className="column is-7-desktop is-half-mobile">
                                                 <div className="columns is-mobile is-multiline">
@@ -144,17 +150,16 @@ class Featured extends Component {
                                                 {this.genTags(posts[1])}
                                             </div>
 
-
                                         </div>
                                     </div>
                                     {posts[1].image ? <div className="column is-one-quarter is-hidden-mobile">
-                                        <Link href={{ pathname: '/posts', query: { id: posts[1].id } }}>
+                                        <LinkWrap post={posts[1]}>
                                             <a >
                                                 <figure className="image is-4by3">
                                                     <img src={posts[1].image} alt="image" />
                                                 </figure>
                                             </a>
-                                        </Link>
+                                        </LinkWrap>
                                     </div> : ''}
                                 </div>
                             </article> : ''}
@@ -167,19 +172,14 @@ class Featured extends Component {
                                         <img src={posts[2].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[0].author.username}'s picture`} />
                                     </div>
                                     <div className="columns is-multiline is-mobile">
-                                        <Link href={{ pathname: '/posts', query: { id: posts[2].id } }}>
-                                            <a className="column is-full">
-                                                <p className="title is-4 font-1">{this.shorten(posts[2].title)}</p>
-                                                <p className="subtitle is-6">{this.shorten(posts[2].caption, 200)}</p>
-                                            </a>
-                                        </Link>
-                                        {posts[2].image ? <Link href={{ pathname: '/posts', query: { id: posts[2].id } }}>
+                                        {this.genHead(posts[2], true)}
+                                        {posts[2].image ? <LinkWrap post={posts[2]}>
                                             <a className="column is-half">
                                                 <figure className="image is-4by3">
                                                     <img src={posts[2].image} alt="image" />
                                                 </figure>
                                             </a>
-                                        </Link> : ''}
+                                        </LinkWrap> : ''}
                                         <div className="column is-half">
                                             {this.genStats(posts[2])}
                                             {this.genMedia(posts[2])}
@@ -199,23 +199,14 @@ class Featured extends Component {
                                         <img src={posts[3].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[0].author.username}'s picture`} />
                                     </div>
                                     <div className="columns is-multiline is-mobile">
-                                        <Link href={{ pathname: '/posts', query: { id: posts[3].id } }}>
-                                            <a className="column is-full">
-                                                <p className="title is-4 font-1">{this.shorten(posts[3].title)}</p>
-                                                <p className="subtitle is-6">{this.shorten(posts[3].caption, 200)}</p>
-                                            </a>
-                                        </Link>
-                                        {posts[3].image ? <Link href={{ pathname: '/posts', query: { id: posts[3].id } }}>
+                                        {this.genHead(posts[3], true)}
+                                        {posts[3].image ? <LinkWrap post={posts[3]}>
                                             <a className="column is-half">
-
                                                 <figure className="image is-4by3">
                                                     <img src={posts[3].image} alt="image" />
                                                 </figure>
                                             </a>
-                                        </Link> : ''}
-
-
-
+                                        </LinkWrap> : ''}
                                         <div className="column is-half">
                                             {this.genStats(posts[3])}
                                             {this.genMedia(posts[3])}
@@ -234,21 +225,17 @@ class Featured extends Component {
                             <div className="media-center">
                                 <img src={posts[4].author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${posts[4].author.username}'s picture`} />
                             </div>
-                            <Link href={{ pathname: '/posts', query: { id: posts[4].id } }}>
-                                <a>
-                                    <p className="title is-4 font-1">{this.shorten(posts[4].title)}</p>
-                                    <p className="subtitle is-6">{this.shorten(posts[4].caption, 200)}</p>
-                                </a>
-                            </Link>
+                            {this.genHead(posts[4])}
+                            <br />
                             <div className="columns is-multiline is-mobile">
                                 <div className="column is-half-mobile is-full-tablet">
-                                    {posts[4].image ? <Link href={{ pathname: '/posts', query: { id: posts[4].id } }}>
+                                    {posts[4].image ? <LinkWrap post={posts[4]} >
                                         <a >
                                             <figure className="image is-4by3">
                                                 <img src={posts[4].image} alt="image" />
                                             </figure>
                                         </a>
-                                    </Link> : ''}
+                                    </LinkWrap> : ''}
 
                                 </div>
                                 <div className="column is-half-mobile is-full-tablet">
@@ -294,9 +281,6 @@ class Featured extends Component {
                 }
                 .media .media-content .content{
                     word-break: break-all
-                }
-                .stats .column{
-                    margin: -1rem auto;
                 }
 
                 .subtitle{

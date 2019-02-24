@@ -5,6 +5,7 @@ import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import { CURRENT_USER } from '../../apollo/queries';
 import { clearError } from '../../apollo/clientWrites';
+import LinkWrap from '../global/LinkWrap';
 
 
 
@@ -25,13 +26,13 @@ class User extends Component {
                             </div>
                             <div className="has-text-centered">
 
-                                <Link href={{ pathname: '/profile', query: { id: data.user.id } }}>
+                                <LinkWrap profile={data.user}>
 
                                     <a onClick={this.props.deactivateMenu} id="greeting" className="has-text-light font-1 has-text-centered">
                                         <p><strong>{(loading && <Loading style="margin" size="2x" />) || data.user.username}</strong></p>
                                     </a>
 
-                                </Link>
+                                </LinkWrap>
                                 <style jsx>{`
                                 p{
                                     margin-right: 10px;
@@ -42,7 +43,8 @@ class User extends Component {
                                 #greeting{
                                     position: relative;
                                     left: .5rem !important;
-                                }
+                                }import LinkWrap from '../global/LinkWrap';
+
                                 `}</style>
                             </div>
                         </>
