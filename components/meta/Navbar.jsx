@@ -53,7 +53,7 @@ class Navbar extends Component {
                         <Query query={GET_NUM_NOTIFICATIONS}>
                             {({ data }) => {
                                 return <a onClick={() => renderModal({ active: true, display: 'Notifications' })} className="navbar-item has-text-centered notifs">
-                                    <span className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}><i className="fas fa-globe "></i></span>
+                                    <span id="notification-icon" className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}><i className="fas fa-globe "></i></span>
                                     <span className={`has-text-weight-bold`}>{data && data.numNotifications ? shortenNumber(data.numNotifications) : '0'}</span>
                                 </a>
                             }}

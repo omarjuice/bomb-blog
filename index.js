@@ -70,7 +70,7 @@ const initializeServer = (app, productionEnv = false) => {
     return (done = null) => {
         nextApp.prepare()
             .then(() => {
-                app.use(graphqlUploadExpress())
+                app.use(graphqlUploadExpress({ maxFileSize: 10000000 }))
                 app.use(session({
                     name: 'blog-session',
                     secret: process.env.SESSION_SECRET,

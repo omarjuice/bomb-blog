@@ -29,3 +29,14 @@ export const svgAnimations = {
         })
     }
 }
+export const notificationAnimations = {
+    pop: (element) => {
+        return anime({
+            targets: element,
+            scale: [1, 2, 1],
+            easing: 'easeInOutQuad',
+            duration: 1000,
+            loop: false
+        })
+    }
+}

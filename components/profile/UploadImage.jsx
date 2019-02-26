@@ -42,7 +42,7 @@ class UploadImage extends Component {
     render() {
         return (
             <Mutation mutation={UPLOAD_IMAGE}>
-                {(uploadImage, { loading, error, data, client }) => {
+                {(uploadImage, { error, client }) => {
                     if (error) { console.log(error); }
                     return (
                         <form onSubmit={this.onSubmit(uploadImage, client)} className="has-text-centered">
@@ -54,7 +54,7 @@ class UploadImage extends Component {
                                                 onChange={this.onChange} />
                                             <span className="file-cta">
                                                 <span className="file-icon">
-                                                    {loading ? <Loading /> : error ? <ErrorIcon /> : <i className="fas fa-upload"></i>}
+                                                    {!error ? <i className="fas fa-exclamation-circle"></i> : <i className="fas fa-upload"></i>}
                                                 </span>
                                                 <span className="file-label">
                                                     {!this.state.fileName ? 'Choose an image' : ''}
@@ -67,7 +67,7 @@ class UploadImage extends Component {
                                         </label>
                                     </div>
                                 </div>
-                                {this.state.valid && this.state.fileName ? <div className="field has-text-centered">
+                                {this.state.valid && this.state.fileName && !error ? <div className="field has-text-centered">
                                     <div className="control has-text-centered">
                                         <button type="submit" className="button is-primary">
                                             <span className="icon"><i className="fas fa-check"></i></span>

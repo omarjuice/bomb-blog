@@ -3,6 +3,7 @@ import { ApolloProvider } from 'react-apollo'
 import { PageTransition } from 'next-page-transitions'
 import withApollo from '../apollo'
 import Header from '../components/meta/Header';
+import Footer from '../components/meta/Footer';
 import Loading from '../components/meta/Loading';
 class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
@@ -23,6 +24,7 @@ class MyApp extends App {
                     <PageTransition timeout={300} classNames="page-transition">
                         <Component {...pageProps} client={apollo} />
                     </PageTransition>
+                    <Footer />
                 </ApolloProvider>
                 <style jsx global>{`
                 .page-transition-enter {

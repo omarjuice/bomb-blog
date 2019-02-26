@@ -9,7 +9,7 @@ import BombSVG from '../svg/bomb';
 import { SEARCH_POSTS, AUTHENTICATED, CURRENT_USER_TAGS, FOLLOWEE_POSTS } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 import LoadingMedia from '../meta/LoadingMedia';
-
+import { tabsAnimations } from '../../animations/index';
 
 class Home extends Component {
     state = {
@@ -67,16 +67,13 @@ class Home extends Component {
             }
         }
     }
+
     render() {
         const { trending } = this.props.data
         const inputTrending = { cursor: 0, limit: 5, exclude: trending.results.map(post => post.id), orderBy: "trending" }
         const inputSuggested = { cursor: 0, limit: 5, tags: [] }
         return (
             <div>
-                {/* <div className="has-text-centered content">
-                    <Loading />
-                </div> */}
-
                 {this.state.tabs ? <div className="tabs is-hidden-tablet is-toggle is-right">
                     <ul>
                         <li onClick={() => this.setState({ active: 'featured' })} className={this.state.active === 'featured' ? 'is-active' : ''}><a>Featured</a></li>
@@ -87,10 +84,8 @@ class Home extends Component {
                 <a onClick={() => this.setState({ tabs: !this.state.tabs })} className="has-text-link tabs-toggle is-hidden-tablet" ><span className="icon is-large"><i className="fas fa-ellipsis-h fa-2x"></i></span></a>
                 <Featured active={this.state.active === 'featured'} posts={this.props.data.trending.results} />
                 <br />
-
                 <hr className="is-hidden-mobile" />
                 <div className="container">
-
                     <div className="columns is-tablet">
                         <Query query={AUTHENTICATED} ssr={false}>
                             {({ loading, error, data }) => {

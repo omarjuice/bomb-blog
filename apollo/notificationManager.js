@@ -1,7 +1,7 @@
 import { NEW_COMMENT, NEW_POST, NEW_LIKE, NEW_REPLY, NEW_COMMENT_LIKE, NEW_FOLLOWER, FEATURED_POST, APP_MESSAGE } from "./subscriptions";
 import { NOTIFICATIONS } from "./queries";
 import { setNumNotifications } from "./clientWrites";
-
+import { notificationAnimations } from '../animations'
 class NotificationManager {
     constructor(client) {
         this.client = client
@@ -31,7 +31,8 @@ class NotificationManager {
         return this
     }
     _update() {
-        setNumNotifications(this.allNotifications.length)
+        setNumNotifications(this.allNotifications.length);
+        if (this.allNotifications.length > 0) notificationAnimations.pop('#notification-icon')
     }
     _getKey({ __typename, ...data }) {
         switch (__typename) {

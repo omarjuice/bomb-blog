@@ -1,5 +1,5 @@
 {
-  "name": "blog",
+  "name": "bomb-blog",
   "version": "1.0.0",
   "description": "A blog app.",
   "main": "index.js",
