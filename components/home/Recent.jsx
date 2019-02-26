@@ -11,7 +11,6 @@ class Recent extends Component {
         const { data } = this.props
         return (
             <>
-                <LoadingMedia />
                 {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags, image }, i) => {
                     const likes = shortenNumber(numLikes)
                     const comments = shortenNumber(numComments)

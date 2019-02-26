@@ -8,6 +8,7 @@ import Feed from './Feed';
 import BombSVG from '../svg/bomb';
 import { SEARCH_POSTS, AUTHENTICATED, CURRENT_USER_TAGS, FOLLOWEE_POSTS } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
+import LoadingMedia from '../meta/LoadingMedia';
 
 
 class Home extends Component {
@@ -133,14 +134,7 @@ class Home extends Component {
                                                                 </div>
                                                             </article>
                                                             <Feed data={data.user.followingPosts} end={!data.user.followingPosts.cursor} />
-                                                            {this.state.fetching === 'feed' && (
-                                                                <article className="media">
-                                                                    <div className="media-content font-1 has-text-centered">
-                                                                        <div className="content has-text-centered">
-                                                                            <Loading size="4x" style="margin-top:2rem" />
-                                                                        </div>
-                                                                    </div>
-                                                                </article>)}
+                                                            {this.state.fetching === 'feed' && <LoadingMedia />}
                                                         </div>
                                                     )
                                                 }
@@ -178,14 +172,7 @@ class Home extends Component {
                                                                     </div>
                                                                 </article>
                                                                 <Recent data={data.posts} showTags={false} end={!data.posts.cursor} />
-                                                                {this.state.fetching === 'posts' && (
-                                                                    <article className="media">
-                                                                        <div className="media-content font-1 has-text-centered">
-                                                                            <div className="content has-text-centered">
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </article>)}
+                                                                {this.state.fetching === 'posts' && <LoadingMedia />}
                                                             </div>
                                                         )
                                                     }}
@@ -216,14 +203,7 @@ class Home extends Component {
                                                         </div>
                                                     </article>
                                                     <Recent data={data.posts} showTags={true} end={!data.posts.cursor} />
-                                                    {this.state.fetching === 'posts' && (
-                                                        <article className="media">
-                                                            <div className="media-content font-1 has-text-centered">
-                                                                <div className="content has-text-centered">
-                                                                    <Loading size="4x" style="margin-top:2rem" />
-                                                                </div>
-                                                            </div>
-                                                        </article>)}
+                                                    {this.state.fetching === 'posts' && <LoadingMedia />}
                                                 </div>
                                                 <div className={`column is-one-third ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
                                                     <div className="tile is-vertical has-text-centered font-1">
