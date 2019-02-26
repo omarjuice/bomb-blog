@@ -72,6 +72,10 @@ class Home extends Component {
         const inputSuggested = { cursor: 0, limit: 5, tags: [] }
         return (
             <div>
+                {/* <div className="has-text-centered content">
+                    <Loading />
+                </div> */}
+
                 {this.state.tabs ? <div className="tabs is-hidden-tablet is-toggle is-right">
                     <ul>
                         <li onClick={() => this.setState({ active: 'featured' })} className={this.state.active === 'featured' ? 'is-active' : ''}><a>Featured</a></li>
@@ -85,13 +89,14 @@ class Home extends Component {
 
                 <hr className="is-hidden-mobile" />
                 <div className="container">
+
                     <div className="columns is-tablet">
                         <Query query={AUTHENTICATED} ssr={false}>
                             {({ loading, error, data }) => {
                                 if (loading || error || !data) {
                                     return (
                                         <div className="column is-two-thirds has-text-centered load-error">
-                                            {loading && <Loading size="5x" />}
+                                            {loading && <Loading scale={5} />}
                                             {error && <ErrorIcon size="5x" />}
                                         </div>
                                     )
@@ -110,7 +115,7 @@ class Home extends Component {
 
                                                     return (
                                                         <div className={`column is-two-thirds has-text-centered load-error ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
-                                                            {loading && <Loading size="5x" />}
+                                                            {loading && <Loading scale={3} />}
                                                             {error && <ErrorIcon size="5x" />}
                                                         </div>
                                                     )
@@ -146,7 +151,7 @@ class Home extends Component {
                                                 if (loading || error || !data || !data.user) {
                                                     return (
                                                         <div className={`column is-one-third has-text-centered load-error ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
-                                                            {loading && <Loading size="5x" />}
+                                                            {loading && <Loading scale={3} />}
                                                             {error && <ErrorIcon size="5x" />}
                                                         </div>
                                                     )
@@ -157,7 +162,7 @@ class Home extends Component {
                                                         if (loading || error) {
                                                             return (
                                                                 <div className="column is-one-third has-text-centered load-error">
-                                                                    {loading && <Loading size="5x" />}
+                                                                    {loading && <Loading scale={3} />}
                                                                     {error && <ErrorIcon size="5x" />}
                                                                 </div>
                                                             )
@@ -177,7 +182,7 @@ class Home extends Component {
                                                                     <article className="media">
                                                                         <div className="media-content font-1 has-text-centered">
                                                                             <div className="content has-text-centered">
-                                                                                <Loading size="4x" style="margin-top:2rem" />
+
                                                                             </div>
                                                                         </div>
                                                                     </article>)}
@@ -196,7 +201,7 @@ class Home extends Component {
                                             if (loading || error || !data) {
                                                 return (
                                                     <div className={`column is-two-thirds has-text-centered load-error ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
-                                                        {loading && <Loading size="5x" />}
+                                                        {loading && <Loading scale={3} />}
                                                         {error && <ErrorIcon size="5x" />}
                                                     </div>
                                                 )
@@ -225,13 +230,13 @@ class Home extends Component {
                                                         <div className="columns is-mobile">
                                                             <div className="column is-half">
                                                                 <div className="has-text-centered">
-                                                                    <BombSVG lit={true} face={{ happy: true }} />
+                                                                    <BombSVG lit={true} flare={true} />
                                                                 </div>
                                                             </div>
                                                             <div className="column login is-half">
-                                                                <a className="subtitle is-4" onClick={() => renderModal({ active: true, display: 'Login' })}>Login</a>
+                                                                <a className="subtitle is-4 has-text-link" onClick={() => renderModal({ active: true, display: 'Login' })}>Login</a>
                                                                 <p className="subtitle is-4">OR</p>
-                                                                <a className="subtitle is-4" onClick={() => renderModal({ active: true, display: 'Register' })}>Sign Up</a>
+                                                                <a className="subtitle is-4 has-text-link" onClick={() => renderModal({ active: true, display: 'Register' })}>Sign Up</a>
                                                                 <p className="subtitle">To see your Feed</p>
                                                             </div>
                                                         </div>
@@ -251,7 +256,7 @@ class Home extends Component {
                         height: 85vh;
                         overflow: scroll;
                         background-color: #f9f9f9;
-                        padding: .5rem;
+                        padding: 1rem;
                         -webkit-overflow-scrolling: touch;
                         z-index: 2;
                         margin-top: 2rem;
@@ -275,7 +280,7 @@ class Home extends Component {
                     }
                     .tabs-toggle, .tabs{
                         position: fixed;
-                        top: 3.2rem;
+                        top: 3.8rem;
                         z-index: 2;
                     }
                     .tabs{
@@ -285,6 +290,7 @@ class Home extends Component {
                     .tabs-toggle{
                         right: 1rem;
                     }
+
                     `}</style>
             </div>
         );

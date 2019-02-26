@@ -86,7 +86,6 @@ class Register extends Component {
     render() {
         return (<Mutation mutation={REGISTER} refetchQueries={[`Authenticated`, `Notifications`, `CurrentUser`, `User`,]}>
             {(register, { data, loading, error, client }) => {
-                if (loading) return <Loading />;
                 if (!data) return (
                     <form onSubmit={this.onSubmit(register, client)} className="form has-text-centered">
                         {loading && <Loading color="primary" size="4x" />}

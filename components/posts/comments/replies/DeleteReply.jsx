@@ -36,8 +36,7 @@ class DeleteReply extends Component {
         return (
             <div className="media-right">
                 <Mutation mutation={DELETE_REPLY} update={update(this.props.commentId, this.props.replyId)} >
-                    {(deleteReply, { loading, error, data }) => {
-                        if (loading) return <Loading size="lg" />;
+                    {(deleteReply, { error, data }) => {
                         if (error) return <ErrorIcon size="lg" />
                         if (data && data.deleteReply) {
                             return <span className="has-text-warning has-text-weight-bold">DELETED</span>

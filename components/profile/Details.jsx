@@ -42,7 +42,7 @@ class Details extends Component {
                             </div>}
                             {followingMe ? <div className="level-item has-text-centered">
                                 <div>
-                                    <p className="heading">Following You</p>
+                                    <p className="heading">You</p>
                                     <div className="title"><span className="icon"><i className="fas fa-lg fa-user-check has-text-success"></i></span></div>
                                 </div>
                             </div> : ''}

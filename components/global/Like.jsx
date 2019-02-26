@@ -15,15 +15,16 @@ class Like extends Component {
 
             <Query query={POST_LIKES} variables={{ id: this.props.postId }} ssr={false}>
                 {({ loading, error, data }) => {
-                    if (loading) return <Loading color="primary" size={size || 'lg'} />;
+                    if (loading) return null
                     if (error) return <ErrorIcon color="primary" size={size || 'lg'} />
                     if (!data.post) return <div>Not Found</div>
                     const { iLike, numLikes, id } = data.post
-                    return (<>
-                        {iLike ? <UnlikePost postId={id} size={size} scale={scale} /> : <LikePost postId={id} size={size} scale={scale} />}
-                        <br />
-                        <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })} className="is-size-4  has-text-grey underline">{shortenNumber(numLikes)}</a>
-                    </>
+                    return (
+                        <>
+                            {iLike ? <UnlikePost postId={id} size={size} scale={scale} /> : <LikePost postId={id} size={size} scale={scale} />}
+                            <br />
+                            <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })} className="is-size-4  has-text-dark font-1 underline">{shortenNumber(numLikes)}</a>
+                        </>
                     )
                 }}
             </Query>

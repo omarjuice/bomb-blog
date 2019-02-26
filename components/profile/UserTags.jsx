@@ -35,7 +35,7 @@ class UserTags extends Component {
         return (
             <Query query={USER_TAGS} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
-                    if (loading) return <Loading size="2x" color="primary" />;
+                    if (loading) return <Loading />;
                     if (error) return <ErrorIcon />;
                     const { tags, username } = data.user
                     const isMe = data.user.isMe || this.props.isMe
@@ -53,14 +53,13 @@ class UserTags extends Component {
                     return (
                         <Mutation mutation={UPDATE_PROFILE} refetchQueries={[`UserTags`]}>
                             {(updateProfile, { loading, error, data }) => {
-                                if (loading) return <Loading size="2x" color="primary" />;
                                 if (error) return <ErrorIcon size="2x" color="primary" />;
                                 if (!data) return (
                                     <form action="" onSubmit={this.handleSubmit(updateProfile)}>
                                         <textarea className="textarea" placeholder="#tag1 #tag2"
                                             value={this.state.input}
                                             onChange={(e) => this.setState({ input: e.target.value })} ></textarea>
-                                        <button type="submit" className="button is-dark">Submit</button>
+                                        <button type="submit" className={`button is-dark ${loading && 'is-loading'}`}>Submit</button>
                                     </form>
                                 )
                                 return <p>DONE</p>

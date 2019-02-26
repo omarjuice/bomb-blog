@@ -10,8 +10,7 @@ class Logout extends Component {
         return (
             <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`, `User`, `UserProfile`, `Post`, `Comments`, `UserPhoto`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `CurrentUser`, `Notifications`, `IsAdmin`]}>
                 {(logout, { loading, error, data, client }) => {
-                    if (loading) return <button>Loading...</button>;
-                    if (error) return <button>{error.message.replace(/GraphQL error: /g, '')}</button>
+                    if (loading) return null
                     if (!data) return (
                         <>
                             <div className="navbar-item has-text-centered">

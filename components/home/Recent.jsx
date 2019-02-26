@@ -4,12 +4,14 @@ import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
 import { renderModal, setSearch } from '../../apollo/clientWrites';
 import LinkWrap from '../global/LinkWrap';
+import LoadingMedia from '../meta/LoadingMedia';
 
 class Recent extends Component {
     render() {
         const { data } = this.props
         return (
             <>
+                <LoadingMedia />
                 {data.results.map(({ id, title, author, created_at, last_updated, numLikes, numComments, caption, iLike, tags, image }, i) => {
                     const likes = shortenNumber(numLikes)
                     const comments = shortenNumber(numComments)

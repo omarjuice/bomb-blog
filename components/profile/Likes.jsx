@@ -9,6 +9,7 @@ import UnlikePost from '../posts/UnlikePost';
 import LikePost from '../posts/LikePost';
 import { LIKES } from '../../apollo/queries';
 import LinkWrap from '../global/LinkWrap';
+import LoadingMedia from '../meta/LoadingMedia';
 
 
 class Likes extends Component {
@@ -21,7 +22,7 @@ class Likes extends Component {
                 <Query query={LIKES} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
 
-                        if (loading) return <Loading color="primary" size="4x" style="margin-top: 10px" />
+                        if (loading) return <LoadingMedia />
                         if (error) return <ErrorIcon color="primary" size="4x" style="margin-top: 10px" />;
                         if (data.user.likedPosts.length < 1) {
                             return (
@@ -32,6 +33,7 @@ class Likes extends Component {
                                 </div>
                             )
                         }
+
                         return (
                             <div className="columns is-centered is-mobile">
                                 <div className="column is-full-mobile is-four-fifths-tablet is-8-desktop">

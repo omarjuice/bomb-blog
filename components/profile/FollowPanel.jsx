@@ -8,6 +8,7 @@ import ErrorIcon from '../meta/ErrorIcon';
 import BombSVG from '../svg/bomb';
 import { FOLLOWING, FOLLOWERS } from '../../apollo/queries';
 import LinkWrap from '../global/LinkWrap';
+import LoadingMedia from '../meta/LoadingMedia';
 
 
 const queries = { FOLLOWING, FOLLOWERS }
@@ -25,7 +26,7 @@ class FollowPanel extends Component {
 
                 <Query query={queries[display.toUpperCase()]} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
-                        if (loading) return <Loading color="primary" size="4x" style="margin-top: 10px" />;
+                        if (loading) return <LoadingMedia />;
                         if (error) return <ErrorIcon color="primary" size="4x" style="margin-top: 10px" />
                         if (data.user[display].length < 1) {
                             return (

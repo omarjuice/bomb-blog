@@ -41,7 +41,7 @@ class Login extends Component {
                 if (!data) return (
                     <div>
                         <form onSubmit={this.onSubmit(login)} className="form has-text-centered">
-                            {loading && <Loading color="primary" size="4x" />}
+                            {loading && <Loading />}
                             <ErrorMessage />
                             <div className="field">
                                 <label className="label">Username</label>

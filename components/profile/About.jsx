@@ -27,10 +27,20 @@ class About extends Component {
             })
         }
     }
-    handleSubmit = editAbout => {
+    handleSubmit = (editAbout, profile) => {
         return async e => {
             e.preventDefault();
-            await editAbout({ variables: { input: { about: this.state.input } } })
+            await editAbout({
+                variables: { input: { about: this.state.input } },
+                optimisticResponse: {
+                    _typename: "Mutation",
+                    updateProfile: {
+                        __typename: "Profile",
+                        ...profile,
+                        about: this.state.input
+                    }
+                }
+            })
             this.setState({
                 editing: false,
                 input: ''
@@ -41,28 +51,27 @@ class About extends Component {
         return (
             <Query query={USER_PROFILE} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
-                    if (loading) return <Loading size="3x" />;
+                    if (loading) return <Loading />
                     if (error) return <ErrorIcon size="3x" />
+                    const { profile } = data.user
                     if (!this.state.editing) return (
                         <div>
-                            <p>{data.user.profile.about || 'Let others know something about you!'}</p>
-                            <button className="button is-dark" onClick={this.editAbout(data.user.profile.about)}><i className="fas fa-pen-alt"></i></button>
+                            <p>{profile.about || 'Let others know something about you!'}</p>
+                            <button className="button is-dark" onClick={this.editAbout(profile.about)}><i className="fas fa-pen-alt"></i></button>
                         </div>
                     )
                     return (
                         <div>
                             <Mutation mutation={UPDATE_PROFILE} update={update(this.props.userId)}>
-                                {(updateProfile, { loading, error, data }) => {
-                                    if (loading) return <Loading />
+                                {(updateProfile, { error, data }) => {
                                     if (error) return <ErrorIcon />
-                                    if (!data) return (
-                                        <form action="" onSubmit={this.handleSubmit(updateProfile)}>
+                                    return (
+                                        <form action="" onSubmit={this.handleSubmit(updateProfile, profile)}>
                                             <textarea className="textarea" value={this.state.input}
                                                 onChange={e => this.setState({ input: e.target.value })}></textarea>
                                             <button type="submit" className="button is-dark">Submit</button>
                                         </form>
                                     )
-                                    return <p>DONE</p>
                                 }}
                             </Mutation>
                         </div>

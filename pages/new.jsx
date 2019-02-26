@@ -61,7 +61,7 @@ class New extends Component {
         return (
             <Query query={AUTHENTICATED} ssr={false}>
                 {({ loading, error, data, client, refetch }) => {
-                    if (loading) return <Loading />
+                    if (loading) return null
                     if (error) return <ErrorIcon />
                     if (data.authenticated) return <WritePost onSubmit={this.onSubmit} />
                     if (!data.authenticated) {
@@ -88,7 +88,7 @@ class New extends Component {
                                     return <div></div>
                                 }
                             })
-                        return <Loading />
+                        return null
                     }
 
                 }}

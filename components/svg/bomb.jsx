@@ -1,13 +1,52 @@
 import React, { Component } from 'react';
+import { svgAnimations } from '../../animations';
+import anime from 'animejs'
+const flare = (element) => {
+    const initialValue = "583.795 58.2335 610.966 124.102 641.43 68.1138 634.843 132.335 664.484 113.398 649.663 147.979 709.768 135.629 644.723 172.68 719.648 188.323 648.84 192.44 685.891 227.021 635.666 210.554 643.076 261.602 609.319 213.024 593.675 283.009 584.618 216.317 545.921 248.428 578.031 203.144 517.103 213.847 566.505 182.56 492.403 156.213 573.091 156.213 501.46 102.695 596.145 134.805"
+    const randomFlare = () => initialValue.split(' ').map((val, i) => i === 0 ? val : String(Math.round(Math.random()) > 0 ? Number(val) + 5 : Number(val) - 5)).join(' ')
+    return anime({
+        targets: element,
+        points: [{ value: initialValue }].concat(Array(25).fill('x').map(() => {
+            return {
+                value: randomFlare()
+            }
+        })),
+        easing: 'linear',
+        duration: 5000,
+        direction: 'alternate',
+        loop: true
+    })
+}
+const bounce = (element) => {
+    return anime({
+        targets: element,
+        translateY: [
+            { value: -20, duration: 1000, easing: 'easeOutCubic' },
+            { value: 0, duration: 1000, easing: 'easeInCubic' }
+        ],
+
+        loop: true,
+    })
+}
 
 class BombSVG extends Component {
+    componentDidMount() {
+        if (this.props.animated) {
+            flare('.flare')
+            bounce('.bounce')
+        } else if (this.props.flare) {
+            flare('.flare')
+        } else if (this.props.bounce) {
+            bounce('.bounce')
+        }
 
+    }
     render() {
         const fill = this.props.lit ? '#3F3B3C' : 'lightgray'
         const scale = this.props.scale || 1
         const secondaryColor = this.props.face && this.props.face.happy ? "#cc0000" : '#0fc5d9'
-        return (<div className="has-text-centered">
-            <svg id="bomb-svg" xmlns="http://www.w3.org/2000/svg" width={`${(scale) * 100}%`} height={`${(550 / 600) * 100 * (scale)}%`} viewBox="150 0 600 550"
+        return (<div >
+            <svg id="bomb-svg" className={this.props.animated || this.props.bounce ? 'bounce' : ''} xmlns="http://www.w3.org/2000/svg" width={`${(scale) * 100}%`} height={`${(550 / 600) * 100 * (scale)}%`} viewBox="150 0 600 550"
                 preserveAspectRatio="xMidYMid meet">
 
                 <defs id="svgEditorDefs">
@@ -29,10 +68,17 @@ class BombSVG extends Component {
                     style={{ fill: 'tan', stroke: 'black', strokeWidth: '8px' }} id="e7_path" />
                 <ellipse id="e8_ellipse" cx="609.281" cy="171.857" style={{ fill: '#805929', stroke: 'black', strokeWidth: '6.75px' }} rx="13.4432"
                     ry="25.6662" />
-                {this.props.lit ? <path d="M611.9012102705,123.6526899238l30.389222186200072,-55.5389233058l-7.335329493199993,64.9700612256l29.341317972877164,-19.910180052920623l-14.67065898648957,34.5808390393008l61.82634858561232,-13.622754773080175l-68.11377386549998,38.77245589269998l75.44910335873055,15.718563199756517l-69.16167807886598,5.2395210666161915l36.67664746599223,34.58083903936168l-49.25149802574538,-16.76646741302926l6.287425279888566,50.299402239194876l-33.53293482610002,-48.20359381259999l-16.766467413097757,68.1137738655197l-8.38323370650221,-64.97006122551971l-38.77245589270922,30.389222186182224l31.437126399509225,-41.91616853268221l-60.77844437232045,7.335329493160486l51.347306452520456,-30.389222186060493l-72.30539071882077,-25.1497011196617l79.64072021202077,6.17035311734071e-11l-74.40119914542589,-53.44311487911547l94.31137919842587,31.437126399515464l-11.52694634650004,-77.54491178539999l27.245509546200083,66.0179654389Z"
-                    style={{ fill: 'url(#rgrd2-white-blue)', stroke: 'none', strokeWidth: '4.32px', strokeLinejoin: 'miter', strokeLinecap: 'round' }}
-                    id="e15_path" /> : ''}
-                {this.props.face ? <> <ellipse id="e1_ellipse" cx="438.10343668076115" cy="321.6433026072141"
+                {this.props.lit ?
+
+                    // <path d="M611.9012102705,123.6526899238l30.389222186200072,-55.5389233058l-7.335329493199993,64.9700612256l29.341317972877164,-19.910180052920623l-14.67065898648957,34.5808390393008l61.82634858561232,-13.622754773080175l-68.11377386549998,38.77245589269998l75.44910335873055,15.718563199756517l-69.16167807886598,5.2395210666161915l36.67664746599223,34.58083903936168l-49.25149802574538,-16.76646741302926l6.287425279888566,50.299402239194876l-33.53293482610002,-48.20359381259999l-16.766467413097757,68.1137738655197l-8.38323370650221,-64.97006122551971l-38.77245589270922,30.389222186182224l31.437126399509225,-41.91616853268221l-60.77844437232045,7.335329493160486l51.347306452520456,-30.389222186060493l-72.30539071882077,-25.1497011196617l79.64072021202077,6.17035311734071e-11l-74.40119914542589,-53.44311487911547l94.31137919842587,31.437126399515464l-11.52694634650004,-77.54491178539999l27.245509546200083,66.0179654389Z"
+                    //     style={{ fill: 'url(#rgrd2-white-blue)', stroke: 'none', strokeWidth: '4.32px', strokeLinejoin: 'miter', strokeLinecap: 'round' }}
+                    //     id="e15_path" /> 
+                    <g className="flare-g">
+                        <polygon className={this.props.animated || this.props.flare ? 'flare' : ''} style={{ stroke: 'none', fill: 'url(#rgrd2-white-blue)', strokeWidth: '1px' }} id="e3_polygon"
+                            points="583.795 58.2335 610.966 124.102 641.43 68.1138 634.843 132.335 664.484 113.398 649.663 147.979 709.768 135.629 644.723 172.68 719.648 188.323 648.84 192.44 685.891 227.021 635.666 210.554 643.076 261.602 609.319 213.024 593.675 283.009 584.618 216.317 545.921 248.428 578.031 203.144 517.103 213.847 566.505 182.56 492.403 156.213 573.091 156.213 501.46 102.695 596.145 134.805"></polygon>
+                    </g>
+                    : ''}
+                {/* {this.props.face ? <> <ellipse id="e1_ellipse" cx="438.10343668076115" cy="321.6433026072141"
                     rx="34.995601654052734" ry="27.234399795532227" transform="matrix(1.04153 0.10108 -0.10108 1.04153 23.3606 20.1244)" style={{ stroke: 'none', fill: secondaryColor }} />
                     <ellipse id="e3_ellipse" cx="310.59814453125006" cy="347.06173706054693" style={{ stroke: 'none', fill: secondaryColor }}
                         rx="34.995601654052734" ry="27.234399795532227" transform="matrix(0.624166 0.829864 -0.829864 0.624166 426.452 -142.109)" />
@@ -42,9 +88,19 @@ class BombSVG extends Component {
                         :
                         <path d="M412.5748502994013,481.88622754491024q-39.67065868263484,-87.57485029940119,-133.98203592814372,-78.59281437125748q86.82634730538922,8.233532934131688,133.2335329341318,80.08982035928136Z"
                             style={{ fill: secondaryColor, strokeWidth: "8px", stroke: secondaryColor }} id="e9_path" />}
-                </> : ''}
+                </> : ''} */}
             </svg>
             {this.props.children}
+            <style jsx>{`
+                @keyframes spin{
+                    from {
+                        transform: rotate(0deg);
+                    }
+                    to{
+                        transform: rotate(360deg);
+                    }
+                }
+                `}</style>
         </div>
         );
     }

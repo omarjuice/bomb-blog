@@ -5,6 +5,7 @@ import ErrorIcon from '../../../meta/ErrorIcon';
 import Reply from './Reply';
 import CreateReply from './CreateReply';
 import { REPLIES } from '../../../../apollo/queries';
+import LoadingMedia from '../../../meta/LoadingMedia';
 
 
 class Replies extends Component {
@@ -16,7 +17,7 @@ class Replies extends Component {
                         <article className="media">
                             <div className="media-content">
                                 <div className="content has-text-centered">
-                                    {loading && <Loading color="primary" size="2x" style="margin-top:5px" />}
+                                    {loading && <LoadingMedia />}
                                     {error && <ErrorIcon color="primary" size="2x" style="margin-top:5px" />}
                                 </div>
                             </div>

@@ -134,6 +134,8 @@ class ProfilePage extends Component {
                                         z-index: 1;
                                         left: -32px;
                                         width: 70%;
+                                        overflow: scroll;
+                                        -webkit-overflow-scrolling: touch;
                                     }
                                     .bordered{
                                         border: 2px solid steelblue;

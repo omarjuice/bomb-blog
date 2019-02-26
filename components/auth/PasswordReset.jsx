@@ -86,7 +86,7 @@ class PasswordReset extends Component {
     render() {
         return (
             <form onSubmit={this.processSubmit()} className="form has-text-centered">
-                {this.state.loading && <Loading color="primary" size="4x" />}
+                {this.state.loading && <Loading />}
                 <ErrorMessage />
                 {this.state.question ?
                     <>

@@ -8,6 +8,7 @@ import Users from './Users';
 import Comments from './Comments'
 import Tags from './Tags';
 import { SEARCH_USERS, SEARCH_POSTS, SEARCH_ALL, SEARCH_COMMENTS, SEARCH_TAGS } from '../../apollo/queries';
+import LoadingMedia from '../meta/LoadingMedia';
 const gqlQueries = {
     users: SEARCH_USERS,
     posts: SEARCH_POSTS,
@@ -123,13 +124,7 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Posts data={data.posts} input={variables.input} end={!data.posts.cursor} inputTags={variables.input.tags} />
-                                            {this.state.fetching === 'posts' && <article className="media">
-                                                <div className="media-content font-1 has-text-centered">
-                                                    <div className="content has-text-centered">
-                                                        <Loading size="4x" style="margin-top:2rem" />
-                                                    </div>
-                                                </div>
-                                            </article>}
+                                            {this.state.fetching === 'posts' && <LoadingMedia />}
                                         </div>
                                     </div> : ''}
                                 <div className={`column is-1-desktop ${data.posts ? 'is-hidden-touch' : 'is-hidden'}`}></div>
@@ -146,13 +141,7 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Users data={data.users} input={variables.input} end={!data.users.cursor} inputTags={variables.input.tags} />
-                                            {this.state.fetching === 'users' && <article className="media">
-                                                <div className="media-content font-1 has-text-centered">
-                                                    <div className="content has-text-centered">
-                                                        <Loading size="4x" style="margin-top:2rem" />
-                                                    </div>
-                                                </div>
-                                            </article>}
+                                            {this.state.fetching === 'users' && <LoadingMedia />}
                                         </div>
                                     </div> : ''}
 
@@ -169,13 +158,7 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Comments data={data.comments} input={variables.input} end={!data.comments.cursor} inputTags={variables.input.tags} />
-                                            {this.state.fetching === 'comments' && <article className="media">
-                                                <div className="media-content font-1 has-text-centered">
-                                                    <div className="content has-text-centered">
-                                                        <Loading size="4x" style="margin-top:2rem" />
-                                                    </div>
-                                                </div>
-                                            </article>}
+                                            {this.state.fetching === 'comments' && <LoadingMedia />}
                                         </div>
                                     </div> : ''}
                                 <div className={`column is-1-desktop ${data.comments ? 'is-hidden-touch' : 'is-hidden'}`}></div>
@@ -192,13 +175,7 @@ class SearchPage extends Component {
                                                 </div>
                                             </article>
                                             <Tags data={data.tags} input={variables.input} end={!data.tags.cursor} inputTags={variables.input.tags} />
-                                            {this.state.fetching === 'tags' && <article className="media">
-                                                <div className="media-content font-1 has-text-centered">
-                                                    <div className="content has-text-centered">
-                                                        <Loading size="4x" style="margin-top:2rem" />
-                                                    </div>
-                                                </div>
-                                            </article>}
+                                            {this.state.fetching === 'tags' && <LoadingMedia />}
                                         </div>
                                     </div> : ''}
                             </>

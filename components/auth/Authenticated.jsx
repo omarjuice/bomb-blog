@@ -9,10 +9,7 @@ class Authenticated extends Component {
         return (
             <Query query={AUTHENTICATED} ssr={false} >
                 {({ loading, data }) => {
-                    if (loading) return (
-                        <div className="navbar-item has-text-centered">
-                            <div><Loading size="2x" /></div>
-                        </div>)
+                    if (loading) return null
                     return data && data.authenticated ? <Logout deactivateMenu={this.props.deactivateMenu} /> : <>
                         <div className="navbar-item has-text-centered">
                             <a className="button is-ligh font-1 " onClick={() => { renderModal({ display: 'Register', message: '', active: true }); this.props.deactivateMenu() }}>

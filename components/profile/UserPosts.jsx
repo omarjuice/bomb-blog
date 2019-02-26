@@ -9,6 +9,7 @@ import { shortenNumber } from '../../utils';
 import { USER_POSTS } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 import LinkWrap from '../global/LinkWrap';
+import LoadingMedia from '../meta/LoadingMedia';
 
 
 class UserPosts extends Component {
@@ -20,7 +21,7 @@ class UserPosts extends Component {
                 </h1>
                 <Query query={USER_POSTS} variables={{ id: this.props.userId }} ssr={false}>
                     {({ loading, error, data }) => {
-                        if (loading) return <Loading size="5x" color="primary" />
+                        if (loading) return <LoadingMedia />
                         if (error) return <ErrorIcon size="5x" color="primary" />;
                         if (data.user.posts.length < 1) {
                             return (

@@ -16,7 +16,7 @@ class Likers extends Component {
         return (
             <Query query={query} variables={{ id }}>
                 {({ loading, error, data }) => {
-                    if (loading) return <Loading size="4x" color="primary" />;
+                    if (loading) return <Loading />;
                     if (error) return <ErrorIcon size="4x" color="primary" />;
                     return (<div className="columns is-centered is-mobile">
                         <div className="column box is-three-fifths-desktop is-two-thirds-tablet is-four-fifths-mobile">
