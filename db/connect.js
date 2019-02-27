@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 
 const { user, password, host, multipleStatements } = require('../config');
-const db = mysql.createConnection({ user, password, host, multipleStatements })
+const db = mysql.createConnection({ user, password, host, multipleStatements, })
 const queryDB = (query, obj = null, before = null, bool = false) => {
     return new Promise((resolve, reject) => {
         const makeQuery = (Obj) => db.query(query, Obj, (err, res) => {

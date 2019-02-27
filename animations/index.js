@@ -29,14 +29,23 @@ export const svgAnimations = {
         })
     }
 }
-export const notificationAnimations = {
-    pop: (element) => {
+export const navbarAnimations = {
+    slideIn: (element) => {
         return anime({
             targets: element,
-            scale: [1, 2, 1],
-            easing: 'easeInOutQuad',
-            duration: 1000,
-            loop: false
+            opacity: [0, 1],
+            translateY: [-30, 0],
+            duration: 500,
+            easing: 'easeInOutQuad'
+        })
+    },
+    slideOut: (element) => {
+        return anime({
+            targets: element,
+            opacity: [1, 0],
+            translateY: [0, -30],
+            duration: 500,
+            easing: 'easeInOutQuad'
         })
     }
 }

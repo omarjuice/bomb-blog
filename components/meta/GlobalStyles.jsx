@@ -53,6 +53,13 @@ class GlobalStyles extends Component {
                         padding: 15px;
                     }
                 }
+                #panel-display{
+                    position: relative;
+                    top: -1.45rem;
+                    height: 100vh;
+                    overflow: scroll;
+                    -webkit-overflow-scrolling: touch;
+                }
             `}</style>
         );
     }

@@ -19,7 +19,9 @@ module.exports = {
         FROM follows
         INNER JOIN users
             ON follower_id = users.id
-        WHERE follows.followee_id IN (?) AND follows.follower_id != follows.followee_id`, [keys], null, bool);
+        WHERE follows.followee_id IN (?) AND follows.follower_id != follows.followee_id
+        ORDER BY followed_at DESC
+        `, [keys], null, bool);
         const Followers = followers.reduce((acc, { followee_id, username, id, followed_at }) => {
             if (!followee_id) return acc;
             if (!acc[followee_id]) {
@@ -39,6 +41,7 @@ module.exports = {
         INNER JOIN users
             ON followee_id = users.id
         WHERE follows.follower_id IN (?) AND follows.follower_id != follows.followee_id
+        ORDER BY followed_at DESC
         `, [keys], null, bool);
         const Following = following.reduce((acc, { follower_id, username, id, followed_at }) => {
             if (!follower_id) return acc;
@@ -121,7 +124,8 @@ module.exports = {
         FROM posts
         INNER JOIN likes
             ON posts.id = likes.post_id
-        WHERE likes.user_id IN (?) 
+        WHERE likes.user_id IN (?)
+        ORDER BY likes.created_at DESC
         `, [keys], null, bool);
         const LikedPosts = likedPosts.reduce((acc, { liker_id, ...post }) => {
             if (!liker_id) return acc

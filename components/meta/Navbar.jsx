@@ -7,6 +7,7 @@ import Authenticated from '../auth/Authenticated';
 import SearchNav from './SearchNav';
 import { GET_SEARCH, GET_NUM_NOTIFICATIONS } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
+import { navbarAnimations } from '../../animations';
 
 class Navbar extends Component {
     state = {
@@ -30,6 +31,15 @@ class Navbar extends Component {
             menu: false
         })
     }
+    toggleSearch = () => {
+        const animation = this.state.searchNav ? navbarAnimations.slideOut('#search-nav') : navbarAnimations.slideIn('#search-nav')
+        animation.finished.then(() => {
+            this.setState({
+                searchNav: !this.state.searchNav,
+                menu: !this.state.searchNav ? false : this.state.menu
+            })
+        })
+    }
     render() {
         return (
             <div>
@@ -37,7 +47,7 @@ class Navbar extends Component {
                     <div className="navbar-brand">
                         <Link href="/">
                             <a className="navbar-item">
-                                <span className="icon is-large"><BombSVG lit={true} face={{ happy: true }} /></span>
+                                <span className="icon is-large"><BombSVG lit={true} flare={true} /></span>
                                 <img id="brand-img" src="/static/brand.svg" width="100" height="100" />
                             </a>
                         </Link>
@@ -47,7 +57,7 @@ class Navbar extends Component {
                             </a>
                         </Link>
                         <a className={`navbar-item ${this.state.searchNav ? 'has-text-grey' : ''}`}
-                            onClick={() => this.setState({ searchNav: !this.state.searchNav, menu: !this.state.searchNav ? false : this.state.menu })}>
+                            onClick={this.toggleSearch}>
                             <span className="icon is-large"><i className="fas fa-search fa-lg"></i></span>
                         </a>
                         <Query query={GET_NUM_NOTIFICATIONS}>
@@ -81,7 +91,8 @@ class Navbar extends Component {
                 </Query>
                 <style jsx>{`
                     #brand-img{
-                        margin-left: -1rem
+                        margin-left: -1rem;
+                        margin-right: -1rem;
                     }
                     .navbar-brand{
                         margin-left: -1rem;

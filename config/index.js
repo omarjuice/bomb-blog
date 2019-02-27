@@ -1,7 +1,7 @@
 const dotenv = require('dotenv').config();
 
 const mySqlConfig = {
-    host: 'localhost',
+    host: process.env.MYSQL_HOST || 'localhost',
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PW,
 }

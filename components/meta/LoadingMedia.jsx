@@ -5,9 +5,7 @@ class LoadingMedia extends Component {
         return (
             <article className="media">
                 <figure className="media-left">
-                    <p className="image is-64x64">
-                        <div className="block"></div>
-                    </p>
+                    <div className="block"></div>
                 </figure>
                 <div className="media-content">
                     <div className="content">

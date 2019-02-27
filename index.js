@@ -10,6 +10,7 @@ const resolvers = require('./gql/resolvers')
 const applyLoaders = require('./gql/batch')
 const moment = require('moment')
 const { queryDB } = require('./db/connect')
+const { database } = require('./config')
 require('mkdirp').sync('./static/uploads')
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -146,7 +147,7 @@ const initializeServer = (app, productionEnv = false) => {
 if (test) {
     port++
 } else {
-    queryDB(`USE blog`).then(() => initializeServer(app, !dev)()).catch(e => console.log(e))
+    queryDB(`USE ${database}`).then(() => initializeServer(app, !dev)()).catch(e => console.log(e))
 }
 
 module.exports = { nextApp, port, initializeServer, app, }

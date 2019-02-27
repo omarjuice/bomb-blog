@@ -28,13 +28,13 @@ const postSchema = {
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
         created_at TIMESTAMP DEFAULT NOW(),
-        last_updated TIMESTAMP DEFAULT NULL,
+        last_updated TIMESTAMP,
         title VARCHAR(255) NOT NULL,
         caption TEXT NOT NULL,
         post_content LONGTEXT NOT NULL,
         image VARCHAR(255),
         featured BOOLEAN DEFAULT 0, 
-        featured_at TIMESTAMP DEFAULT NULL,
+        featured_at TIMESTAMP,
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )`,
     drop: `DROP TABLE IF EXISTS posts`
@@ -57,7 +57,7 @@ const commentSchema = {
         post_id INT NOT NULL,
         comment_text TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT NOW(),
-        last_updated TIMESTAMP DEFAULT NULL,
+        last_updated TIMESTAMP,
         FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE,
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )`,
@@ -81,7 +81,7 @@ const replySchema = {
         comment_id INT NOT NULL,
         reply_text TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT NOW(),
-        last_updated TIMESTAMP DEFAULT NULL,
+        last_updated TIMESTAMP,
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY(comment_id) REFERENCES comments(id) ON DELETE CASCADE
     )`,

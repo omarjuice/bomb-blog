@@ -32,7 +32,9 @@ module.exports = {
         if (!validator.validate(email)) throw Errors.register.invalidEmail;
         const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username])
         if (!user) {
-            const { insertId } = await queryDB(`INSERT INTO users (username, email, pswd) VALUES ?`, [[[username, email, password]]], hashUser).catch(e => { throw Errors.database })
+            const { insertId } = await queryDB(`INSERT INTO users (username, email, pswd) VALUES ?`,
+                [[[username, email, password]]], hashUser)
+                .catch(e => { throw Errors.database })
             const [newUser] = await queryDB(`SELECT username, email, id, created_at FROM users WHERE id= ?`, [insertId]).catch(e => { throw Errors.database })
             await queryDB(`INSERT INTO profiles (user_id) VALUES ?`, [[[newUser.id]]]).catch(e => { throw Errors.database })
             req.session.user = { ...newUser }
@@ -71,7 +73,9 @@ module.exports = {
                 about= ?,
                 photo_path= ?,
                 last_updated = NOW() 
-            WHERE user_id = ?`, [args.input.about !== undefined ? args.input.about : about, args.input.photo_path || photo_path, id]).catch(e => { throw Errors.database })
+            WHERE user_id = ?`,
+            [args.input.about !== undefined ? args.input.about : about, args.input.photo_path !== undefined ? args.input.photo_path : photo_path, id])
+            .catch(e => { throw Errors.database })
         if (affectedRows > 0) {
             if (photo_path && args.input.photo_path) {
                 deleteFS('.' + photo_path)
@@ -96,7 +100,10 @@ module.exports = {
         let sessionUser = authenticate(req.session)
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         if (!title || !post_content || !caption) throw Errors.posts.missingField;
-        const { rowsAffected, insertId } = await queryDB(`INSERT INTO posts (user_id, title, caption, post_content, image) VALUES ?`, [[[sessionUser, title, caption, post_content, image]]]).catch(e => { throw Errors.database })
+        const { rowsAffected, insertId } = await queryDB(
+            `INSERT INTO posts (user_id, title, caption, post_content, image) VALUES ?`,
+            [[[sessionUser, title, caption, post_content, image]]])
+            .catch(e => { throw Errors.database })
         if (rowsAffected < 1) return null;
         if (tags && tags.length > 0) {
             await batchInserts.tags.postTags(tags, insertId)
@@ -116,7 +123,10 @@ module.exports = {
         let sessionUser = authenticate(req.session)
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         const { image } = await Loaders.posts.byId.load(args.id)
-        const { affectedRows } = await queryDB(`DELETE FROM posts WHERE id= ? AND user_id= ?`, [args.id, sessionUser]).catch(e => { throw Errors.database })
+        const { affectedRows } = await queryDB(
+            `DELETE FROM posts WHERE id= ? AND user_id= ?`,
+            [args.id, sessionUser])
+            .catch(e => { throw Errors.database })
         if (affectedRows > 0) {
             deleteFS('.' + image)
             return true
@@ -146,7 +156,8 @@ module.exports = {
                 image=?,
                 last_updated=NOW()
             WHERE id= ? AND user_id= ?
-        `, [args.input.title || title, args.input.caption || caption, args.input.post_content || post_content, image, args.id, sessionUser]).catch(e => { throw Errors.database })
+        `, [args.input.title || title, args.input.caption || caption, args.input.post_content || post_content, image, args.id, sessionUser])
+                .catch(e => { throw Errors.database })
         if (affectedRows < 1) throw Errors.database;
         if (args.input.modTags) {
             const { modTags } = args.input;
@@ -191,7 +202,10 @@ module.exports = {
         const sessionUser = authenticate(req.session)
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         const { post_id, comment_text, tags } = args;
-        const { affectedRows, insertId } = await queryDB(`INSERT INTO comments (user_id, post_id, comment_text) VALUES ?`, [[[sessionUser, post_id, comment_text]]]).catch(e => { throw Errors.database })
+        const { affectedRows, insertId } = await queryDB(
+            `INSERT INTO comments (user_id, post_id, comment_text) VALUES ?`,
+            [[[sessionUser, post_id, comment_text]]])
+            .catch(e => { throw Errors.database })
         if (affectedRows < 1) throw Errors.authorization.notAuthorized;
         if (tags && tags.length > 0) {
             await batchInserts.tags.commentTags(tags, insertId)
@@ -260,7 +274,10 @@ module.exports = {
         const sessionUser = authenticate(req.session);
         if (!sessionUser) throw Errors.authentication.notLoggedIn;
         const { comment_id, reply_text } = args
-        const { affectedRows, insertId } = await queryDB(`INSERT INTO replies (comment_id, user_id, reply_text) VALUES ?`, [[[comment_id, sessionUser, reply_text]]]).catch(e => { throw Errors.database })
+        const { affectedRows, insertId } = await queryDB(
+            `INSERT INTO replies (comment_id, user_id, reply_text) VALUES ?`,
+            [[[comment_id, sessionUser, reply_text]]])
+            .catch(e => { throw Errors.database })
         if (affectedRows < 1) throw Errors.authorization.notAuthorized;
         const [newReply] = await queryDB(`SELECT * FROM replies WHERE id = ?`, [insertId])
         Loaders.comments.byId.load(comment_id)

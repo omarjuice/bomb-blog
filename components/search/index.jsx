@@ -81,7 +81,7 @@ class SearchPage extends Component {
                 <div className="columns is-centered is-mobile is-multiline">
                     <Query query={gqlQueries[options]} variables={variables} ssr={false}>
                         {({ loading, error, data, client }) => {
-                            if (loading) return <Loading size="5x" />
+                            if (loading) return <Loading scale={5} />
                             if (error) return <ErrorIcon size="5x" />
                             let numUsers;
                             let numPosts;

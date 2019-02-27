@@ -12,7 +12,7 @@ module.exports = {
         return keys.map(key => Posts[key] ? Posts[key] : null)
     },
     batchPostsByUserId: async keys => {
-        const posts = await queryDB(`SELECT * FROM posts WHERE user_id IN (?)`, [keys], null, bool)
+        const posts = await queryDB(`SELECT * FROM posts WHERE user_id IN (?) ORDER BY posts.created_at DESC`, [keys], null, bool)
         const userPosts = posts.reduce((acc, post) => {
             if (!post) return acc;
             if (!acc[post.user_id]) {

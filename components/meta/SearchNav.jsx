@@ -28,7 +28,7 @@ class SearchNav extends Component {
     }
     render() {
         return (
-            <nav className={`navbar is-fixed-top secondary-navbar ${this.props.active ? '' : 'is-hidden'}`} role="navigation" aria-label="main navigation">
+            <nav id="search-nav" className={`navbar is-fixed-top secondary-navbar ${this.props.active ? '' : 'is-hidden'}`} role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
                     <div className="navbar-item">
                         <form action="/search" className="form" method="GET">
