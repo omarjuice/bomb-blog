@@ -9,11 +9,14 @@ import Confirm from './Confirm';
 import Notifications from '../global/Notifications';
 import { GET_MODAL, NOTIFICATIONS, CURRENT_USER } from '../../apollo/queries';
 import { clearError, renderModal } from '../../apollo/clientWrites';
+import { modalAnimations } from '../../animations';
 
 
 const dismiss = (confirmation = false) => {
-    renderModal({ confirmation })
-    clearError()
+    modalAnimations.contract('.modal-card').finished.then(() => {
+        renderModal({ confirmation })
+        clearError()
+    })
 }
 class Modal extends Component {
     componentDidMount() {
@@ -55,6 +58,7 @@ class Modal extends Component {
                 {({ data }) => {
                     if (!data) return <div></div>;
                     const { active, message, display, info } = data.modal
+                    if (active) modalAnimations.expand('.modal-card')
                     return (
                         <div className={`modal ${active && 'is-active'}`}>
                             <div className="modal-background" onClick={() => dismiss(false)}></div>

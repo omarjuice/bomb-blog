@@ -58,3 +58,21 @@ export const navbarAnimations = {
         })
     }
 }
+export const modalAnimations = {
+    expand: (element) => {
+        return anime({
+            targets: element,
+            scaleY: [0, 1],
+            duration: 250,
+            easing: 'easeInOutQuad'
+        })
+    },
+    contract: (element) => {
+        return anime({
+            targets: element,
+            scaleY: [1, 0],
+            duration: 250,
+            easing: 'easeInOutQuad'
+        })
+    }
+}
