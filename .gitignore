@@ -10,3 +10,4 @@ posts.json
 /static/uploads
 file.js
 .DS_Store
+dbtransfer.js

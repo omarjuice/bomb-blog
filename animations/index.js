@@ -29,6 +29,15 @@ export const svgAnimations = {
         })
     }
 }
+export const notificationAnimations = {
+    pop: (element) => {
+        return anime({
+            targets: element,
+            scale: [1, 2, 1],
+            duration: 1000
+        })
+    }
+}
 export const navbarAnimations = {
     slideIn: (element) => {
         return anime({

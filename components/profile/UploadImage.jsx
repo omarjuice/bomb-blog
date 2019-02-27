@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import Loading from '../meta/Loading';
-import ErrorIcon from '../meta/ErrorIcon';
 import { USER_PROFILE } from '../../apollo/queries';
 import { UPLOAD_IMAGE, UPDATE_PROFILE } from '../../apollo/mutations';
 
@@ -21,7 +19,7 @@ class UploadImage extends Component {
     onChange = ({ target: { validity, files: [file] } }) => {
         this.setState({
             valid: validity.valid,
-            fileName: file.name,
+            fileName: file ? file.name : null,
             file
         })
         this.props.setPreviewImage(file)
@@ -29,15 +27,28 @@ class UploadImage extends Component {
     onSubmit = (uploadImage, client) => {
         return async e => {
             const image = this.state.file
-            if (!image) return
             e.preventDefault()
-            const { data } = await uploadImage({ variables: { image } })
-            if (data && data.uploadImage) {
-                const photo_path = data.uploadImage
+            if (image && this.state.valid) {
+                const { data } = await uploadImage({ variables: { image } })
+                if (data && data.uploadImage) {
+                    const photo_path = data.uploadImage
+                    await client.mutate({ mutation: UPDATE_PROFILE, variables: { input: { photo_path } }, update })
+                    this.props.cancelEdit()
+                }
+            } else {
+                const photo_path = null
                 await client.mutate({ mutation: UPDATE_PROFILE, variables: { input: { photo_path } }, update })
                 this.props.cancelEdit()
             }
         }
+    }
+    reset = () => {
+        this.setState({
+            valid: false,
+            fileName: '',
+            file: null
+        })
+        this.props.setPreviewImage(null)
     }
     render() {
         return (
@@ -54,7 +65,7 @@ class UploadImage extends Component {
                                                 onChange={this.onChange} />
                                             <span className="file-cta">
                                                 <span className="file-icon">
-                                                    {!error ? <i className="fas fa-exclamation-circle"></i> : <i className="fas fa-upload"></i>}
+                                                    {error ? <i className="fas fa-exclamation-circle"></i> : <i className="fas fa-upload"></i>}
                                                 </span>
                                                 <span className="file-label">
                                                     {!this.state.fileName ? 'Choose an image' : ''}
@@ -62,18 +73,23 @@ class UploadImage extends Component {
                                                     {this.state.valid && this.state.fileName ? <span>Do you like it?</span> : ''}
                                                 </span>
                                             </span>
-
-
                                         </label>
                                     </div>
                                 </div>
-                                {this.state.valid && this.state.fileName && !error ? <div className="field has-text-centered">
+                                <div className="field has-text-centered">
                                     <div className="control has-text-centered">
-                                        <button type="submit" className="button is-primary">
+                                        <button type="submit" className="button is-link">
                                             <span className="icon"><i className="fas fa-check"></i></span>
                                         </button>
                                     </div>
-                                </div> : ''}
+                                </div>
+                                <div onClick={this.reset} className="field has-text-centered">
+                                    <div className="control has-text-centered">
+                                        <a className="button is-primary">
+                                            <span className="icon"><i className="fas fa-trash-alt"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
 
 

@@ -20,7 +20,8 @@ class Likers extends Component {
                     if (error) return <ErrorIcon size="4x" color="primary" />;
                     return (<div className="columns is-centered is-mobile">
                         <div className="column box is-three-fifths-desktop is-two-thirds-tablet is-four-fifths-mobile">
-                            {data[type].likers.map(({ id, username, liked_at, imFollowing, followingMe, isMe, profile }) => {
+
+                            {data[type].likers.length > 0 ? data[type].likers.map(({ id, username, liked_at, imFollowing, followingMe, isMe, profile }) => {
                                 return <article key={id} className="media has-text-centered">
                                     <figure className="media-left">
                                         <p className="image is-48x48">
@@ -60,7 +61,16 @@ class Likers extends Component {
                                         }
                                         `}</style>
                                 </article>
-                            })}
+                            }) :
+                                <article className="media">
+                                    <div className="media-content">
+                                        <div className="content font-1">
+                                            <h1 className="title has-text-centered is-5">
+                                                No one likes this.
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </article>}
                         </div>
                     </div>)
                 }}

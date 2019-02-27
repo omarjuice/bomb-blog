@@ -70,7 +70,7 @@ class UnlikePost extends Component {
                     return (
                         <a onClick={unlikePost} className="has-text-primary has-text-centered">
                             <span className="icon is-large">
-                                <BombSVG lit={true} scale={this.props.scale || 1.2} />
+                                <BombSVG lit={true} scale={this.props.scale || 1.2} flare={this.props.flare} />
                             </span>
                         </a>
                     )

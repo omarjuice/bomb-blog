@@ -3,7 +3,6 @@ import { Query } from 'react-apollo';
 import moment from 'moment'
 import Panels from './Panels';
 import Details from './Details'
-import Loading from '../meta/Loading';
 import UserTags from './UserTags';
 import About from './About'
 import ErrorIcon from '../meta/ErrorIcon';
@@ -19,6 +18,8 @@ class ProfilePage extends Component {
     setPreviewImage(image) {
         if (image) {
             this.setState({ image: URL.createObjectURL(image) })
+        } else {
+            this.setState({ image: '/static/user_image.png' })
         }
 
     }
@@ -35,7 +36,7 @@ class ProfilePage extends Component {
                         if (loading || error) return (
                             <div className="columns is-centered">
                                 <div className="column is-one-third has-text-centered">
-                                    {loading && <Loading size="10x" />}
+                                    {loading && <LoadingMedia />}
                                     {error && <ErrorIcon size="10x" />}
                                 </div>
                                 <style jsx>{`
@@ -126,7 +127,8 @@ class ProfilePage extends Component {
                                         z-index: 2;
                                         height: 128px important!;
                                         width: 128px important!
-                                    }
+                                    }import LoadingMedia from '../meta/LoadingMedia';
+
 
                                     #user-info{
                                         height: 75%;

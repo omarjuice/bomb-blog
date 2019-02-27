@@ -21,7 +21,7 @@ class Like extends Component {
                     const { iLike, numLikes, id } = data.post
                     return (
                         <>
-                            {iLike ? <UnlikePost postId={id} size={size} scale={scale} /> : <LikePost postId={id} size={size} scale={scale} />}
+                            {iLike ? <UnlikePost postId={id} flare={true} size={size} scale={scale} /> : <LikePost postId={id} size={size} scale={scale} />}
                             <br />
                             <a onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })} className="is-size-4  has-text-dark font-1 underline">{shortenNumber(numLikes)}</a>
                         </>
