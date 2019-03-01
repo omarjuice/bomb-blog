@@ -382,7 +382,6 @@ class Notifications extends Component {
                     this.props.data.map((key, i) => {
                         if (key) {
                             const data = this.props.notificationMap[key]
-                            console.log(key, data)
                             return typeMap[data.__typename](key, data)
                         }
                         return null

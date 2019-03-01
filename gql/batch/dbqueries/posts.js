@@ -49,6 +49,7 @@ module.exports = {
             * 
         FROM comments
         WHERE post_id IN (?)
+        ORDER BY created_at DESC
         `, [keys], null, bool)
         const postComments = comments.reduce((acc, comment) => {
             if (!comment) return acc;

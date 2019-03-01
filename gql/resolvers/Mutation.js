@@ -365,5 +365,12 @@ module.exports = {
             return true
         }
         return false
+    },
+    setLastRead: (_, { lastRead }, { req }) => {
+        if (req.session.user) {
+            req.session.user.lastRead = lastRead
+            return lastRead
+        }
+        return null
     }
 }

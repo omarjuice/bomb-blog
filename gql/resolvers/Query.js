@@ -139,13 +139,18 @@ module.exports = {
         return { results, cursor: results.length < limit ? null : cursor + results.length }
     },
     notifications: (_, args, { req }) => {
-        if (req.session.user) {
-            if (req.session.user.lastVisited) {
-                return { lastVisited: req.session.user.lastVisited }
-            }
-            return { lastVisited: 1 }
+        let notifications = {}
+        try {
+            notifications.lastVisited = req.session.user.lastVisited
+        } catch (e) {
+            notifications.lastVisited = null
         }
-        return { lastVisited: null }
+        try {
+            notifications.lastRead = req.session.user.lastRead || 1
+        } catch (e) {
+            notifications.lastRead = null
+        }
+        return notifications
     },
     secretQuestion: async (_, { username }) => {
         const query = `

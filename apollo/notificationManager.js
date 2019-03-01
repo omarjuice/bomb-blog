@@ -10,8 +10,15 @@ class NotificationManager {
         this._generated = false
         this.notificationMap = {}
         this.allNotifications = []
+        this.lastRead = 0
+        this.numNotifications = 0
+    }
+    _getDate(data) {
+        return Number(data.created_at || data.followed_at || data.liked_at || data.featured_at)
     }
     store(notifications) {
+        this.lastRead = notifications.lastRead
+        console.log(this.lastRead);
         if (this.allNotifications.length < 2) {
             let combinedNotifications = []
             let { lastVisited, ...notifs } = notifications
@@ -21,9 +28,9 @@ class NotificationManager {
                 }
             }
             combinedNotifications = combinedNotifications.sort((a, b) => {
-                let aTime = a.created_at || a.liked_at || a.followed_at || a.featured_at
-                let bTime = b.created_at || b.liked_at || b.followed_at || b.featured_at
-                return Number(aTime) > Number(bTime) ? -1 : 1
+                let aTime = this._getDate(a)
+                let bTime = this._getDate(b)
+                return aTime > bTime ? -1 : 1
             })
             this.allNotifications = combinedNotifications.map(notification => this._addNotificationAndReturnKey(notification))
             this._update()
@@ -31,8 +38,9 @@ class NotificationManager {
         return this
     }
     _update() {
-        setNumNotifications(this.allNotifications.length);
-        if (this.allNotifications.length > 0) notificationAnimations.pop('#notification-icon')
+        console.log(this.numNotifications);
+        setNumNotifications(this.numNotifications);
+        if (this.numNotifications > 0) notificationAnimations.pop('#notification-icon')
     }
     _getKey({ __typename, ...data }) {
         switch (__typename) {
@@ -58,6 +66,9 @@ class NotificationManager {
         const key = this._getKey(data)
         if (!this.notificationMap[key]) {
             this.notificationMap[key] = data
+            if (this._getDate(data) > this.lastRead * 1000) {
+                this.numNotifications++
+            }
             return key
         }
         return null
@@ -65,7 +76,9 @@ class NotificationManager {
     _newNotification(data) {
         console.log(data);
         const key = this._addNotificationAndReturnKey(data)
-        if (key) { this.allNotifications = [key, ...this.allNotifications] }
+        if (key) {
+            this.allNotifications = [key, ...this.allNotifications]
+        }
         this._update()
     }
     generate(id) {

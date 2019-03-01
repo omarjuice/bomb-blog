@@ -41,6 +41,7 @@ module.exports = gql`
       deleteFollow(user_id: Int!): Boolean!
       uploadImage(image: Upload!): String
       passwordReset(id: Int, secretAnswer: String!, newPassword: String!): Boolean!
+      setLastRead(lastRead: Int!): Int
   }
   type Subscription{
       newPost(id: Int!): Post
@@ -55,6 +56,7 @@ module.exports = gql`
   
   type Notifications{
       lastVisited: Int
+      lastRead: Int
       newPosts: [Post]!
       newComments: [Comment]!
       newLikes: [NewLike]!

@@ -5,9 +5,10 @@ import { shortenNumber } from '../../utils';
 import BombSVG from '../svg/bomb';
 import Authenticated from '../auth/Authenticated';
 import SearchNav from './SearchNav';
-import { GET_SEARCH, GET_NUM_NOTIFICATIONS } from '../../apollo/queries';
-import { renderModal } from '../../apollo/clientWrites';
+import { GET_SEARCH, GET_NUM_NOTIFICATIONS, NOTIFICATIONS } from '../../apollo/queries';
+import { renderModal, setNumNotifications } from '../../apollo/clientWrites';
 import { navbarAnimations } from '../../animations';
+import { SET_LAST_READ } from '../../apollo/mutations';
 
 class Navbar extends Component {
     state = {
@@ -40,6 +41,19 @@ class Navbar extends Component {
             })
         })
     }
+    showNotifications = () => {
+        renderModal({ active: true, display: 'Notifications' })
+        setNumNotifications(0)
+        this.props.client.mutate({
+            mutation: SET_LAST_READ,
+            variables: { lastRead: Math.floor(Date.now() / 1000) },
+            update: (proxy, { data: { setLastRead } }) => {
+                const data = proxy.readQuery({ query: NOTIFICATIONS })
+                data.notifications.lastRead = setLastRead
+                proxy.writeQuery({ query: NOTIFICATIONS, data })
+            }
+        })
+    }
     render() {
         return (
             <div>
@@ -62,7 +76,7 @@ class Navbar extends Component {
                         </a>
                         <Query query={GET_NUM_NOTIFICATIONS}>
                             {({ data }) => {
-                                return <a onClick={() => renderModal({ active: true, display: 'Notifications' })} className="navbar-item has-text-centered notifs">
+                                return <a onClick={this.showNotifications} className="navbar-item has-text-centered notifs">
                                     <span id="notification-icon" className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}><i className="fas fa-globe "></i></span>
                                     <span className={`has-text-weight-bold`}>{data && data.numNotifications ? shortenNumber(data.numNotifications) : '0'}</span>
                                 </a>

@@ -597,6 +597,7 @@ export const NOTIFICATIONS = gql`
     query Notifications {
        notifications{
         lastVisited
+        lastRead
         newPosts{
             id
             title

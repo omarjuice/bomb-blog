@@ -170,3 +170,8 @@ export const PASSWORD_RESET = gql`
         passwordReset(id: $id, secretAnswer: $secretAnswer, newPassword: $newPassword)
     }
 `
+export const SET_LAST_READ = gql`
+    mutation SetLastRead($lastRead: Int!){
+        setLastRead(lastRead: $lastRead)
+    }
+`
