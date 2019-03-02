@@ -32,11 +32,11 @@ module.exports = {
             ORDER BY relevance DESC, created_at ${order}
             LIMIT ?,?
             `
-            const results = await queryDB(query, [tags, `%${search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+            const results = await queryDB(query, [tags, `%${search || ''}%`, cursor, limit], null, true).catch(() => { throw Errors.database })
             return { results, cursor: results.length < limit ? null : cursor + results.length }
         }
         const query = `SELECT id, username, email, created_at FROM users WHERE username LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
-        const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e); })
+        const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(() => { throw Errors.database })
         return { results, cursor: results.length < limit ? null : cursor + results.length }
     },
     post: async (_, args, { Loaders }) => {
@@ -68,7 +68,7 @@ module.exports = {
             ORDER BY relevance DESC, created_at ${order}
             LIMIT ?,?
             `
-            const results = await queryDB(query, [tags, exclude, `%${search || ''}%`, featured, cursor, limit], null, true).catch(e => { console.log(e) })
+            const results = await queryDB(query, [tags, exclude, `%${search || ''}%`, featured, cursor, limit], null, true).catch(() => { throw Errors.database })
             return { results, cursor: results.length < limit ? null : cursor + results.length }
         }
         const query = `
@@ -81,7 +81,7 @@ module.exports = {
         GROUP BY posts.id
         ORDER BY ${orderBy} ${order} LIMIT ?,?
         `
-        const results = await queryDB(query, [exclude, `%${input.search || ''}%`, featured, cursor, limit], null, true).catch(e => { console.log(e) })
+        const results = await queryDB(query, [exclude, `%${input.search || ''}%`, featured, cursor, limit], null, true).catch(() => { throw Errors.database })
         return { results, cursor: results.length < limit ? null : cursor + results.length }
     },
     tag: async (_, { id }, { Loaders }) => {
@@ -131,11 +131,11 @@ module.exports = {
             ORDER BY relevance DESC, created_at ${order}
             LIMIT ?,?
             `
-            const results = await queryDB(query, [tags, `%${search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+            const results = await queryDB(query, [tags, `%${search || ''}%`, cursor, limit], null, true).catch(() => { throw Errors.database })
             return { results, cursor: results.length < limit ? null : cursor + results.length }
         }
         const query = `SELECT * FROM comments WHERE comment_text LIKE ? ORDER BY ${orderBy} ${order} LIMIT ?,?`
-        const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(e => { console.log(e) })
+        const results = await queryDB(query, [`%${input.search || ''}%`, cursor, limit], null, true).catch(() => { throw Errors.database })
         return { results, cursor: results.length < limit ? null : cursor + results.length }
     },
     notifications: (_, args, { req }) => {

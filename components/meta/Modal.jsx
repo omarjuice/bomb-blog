@@ -69,9 +69,7 @@ class Modal extends Component {
                                 </header>
                                 <section className="modal-card-body has-text-centered">
                                     <Query query={NOTIFICATIONS} ssr={false}  >
-                                        {({ data, loading, error }) => {
-                                            if (error) console.log(error);
-                                            if (loading || error) return <div>loading</div>;
+                                        {({ data }) => {
                                             if (!data || !data.notifications) return <Notifications data={[]} lastVisited={null} active={display === 'Notifications'} />;
                                             if (data && data.notifications) {
                                                 this.manager.store(data.notifications)

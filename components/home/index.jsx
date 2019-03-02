@@ -28,7 +28,7 @@ class Home extends Component {
         let avgItemHeight = null
         const calcAvgItemHeight = (last, first, children) => {
             const height = (last.offsetTop - first.offsetTop) / (children.length - 2)
-            console.log('AVGHEIGHT, ', height);
+            // console.log('AVGHEIGHT, ', height);
             return height
         }
         return async ({ target: { scrollTop, lastElementChild, children, scrollHeight, clientHeight } }) => {
@@ -37,7 +37,7 @@ class Home extends Component {
                 avgItemHeight = calcAvgItemHeight(lastElementChild, document.querySelector('.recent'), children)
             }
             const bool = scrollTop > scrollHeight - (avgItemHeight * (1 + clientHeight / avgItemHeight))
-            console.log(scrollTop, scrollHeight - (avgItemHeight * (1 + clientHeight / avgItemHeight)), bool, cursor);
+            // console.log(scrollTop, scrollHeight - (avgItemHeight * (1 + clientHeight / avgItemHeight)), bool, cursor);
             if (this.state.fetching) { return }
             if (bool) {
                 this.setState({ fetching: display }, async () => {
@@ -59,7 +59,6 @@ class Home extends Component {
                         this.setState({ fetching: null })
                         avgItemHeight = null
                     } catch (e) {
-                        console.log(e)
                         this.setState({ fetching: null })
                     }
                 })
@@ -90,7 +89,7 @@ class Home extends Component {
                                 if (loading || error || !data) {
                                     return (
                                         <div className="column is-two-thirds has-text-centered load-error">
-                                            {loading && <Loading scale={5} />}
+                                            {loading && <LoadingMedia />}
                                             {error && <ErrorIcon size="5x" />}
                                         </div>
                                     )
@@ -109,7 +108,7 @@ class Home extends Component {
 
                                                     return (
                                                         <div className={`column is-two-thirds has-text-centered load-error ${this.state.active !== 'feed' && 'is-hidden-mobile'}`}>
-                                                            {loading && <Loading scale={3} />}
+                                                            {loading && <LoadingMedia />}
                                                             {error && <ErrorIcon size="5x" />}
                                                         </div>
                                                     )
@@ -149,7 +148,7 @@ class Home extends Component {
                                                         if (loading || error) {
                                                             return (
                                                                 <div className="column is-one-third has-text-centered load-error">
-                                                                    {loading && <Loading scale={3} />}
+                                                                    {loading && <LoadingMedia />}
                                                                     {error && <ErrorIcon size="5x" />}
                                                                 </div>
                                                             )
@@ -181,7 +180,7 @@ class Home extends Component {
                                             if (loading || error || !data) {
                                                 return (
                                                     <div className={`column is-two-thirds has-text-centered load-error ${this.state.active !== 'suggested' && 'is-hidden-mobile'}`}>
-                                                        {loading && <Loading scale={3} />}
+                                                        {loading && <LoadingMedia />}
                                                         {error && <ErrorIcon size="5x" />}
                                                     </div>
                                                 )

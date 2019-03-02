@@ -7,7 +7,9 @@ class GlobalStyles extends Component {
                 html{
                     background-color: #f0f0f0 !important;
                 }
-
+                .main-component{
+                    height: 100%;
+                }
                 .font-1{
                     font-family: 'Baloo Thambi', sans-serif;
                 }

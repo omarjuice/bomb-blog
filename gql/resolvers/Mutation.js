@@ -115,7 +115,6 @@ module.exports = {
         if (newPost) {
             Loaders.users.followers.load(newPost.user_id)
                 .then((followers) => {
-                    console.log(followers)
                     pubsub.publish('NEW_POST', { newPost, followers: followers.map(follower => follower.id) })
                 })
             return newPost

@@ -13,7 +13,6 @@ const update = (id, userId) => {
             proxy.writeQuery({ query: USER_POSTS, variables: { id: userId }, data })
             proxy.data.delete(`Post:${id}`)
         } catch (e) {
-            console.log(e);
         }
     }
 }

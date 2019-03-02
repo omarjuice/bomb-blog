@@ -6,11 +6,11 @@ export const svgAnimations = {
         const randomFlare = () => initialValue.split(' ').map((val, i) => i === 0 ? val : String(Math.round(Math.random()) > 0 ? Number(val) + 5 : Number(val) - 5)).join(' ')
         return anime({
             targets: element,
-            points: [{ value: initialValue }].concat(Array(25).fill('x').map(() => {
+            points: Array(25).fill('x').map(() => {
                 return {
                     value: randomFlare()
                 }
-            })),
+            }),
             easing: 'linear',
             duration: 5000,
             direction: 'alternate',

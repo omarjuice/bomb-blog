@@ -77,12 +77,12 @@ class SearchPage extends Component {
             header += ' ' + tags.map(tag => '#' + tag).join(' ')
         };
         return (
-            <div>
+            <div className="has-text-centered">
                 <div className="columns is-centered is-mobile is-multiline">
                     <Query query={gqlQueries[options]} variables={variables} ssr={false}>
                         {({ loading, error, data, client }) => {
                             if (loading) return (
-                                <div className="column is-full has-text-centered">
+                                <div className="column is-full has-text-centered loading">
                                     <Loading scale={5} />
                                 </div>
                             )
@@ -199,6 +199,10 @@ class SearchPage extends Component {
                 }
                 .tabs{
                     margin-bottom: -1.4rem
+                }
+                .loading{
+                    margin-top: 30vh;
+                    margin-left: -20vh
                 }
             
                 `}</style>
