@@ -30,7 +30,7 @@ class Login extends Component {
 
             if (!Object.values(errors).length) {
                 await login({
-                    variables: { username: this.state.username, password: this.state.password }
+                    variables: { username: this.state.username.trim(), password: this.state.password }
                 })
             }
         }

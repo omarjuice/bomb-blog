@@ -55,7 +55,7 @@ class Register extends Component {
             if (password.length > 30) {
                 errors.password = 'Password too long. Max 30 characters'
             }
-            if (/[^\w\._]|\.\.+/g.test(username)) {
+            if (/[^\w\._]|\.\.+/g.test(username.trim())) {
                 errors.username = 'Username may only contain letters, numbers, and single dots.'
             }
             if (Object.values(errors).filter(e => e).length) {
@@ -64,7 +64,7 @@ class Register extends Component {
                 })
             }
             const { data } = await register({
-                variables: { input: { username, password, email } }
+                variables: { input: { username: username.trim(), password, email } }
             })
 
             if (data.register) {
