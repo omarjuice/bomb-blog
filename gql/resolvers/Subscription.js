@@ -53,7 +53,6 @@ module.exports = {
     },
     appMessage: {
         resolve: ({ user_id, ...appMessage }) => {
-            console.log(appMessage)
             return appMessage
         },
         subscribe: withFilter(

@@ -31,7 +31,8 @@ class Likes extends Component {
                                     <h1 className="subtitle font-1">
                                         {data.user.isMe ?
                                             <>
-                                                <span>You have no likes.</span>
+                                                <span>You have no likes. </span>
+                                                <br />
                                                 <Link href="/"><a>Go show some love.</a></Link>
                                             </> : `${data.user.username} doesn't like anything...`}</h1>
                                 </div>

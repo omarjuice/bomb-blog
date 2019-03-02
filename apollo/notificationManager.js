@@ -1,5 +1,5 @@
 import { NEW_COMMENT, NEW_POST, NEW_LIKE, NEW_REPLY, NEW_COMMENT_LIKE, NEW_FOLLOWER, FEATURED_POST, APP_MESSAGE } from "./subscriptions";
-import { NOTIFICATIONS } from "./queries";
+import { NOTIFICATIONS, GET_NUM_NOTIFICATIONS } from "./queries";
 import { setNumNotifications } from "./clientWrites";
 import { notificationAnimations } from '../animations'
 class NotificationManager {
@@ -18,7 +18,7 @@ class NotificationManager {
     }
     store(notifications) {
         this.lastRead = notifications.lastRead
-        if (this.allNotifications.length < 2) {
+        if (this.allNotifications.length < 1) {
             let combinedNotifications = []
             let { lastVisited, ...notifs } = notifications
             for (let key in notifs) {
@@ -62,20 +62,17 @@ class NotificationManager {
     }
     _addNotificationAndReturnKey(data) {
         const key = this._getKey(data)
-        if (!this.notificationMap[key]) {
-            this.notificationMap[key] = data
-            if (this._getDate(data) > this.lastRead * 1000) {
+        if (this._getDate(data) > this.lastRead * 1000) {
+            if (!this.notificationMap[key]) {
+                this.notificationMap[key] = data
                 this.numNotifications++
             }
-            return key
         }
-        return null
+        return key
     }
     _newNotification(data) {
         const key = this._addNotificationAndReturnKey(data)
-        if (key) {
-            this.allNotifications = [key, ...this.allNotifications]
-        }
+        this.allNotifications = [key, ...this.allNotifications.filter(e => e !== key)]
         this._update()
     }
     generate(id) {
@@ -105,6 +102,9 @@ class NotificationManager {
             }
             this.appMessageListener = {
                 base: this.client.subscribe({ query: APP_MESSAGE, variables: { id } })
+            }
+            this.numNotificationsListener = {
+                base: this.client.watchQuery({ query: GET_NUM_NOTIFICATIONS })
             }
             this._generated = true
         }
@@ -210,6 +210,14 @@ class NotificationManager {
                     }
                 }
             })
+            this.numNotificationsListener.subscription = this.numNotificationsListener.base.subscribe({
+                next({ data: { numNotifications } }) {
+                    if (typeof numNotifications === 'number' && numNotifications !== manager.numNotifications) {
+                        manager.numNotifications = numNotifications
+                        manager._update()
+                    }
+                }
+            })
             this._subscribed = true
         }
         return this
@@ -224,6 +232,7 @@ class NotificationManager {
             this.followListener.subscription.unsubscribe()
             this.featuredListener.subscription.unsubscribe()
             this.appMessageListener.subscription.unsubscribe()
+            this.numNotificationsListener.subscription.unsubscribe()
             this._subscribed = false
         }
         return this

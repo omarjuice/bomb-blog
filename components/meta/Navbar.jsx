@@ -41,18 +41,28 @@ class Navbar extends Component {
             })
         })
     }
-    showNotifications = () => {
-        renderModal({ active: true, display: 'Notifications' })
-        setNumNotifications(0)
-        this.props.client.mutate({
-            mutation: SET_LAST_READ,
-            variables: { lastRead: Math.floor(Date.now() / 1000) },
-            update: (proxy, { data: { setLastRead } }) => {
-                const data = proxy.readQuery({ query: NOTIFICATIONS })
-                data.notifications.lastRead = setLastRead
-                proxy.writeQuery({ query: NOTIFICATIONS, data })
-            }
-        })
+    showNotifications = (data) => {
+        return () => {
+            renderModal({ active: true, display: 'Notifications' })
+            data.numNotifications = 0
+            this.props.client.writeQuery({ query: GET_NUM_NOTIFICATIONS, data })
+            this.props.client.mutate({
+                mutation: SET_LAST_READ,
+                variables: { lastRead: Math.floor(Date.now() / 1000) },
+                update: (proxy, { data: { setLastRead } }) => {
+                    {
+                        const data = proxy.readQuery({ query: NOTIFICATIONS })
+                        data.notifications.lastRead = setLastRead
+                        proxy.writeQuery({ query: NOTIFICATIONS, data })
+                    }
+                    {
+                        const data = proxy.readQuery({ query: GET_NUM_NOTIFICATIONS })
+                        data.numNotifications = 0
+                        proxy.writeQuery({ query: GET_NUM_NOTIFICATIONS, data })
+                    }
+                }
+            })
+        }
     }
     render() {
         return (
@@ -76,7 +86,7 @@ class Navbar extends Component {
                         </a>
                         <Query query={GET_NUM_NOTIFICATIONS}>
                             {({ data }) => {
-                                return <a onClick={this.showNotifications} className="navbar-item has-text-centered notifs">
+                                return <a onClick={this.showNotifications(data)} className="navbar-item has-text-centered notifs">
                                     <span id="notification-icon"
                                         className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}>
                                         <i className="fas fa-globe "></i>

@@ -55,7 +55,7 @@ class Register extends Component {
             if (password.length > 30) {
                 errors.password = 'Password too long. Max 30 characters'
             }
-            if (/[^\w\.]|\.\.+/g.test(username)) {
+            if (/[^\w\._]|\.\.+/g.test(username)) {
                 errors.username = 'Username may only contain letters, numbers, and single dots.'
             }
             if (Object.values(errors).filter(e => e).length) {
@@ -68,16 +68,6 @@ class Register extends Component {
             })
 
             if (data.register) {
-                const watchNotifications = client.watchQuery({ query: NOTIFICATIONS })
-                    .subscribe({
-                        next({ data }) {
-                            if (data.notifications.lastVisited) {
-                                data.notifications.appMessages.push({ message: `Welcome, ${username}!`, created_at: String(Date.now()), __typename: 'AppMessage' })
-                                client.writeQuery({ query: NOTIFICATIONS, data })
-                                watchNotifications.unsubscribe()
-                            }
-                        }
-                    })
                 client.mutate({ mutation: CREATE_SECRET, variables: { question, answer } })
             }
 

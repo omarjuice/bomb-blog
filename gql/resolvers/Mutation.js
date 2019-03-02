@@ -30,7 +30,7 @@ module.exports = {
     register: async (_, { input }, { req }) => {
         const { username, password, email } = input;
         if (!validator.validate(email)) throw Errors.register.invalidEmail;
-        const [user] = await queryDB(`SELECT * FROM users WHERE username= ?`, [username])
+        const [user] = await queryDB(`SELECT * FROM users WHERE username= ? OR email=?`, [username, email])
         if (!user) {
             const { insertId } = await queryDB(`INSERT INTO users (username, email, pswd) VALUES ?`,
                 [[[username, email, password]]], hashUser)
@@ -42,6 +42,9 @@ module.exports = {
             req.session.user.lastVisited = 1;
             req.session.user.loginTime = Math.floor(Date.now() / 1000)
             req.session.user.visited = req.session.user.loginTime
+            setTimeout(() => {
+                pubsub.publish('APP_MESSAGE', { user_id: insertId, message: `Welcome, ${username}!`, created_at: String(Date.now()) })
+            }, 1000)
             return insertId
         }
         throw Errors.register.alreadyExists

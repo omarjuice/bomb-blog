@@ -225,7 +225,7 @@ class Home extends Component {
                 </div>
                 <style jsx>{`
                     .recent{
-                        height: 85vh;
+                        height: 80vh;
                         overflow: scroll;
                         background-color: #f9f9f9;
                         padding: 1rem;
