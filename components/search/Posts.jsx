@@ -48,7 +48,6 @@ class Posts extends Component {
                                             </a>
                                         ))}
                                         <br />
-
                                         <nav className="level is-mobile">
                                             <div className="level-left">
                                                 <a className="level-item  has-text-primary has-text-weight-bold"
@@ -56,10 +55,12 @@ class Posts extends Component {
                                                     <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                     {likes}
                                                 </a>
-                                                <a className="level-item has-text-weight-bold has-text-grey">
-                                                    <span className="icon "><i className="fas fa-comments"></i> </span>
-                                                    {comments}
-                                                </a>
+                                                <LinkWrap post={{ id, title }} comments={true}>
+                                                    <a className="level-item has-text-weight-bold has-text-grey">
+                                                        <span className="icon "><i className="fas fa-comments"></i> </span>
+                                                        {comments}
+                                                    </a>
+                                                </LinkWrap>
                                                 <span className="level-item">{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
                                             </div>
                                         </nav>

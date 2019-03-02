@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { renderModal } from '../../apollo/clientWrites';
 class LinkWrap extends Component {
     render() {
-        const { profile, post, href, toggleModal } = this.props
+        const { profile, post, href, toggleModal, comments } = this.props
         const children = toggleModal ?
             <a onClick={() => renderModal({ active: false })} >
                 {this.props.children}
@@ -19,11 +19,18 @@ class LinkWrap extends Component {
                 {children}
             </Link>
         )
-        if (post) return (
-            <Link as={`/posts/${post.title.replace(/\s/g, '-')}?id=${post.id}`} href={{ pathname: '/posts', query: { id: post.id } }}>
-                {children}
-            </Link>
-        )
+
+
+        if (post) {
+            let query = {}
+            query.id = post.id
+            if (comments) query.comments = true
+            return (
+                <Link as={`/posts/${post.title.replace(/\s/g, '-')}?id=${post.id}${comments ? '&comments=true' : ''}`} href={{ pathname: '/posts', query }}>
+                    {children}
+                </Link>
+            )
+        }
     }
 }
 

@@ -42,7 +42,7 @@ class Likes extends Component {
                         return (
                             <div className="columns is-centered is-mobile">
                                 <div className="column is-full-mobile is-four-fifths-tablet is-8-desktop">
-                                    {data.user.likedPosts.map(({ id, title, author, caption, numLikes, numComments, created_at, iLike }) => {
+                                    {data.user.likedPosts.map(({ id, title, author, caption, numLikes, numComments, created_at, iLike, image }) => {
                                         const likes = shortenNumber(numLikes)
                                         const comments = shortenNumber(numComments)
                                         const likesMargin = String(likes.length * .25) + 'rem'
@@ -67,6 +67,7 @@ class Likes extends Component {
                                                                 </a>
                                                             </LinkWrap>
                                                             <br />
+
                                                             <nav className="level is-mobile">
                                                                 <div className="level-left">
                                                                     <a className="level-item  has-text-primary has-text-weight-bold"
@@ -74,10 +75,12 @@ class Likes extends Component {
                                                                         <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                                         {likes}
                                                                     </a>
-                                                                    <a className="level-item has-text-weight-bold has-text-grey">
-                                                                        <span className="icon "><i className="fas fa-comments"></i> </span>
-                                                                        {comments}
-                                                                    </a>
+                                                                    <LinkWrap post={{ id, title }} comments={true}>
+                                                                        <a className="level-item has-text-weight-bold has-text-grey">
+                                                                            <span className="icon "><i className="fas fa-comments"></i> </span>
+                                                                            {comments}
+                                                                        </a>
+                                                                    </LinkWrap>
                                                                     <span className="level-item">{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
                                                                 </div>
                                                             </nav>

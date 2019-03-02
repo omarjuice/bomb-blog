@@ -25,9 +25,7 @@ class Featured extends Component {
                         <p>
                             <LinkWrap profile={post.author}>
                                 <a >
-                                    <i>
-                                        {post.author.username}
-                                    </i>
+                                    {post.author.username}
                                 </a>
                             </LinkWrap>
                             <br />
@@ -44,7 +42,11 @@ class Featured extends Component {
         return (
             <>
                 {post.tags.slice(0, 10).map((tag, i) => (
-                    <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-dark'}`}>{tag.tag_name}</a>
+                    <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })}
+                        key={tag.id}
+                        className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-dark'}`}>
+                        {tag.tag_name}
+                    </a>
                 ))}
                 {post.tags.length > 10 ? <div className="tag">...</div> : ''}
             </>
@@ -54,10 +56,22 @@ class Featured extends Component {
         return (
             <div className="columns is-mobile is-multiline stats">
                 <div className="column is-narrow is-paddingless">
-                    <a onClick={() => renderModal({ active: true, display: 'Likers', info: { type: 'post', id: post.id } })} className="has-text-weight-bold has-text-primary"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-bomb ${size === 'large' ? 'fa-2x' : ''}`}></i></span><span className="stat-num">{shortenNumber(post.numLikes)}</span></a>
+                    <a onClick={() => renderModal({ active: true, display: 'Likers', info: { type: 'post', id: post.id } })}
+                        className="has-text-weight-bold has-text-primary">
+                        <span className={`icon ${size === 'large' ? 'is-large' : ''}`}>
+                            <i className={`fas fa-bomb ${size === 'large' ? 'fa-2x' : ''}`}></i>
+                        </span><span className="stat-num">{shortenNumber(post.numLikes)}</span>
+                    </a>
                 </div>
                 <div className="column is-narrow is-paddingless">
-                    <p className="has-text-weight-bold has-text-grey"><span className={`icon ${size === 'large' ? 'is-large' : ''}`}><i className={`fas fa-comment ${size === 'large' ? 'fa-2x' : ''}`}></i></span><span className="stat-num">{shortenNumber(post.numComments)}</span></p>
+                    <LinkWrap post={post} comments={true}>
+                        <a className="has-text-weight-bold has-text-grey">
+                            <span className={`icon ${size === 'large' ? 'is-large' : ''}`}>
+                                <i className={`fas fa-comment ${size === 'large' ? 'fa-2x' : ''}`}></i>
+                            </span>
+                            <span className="stat-num">{shortenNumber(post.numComments)}</span>
+                        </a>
+                    </LinkWrap>
                     <FeaturePost featured={post.featured} id={post.id} />
                 </div>
             </div>

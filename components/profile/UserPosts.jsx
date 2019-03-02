@@ -36,8 +36,8 @@ class UserPosts extends Component {
                         const isMe = data.user.isMe || this.props.isMe
                         return (
                             <div className="columns is-centered is-mobile">
-                                <div className="column is-full-mobile is-four-fifths-tablet is-8-desktop">
-                                    {data.user.posts.map(({ id, title, created_at, last_updated, numLikes, numComments, caption, iLike }) => {
+                                <div className="column is-full-mobile is-10-desktop">
+                                    {data.user.posts.map(({ id, title, created_at, last_updated, numLikes, numComments, caption, iLike, image }) => {
                                         const likes = shortenNumber(numLikes)
                                         const comments = shortenNumber(numComments)
                                         const likesMargin = String(likes.length * .25) + 'rem'
@@ -57,6 +57,14 @@ class UserPosts extends Component {
                                                             <br />
                                                             {caption}
                                                             <br />
+                                                            {image ?
+                                                                <div className="columns is-centered is-mobile">
+                                                                    <div className="column is-full-mobile is-four-fifths-tablet is-two-thirds-desktop">
+                                                                        <figure className="image is-256x256">
+                                                                            <img src={image} alt="" />
+                                                                        </figure>
+                                                                    </div>
+                                                                </div> : ''}
                                                             <nav className="level is-mobile">
                                                                 <div className="level-left">
                                                                     <a className="level-item  has-text-primary has-text-weight-bold"
@@ -64,10 +72,12 @@ class UserPosts extends Component {
                                                                         <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                                         {likes}
                                                                     </a>
-                                                                    <a className="level-item has-text-weight-bold has-text-grey">
-                                                                        <span className="icon "><i className="fas fa-comments"></i> </span>
-                                                                        {comments}
-                                                                    </a>
+                                                                    <LinkWrap post={{ id, title }} comments={true}>
+                                                                        <a className="level-item has-text-weight-bold has-text-grey">
+                                                                            <span className="icon "><i className="fas fa-comments"></i> </span>
+                                                                            {comments}
+                                                                        </a>
+                                                                    </LinkWrap>
                                                                     <span className="level-item">{moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</span>
                                                                 </div>
                                                             </nav>
@@ -98,6 +108,10 @@ class UserPosts extends Component {
                                                     small a:nth-of-type(2){
                                                         margin-left: ${commentsMargin};
                                                         margin-right: ${timeMargin}
+                                                    }
+                                                    .image.is-4by3{
+                                                        max-height: 8rem !important;
+                                                        
                                                     }
                                                 `}</style>
                                             </article>

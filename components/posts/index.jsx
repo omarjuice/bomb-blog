@@ -21,7 +21,7 @@ marked.setOptions({
 
 class PostPage extends Component {
     state = {
-        comments: false
+        comments: this.props.comments
     }
     toggleComments = () => {
         this.setState({
@@ -32,6 +32,12 @@ class PostPage extends Component {
             }
         })
 
+    }
+    componentDidMount() {
+        console.log(this.state.comments);
+        if (this.state.comments) {
+            document.getElementById('comments').scrollIntoView()
+        }
     }
     render() {
         if (!this.props.post) return <div>DELETED</div>
