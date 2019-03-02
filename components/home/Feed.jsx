@@ -18,7 +18,6 @@ class Feed extends Component {
                             <div className="media-content">
                                 <div className="content">
                                     <div>
-
                                         <LinkWrap post={{ id, title }}><a className="has-text-dark"><strong className="font-1">{title} </strong></a></LinkWrap>
                                         <br />
                                         {caption}

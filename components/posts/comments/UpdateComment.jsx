@@ -45,12 +45,14 @@ class UpdateComment extends Component {
                         <form action="" className="form" onSubmit={!loading && !error ? this.onSubmit(updateComment) : undefined}>
                             <div className="field">
                                 <p className="control">
-                                    <textarea onChange={e => this.setState({ input: e.target.value })} value={this.state.input} className="textarea" rows="2"></textarea>
+                                    <textarea onChange={e => this.setState({ input: e.target.value })}
+                                        value={this.state.input} className="textarea" rows="2"></textarea>
                                 </p>
                             </div>
                             <div className="field">
                                 <p className="control">
-                                    <textarea onChange={e => this.setState({ tagsText: e.target.value })} value={this.state.tagsText} className="textarea" rows="1"></textarea>
+                                    <textarea onChange={e => this.setState({ tagsText: e.target.value })}
+                                        value={this.state.tagsText} className="textarea" rows="1"></textarea>
                                 </p>
                             </div>
                             <div className="field is-grouped">

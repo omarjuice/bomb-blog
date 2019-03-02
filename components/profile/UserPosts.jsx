@@ -59,7 +59,8 @@ class UserPosts extends Component {
                                                             <br />
                                                             <nav className="level is-mobile">
                                                                 <div className="level-left">
-                                                                    <a className="level-item  has-text-primary has-text-weight-bold" onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                                    <a className="level-item  has-text-primary has-text-weight-bold"
+                                                                        onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
                                                                         <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                                         {likes}
                                                                     </a>
@@ -75,10 +76,15 @@ class UserPosts extends Component {
                                                 </div>
                                                 <div className="media-right columns is-multiline is-mobile is-centered">
                                                     <div className="column is-half has-text-centered">
-                                                        {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> : <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
+                                                        {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> :
+                                                            <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
                                                     </div>
                                                     {isMe ? <div className="column is-half has-text-centered edit">
-                                                        <Link href={{ pathname: '/posts/edit', query: { id } }}><button className="button is-success"><span className="icon"><i className="fas fa-pen"></i></span></button></Link>
+                                                        <Link href={{ pathname: '/posts/edit', query: { id } }}>
+                                                            <button className="button is-success">
+                                                                <span className="icon"><i className="fas fa-pen"></i></span>
+                                                            </button>
+                                                        </Link>
                                                     </div> : ''}
 
                                                 </div>

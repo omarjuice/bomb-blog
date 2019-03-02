@@ -3,7 +3,6 @@ import { Query } from 'react-apollo';
 import Link from 'next/link';
 import moment from 'moment'
 import { shortenNumber } from '../../utils';
-import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import UnlikePost from '../posts/UnlikePost';
 import LikePost from '../posts/LikePost';
@@ -29,7 +28,12 @@ class Likes extends Component {
                                 <div>
                                     <span className="icon has-text-primary"><i className="far fa-5x fa-heart"></i></span>
                                     <hr />
-                                    <h1 className="subtitle font-1">{data.user.isMe ? <><span>You have no likes.</span> <Link href="/"><a>Go show some love.</a></Link> </> : `${data.user.username} doesn't like anything...`}</h1>
+                                    <h1 className="subtitle font-1">
+                                        {data.user.isMe ?
+                                            <>
+                                                <span>You have no likes.</span>
+                                                <Link href="/"><a>Go show some love.</a></Link>
+                                            </> : `${data.user.username} doesn't like anything...`}</h1>
                                 </div>
                             )
                         }
@@ -64,7 +68,8 @@ class Likes extends Component {
                                                             <br />
                                                             <nav className="level is-mobile">
                                                                 <div className="level-left">
-                                                                    <a className="level-item  has-text-primary has-text-weight-bold" onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                                    <a className="level-item  has-text-primary has-text-weight-bold"
+                                                                        onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
                                                                         <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                                         {likes}
                                                                     </a>
@@ -80,7 +85,8 @@ class Likes extends Component {
                                                 </div>
                                                 <div className="media-right columns is-multiline is-mobile is-centered">
                                                     <div className="column is-half has-text-centered">
-                                                        {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> : <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
+                                                        {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> :
+                                                            <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
                                                     </div>
                                                 </div>
                                                 <style jsx>{`

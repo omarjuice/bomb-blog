@@ -33,7 +33,9 @@ class FollowPanel extends Component {
                                 <div>
                                     <BombSVG scale={.5} face={{ happy: false }} />
                                     <hr />
-                                    <h1 className="subtitle is-4 font-1">{data.user.isMe ? `You ${display === 'following' ? 'are not following anyone.' : 'have no followers'}` : `${data.user.username} has no ${display}.`}</h1>
+                                    <h1 className="subtitle is-4 font-1">
+                                        {data.user.isMe ? `You ${display === 'following' ? 'are not following anyone.' : 'have no followers'}` : `${data.user.username} has no ${display}.`}
+                                    </h1>
                                     <style jsx>{`
                                         .icon{
                                             margin-top: 10px

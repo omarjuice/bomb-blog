@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { setSearch } from '../apollo/clientWrites';
 import Home from '../components/home';
-import { SEARCH_POSTS, TRENDING } from '../apollo/queries';
+import { TRENDING } from '../apollo/queries';
 class Index extends Component {
     static async getInitialProps({ apolloClient }) {
         setSearch({ active: false })

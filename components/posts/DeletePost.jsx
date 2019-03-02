@@ -47,7 +47,11 @@ class DeletePost extends Component {
             <Mutation mutation={DELETE_POST} update={update(this.props.id, this.props.userId)}>
                 {(deletePost, { client }) => {
                     return (
-                        <button onClick={this.handleClick(deletePost, client)} className="button is-warning is-large"><span className="icon"><i className="fas fa-trash-alt"></i></span></button>
+                        <button onClick={this.handleClick(deletePost, client)}
+                            className="button is-warning is-large"><span className="icon">
+                                <i className="fas fa-trash-alt"></i>
+                            </span>
+                        </button>
                     )
                 }}
             </Mutation>

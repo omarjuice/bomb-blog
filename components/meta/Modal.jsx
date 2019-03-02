@@ -75,7 +75,10 @@ class Modal extends Component {
                                             if (!data || !data.notifications) return <Notifications data={[]} lastVisited={null} active={display === 'Notifications'} />;
                                             if (data && data.notifications) {
                                                 this.manager.store(data.notifications)
-                                                return <Notifications data={this.manager.allNotifications} notificationMap={this.manager.notificationMap} lastVisited={data.notifications.lastVisited} active={display === 'Notifications'} />
+                                                return <Notifications data={this.manager.allNotifications}
+                                                    notificationMap={this.manager.notificationMap}
+                                                    lastVisited={data.notifications.lastVisited}
+                                                    active={display === 'Notifications'} />
                                             }
                                             return <div></div>
                                         }}

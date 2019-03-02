@@ -35,7 +35,14 @@ module.exports = {
         return keys.map(key => commentNumLikes[key] ? commentNumLikes[key] : 0)
     },
     batchCommentReplies: async keys => {
-        const commentReplies = await queryDB(`SELECT * FROM replies WHERE comment_id IN (?) ORDER BY created_at DESC`, [keys], null, bool)
+        const commentReplies =
+            await queryDB(
+                `SELECT 
+                * 
+            FROM replies 
+            WHERE comment_id IN (?) 
+            ORDER BY created_at DESC
+            `, [keys], null, bool)
         const CommentReplies = commentReplies.reduce((acc, reply) => {
             if (!reply) return acc;
             if (!acc[reply.comment_id]) {

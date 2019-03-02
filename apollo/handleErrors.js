@@ -1,4 +1,3 @@
-
 export const handleErrors = (cache, { graphQLErrors, networkError, operation: { operationName } }) => {
     if (graphQLErrors) {
         const [{ extensions: { code }, message }] = graphQLErrors;

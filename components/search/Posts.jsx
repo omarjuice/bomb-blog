@@ -42,13 +42,17 @@ class Posts extends Component {
                                         </LinkWrap>
                                         <br />
                                         {tags.map((tag, i) => (
-                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
+                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id}
+                                                className={`tag font-1 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>
+                                                {tag.tag_name}
+                                            </a>
                                         ))}
                                         <br />
 
                                         <nav className="level is-mobile">
                                             <div className="level-left">
-                                                <a className="level-item  has-text-primary has-text-weight-bold" onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                <a className="level-item  has-text-primary has-text-weight-bold"
+                                                    onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
                                                     <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                     {likes}
                                                 </a>

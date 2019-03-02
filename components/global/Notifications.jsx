@@ -36,9 +36,7 @@ class Notifications extends Component {
                                     {tags && tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag font-1'}>{tag.tag_name}</span>)}
                                 </p>
                             </div>
-
                             <br />
-
                         </div>
                     </div>
                     <nav className="level is-mobile">
@@ -80,9 +78,7 @@ class Notifications extends Component {
                             </LinkWrap>
                             {caption}
                             <br />
-
                             {tags.map((tag, i) => <span key={tag.id} className={i % 2 === 0 ? 'tag is-primary font-1' : 'tag is-dark font-1'}>{tag.tag_name}</span>)}
-
                         </div>
                     </div>
                     <nav className="level is-mobile">

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import User from './User';
-import { LOGOUT } from '../../apollo/mutations';
+import { LOGOUT, authRefetch } from '../../apollo/mutations';
 import { setNumNotifications } from '../../apollo/clientWrites';
 
 
 class Logout extends Component {
     render() {
         return (
-            <Mutation mutation={LOGOUT} refetchQueries={[`Authenticated`, `User`, `UserProfile`, `Post`, `Comments`, `UserPhoto`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `CurrentUser`, `Notifications`, `IsAdmin`]}>
+            <Mutation mutation={LOGOUT} refetchQueries={authRefetch}>
                 {(logout, { loading, error, data, client }) => {
                     if (loading) return null
                     if (!data) return (

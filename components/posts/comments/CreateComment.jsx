@@ -70,12 +70,18 @@ class CreateComment extends Component {
                                         <form action="" className="form" onSubmit={!loading && !error ? this.onSubmit(createComment) : undefined}>
                                             <div className="field">
                                                 <p className="control">
-                                                    <textarea onChange={e => this.setState({ input: e.target.value, error: false })} value={this.state.input} className={`textarea ${this.state.error ? 'is-primary' : ''}`} rows="2" placeholder="Add a comment..."></textarea>
+                                                    <textarea onChange={e => this.setState({ input: e.target.value, error: false })}
+                                                        value={this.state.input}
+                                                        className={`textarea ${this.state.error ? 'is-primary' : ''}`} rows="2" placeholder="Add a comment...">
+                                                    </textarea>
                                                 </p>
                                             </div>
                                             <div className="field">
                                                 <p className="control">
-                                                    <textarea onChange={e => this.setState({ tagsText: e.target.value })} value={this.state.tagsText} className="textarea" rows="1" placeholder="#Add #tags #to #your #comment"></textarea>
+                                                    <textarea onChange={e => this.setState({ tagsText: e.target.value })}
+                                                        value={this.state.tagsText} className="textarea" rows="1"
+                                                        placeholder="#Add #tags #to #your #comment">
+                                                    </textarea>
                                                 </p>
                                             </div>
                                             <div className="field">

@@ -5,6 +5,10 @@ import Loading from '../meta/Loading';
 import { AUTHENTICATED } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 class Authenticated extends Component {
+    openModal = (display) => {
+        return () => renderModal({ display, message: '', active: true })
+        this.props.deactivateMenu()
+    }
     render() {
         return (
             <Query query={AUTHENTICATED} ssr={false} >
@@ -12,12 +16,12 @@ class Authenticated extends Component {
                     if (loading) return null
                     return data && data.authenticated ? <Logout deactivateMenu={this.props.deactivateMenu} /> : <>
                         <div className="navbar-item has-text-centered">
-                            <a className="button is-ligh font-1 " onClick={() => { renderModal({ display: 'Register', message: '', active: true }); this.props.deactivateMenu() }}>
+                            <a className="button is-ligh font-1 " onClick={this.openModal('Register')}>
                                 <strong>Sign up</strong>
                             </a>
                         </div>
                         <div className="navbar-item has-text-centered">
-                            <a className="button is-white font-1 " onClick={() => { renderModal({ display: 'Login', message: '', active: true }); this.props.deactivateMenu() }}>
+                            <a className="button is-white font-1 " onClick={this.openModal('Login')}>
                                 <strong>Log in</strong>
                             </a>
                         </div>

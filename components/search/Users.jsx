@@ -34,7 +34,8 @@ class Users extends Component {
                                     {profile.about}
                                     <br />
                                     {tags.map((tag, i) => (
-                                        <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
+                                        <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id}
+                                            className={`tag font-1 ${this.props.inputTags.includes(tag.tag_name) ? 'is-primary' : ''}`}>{tag.tag_name}</a>
                                     ))}
                                     <br />
                                     <small>Since {moment.utc(Number(created_at)).local().format('MMMM Do YYYY')}</small>

@@ -77,13 +77,18 @@ class Navbar extends Component {
                         <Query query={GET_NUM_NOTIFICATIONS}>
                             {({ data }) => {
                                 return <a onClick={this.showNotifications} className="navbar-item has-text-centered notifs">
-                                    <span id="notification-icon" className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}><i className="fas fa-globe "></i></span>
+                                    <span id="notification-icon"
+                                        className={`icon is-large ${data && data.numNotifications > 0 ? 'has-text-info' : ''}`}>
+                                        <i className="fas fa-globe "></i>
+                                    </span>
                                     <span className={`has-text-weight-bold`}>{data && data.numNotifications ? shortenNumber(data.numNotifications) : '0'}</span>
                                 </a>
                             }}
                         </Query>
 
-                        <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`} onClick={() => this.setState({ menu: !this.state.menu, searchNav: !this.state.menu ? false : this.state.searchNav })} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                        <a role="button" className={`navbar-burger burger ${this.state.menu && 'is-active'}`}
+                            onClick={() => this.setState({ menu: !this.state.menu, searchNav: !this.state.menu ? false : this.state.searchNav })}
+                            aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>

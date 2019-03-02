@@ -8,8 +8,6 @@ class Header extends Component {
     state = {
         menu: false
     }
-
-
     render() {
         return (
             <div>

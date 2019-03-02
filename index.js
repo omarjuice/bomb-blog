@@ -22,7 +22,6 @@ const nextApp = next({ dev, dir: __dirname })
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 const apollo = new ApolloServer({
     schema, context: ctx => {
-        let user, id, operationName, variables, lastVisited, visited;
         if (dev) {
             require('./file').printContext(ctx)
         }

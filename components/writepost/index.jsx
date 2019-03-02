@@ -209,23 +209,42 @@ class WritePost extends Component {
                             <div className="field has-text-centered">
                                 <label className="label">Title</label>
                                 <div className="control">
-                                    <input onChange={e => this.setState({ title: e.target.value, head: true, errors: { ...this.state.errors, title: null } })} value={this.state.title} className={`input ${this.state.errors.title ? 'is-primary' : ''}`} type="text" placeholder="Title" />
+                                    <input onChange={e => this.setState({ title: e.target.value, head: true, errors: { ...this.state.errors, title: null } })}
+                                        value={this.state.title}
+                                        className={`input ${this.state.errors.title ? 'is-primary' : ''}`}
+                                        type="text"
+                                        placeholder="Title" />
                                 </div>
-                                <p className={`help ${this.state.title.length < 1 || this.state.title.length > 255 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.title.length}</span><span>{this.state.errors.title}</span></p>
+                                <p className={`help ${this.state.title.length < 1 || this.state.title.length > 255 ? 'is-primary' : ''}`}>
+                                    <span className="is-pulled-left">{this.state.title.length}</span>
+                                    <span>{this.state.errors.title}</span>
+                                </p>
                             </div>
                             <div className="field has-text-centered">
                                 <label className="label">Caption</label>
                                 <div className="control">
-                                    <input onChange={e => this.setState({ caption: e.target.value, head: true, errors: { ...this.state.errors, caption: null } })} value={this.state.caption} className={`input ${this.state.errors.caption ? 'is-primary' : ''}`} type="text" placeholder="Caption" />
+                                    <input onChange={e => this.setState({ caption: e.target.value, head: true, errors: { ...this.state.errors, caption: null } })}
+                                        value={this.state.caption} className={`input ${this.state.errors.caption ? 'is-primary' : ''}`}
+                                        type="text"
+                                        placeholder="Caption" />
                                 </div>
-                                <p className={`help ${this.state.caption.length < 1 || this.state.caption.length > 400 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.caption.length}</span><span>{this.state.errors.caption}</span></p>
+                                <p className={`help ${this.state.caption.length < 1 || this.state.caption.length > 400 ? 'is-primary' : ''}`}>
+                                    <span className="is-pulled-left">{this.state.caption.length}</span>
+                                    <span>{this.state.errors.caption}</span>
+                                </p>
                             </div>
                             <div className="field has-text-centered">
                                 <label className="label">Tags</label>
                                 <div className="control">
-                                    <input onChange={e => { this.setState({ tags: e.target.value, head: true, errors: { ...this.state.errors, tags: null } }) }} value={this.state.tags} className={`input ${this.state.errors.tags ? 'is-primary' : ''}`} type="text" placeholder="#tags" />
+                                    <input onChange={e => { this.setState({ tags: e.target.value, head: true, errors: { ...this.state.errors, tags: null } }) }}
+                                        value={this.state.tags} className={`input ${this.state.errors.tags ? 'is-primary' : ''}`}
+                                        type="text"
+                                        placeholder="#tags" />
                                 </div>
-                                <p className={`help ${tags.length < 1 || this.state.tags.length < 1 || tags.length > 20 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.tags.length < 1 ? 0 : tags.length}</span><span>{this.state.errors.tags}</span></p>
+                                <p className={`help ${tags.length < 1 || this.state.tags.length < 1 || tags.length > 20 ? 'is-primary' : ''}`}>
+                                    <span className="is-pulled-left">{this.state.tags.length < 1 ? 0 : tags.length}</span>
+                                    <span>{this.state.errors.tags}</span>
+                                </p>
                             </div>
 
                             <div className="field has-text-centered">
@@ -273,9 +292,14 @@ class WritePost extends Component {
                                                 </label>
                                             </div>
                                         </> :
-                                        <input onChange={e => { this.setState({ image: e.target.value, head: true, errors: { ...this.state.errors, image: null } }) }} value={this.state.image} className={`input ${this.state.errors.image ? 'is-primary' : ''}`} type="text" placeholder="Image Link" />}
+                                        <input onChange={e => { this.setState({ image: e.target.value, head: true, errors: { ...this.state.errors, image: null } }) }}
+                                            value={this.state.image} className={`input ${this.state.errors.image ? 'is-primary' : ''}`}
+                                            type="text" placeholder="Image Link" />}
                                 </div>
-                                <p className={`help ${!this.state.imageType && this.state.image.length > 255 ? 'is-primary' : ''}`}><span className="is-pulled-left">{!this.state.imageType && this.state.image.length}</span><span>{this.state.errors.image}</span></p>
+                                <p className={`help ${!this.state.imageType && this.state.image.length > 255 ? 'is-primary' : ''}`}>
+                                    <span className="is-pulled-left">{!this.state.imageType && this.state.image.length}</span>
+                                    <span>{this.state.errors.image}</span>
+                                </p>
                             </div>
                             <div className="card has-text-centered">
                                 <ToolBar modifyText={this.modifyText.bind('this')} />
@@ -284,11 +308,16 @@ class WritePost extends Component {
                                         <textarea onSelect={e => this.scrollmarkdown(e.target.selectionStart || 0)}
                                             onChange={(e) => this.setState({ body: e.target.value, errors: { ...this.state.errors, body: null } })} value={this.state.body}
                                             onKeyDown={e => { if (e.keyCode === 9) { this.modifyText('tab')(e) } }}
-                                            className={`textarea ${this.state.errors.body ? 'is-primary' : ''}`} type="text" placeholder="Post text goes here" />
+                                            className={`textarea ${this.state.errors.body ? 'is-primary' : ''}`}
+                                            type="text"
+                                            placeholder="Post text goes here" />
                                     </div>
                                 </div>
                             </div>
-                            <p className={`help ${this.state.body.length < 100 || this.state.body.length > 200000 ? 'is-primary' : ''}`}><span className="is-pulled-left">{this.state.body.length}</span><span>{this.state.errors.body}</span></p>
+                            <p className={`help ${this.state.body.length < 100 || this.state.body.length > 200000 ? 'is-primary' : ''}`}>
+                                <span className="is-pulled-left">{this.state.body.length}</span>
+                                <span>{this.state.errors.body}</span>
+                            </p>
                             <div className="field submit">
                                 <div className="control">
                                     <button type="submit" className="button is-success is-large font-1">Submit</button>
@@ -297,7 +326,10 @@ class WritePost extends Component {
                         </form>
                     </div>
                     <Preview body={this.state.body || '# post-body'} preview={this.state.preview} >
-                        <PostHead title={this.state.title || 'Title of Post'} caption={this.state.caption || 'I am the bomb'} tags={tags} image={this.state.imageType && this.state.upload.file ? URL.createObjectURL(this.state.upload.file) : this.state.image} />
+                        <PostHead title={this.state.title || 'Title of Post'}
+                            caption={this.state.caption || 'I am the bomb'}
+                            tags={tags}
+                            image={this.state.imageType && this.state.upload.file ? URL.createObjectURL(this.state.upload.file) : this.state.image} />
                     </Preview>
                     <div className="control preview has-text-centered is-hidden-desktop">
                         <a onClick={() => this.setState({ preview: !this.state.preview })} className="button is-large is-primary is-rounded font-1">

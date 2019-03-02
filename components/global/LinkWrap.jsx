@@ -4,9 +4,11 @@ import { renderModal } from '../../apollo/clientWrites';
 class LinkWrap extends Component {
     render() {
         const { profile, post, href, toggleModal } = this.props
-        const children = toggleModal ? <a onClick={() => renderModal({ active: false })} >
-            {this.props.children}
-        </a> : this.props.children
+        const children = toggleModal ?
+            <a onClick={() => renderModal({ active: false })} >
+                {this.props.children}
+            </a> :
+            this.props.children
         if (href) return (
             <Link href={href}>
                 {children}

@@ -31,7 +31,8 @@ class Recent extends Component {
                                         </LinkWrap>
                                         <br />
                                         {this.props.showTags && tags.slice(0, 8).map((tag, i) => (
-                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-dark'}`}>{tag.tag_name}</a>
+                                            <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id}
+                                                className={`tag font-1 ${i % 2 === 0 ? 'is-primary' : 'is-dark'}`}>{tag.tag_name}</a>
                                         ))}
                                         {
                                             this.props.showTags && tags.length > 7 ? <span className="tag">...</span> : ''
@@ -40,7 +41,8 @@ class Recent extends Component {
 
                                         <nav className="level is-mobile">
                                             <div className="level-left">
-                                                <a className="level-item  has-text-primary has-text-weight-bold" onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
+                                                <a className="level-item  has-text-primary has-text-weight-bold"
+                                                    onClick={() => renderModal({ display: 'Likers', message: 'Users who like this', active: true, info: { type: 'post', id } })}>
                                                     <span className="icon"><i className="fas fa-bomb"></i> </span>
                                                     {likes}
                                                 </a>
@@ -66,8 +68,6 @@ class Recent extends Component {
                                     <img src={image} alt="image" />
                                 </p> : ''}
                             </div>
-
-
                         </article>
                     )
                 })}

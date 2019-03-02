@@ -35,7 +35,9 @@ class SearchNav extends Component {
                             <div className="field has-addons has-addons-right">
                                 <p className="control">
                                     <span className="select">
-                                        <select name="options" onChange={(e) => this.setState({ options: e.target.value })} value={this.state.options}>
+                                        <select name="options"
+                                            onChange={(e) => this.setState({ options: e.target.value })}
+                                            value={this.state.options}>
                                             <option>all</option>
                                             <option>users</option>
                                             <option>posts</option>
@@ -45,13 +47,13 @@ class SearchNav extends Component {
                                     </span>
                                 </p>
                                 <p className="control">
-                                    <input className="input" name="input" type="text" placeholder="Search or #tags" onChange={e => this.setState({ input: e.target.value })} value={this.state.input} />
+                                    <input className="input" name="input" type="text" placeholder="Search or #tags"
+                                        onChange={e => this.setState({ input: e.target.value })} value={this.state.input} />
                                 </p>
                                 <p className="control">
                                     <button type="submit" className="button is-dark font-1">
                                         <i className="fas fa-search"></i>
                                     </button >
-
                                 </p>
                             </div>
                         </form>

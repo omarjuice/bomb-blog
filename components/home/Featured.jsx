@@ -75,8 +75,6 @@ class Featured extends Component {
             </LinkWrap>
         )
     }
-
-
     render() {
         const { posts } = this.props
         return (<div>
@@ -282,11 +280,9 @@ class Featured extends Component {
                 .media .media-content .content{
                     word-break: break-all
                 }
-
                 .subtitle{
                     margin: 1rem auto
                 }
-   
                 article.tile{
                     padding: 1rem;
                     background-color: #F9F9F9;

@@ -38,7 +38,10 @@ class New extends Component {
                             } else {
                                 imagePath = image
                             }
-                            const { data } = await client.mutate({ mutation: CREATE_POST, variables: { input: { title, caption, tags: insertTags, post_content: body, image: imagePath } } })
+                            const { data } = await client.mutate({
+                                mutation: CREATE_POST,
+                                variables: { input: { title, caption, tags: insertTags, post_content: body, image: imagePath } }
+                            })
                             if (data.createPost) {
                                 page.waitForConfirmation.unsubscribe()
                                 hideModal()

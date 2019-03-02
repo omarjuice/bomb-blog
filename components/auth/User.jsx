@@ -25,13 +25,10 @@ class User extends Component {
                                 <img src={data.user.profile.photo_path || '/static/user_image.png'} alt="" />
                             </div>
                             <div className="has-text-centered">
-
                                 <LinkWrap profile={data.user}>
-
                                     <a onClick={this.props.deactivateMenu} id="greeting" className="has-text-light font-1 has-text-centered">
                                         <p><strong>{(loading && <Loading style="margin" size="2x" />) || data.user.username}</strong></p>
                                     </a>
-
                                 </LinkWrap>
                                 <style jsx>{`
                                 p{

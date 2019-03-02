@@ -175,3 +175,4 @@ export const SET_LAST_READ = gql`
         setLastRead(lastRead: $lastRead)
     }
 `
+export const authRefetch = [`Authenticated`, `CurrentUser`, `UserProfile`, `Comments`, `Replies`, `UserPhoto`, `ILike`, `PostAuthor`, `UserPosts`, `UserLikes`, `Followers`, `Following`, `Likers`, `Notifications`, `FolloweePosts`, `IsAdmin`]

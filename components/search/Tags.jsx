@@ -21,7 +21,12 @@ class Tags extends Component {
                             </div>
                             <div className="media-right columns is-multiline is-mobile is-centered">
                                 <div className="column is-half has-text-centered">
-                                    <a onClick={() => setSearch({ addToInput: ` #${tag_name}`, active: true })} className="has-text-grey"><span className="icon is-large"><i className="fas fa-search fa-2x"></i></span></a>
+                                    <a onClick={() => setSearch({ addToInput: ` #${tag_name}`, active: true })}
+                                        className="has-text-grey">
+                                        <span className="icon is-large">
+                                            <i className="fas fa-search fa-2x"></i>
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
                             <style jsx>{`

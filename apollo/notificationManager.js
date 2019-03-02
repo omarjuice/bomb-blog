@@ -18,7 +18,6 @@ class NotificationManager {
     }
     store(notifications) {
         this.lastRead = notifications.lastRead
-        console.log(this.lastRead);
         if (this.allNotifications.length < 2) {
             let combinedNotifications = []
             let { lastVisited, ...notifs } = notifications
@@ -38,7 +37,6 @@ class NotificationManager {
         return this
     }
     _update() {
-        console.log(this.numNotifications);
         setNumNotifications(this.numNotifications);
         if (this.numNotifications > 0) notificationAnimations.pop('#notification-icon')
     }
@@ -74,7 +72,6 @@ class NotificationManager {
         return null
     }
     _newNotification(data) {
-        console.log(data);
         const key = this._addNotificationAndReturnKey(data)
         if (key) {
             this.allNotifications = [key, ...this.allNotifications]

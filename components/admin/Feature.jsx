@@ -11,7 +11,6 @@ class Feature extends Component {
             <Mutation mutation={FEATURE_POST} optimisticResponse={{ __typename: "Mutation", featurePost: true }}>
                 {(featurePost, { error, data }) => {
                     if (error) return <ErrorIcon />
-
                     if (data && data.featurePost) {
                         return <Unfeature id={id} />
                     }

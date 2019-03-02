@@ -9,7 +9,6 @@ import BombSVG from '../svg/bomb';
 import { SEARCH_POSTS, AUTHENTICATED, CURRENT_USER_TAGS, FOLLOWEE_POSTS } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 import LoadingMedia from '../meta/LoadingMedia';
-import { tabsAnimations } from '../../animations/index';
 
 class Home extends Component {
     state = {
@@ -67,7 +66,6 @@ class Home extends Component {
             }
         }
     }
-
     render() {
         const { trending } = this.props.data
         const inputTrending = { cursor: 0, limit: 5, exclude: trending.results.map(post => post.id), orderBy: "trending" }
@@ -215,7 +213,6 @@ class Home extends Component {
                                                                 <p className="subtitle">To see your Feed</p>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </>

@@ -82,7 +82,11 @@ class PostPage extends Component {
                                                                             </div>
                                                                             <div className="column is-1"></div>
                                                                             <div className="column is-3">
-                                                                                <Link href={{ pathname: '/posts/edit', query: { id } }}><button className="button is-success is-large"><span className="icon"><i className="fas fa-pen"></i></span></button></Link>
+                                                                                <Link href={{ pathname: '/posts/edit', query: { id } }}>
+                                                                                    <button className="button is-success is-large">
+                                                                                        <span className="icon"><i className="fas fa-pen"></i></span>
+                                                                                    </button>
+                                                                                </Link>
                                                                             </div>
                                                                             <div className="column is-2"></div>
                                                                         </div>
@@ -92,7 +96,10 @@ class PostPage extends Component {
                                                                 <br />
                                                                 at {moment.utc(Number(created_at)).local().format(' h:mma on MMMM Do, YYYY')}
                                                                 <br />
-                                                                {last_updated && <span> <i className="fas fa-pen-square"></i>{moment.utc(Number(last_updated)).local().format(' h:mma on \n MMMM Do, YYYY')}</span>}
+                                                                {last_updated && <span>
+                                                                    <i className="fas fa-pen-square"></i>
+                                                                    {moment.utc(Number(last_updated)).local().format(' h:mma on \n MMMM Do, YYYY')}
+                                                                </span>}
                                                                 <br />
                                                                 {!postAuthor.isMe ? postAuthor.imFollowing ? <Unfollow userId={user_id} /> : <Follow userId={user_id} /> : ''}
                                                             </>
@@ -104,7 +111,8 @@ class PostPage extends Component {
                                             <div className="column is-8-desktop is-8-tablet is-full-mobile">
                                                 {<div className="tags">
                                                     {tags.map((tag, i) => {
-                                                        return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id} className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-dark'}`}>{tag.tag_name}</a>
+                                                        return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id}
+                                                            className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-primary' : 'is-dark'}`}>{tag.tag_name}</a>
                                                     })}
                                                 </div>}
                                             </div>

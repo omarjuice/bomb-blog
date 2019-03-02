@@ -90,7 +90,13 @@ class Edit extends Component {
                                     return <div></div>
                                 }
                                 if (data.user.id === post.author.id) {
-                                    return <WritePost uploaded={/\/static\/uploads\//.test(post.image)} image={post.image} title={post.title} caption={post.caption} tags={post.tags.reduce((acc, tag) => acc + '#' + tag.tag_name + ' ', '')} body={post.post_content} onSubmit={this.onSubmit} />
+                                    return <WritePost
+                                        uploaded={/\/static\/uploads\//.test(post.image)}
+                                        image={post.image} title={post.title}
+                                        caption={post.caption}
+                                        tags={post.tags.reduce((acc, tag) => acc + '#' + tag.tag_name + ' ', '')}
+                                        body={post.post_content}
+                                        onSubmit={this.onSubmit} />
                                 }
                                 createError({ code: 'UNAUTHORIZED', message: 'You did not write that post.' })
                                 Router.replace('/')
