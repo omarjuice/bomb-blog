@@ -11,7 +11,7 @@ import Follow from '../global/Follow';
 import Like from '../global/Like';
 import DeletePost from './DeletePost';
 import FeaturePost from '../admin/FeaturePost';
-import { POST, POST_AUTHOR } from '../../apollo/queries';
+import { POST_AUTHOR } from '../../apollo/queries';
 import { setSearch } from '../../apollo/clientWrites';
 import LinkWrap from '../global/LinkWrap';
 marked.setOptions({

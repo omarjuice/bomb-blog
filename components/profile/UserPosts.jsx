@@ -37,7 +37,7 @@ class UserPosts extends Component {
                         return (
                             <div className="columns is-centered is-mobile">
                                 <div className="column is-full-mobile is-10-desktop">
-                                    {data.user.posts.map(({ id, title, created_at, last_updated, numLikes, numComments, caption, iLike, image }) => {
+                                    {data.user.posts.map(({ id, title, created_at, numLikes, numComments, caption, iLike, image }) => {
                                         const likes = shortenNumber(numLikes)
                                         const comments = shortenNumber(numComments)
                                         const likesMargin = String(likes.length * .25) + 'rem'
