@@ -40,7 +40,7 @@ const initializeServer = (app, productionEnv = false) => {
                     resave: productionEnv,
                     saveUninitialized: true,
                     cookie: {
-                        secure: false,
+                        secure: productionEnv,
                         maxAge: !test ? 1000 * 60 * 60 * 24 * 30 : 60000
                     }
                 }))

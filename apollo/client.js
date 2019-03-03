@@ -12,12 +12,12 @@ import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const { publicRuntimeConfig } = getConfig()
-const wsLink = process.browser ? new SubscriptionClient(`ws://localhost:${publicRuntimeConfig.PORT}/graphql`, {
+const wsLink = process.browser ? new SubscriptionClient(`ws://${publicRuntimeConfig.HOST}/graphql`, {
     reconnect: true
 }, WebSocket) : null
 
 const httpLink = createUploadLink({
-    uri: `http://localhost:${publicRuntimeConfig.PORT}/graphql`,
+    uri: `${publicRuntimeConfig.HTTP}://${publicRuntimeConfig.HOST}/graphql`,
     fetch,
     credentials: 'same-origin',
 });

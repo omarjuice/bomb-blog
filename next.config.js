@@ -4,6 +4,8 @@ module.exports = {
         mySecret: 'secret'
     },
     publicRuntimeConfig: {
-        PORT: process.env.PORT
+        PORT: process.env.PORT,
+        HOST: process.env.HOST,
+        HTTP: process.env.HTTP
     }
 }
