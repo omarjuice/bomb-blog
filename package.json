@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "build": "next build",
-    "heroku-postbuild": "npm run build",
+    "postinstall": "npm run build",
     "start": "export NODE_ENV=production &&  next start",
     "test": "export NODE_ENV=test && mocha **/*.test.js"
   },
