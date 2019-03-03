@@ -37,7 +37,7 @@ const initializeServer = (app, productionEnv = false) => {
                     name: 'blog-session',
                     store: productionEnv ? new MemoryStore() : null,
                     secret: process.env.SESSION_SECRET,
-                    resave: false,
+                    resave: productionEnv,
                     saveUninitialized: true,
                     cookie: {
                         secure: false,
