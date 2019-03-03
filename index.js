@@ -8,11 +8,9 @@ const session = require('express-session')
 const typeDefs = require('./gql/schema');
 const resolvers = require('./gql/resolvers')
 const applyLoaders = require('./gql/batch')
-const moment = require('moment')
 const { queryDB } = require('./db/connect')
 const { database } = require('./config')
 require('mkdirp').sync('./static/uploads')
-
 const dev = process.env.NODE_ENV !== 'production'
 const test = process.env.NODE_ENV === 'test'
 let port = process.env.PORT || 3000
