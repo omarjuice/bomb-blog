@@ -92,7 +92,7 @@ const initializeServer = (app, productionEnv = false) => {
                 const httpServer = http.createServer(app)
                 apollo.installSubscriptionHandlers(httpServer)
 
-                httpServer.listen(port, () => {
+                httpServer.listen(port, productionEnv ? '0.0.0.0' : 'localhost', () => {
                     console.log(`Listening on port ${port}`, apollo.graphqlPath)
                     if (done) {
                         done()
