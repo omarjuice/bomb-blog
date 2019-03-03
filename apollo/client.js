@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import getConfig from 'next/config'
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink, } from 'apollo-upload-client'
@@ -10,12 +11,13 @@ import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
-const wsLink = process.browser ? new SubscriptionClient('ws://localhost:3000/graphql', {
+const { publicRuntimeConfig } = getConfig()
+const wsLink = process.browser ? new SubscriptionClient(`ws://localhost:${publicRuntimeConfig.PORT}/graphql`, {
     reconnect: true
 }, WebSocket) : null
 
 const httpLink = createUploadLink({
-    uri: `http://localhost:3000/graphql`,
+    uri: `http://localhost:${publicRuntimeConfig.PORT}/graphql`,
     fetch,
     credentials: 'same-origin',
 });
