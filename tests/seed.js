@@ -18,38 +18,38 @@ const seedDB = {
         "a@z.com",
         "alpha",
         '1',
-        new Date(1000),
+        '2000-01-01T00:00:00.000Z',
         'user'
     ], [
         "b@y.com",
         "beta",
         '2',
-        new Date(1000),
+        '2000-01-01T00:00:00.000Z',
         'user'
     ], [
         "c@x.com",
         "gamma",
         '3',
-        new Date(1000),
+        '2000-01-01T00:00:00.000Z',
         'admin'
     ]],
     usersHashed: [[
         "a@z.com",
         "alpha",
         '1',
-        new Date(1000),
+        '2000-01-01T00:00:00.000Z',
         'user'
     ], [
         "b@y.com",
         "beta",
         '2',
-        new Date(1000),
+        '2000-01-01T00:00:00.000Z',
         'user'
     ], [
         "c@x.com",
         "gamma",
         '3',
-        new Date(1000),
+        '2000-01-01T00:00:00.000Z',
         'admin'
     ]],
     profiles: [[
