@@ -10,7 +10,7 @@
     "dev": "nodemon index.js",
     "build": "next build",
     "postinstall": "npm run build",
-    "start": "export NODE_ENV=production && next start -p $PORT",
+    "start": "export NODE_ENV=production && node index.js -p $PORT ",
     "test": "export NODE_ENV=test && mocha **/*.test.js"
   },
   "author": "Omar Juice",
@@ -50,6 +50,7 @@
     "next-with-apollo": "^3.3.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "session-memory-store": "^0.2.2",
     "shortid": "^2.2.14",
     "subscriptions-transport-ws": "^0.9.15"
   }

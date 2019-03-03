@@ -5,6 +5,7 @@ const app = express()
 const { ApolloServer, makeExecutableSchema } = require('apollo-server-express')
 const { graphqlUploadExpress } = require('graphql-upload')
 const session = require('express-session')
+const MemoryStore = require('session-memory-store')(session);
 const typeDefs = require('./gql/schema');
 const resolvers = require('./gql/resolvers')
 const applyLoaders = require('./gql/batch')
@@ -34,11 +35,12 @@ const initializeServer = (app, productionEnv = false) => {
                 app.use(graphqlUploadExpress({ maxFileSize: 10000000 }))
                 app.use(session({
                     name: 'blog-session',
+                    store: new MemoryStore(),
                     secret: process.env.SESSION_SECRET,
                     resave: false,
                     saveUninitialized: true,
                     cookie: {
-                        secure: productionEnv,
+                        secure: false,
                         maxAge: !test ? 1000 * 60 * 60 * 24 * 30 : 60000
                     }
                 }))
