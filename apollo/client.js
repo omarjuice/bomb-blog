@@ -15,7 +15,7 @@ const wsLink = process.browser ? new SubscriptionClient('ws://localhost:3000/gra
 }, WebSocket) : null
 
 const httpLink = createUploadLink({
-    uri: `http://localhost:${process.env.PORT || 3000}/graphql`,
+    uri: `http://localhost:3000/graphql`,
     fetch,
     credentials: 'same-origin',
 });

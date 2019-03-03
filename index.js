@@ -35,7 +35,7 @@ const initializeServer = (app, productionEnv = false) => {
                 app.use(graphqlUploadExpress({ maxFileSize: 10000000 }))
                 app.use(session({
                     name: 'blog-session',
-                    store: new MemoryStore(),
+                    store: productionEnv ? new MemoryStore() : null,
                     secret: process.env.SESSION_SECRET,
                     resave: false,
                     saveUninitialized: true,
