@@ -13,7 +13,7 @@ const { database } = require('./config')
 require('mkdirp').sync('./static/uploads')
 const dev = process.env.NODE_ENV !== 'production'
 const test = process.env.NODE_ENV === 'test'
-let port = process.env.PORT || 3000
+let port = process.env.PORT
 const nextApp = next({ dev, dir: __dirname })
 
 

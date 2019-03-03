@@ -1,6 +1,9 @@
 {
   "name": "bomb-blog",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.14.1"
+  },
   "description": "A blog app.",
   "main": "index.js",
   "scripts": {

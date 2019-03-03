@@ -4,7 +4,6 @@ import validator from 'email-validator';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import { REGISTER, CREATE_SECRET } from '../../apollo/mutations';
-import { NOTIFICATIONS } from '../../apollo/queries';
 import { clearError } from '../../apollo/clientWrites';
 
 
