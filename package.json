@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "build": "next build",
-    "start": "export NODE_ENV=production && npm run build && next start",
+    "postinstall": "npm run build",
+    "start": "export NODE_ENV=production next start",
     "test": "export NODE_ENV=test && mocha **/*.test.js"
   },
   "author": "Omar Juice",
