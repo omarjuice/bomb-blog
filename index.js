@@ -107,7 +107,7 @@ const initializeServer = (app, productionEnv = false) => {
 if (test) {
     port++
 } else {
-    queryDB(`USE ${database}`, null, null, true).then(() => initializeServer(app, !dev)()).catch(e => console.log(e))
+    queryDB(`USE ${database}`).then(() => initializeServer(app, !dev)()).catch(e => console.log(e))
 }
 
 module.exports = { nextApp, port, initializeServer, app, }

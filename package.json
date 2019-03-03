@@ -10,7 +10,7 @@
     "dev": "nodemon index.js",
     "build": "next build",
     "postinstall": "npm run build",
-    "start": "export NODE_ENV=production &&  next start",
+    "start": "export NODE_ENV=production && next start -p $PORT",
     "test": "export NODE_ENV=test && mocha **/*.test.js"
   },
   "author": "Omar Juice",
