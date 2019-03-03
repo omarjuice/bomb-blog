@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "build": "next build",
-    "start": "npm run build && next start",
+    "start": "npm run build && node --optimize_for_size --max_old_space_size=460 index.js",
     "test": "export NODE_ENV=test && mocha **/*.test.js"
   },
   "author": "Omar Juice",
