@@ -12,7 +12,7 @@ import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const { publicRuntimeConfig } = getConfig()
-const wsLink = process.browser ? new SubscriptionClient(`ws://${publicRuntimeConfig.HOST}/graphql`, {
+const wsLink = process.browser ? new SubscriptionClient(`${publicRuntimeConfig.WS}://${publicRuntimeConfig.HOST}/graphql`, {
     reconnect: true
 }, WebSocket) : null
 
