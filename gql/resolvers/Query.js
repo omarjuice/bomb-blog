@@ -12,7 +12,7 @@ module.exports = {
         if (!id) return null;
         const user = await Loaders.users.byId.load(id)
         if (user && user.id) return user;
-        throw Errors.user.notFound
+        return null
     },
     users: async (_, { input }) => {
         const orderBy = input.orderBy === 'username' ? 'LOWER(username)' : 'created_at';

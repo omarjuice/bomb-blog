@@ -161,8 +161,8 @@ export const UNFEATURE_POST = gql`
     }
 `
 export const UPLOAD_IMAGE = gql`
-    mutation UploadImage($image: Upload!){
-        uploadImage(image: $image)
+    mutation UploadImage($image: Upload!, $type: String!){
+        uploadImage(image: $image, type: $type)
     }
 `
 export const PASSWORD_RESET = gql`

@@ -3,7 +3,9 @@ const moment = require('moment')
 const { queryDB } = require('../../db/connect')
 const { compare, hashUser, hashPW } = require('../../db/crypt')
 const Errors = require('../errors')
-const { pubsub, authenticate, authenticateAdmin, storeFS, deleteFS, simplifyString } = require('./utils')
+const { pubsub, authenticate, authenticateAdmin, storeFS, deleteFS, simplifyString, storeCloud } = require('./utils')
+
+
 
 module.exports = {
     login: async (_, { username, password }, { req }) => {
@@ -350,13 +352,15 @@ module.exports = {
         const { affectedRows } = await queryDB(`UPDATE posts SET featured=?, featured_at=NULL WHERE id=?`, [false, id], null, true)
         return affectedRows > 0
     },
-    uploadImage: async (_, { image }) => {
+    uploadImage: async (_, { image, type }) => {
         const { filename, createReadStream } = await image
         const stream = createReadStream()
         const { path, id, error } = await storeFS({ stream, filename }).catch(error => { return { error } })
+
         if (error) {
             return null
         }
+        storeCloud({ path, type }).then((res) => console.log(res)).catch(e => console.log(e))
         return path.slice(1)
     },
     passwordReset: async (_, { id, secretAnswer, newPassword }) => {

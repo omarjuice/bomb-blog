@@ -33,6 +33,7 @@
     "apollo-upload-client": "^10.0.0",
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.13.2",
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
     "email-validator": "^2.0.4",

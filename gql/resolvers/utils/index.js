@@ -1,8 +1,11 @@
+const cloudinary = require('cloudinary').v2
 const { PubSub } = require('apollo-server-express')
 const fs = require('fs')
+const dotenv = require('dotenv')
 const shortid = require('shortid')
+dotenv.load()
 const pubsub = new PubSub()
-
+const { queryDB } = require('../../../db/connect')
 const authenticate = (session) => {
     let sessionUser;
     try {
@@ -45,4 +48,14 @@ const deleteFS = path => {
     })
 }
 const simplifyString = str => str.replace(/\s|\W/g, '').toLowerCase()
-module.exports = { authenticate, pubsub, authenticateAdmin, storeFS, deleteFS, simplifyString }
+const storeCloud = ({ path, type }) => {
+    return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream({ tags: 'image' }, (err, image) => {
+            if (err) reject(err)
+            resolve({ image, type, path })
+        }, { async: true });
+        fs.createReadStream(path.slice(1)).pipe(uploadStream)
+    })
+
+}
+module.exports = { authenticate, pubsub, authenticateAdmin, storeFS, deleteFS, simplifyString, storeCloud }

@@ -29,7 +29,7 @@ class UploadImage extends Component {
             const image = this.state.file
             e.preventDefault()
             if (image && this.state.valid) {
-                const { data } = await uploadImage({ variables: { image } })
+                const { data } = await uploadImage({ variables: { image, type: 'profile' } })
                 if (data && data.uploadImage) {
                     const photo_path = data.uploadImage
                     await client.mutate({ mutation: UPDATE_PROFILE, variables: { input: { photo_path } }, update })

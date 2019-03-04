@@ -46,7 +46,7 @@ class Edit extends Component {
                         if (subscription.data.modal.confirmation === true) {
                             let imagePath;
                             if (imageType && upload.file) {
-                                const { data: { uploadImage } } = await client.mutate({ mutation: UPLOAD_IMAGE, variables: { image: upload.file } })
+                                const { data: { uploadImage } } = await client.mutate({ mutation: UPLOAD_IMAGE, variables: { image: upload.file, type: 'post' } })
                                 imagePath = uploadImage
                             } else {
                                 imagePath = image

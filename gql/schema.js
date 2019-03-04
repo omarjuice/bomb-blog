@@ -39,7 +39,7 @@ module.exports = gql`
       updateReply(reply_id: Int!, reply_text: String!): Reply!
       createFollow(user_id: Int!): Boolean!
       deleteFollow(user_id: Int!): Boolean!
-      uploadImage(image: Upload!): String
+      uploadImage(image: Upload!, type: String!): String
       passwordReset(id: Int, secretAnswer: String!, newPassword: String!): Boolean!
       setLastRead(lastRead: Int!): Int
   }
