@@ -23,9 +23,10 @@ class ProfilePage extends Component {
         }
 
     }
-    cancelEdit() {
+    cancelEdit(image) {
         this.setState({
-            editingImage: false
+            editingImage: false,
+            image
         })
     }
     render() {
@@ -62,7 +63,7 @@ class ProfilePage extends Component {
                                                     } catch (e) {
                                                         isMe = false
                                                     }
-                                                    return isMe ? <a onClick={() => this.setState({ editingImage: !this.state.editingImage })} className="edit has-text-grey">
+                                                    return isMe ? <a onClick={() => this.setState({ editingImage: !this.state.editingImage, image: profile.photo_path })} className="edit has-text-grey">
                                                         <span className="icon">
                                                             {this.state.editingImage ? <i className="fas fa-times-circle fa-lg"></i> : <i className="fas fa-camera-retro fa-2x"></i>}
                                                         </span>
@@ -76,7 +77,7 @@ class ProfilePage extends Component {
                                             </h1>
 
                                             <h2 className="subtitle is-6">
-                                                {this.state.editingImage ? <UploadImage cancelEdit={this.cancelEdit.bind(this)} setPreviewImage={this.setPreviewImage.bind(this)} /> :
+                                                {this.state.editingImage ? <UploadImage original={profile.photo_path} cancelEdit={this.cancelEdit.bind(this)} setPreviewImage={this.setPreviewImage.bind(this)} /> :
                                                     <>
                                                         {email}
                                                         <p className="content is-size-6">

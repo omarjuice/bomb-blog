@@ -133,7 +133,7 @@ class PasswordReset extends Component {
                         <p className="help">{this.state.errors.username}</p>
                     </div>}
                 <button className={`button is-success ${this.state.loading && 'is-loading'} ${Object.values(this.state.errors).filter(e => e).length && 'is-static'}`} type="submit">Submit</button>
-
+                <a onClick={() => renderModal({ active: true, display: 'Login', confirmation: null })} className="button is-text">Remember now?</a>
             </form>
         );
     }

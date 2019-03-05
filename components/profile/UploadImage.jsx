@@ -14,13 +14,15 @@ class UploadImage extends Component {
     state = {
         valid: false,
         fileName: '',
-        file: null
+        file: null,
+        delete: false
     }
     onChange = ({ target: { validity, files: [file] } }) => {
         this.setState({
             valid: validity.valid,
             fileName: file ? file.name : null,
-            file
+            file,
+            delete: false
         })
         this.props.setPreviewImage(file)
     }
@@ -35,10 +37,12 @@ class UploadImage extends Component {
                     await client.mutate({ mutation: UPDATE_PROFILE, variables: { input: { photo_path } }, update })
                     this.props.cancelEdit()
                 }
-            } else {
+            } else if (this.state.delete) {
                 const photo_path = null
                 await client.mutate({ mutation: UPDATE_PROFILE, variables: { input: { photo_path } }, update })
-                this.props.cancelEdit()
+                this.props.cancelEdit(this.props.original)
+            } else {
+                this.props.cancelEdit(this.props.original)
             }
         }
     }
@@ -46,14 +50,29 @@ class UploadImage extends Component {
         this.setState({
             valid: false,
             fileName: '',
-            file: null
+            file: null,
+            delete: true
         })
         this.props.setPreviewImage(null)
+    }
+    getText = () => {
+        if (this.state.delete) {
+            return 'Delete your image?'
+        }
+        if (!this.state.fileName) {
+            return 'Choose an image'
+        }
+        if (!this.state.valid && this.state.fileName) {
+            return 'Invalid Image'
+        }
+        if (this.state.valid && this.state.fileName) {
+            return 'Do you like it?'
+        }
     }
     render() {
         return (
             <Mutation mutation={UPLOAD_IMAGE}>
-                {(uploadImage, { error, client }) => {
+                {(uploadImage, { error, loading, client }) => {
                     if (error) { console.log(error); }
                     return (
                         <form onSubmit={this.onSubmit(uploadImage, client)} className="has-text-centered">
@@ -65,24 +84,22 @@ class UploadImage extends Component {
                                                 onChange={this.onChange} />
                                             <span className="file-cta">
                                                 <span className="file-icon">
-                                                    {error ? <i className="fas fa-exclamation-circle"></i> : <i className="fas fa-upload"></i>}
+                                                    {loading ? <i className="fas fa-cog fa-spin"></i> : error ? <i className="fas fa-exclamation-circle"></i> : <i className="fas fa-upload"></i>}
                                                 </span>
                                                 <span className="file-label">
-                                                    {!this.state.fileName ? 'Choose an image' : ''}
-                                                    {!this.state.valid && this.state.fileName ? 'Invalid image' : ''}
-                                                    {this.state.valid && this.state.fileName ? <span>Do you like it?</span> : ''}
+                                                    {this.getText()}
                                                 </span>
                                             </span>
                                         </label>
                                     </div>
                                 </div>
-                                <div className="field has-text-centered">
+                                {this.state.delete || this.state.file ? <div className="field has-text-centered">
                                     <div className="control has-text-centered">
                                         <button type="submit" className="button is-link">
                                             <span className="icon"><i className="fas fa-check"></i></span>
                                         </button>
                                     </div>
-                                </div>
+                                </div> : ''}
                                 <div onClick={this.reset} className="field has-text-centered">
                                     <div className="control has-text-centered">
                                         <a className="button is-primary">

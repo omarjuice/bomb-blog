@@ -11,7 +11,8 @@
     "build": "next build",
     "postinstall": "npm run build",
     "start": "export NODE_ENV=production && node index.js -p $PORT ",
-    "test": "export NODE_ENV=test && mocha **/*.test.js"
+    "test": "export NODE_ENV=test && mocha **/*.test.js",
+    "seed": "export NODE_ENV=production && node seeddb"
   },
   "author": "Omar Juice",
   "license": "ISC",

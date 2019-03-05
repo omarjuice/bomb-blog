@@ -3,7 +3,7 @@ const moment = require('moment')
 const { queryDB } = require('../../db/connect')
 const { compare, hashUser, hashPW } = require('../../db/crypt')
 const Errors = require('../errors')
-const { pubsub, authenticate, authenticateAdmin, storeFS, deleteFS, simplifyString, storeCloud } = require('./utils')
+const { pubsub, authenticate, authenticateAdmin, simplifyString, storeCloud, deleteCloud } = require('./utils')
 
 
 
@@ -82,8 +82,8 @@ module.exports = {
             [args.input.about !== undefined ? args.input.about : about, args.input.photo_path !== undefined ? args.input.photo_path : photo_path, id])
             .catch(e => { throw Errors.database })
         if (affectedRows > 0) {
-            if (photo_path && args.input.photo_path) {
-                deleteFS('.' + photo_path)
+            if (photo_path && args.input.photo_path !== undefined) {
+                deleteCloud(photo_path)
             }
             if (args.input.modTags) {
                 const { addTags, deleteTags } = args.input.modTags;
@@ -132,7 +132,9 @@ module.exports = {
             [args.id, sessionUser])
             .catch(e => { throw Errors.database })
         if (affectedRows > 0) {
-            deleteFS('.' + image)
+            if (image) {
+                deleteCloud(image)
+            }
             return true
         };
         return false
@@ -147,8 +149,8 @@ module.exports = {
         const { title, caption, post_content, user_id } = post
         if (user_id !== sessionUser) throw Errors.authorization.notAuthorized;
         const image = args.input.image ? args.input.image : null
-        if (image && post.image) {
-            deleteFS('.' + post.image)
+        if ((image || args.input.image === '') && post.image) {
+            deleteCloud(post.image)
         }
         const { affectedRows } =
             await queryDB(`
@@ -355,13 +357,11 @@ module.exports = {
     uploadImage: async (_, { image, type }) => {
         const { filename, createReadStream } = await image
         const stream = createReadStream()
-        const { path, id, error } = await storeFS({ stream, filename }).catch(error => { return { error } })
-
-        if (error) {
+        const upload = await storeCloud({ stream, type }).catch(e => null)
+        if (!upload) {
             return null
         }
-        storeCloud({ path, type }).then((res) => console.log(res)).catch(e => console.log(e))
-        return path.slice(1)
+        return upload.secure_url
     },
     passwordReset: async (_, { id, secretAnswer, newPassword }) => {
         const [{ answer }] = await queryDB(`SELECT answer FROM user_secrets WHERE user_id=?`, [id])

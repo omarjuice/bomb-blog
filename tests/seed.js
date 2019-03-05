@@ -8,7 +8,7 @@ const { queryDB } = require('../db/connect')
 const { randomMarkdown } = require('../markdown')
 
 
-
+const firstDate = process.env.NODE_ENV !== 'production' ? new Date(1000) : '2000-01-01T00:00:00.000Z'
 const seedDB = {
     numUsers: 3,
     numPosts: 3,
@@ -18,38 +18,38 @@ const seedDB = {
         "a@z.com",
         "alpha",
         '1',
-        '2000-01-01T00:00:00.000Z',
+        firstDate,
         'user'
     ], [
         "b@y.com",
         "beta",
         '2',
-        '2000-01-01T00:00:00.000Z',
+        firstDate,
         'user'
     ], [
         "c@x.com",
         "gamma",
         '3',
-        '2000-01-01T00:00:00.000Z',
+        firstDate,
         'admin'
     ]],
     usersHashed: [[
         "a@z.com",
         "alpha",
         '1',
-        '2000-01-01T00:00:00.000Z',
+        firstDate,
         'user'
     ], [
         "b@y.com",
         "beta",
         '2',
-        '2000-01-01T00:00:00.000Z',
+        firstDate,
         'user'
     ], [
         "c@x.com",
         "gamma",
         '3',
-        '2000-01-01T00:00:00.000Z',
+        firstDate,
         'admin'
     ]],
     profiles: [[
@@ -153,7 +153,9 @@ const seedDB = {
         return Array(num).fill("x").map((_, i) => [faker.internet.email(), faker.internet.userName(), String(i + 4), faker.date.past()])
     },
     manyProfiles: function () {
-        return Array(this.numUsers - 3).fill("x").map((_, i) => [i + 4, faker.lorem.sentence(Math.floor(Math.random() * 20)), Math.random() < .75 ? faker.internet.avatar() : null])
+        return Array(this.numUsers - 3).fill("x").map((_, i) => {
+            return [i + 4, faker.lorem.sentence(Math.floor(Math.random() * 20)), Math.random() < .75 ? faker.internet.avatar() : null]
+        })
     },
     manyFollows: function (num) {
         let users = this.numUsers;

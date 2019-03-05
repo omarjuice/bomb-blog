@@ -39,7 +39,7 @@ class UserTags extends Component {
                     if (error) return <ErrorIcon />;
                     const { tags, username } = data.user
                     const isMe = data.user.isMe || this.props.isMe
-                    const editButton = <button className=" button is-dark"
+                    const editButton = i => <button className={`button ${i % 2 === 0 ? 'is-dark' : 'is-primary'}`}
                         onClick={this.editTags(data.user.tags.map(tag => tag.tag_name))}>
                         <i className="fas fa-pencil-alt"></i>
                     </button>
@@ -47,10 +47,11 @@ class UserTags extends Component {
                         <div>
                             {tags.length > 0 ? <div className="tags">
                                 {tags.map((tag, i) => {
-                                    return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id}
+                                    return <> <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id}
                                         className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-dark' : 'is-primary'}`}>{tag.tag_name}</a>
+                                        {i === tags.length - 1 && isMe ? editButton(i) : ''}</>
+
                                 })}
-                                {isMe ? editButton : ''}
                             </div> : isMe ? <><p className="content">You have no tags. What are you interested in?</p>{editButton}</> : <p className="content">{username} has no tags.</p>}
                         </div>
                     );
