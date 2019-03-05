@@ -7,7 +7,7 @@
   "description": "A blog app.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "export NODE_ENV=development && nodemon index.js",
     "build": "next build",
     "postinstall": "npm run build",
     "start": "export NODE_ENV=production && node index.js -p $PORT ",

@@ -16,8 +16,7 @@ if (env === 'test') {
         password: process.env.MYSQL_PW_PRODUCTION,
         multipleStatements: true
     }
-}
-else {
+} else {
     mySqlConfig.database = process.env.MYSQL_DB
     mySqlConfig.multipleStatements = true;
 }

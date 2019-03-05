@@ -6,7 +6,7 @@ import BombSVG from '../svg/bomb';
 import Authenticated from '../auth/Authenticated';
 import SearchNav from './SearchNav';
 import { GET_SEARCH, GET_NUM_NOTIFICATIONS, NOTIFICATIONS } from '../../apollo/queries';
-import { renderModal, setNumNotifications } from '../../apollo/clientWrites';
+import { renderModal } from '../../apollo/clientWrites';
 import { navbarAnimations } from '../../animations';
 import { SET_LAST_READ } from '../../apollo/mutations';
 

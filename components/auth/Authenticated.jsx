@@ -6,8 +6,10 @@ import { AUTHENTICATED } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 class Authenticated extends Component {
     openModal = (display) => {
-        return () => renderModal({ display, message: '', active: true })
-        this.props.deactivateMenu()
+        return () => {
+            renderModal({ display, message: '', active: true })
+            this.props.deactivateMenu()
+        }
     }
     render() {
         return (
