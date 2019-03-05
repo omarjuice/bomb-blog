@@ -39,10 +39,12 @@ class Footer extends Component {
                     .button{
                         position: fixed;
                         bottom: .5rem;
-                        right: 1rem;
+                        left: 1rem;
                         z-index: 10
                     }
                     .navbar{
+                        position: absolute;
+                        bottom: 0;
                         z-index: 9 !important;
                     }
 

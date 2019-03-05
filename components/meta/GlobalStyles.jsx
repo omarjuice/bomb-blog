@@ -4,9 +4,11 @@ class GlobalStyles extends Component {
     render() {
         return (
             <style jsx global>{`
+                *{
+                    touch-action: manipulation;
+                }
                 html{
                     background-color: #f0f0f0 !important;
-                    touch-action: manipulation;
                 }
                 .main-component{
                     height: 100%;
