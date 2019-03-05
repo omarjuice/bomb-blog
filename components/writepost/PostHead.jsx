@@ -29,9 +29,9 @@ class PostHead extends Component {
                                     <p id="title" className="title is-1 article-title font-1">{title}</p>
                                     <div className="caption content is-size-3">
                                         <div className="columns is-mobile is-centered">
-                                            <div className="column is-1"><i className="fas fa-quote-left fa-pull-left"></i></div>
-                                            <div id="caption" className="column is-9">{caption}</div>
-                                            <div className="column is-1"><i className="fas fa-quote-right fa-pull-left"></i></div>
+                                            <div className="column is-1 has-text-left is-paddingless"><i className="fas fa-quote-left fa-pull-left"></i></div>
+                                            <div id="caption" className="column is-9 has-text-centered is-paddingless">{caption}</div>
+                                            <div className="column is-1 has-text-right is-paddingless"><i className="fas fa-quote-right fa-pull-right"></i></div>
                                         </div>
 
                                     </div>
@@ -41,12 +41,12 @@ class PostHead extends Component {
                                         <div className="column is-2 has-text-centered">
                                             <div>
                                                 <a className="has-text-primary has-text-centered">
-                                                    <span className="icon is-large">
+                                                    <span className="icon is-large bomb">
                                                         <BombSVG lit={true} scale={this.props.scale || 1.2} />
                                                     </span>
                                                 </a>
                                                 <br />
-                                                <a className="is-size-4  has-text-grey underline">0</a>
+                                                <a className="is-size-4 font-1 has-text-dark underline">0</a>
                                             </div>
                                         </div>
                                         <div className="column is-2 is-hidden-tablet"></div>
@@ -101,7 +101,7 @@ class PostHead extends Component {
                         margin-top: 3rem;
                         overflow: visible
                     }
- 
+                    
                     .article-subtitle {
                         color: #909AA0;
                         margin-bottom: 3rem;
@@ -109,6 +109,10 @@ class PostHead extends Component {
                     
                     #caption, #title{
                         word-break: break-word
+                    }
+                    .bomb{
+                        position: relative;
+                        left: -0.5rem
                     }
                     `}</style>
                 {image ? <figure className="image is-128by128">

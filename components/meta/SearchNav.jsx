@@ -64,8 +64,8 @@ class SearchNav extends Component {
                     .input{
                         height: 2.25rem !important;
                     }
-                    select{
-                        font-size: 16px ;
+                    select:focus{
+                        font-size: 16px !important;
                         height: 2.25rem !important;
                     }
                     @media only screen and (max-width: 375px){

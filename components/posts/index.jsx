@@ -3,7 +3,6 @@ import { Query } from 'react-apollo';
 import Link from 'next/link';
 import marked from 'marked'
 import moment from 'moment'
-import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import Comments from './comments';
 import Unfollow from '../global/UnFollow';
@@ -31,7 +30,6 @@ class PostPage extends Component {
                 document.getElementById('comments').scrollIntoView()
             }
         })
-
     }
     componentDidMount() {
         if (this.state.comments) {
