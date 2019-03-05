@@ -197,14 +197,12 @@ module.exports = function () {
                 }).end(done)
 
         })
-        it('Should return error for user that does not exist', done => {
+        it('Should return null for user that does not exist', done => {
             const id = 4
             reqGQL({ query: queries.profile.get, variables: { id } })
                 .expect(200)
                 .expect(({ body }) => {
-                    const [error] = body.errors
-                    expect(error).toBeTruthy()
-                    expect(error.message).toBe(Errors.user.notFound.message)
+                    expect(body.data.user).toBe(null)
                 }).end(done)
         })
         it('Should get a profile from the id of the session user', done => {
