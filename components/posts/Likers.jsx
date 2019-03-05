@@ -19,7 +19,7 @@ class Likers extends Component {
                     if (loading) return <Loading />;
                     if (error) return <ErrorIcon size="4x" color="primary" />;
                     return (<div className="columns is-centered is-mobile">
-                        <div className="column box is-three-fifths-desktop is-two-thirds-tablet is-four-fifths-mobile">
+                        <div className="column box is-three-fifths-desktop is-two-thirds-tablet is-11-mobile">
 
                             {data[type].likers.length > 0 ? data[type].likers.map(({ id, username, liked_at, imFollowing, followingMe, isMe, profile }) => {
                                 return <article key={id} className="media has-text-centered">

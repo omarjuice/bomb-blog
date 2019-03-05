@@ -33,13 +33,17 @@ class Navbar extends Component {
         })
     }
     toggleSearch = () => {
-        const animation = this.state.searchNav ? navbarAnimations.slideOut('#search-nav') : navbarAnimations.slideIn('#search-nav')
-        animation.finished.then(() => {
+        const toggle = (after = null) => {
             this.setState({
                 searchNav: !this.state.searchNav,
                 menu: !this.state.searchNav ? false : this.state.menu
+            }, () => {
+                if (after) {
+                    after()
+                }
             })
-        })
+        }
+        this.state.searchNav ? navbarAnimations.slideOut('#search-nav').finished.then(toggle) : toggle(() => navbarAnimations.slideIn('#search-nav'))
     }
     showNotifications = (data) => {
         return () => {

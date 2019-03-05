@@ -64,7 +64,19 @@ class SearchNav extends Component {
                     .input{
                         height: 2.25rem !important;
                     }
-                    
+                    select{
+                        font-size: 16px ;
+                        height: 2.25rem !important;
+                    }
+                    @media only screen and (max-width: 375px){
+                        select{
+                            width: 6rem !important;
+                        }
+                        .field{
+                            margin-left: -0.5rem;
+                        }
+                    }
+
                     `}</style>
             </nav >
         );

@@ -55,9 +55,9 @@ class PostPage extends Component {
                                         <p className="title is-1 article-title font-1">{title}</p>
                                         <div className="caption content is-size-3">
                                             <div className="columns is-mobile is-centered">
-                                                <div className="column is-1 has-text-left"><i className="fas fa-quote-left fa-pull-left"></i></div>
-                                                <div className="column is-9 has-text-centered">{caption}</div>
-                                                <div className="column is-1 has-text-left"><i className="fas fa-quote-right fa-pull-left"></i></div>
+                                                <div className="column is-1 has-text-left is-paddingless"><i className="fas fa-quote-left fa-pull-left"></i></div>
+                                                <div className="column is-9 has-text-centered is-paddingless">{caption}</div>
+                                                <div className="column is-1 has-text-right is-paddingless"><i className="fas fa-quote-right fa-pull-right"></i></div>
                                             </div>
 
                                         </div>
@@ -158,6 +158,9 @@ class PostPage extends Component {
                         border: 3px solid #ccc;
                         border-radius: 50%;
                         box-shadow: 0px 1px 1px gray
+                    }
+                    column.is-9.has-text-centered{
+                        text-align: justify
                     }
                     .media-center {
                         display: block;
