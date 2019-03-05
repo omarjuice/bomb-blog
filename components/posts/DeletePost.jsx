@@ -47,7 +47,7 @@ class DeletePost extends Component {
                 {(deletePost, { client }) => {
                     return (
                         <button onClick={this.handleClick(deletePost, client)}
-                            className="button is-warning is-large"><span className="icon">
+                            className="button is-warning"><span className="icon">
                                 <i className="fas fa-trash-alt"></i>
                             </span>
                         </button>

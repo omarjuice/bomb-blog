@@ -67,7 +67,7 @@ class LikePost extends Component {
             <Mutation mutation={LIKE_POST} variables={{ post_id: this.props.postId }}
                 update={update(this.props.postId, this.props.pageDetails || {})}
                 optimisticResponse={{ __typename: "Mutation", likePost: true }}>
-                {(likePost, { loading, error, data }) => {
+                {(likePost, { error, data }) => {
                     if (error) return <ErrorIcon color="primary" size={this.props.size} />
                     if (data && data.likePost) {
                         return <UnlikePost size={this.props.size} postId={this.props.postId} />
@@ -77,6 +77,12 @@ class LikePost extends Component {
                             <span className="icon is-large">
                                 <BombSVG lit={false} scale={this.props.scale || 1.2} />
                             </span>
+                            <style jsx>{`
+                                .icon.is-large{
+                                    position: relative;
+                                    left: -0.5rem;
+                                }
+                                `}</style>
                         </a>
                     )
 

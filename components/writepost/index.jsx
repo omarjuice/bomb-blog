@@ -308,7 +308,7 @@ class WritePost extends Component {
                                         <textarea onSelect={e => this.scrollmarkdown(e.target.selectionStart || 0)}
                                             onChange={(e) => this.setState({ body: e.target.value, errors: { ...this.state.errors, body: null } })} value={this.state.body}
                                             onKeyDown={e => { if (e.keyCode === 9) { this.modifyText('tab')(e) } }}
-                                            className={`textarea ${this.state.errors.body ? 'is-primary' : ''}`}
+                                            className={`textarea markdown-body ${this.state.errors.body ? 'is-primary' : ''}`}
                                             type="text"
                                             placeholder="Post text goes here" />
                                     </div>
@@ -354,7 +354,8 @@ class WritePost extends Component {
                         top: 1rem
                     }
                     .textarea{
-                        height: 40vh
+                        height: 40vh;
+                        font-size: 16px;
                     }
                     .preview{
                         position: fixed;

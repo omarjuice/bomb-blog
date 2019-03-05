@@ -34,7 +34,6 @@ class PostPage extends Component {
 
     }
     componentDidMount() {
-        console.log(this.state.comments);
         if (this.state.comments) {
             document.getElementById('comments').scrollIntoView()
         }
@@ -56,9 +55,9 @@ class PostPage extends Component {
                                         <p className="title is-1 article-title font-1">{title}</p>
                                         <div className="caption content is-size-3">
                                             <div className="columns is-mobile is-centered">
-                                                <div className="column is-1"><i className="fas fa-quote-left fa-pull-left"></i></div>
-                                                <div className="column is-9">{caption}</div>
-                                                <div className="column is-1"><i className="fas fa-quote-right fa-pull-left"></i></div>
+                                                <div className="column is-1 has-text-left"><i className="fas fa-quote-left fa-pull-left"></i></div>
+                                                <div className="column is-9 has-text-centered">{caption}</div>
+                                                <div className="column is-1 has-text-left"><i className="fas fa-quote-right fa-pull-left"></i></div>
                                             </div>
 
                                         </div>
@@ -66,11 +65,11 @@ class PostPage extends Component {
                                         <div className="columns is-mobile is-centered is-multiline">
                                             <div className="column is-2 is-1-mobile"></div>
                                             <div className="column is-2 has-text-centered">
-                                                <div>
+                                                <div >
                                                     <Like postId={id} size="3x" scale={1.5} />
                                                 </div>
                                             </div>
-                                            <div className="column is-2-mobile is-1-tablet"></div>
+                                            <div className="column is-1"></div>
                                             <div className="post-stats column is-6-mobile is-5-tablet has-text-centered">
                                                 <div className="subtitle is-6 article-subtitle has-text-centered">
                                                     <Query query={POST_AUTHOR} variables={{ id: user_id }} ssr={false}>
@@ -89,7 +88,7 @@ class PostPage extends Component {
                                                                             <div className="column is-1"></div>
                                                                             <div className="column is-3">
                                                                                 <Link href={{ pathname: '/posts/edit', query: { id } }}>
-                                                                                    <button className="button is-success is-large">
+                                                                                    <button className="button is-success">
                                                                                         <span className="icon"><i className="fas fa-pen"></i></span>
                                                                                     </button>
                                                                                 </Link>

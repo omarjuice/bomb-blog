@@ -72,6 +72,12 @@ class UnlikePost extends Component {
                             <span className="icon is-large">
                                 <BombSVG lit={true} scale={this.props.scale || 1.2} flare={this.props.flare} />
                             </span>
+                            <style jsx>{`
+                                .icon.is-large{
+                                    position: relative;
+                                    left: -0.5rem;
+                                }
+                                `}</style>
                         </a>
                     )
                 }}

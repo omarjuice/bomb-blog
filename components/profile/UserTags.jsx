@@ -30,8 +30,8 @@ class UserTags extends Component {
             this.setState({ editing: false, tags: [], input: '' })
         }
     }
-
     render() {
+        let count = 0
         return (
             <Query query={USER_TAGS} variables={{ id: this.props.userId }}>
                 {({ loading, error, data }) => {
@@ -45,14 +45,14 @@ class UserTags extends Component {
                     </button>
                     if (!this.state.editing) return (
                         <div>
-                            {tags.length > 0 ? <div className="tags">
-                                {tags.map((tag, i) => {
-                                    return <> <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id}
-                                        className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-dark' : 'is-primary'}`}>{tag.tag_name}</a>
-                                        {i === tags.length - 1 && isMe ? editButton(i) : ''}</>
-
-                                })}
-                            </div> : isMe ?
+                            {tags.length > 0 ?
+                                (<div className="tags">
+                                    {tags.map((tag, i) => {
+                                        return <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })} key={tag.id}
+                                            className={`tag is-rounded font-1 is-medium ${i % 2 === 1 ? 'is-dark' : 'is-primary'}`}>{tag.tag_name}</a>
+                                    })}
+                                    {isMe ? editButton(count) : ''}
+                                </div>) : isMe ?
                                     <>
                                         <p className="content">You have no tags. What are you interested in?</p>
                                         {editButton(0)}
