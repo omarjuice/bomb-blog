@@ -1,6 +1,5 @@
 require('dotenv').config();
-
-const mySqlConfig = {
+let mySqlConfig = {
     host: process.env.MYSQL_HOST || 'localhost',
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PW,
