@@ -26,6 +26,11 @@ class FollowPanel extends Component {
 
                 <Query query={queries[display.toUpperCase()]} variables={{ id: this.props.userId }}>
                     {({ loading, error, data }) => {
+                        if (loading) return (
+                            <div className="column  is-three-fifths-desktop is-two-thirds-tablet is-11-mobile">
+                                <LoadingMedia />
+                            </div>
+                        );
                         if (error) return <ErrorIcon color="primary" size="4x" style="margin-top: 10px" />
                         if (data.user[display].length < 1) {
                             return (
@@ -44,9 +49,8 @@ class FollowPanel extends Component {
 
                             )
                         }
-                        return <div className="column is-three-fifths-desktop is-two-thirds-tablet is-11-mobile">
-                            {loading && <LoadingMedia />}
-                            {!loading && data.user[display].map(({ id, username, followed_at, imFollowing, followingMe, isMe, profile }) => {
+                        return <div className="column  is-three-fifths-desktop is-two-thirds-tablet is-11-mobile">
+                            {data.user[display].map(({ id, username, followed_at, imFollowing, followingMe, isMe, profile }) => {
                                 return <article key={id} className="media has-text-centered">
                                     <figure className="media-left">
                                         <p className="image is-48x48">
