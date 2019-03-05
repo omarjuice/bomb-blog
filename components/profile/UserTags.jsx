@@ -52,7 +52,11 @@ class UserTags extends Component {
                                         {i === tags.length - 1 && isMe ? editButton(i) : ''}</>
 
                                 })}
-                            </div> : isMe ? <><p className="content">You have no tags. What are you interested in?</p>{editButton}</> : <p className="content">{username} has no tags.</p>}
+                            </div> : isMe ?
+                                    <>
+                                        <p className="content">You have no tags. What are you interested in?</p>
+                                        {editButton(0)}
+                                    </> : <p className="content">{username} has no tags.</p>}
                         </div>
                     );
                     return (

@@ -60,7 +60,12 @@ class SearchNav extends Component {
                     </div>
 
                 </div>
-
+                <style jsx>{`
+                    .input{
+                        height: 2.25rem !important;
+                    }
+                    
+                    `}</style>
             </nav >
         );
     }

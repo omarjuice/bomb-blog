@@ -23,8 +23,8 @@ class BombSVG extends Component {
                 <defs id="svgEditorDefs">
                     <path id="svgEditorClosePathDefs" style={{ stroke: 'orangered', strokeWidth: '8.24px', fill: 'darkorange' }} />
                     <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" id="rgrd2-white-blue" r="50%">
-                        <stop offset="0%" style={{ stopColor: 'rgb(255, 255, 0)', stopOpacity: '1' }} />
-                        <stop offset="100%" style={{ stopColor: 'rgb(255, 132, 0)', stopOpacity: '1' }} />
+                        <stop stopColor="rgb(255,255,0)" offset="0%" style={{ stopColor: 'rgb(255, 255, 0)', stopOpacity: '1' }} />
+                        <stop stopColor="rgb(255,132,0)" offset="100%" style={{ stopColor: 'rgb(255, 132, 0)', stopOpacity: '1' }} />
                     </radialGradient>
                 </defs>
                 <path d="M517.5898201205964,289.2215567559823a161.202093,161.202093,0,1,1,-122.60479009366566,-74.40119743113829Z"
