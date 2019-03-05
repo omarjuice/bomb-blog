@@ -13,7 +13,8 @@ if (env === 'test') {
         database: process.env.MYSQL_DB_PRODUCTION,
         host: process.env.MYSQL_HOST_PRODUCTION,
         user: process.env.MYSQL_USER_PRODUCTION,
-        password: process.env.MYSQL_PW_PRODUCTION
+        password: process.env.MYSQL_PW_PRODUCTION,
+        multipleStatements: true
     }
 }
 else {

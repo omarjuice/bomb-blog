@@ -221,7 +221,6 @@ const resetDB = (done) => {
         .then(() => queryDB(query1))
         .then(() => queryDB(query2))
         .then(() => queryDB(`USE ${database}`))
-        .then(() => Promise.all([queryDB(userSchema.create), queryDB(postSchema.create)]))
         .then(() => done ? done() : null).catch(e => console.log(e))
 }
 const resetTables = (done) => {
