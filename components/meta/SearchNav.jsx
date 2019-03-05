@@ -61,10 +61,7 @@ class SearchNav extends Component {
 
                 </div>
                 <style jsx>{`
-                    .input{
-                        height: 2.25rem !important;
-                    }
-                    select:focus{
+                    input, select, select:focus{
                         font-size: 16px !important;
                         height: 2.25rem !important;
                     }

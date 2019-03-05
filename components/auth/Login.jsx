@@ -4,6 +4,7 @@ import { LOGIN, authRefetch } from '../../apollo/mutations';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import { renderModal, clearError } from '../../apollo/clientWrites';
+import BombSVG from '../svg/bomb';
 
 
 
@@ -84,7 +85,7 @@ class Login extends Component {
                 )
                 if (data.login) {
                     this.props.onComplete(true)
-                    return <p>Success</p>
+                    return <BombSVG lit={true} />
                 } else {
                     this.props.onComplete(false)
                     return <p>Login Failed</p>

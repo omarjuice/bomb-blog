@@ -59,8 +59,9 @@ class ToolBar extends Component {
                 .button{
                     border: none;
                 }
-                select:focus, input:focus{
-                    font-size: 13px !important
+                input, select, select:focus, input:focus{
+                    font-size: 16px !important;
+                    height: 1.75rem
                 }
                 .card-header{
                     display: flex;
