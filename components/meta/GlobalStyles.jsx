@@ -44,14 +44,6 @@ class GlobalStyles extends Component {
                     margin: 0 auto;
                     padding: 45px;
                 }
-                .markdown-body.markdown-narrow{
-                    box-sizing: border-box;
-                    font-size: 50%;
-                    min-width: 200px;
-                    max-width: 500px;
-                    margin: 0 auto;
-                    padding: 0
-                }
                 input[type="color"],
                 input[type="date"],
                 input[type="datetime"],
@@ -70,9 +62,9 @@ class GlobalStyles extends Component {
                 textarea {
                     font-size: 16px;
                 }
-                @media (max-width: 767px) {
+                @media only screen and (max-width: 767px) {
                     .markdown-body {
-                        padding: 15px;
+                        padding: 0px;
                     }
                 }
                 #panel-display{
