@@ -21,9 +21,8 @@ class Navbar extends Component {
         this.watchSearch = client.watchQuery({ query: GET_SEARCH })
             .subscribe({
                 next({ data }) {
-                    nav.setState({
-                        searchNav: data.search.active
-                    })
+                    console.log(data.search.active);
+                    nav.toggleSearch(data.search.active)
                 }
             })
     }
@@ -32,10 +31,10 @@ class Navbar extends Component {
             menu: false
         })
     }
-    toggleSearch = () => {
+    toggleSearch = (bool) => {
         const toggle = (after = null) => {
             this.setState({
-                searchNav: !this.state.searchNav,
+                searchNav: bool,
                 menu: !this.state.searchNav ? false : this.state.menu
             }, () => {
                 if (after) {
@@ -43,7 +42,9 @@ class Navbar extends Component {
                 }
             })
         }
-        this.state.searchNav ? navbarAnimations.slideOut('#search-nav').finished.then(toggle) : toggle(() => navbarAnimations.slideIn('#search-nav'))
+        if (bool !== this.state.searchNav) {
+            this.state.searchNav ? navbarAnimations.slideOut('#search-nav').finished.then(toggle) : toggle(() => navbarAnimations.slideIn('#search-nav'))
+        }
     }
     showNotifications = (data) => {
         return () => {
@@ -74,18 +75,18 @@ class Navbar extends Component {
                 <nav className="navbar is-fixed-top primary-navbar" role="navigation" aria-label="main navigation">
                     <div className="navbar-brand">
                         <Link href="/">
-                            <a className="navbar-item">
+                            <a className="navbar-item is-unselectable">
                                 <span className="icon is-large"><BombSVG lit={true} flare={true} /></span>
                                 <img id="brand-img" src="/static/brand.svg" width="100" height="100" />
                             </a>
                         </Link>
                         <Link href="/posts/new" >
-                            <a className="navbar-item" >
+                            <a className="navbar-item is-unselectable" >
                                 <span className="icon is-large"><i className="fas fa-pen fa-lg"></i></span>
                             </a>
                         </Link>
-                        <a className={`navbar-item ${this.state.searchNav ? 'has-text-grey' : ''}`}
-                            onClick={this.toggleSearch}>
+                        <a className={`navbar-item is-unselectable ${this.state.searchNav ? 'has-text-info' : ''}`}
+                            onClick={() => this.toggleSearch(!this.state.searchNav)}>
                             <span className="icon is-large"><i className="fas fa-search fa-lg"></i></span>
                         </a>
                         <Query query={GET_NUM_NOTIFICATIONS}>

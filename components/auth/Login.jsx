@@ -30,9 +30,14 @@ class Login extends Component {
             }
 
             if (!Object.values(errors).length) {
-                await login({
+                const { data } = await login({
                     variables: { username: this.state.username.trim(), password: this.state.password }
                 })
+                if (data.login) {
+                    this.props.onComplete(true)
+                } else {
+                    this.props.onComplete(false)
+                }
             }
         }
     }
@@ -71,7 +76,7 @@ class Login extends Component {
                                 </div>
                                 <p className="help">{this.state.errors.password}</p>
                             </div>
-                            <button className={`button is-success ${loading && 'is-loading'}`} type="submit">Login</button>
+                            <button className={`button font-1 is-success ${loading && 'is-loading'}`} type="submit">Login</button>
                             <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'Register', active: true }) }}
                                 className="button is-text">
                                 Sign Up
@@ -83,13 +88,7 @@ class Login extends Component {
                         </a>
                     </div>
                 )
-                if (data.login) {
-                    this.props.onComplete(true)
-                    return <BombSVG lit={true} />
-                } else {
-                    this.props.onComplete(false)
-                    return <p>Login Failed</p>
-                }
+                return <div></div>
             }}
         </Mutation>
         )

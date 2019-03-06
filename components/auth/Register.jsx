@@ -139,7 +139,7 @@ class Register extends Component {
                             </div>
                             <p className="help is-danger">{this.state.errors.answer}</p>
                         </div>
-                        <button className={`button is-success ${this.state.loading && 'is-loading'} ${Object.values(this.state.errors).filter(e => e).length && 'is-static'}`} type="submit">Sign Up</button>
+                        <button className={`button font-1 is-success ${this.state.loading && 'is-loading'} ${Object.values(this.state.errors).filter(e => e).length && 'is-static'}`} type="submit">Sign Up</button>
                         <a onClick={() => { clearError(); renderModal({ confirmation: null, display: 'Login', active: true }) }} className="button is-text">Login</a>
                     </form>
                 )
