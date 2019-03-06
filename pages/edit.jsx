@@ -82,7 +82,22 @@ class Edit extends Component {
                     if (data.authenticated) return (
                         <Query query={CURRENT_USER}>
                             {({ loading, error, data }) => {
-                                if (loading || !data || !data.user) return <Loading />
+                                if (loading || !data || !data.user) return (
+                                    <div>
+                                        <div className="columns is-mobile is-centered loading">
+                                            <div className="column is-half">
+                                                <Loading scale={5} />
+                                            </div>
+                                        </div>
+                                        <style jsx>{`
+                                        .column{
+                                            height: 100vh;
+                                            display: flex;
+                                            align-items: center;
+                                        }
+                                        `}</style>
+                                    </div>
+                                )
                                 if (error) return <ErrorIcon />
                                 if (!data) {
                                     createError({ code: 'UNAUTHENTICATED' })
