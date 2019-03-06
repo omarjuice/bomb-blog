@@ -22,7 +22,7 @@ class Like extends Component {
                     let props = {
                         postId: id,
                         flare: true,
-                        size, scale
+                        size, scale, buffer: true
                     }
                     return (
                         <>

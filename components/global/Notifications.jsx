@@ -114,7 +114,9 @@ class Notifications extends Component {
                                 <strong className="is-size-5"><em>{post.title}</em></strong>
                             </LinkWrap>
                             <br />
-                            <BombSVG scale={0.1} lit={true} />
+                            <div className="has-text-centered">
+                                <BombSVG scale={0.1} lit={true} />
+                            </div>
 
                         </div>
                     </div>
@@ -162,7 +164,9 @@ class Notifications extends Component {
                                 <strong className="is-size-5"><em> {comment.post.title}</em></strong>
                             </LinkWrap>
                             <br />
-                            <BombSVG scale={0.1} lit={true} />
+                            <div className="has-text-centered">
+                                <BombSVG scale={0.1} lit={true} />
+                            </div>
 
                         </div>
                     </div>
@@ -378,7 +382,8 @@ class Notifications extends Component {
                     this.props.data.map((key, i) => {
                         if (key) {
                             const data = this.props.notificationMap[key]
-                            return typeMap[data.__typename](key, data)
+                            if (data) return typeMap[data.__typename](key, data);
+                            return null
                         }
                         return null
                     })

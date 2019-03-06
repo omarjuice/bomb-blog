@@ -78,7 +78,7 @@ class LikePost extends Component {
                             <style jsx>{`
                                 .icon.is-large{
                                     position: relative;
-                                    left: -0.5rem;
+                                    ${this.props.buffer ? 'left: -0.5rem;' : ''}
                                 }
                                 `}</style>
                         </a>
