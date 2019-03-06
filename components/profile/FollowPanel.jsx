@@ -19,7 +19,7 @@ class FollowPanel extends Component {
         return (
             <div className="columns is-centered is-mobile is-multiline">
                 <div className="column is-full">
-                    <h1 className="title is-2 font-1">
+                    <h1 className="title is-2 is-size-4-mobile font-1">
                         {display}
                     </h1>
                 </div>

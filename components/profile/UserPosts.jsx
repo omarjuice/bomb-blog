@@ -16,7 +16,7 @@ class UserPosts extends Component {
     render() {
         return (
             <>
-                <h1 className="title is-2 font-1">
+                <h1 className="title is-2 is-size-4-mobile font-1">
                     Posts
                 </h1>
                 <Query query={USER_POSTS} variables={{ id: this.props.userId }} ssr={false}>

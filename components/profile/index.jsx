@@ -50,7 +50,6 @@ class ProfilePage extends Component {
                         const { username, id, email, created_at, profile, followingMe, imFollowing } = data.user
                         return (
                             <div>
-
                                 <div className="columns is-centered is-multiline is-mobile">
                                     <div id="profile-header" className="column is-half-desktop is-two-thirds-tablet is-full-mobile has-text-centered">
                                         <figure className="image is-128x128">
@@ -72,7 +71,7 @@ class ProfilePage extends Component {
                                             </Query>
                                         </figure>
                                         <div id="user-info" className="box bordered">
-                                            <h1 className="title is-3 font-1">
+                                            <h1 className="title is-3 is-size-4-mobile font-1">
                                                 {username}
                                             </h1>
 

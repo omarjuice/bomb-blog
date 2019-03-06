@@ -14,7 +14,7 @@ class GlobalStyles extends Component {
                     height: 100%;
                 }
                 .font-1{
-                    font-family: 'Baloo Thambi', sans-serif;
+                    font-family: 'Baloo Bhaijaan', sans-serif;
                 }
                 .hover-icon{
                     filter: brightness(80%);

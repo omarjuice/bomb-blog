@@ -50,11 +50,11 @@ class PostPage extends Component {
                                         <img src={author.profile.photo_path || `/static/user_image.png`} className="author-image" alt={`${author.username}'s picture`} />
                                     </div>
                                     <div className="media-content has-text-centered">
-                                        <p className="title is-1 article-title font-1">{title}</p>
+                                        <p className="title is-1 is-size-3-mobile article-title font-1">{title}</p>
                                         <div className="caption content is-size-3">
                                             <div className="columns is-mobile is-centered">
                                                 <div className="column is-1 has-text-left is-paddingless"><i className="fas fa-quote-left fa-pull-left"></i></div>
-                                                <div className="column is-9 has-text-centered is-paddingless">{caption}</div>
+                                                <div className="column is-9 is-size-2 is-size-4-mobile has-text-centered is-paddingless">{caption}</div>
                                                 <div className="column is-1 has-text-right is-paddingless"><i className="fas fa-quote-right fa-pull-right"></i></div>
                                             </div>
 
