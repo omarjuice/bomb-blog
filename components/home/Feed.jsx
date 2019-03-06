@@ -16,8 +16,8 @@ class Feed extends Component {
                     return (
                         <article key={id} className="media has-text-centered">
                             <div className="media-content">
-                                <div className="content">
-                                    <div>
+                                <div className="columns is-mobile is-multiline">
+                                    <div className="column is-paddingless is-9-desktop is-8-mobile">
                                         <LinkWrap post={{ id, title }}><a className="has-text-dark"><strong className="font-1">{title} </strong></a></LinkWrap>
                                         <br />
                                         {caption}
@@ -27,8 +27,13 @@ class Feed extends Component {
                                                 {author.isMe ? <strong>You</strong> : <em>{author.username}</em>}
                                             </a>
                                         </LinkWrap>
-
-                                        <br />
+                                    </div>
+                                    <div className="column is-paddingless is-3-desktop is-4-mobile">
+                                        <figure className="image is-128x128">
+                                            {image && <img src={image} alt="image" />}
+                                        </figure>
+                                    </div>
+                                    <div className="column is-full is-paddingless">
                                         {tags.slice(0, 8).map((tag, i) => (
                                             <a onClick={() => setSearch({ addToInput: ` #${tag.tag_name}`, active: true })}
                                                 key={tag.id}
@@ -58,24 +63,7 @@ class Feed extends Component {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="media-right columns is-mobile">
-                                <div className="column is-half">
-                                    {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
-                                </div>
-
-                            </div> */}
-
-                            <div className="media-right">
-                                <p className="image is-128x128">
-                                    {image && <img src={image} alt="image" />}
-
-                                </p>
-                                {/* {iLike ? <UnlikePost size="2x" postId={id} /> : <LikePost size="2x" postId={id} />}
-                                <FeaturePost featured={featured} id={id} /> */}
-                            </div>
-
                             <style jsx>{`
-
                                .media-content{
                                    padding: 1rem
                                }

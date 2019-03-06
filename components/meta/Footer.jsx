@@ -9,7 +9,7 @@ class Footer extends Component {
         return (
             <div>
                 <nav className={`navbar is-fixed-bottom is-dark ${!this.state.active && 'is-hidden'}`}>
-                    <div className="navbar-end">
+                    <div className="navbar-brand">
                         <a className="navbar-item" href="https://omarjuice.github.io" target="_blank">
                             <img src="/static/OJLOGOsquare.png" />
                         </a>
@@ -39,7 +39,7 @@ class Footer extends Component {
                     .button{
                         position: fixed;
                         bottom: .5rem;
-                        left: 1rem;
+                        right: 1rem;
                         z-index: 10
                     }
                     .navbar{

@@ -8,7 +8,7 @@ class Feature extends Component {
     render() {
         const { id } = this.props
         return (
-            <Mutation mutation={FEATURE_POST} optimisticResponse={{ __typename: "Mutation", featurePost: true }}>
+            <Mutation mutation={FEATURE_POST} optimisticResponse={{ __typename: "Mutation", featurePost: true }} refetchQueries={[`TrendingPosts`]}>
                 {(featurePost, { error, data }) => {
                     if (error) return <ErrorIcon />
                     if (data && data.featurePost) {

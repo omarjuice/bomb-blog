@@ -56,8 +56,6 @@ const update = (id, { page, userId }) => {
         data.post.iLike = true;
         data.post.numLikes++;
         proxy.writeQuery({ query: POST_LIKES, variables: { id }, data })
-
-
     }
 }
 
@@ -85,7 +83,6 @@ class LikePost extends Component {
                                 `}</style>
                         </a>
                     )
-
                 }}
             </Mutation>
         );

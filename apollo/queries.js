@@ -523,7 +523,7 @@ export const SEARCH_ALL = gql`
 `
 
 export const TRENDING = gql`
-    query SearchPosts($input: Search!){
+    query TrendingPosts($input: Search!){
         posts(input: $input){
             cursor
             results{

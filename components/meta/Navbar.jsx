@@ -21,7 +21,6 @@ class Navbar extends Component {
         this.watchSearch = client.watchQuery({ query: GET_SEARCH })
             .subscribe({
                 next({ data }) {
-                    console.log(data.search.active);
                     nav.toggleSearch(data.search.active)
                 }
             })

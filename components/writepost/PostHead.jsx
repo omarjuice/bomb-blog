@@ -112,7 +112,7 @@ class PostHead extends Component {
                     }
                     .bomb{
                         position: relative;
-                        left: -0.5rem
+                        left: -0.25rem
                     }
                     `}</style>
                 {image ? <figure className="image is-128by128">

@@ -4,14 +4,12 @@ import { PageTransition } from 'next-page-transitions'
 import withApollo from '../apollo'
 import Header from '../components/meta/Header';
 import Footer from '../components/meta/Footer';
-import Loading from '../components/meta/Loading';
 class MyApp extends App {
-    static async getInitialProps({ Component, ctx }) {
+    static async getInitialProps({ Component, ctx, router: { asPath } }) {
         let pageProps = {}
         if (Component.getInitialProps) {
             pageProps = await Component.getInitialProps(ctx)
         }
-
         return { pageProps }
     }
     render() {

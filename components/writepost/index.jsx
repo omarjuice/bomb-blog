@@ -367,7 +367,6 @@ class WritePost extends Component {
                         .preview{
                             bottom: 10rem;
                             right: 4rem;
-
                         }
                     }
                     `}</style>
