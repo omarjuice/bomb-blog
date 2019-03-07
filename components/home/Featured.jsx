@@ -272,7 +272,7 @@ class Featured extends Component {
             </div>
             <style jsx>{`
                 .tile.is-ancestor{
-                    margin-top: 2rem;
+                    margin-top: .5rem;
                 }
                 .author-image {
                         position: relative;

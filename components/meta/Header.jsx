@@ -8,6 +8,24 @@ class Header extends Component {
     state = {
         menu: false
     }
+    componentDidMount() {
+        let i = 0;
+        setInterval(() => {
+            let text;
+            if (i === 0) {
+                text = 'BOMB'
+            } else if (i === 1) {
+                text = 'A**'
+            } else if (i === 2) {
+                text = 'BLOG'
+            }
+            document.querySelector('title').innerText = text
+            i++;
+            if (i > 2) {
+                i = 0
+            }
+        }, 2000)
+    }
     render() {
         return (
             <div>

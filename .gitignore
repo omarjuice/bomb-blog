@@ -12,3 +12,5 @@ file.js
 .DS_Store
 dbtransfer.js
 db.js
+d:dbdb.sql
+dump.sql

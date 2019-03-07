@@ -49,7 +49,7 @@ const authenticateAdmin = (session) => {
 const simplifyString = str => str.replace(/\s|\W/g, '').toLowerCase()
 const storeCloud = ({ stream, type }) => {
     return new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream({ tags: type, folder: 'bomb-blog' }, (err, image) => {
+        const uploadStream = cloudinary.uploader.upload_stream({ tags: type, folder: process.env.CLOUD_FOLDER }, (err, image) => {
             if (err) reject(err)
             resolve(image)
         });
