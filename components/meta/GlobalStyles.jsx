@@ -7,9 +7,13 @@ class GlobalStyles extends Component {
                 *{
                     touch-action: manipulation;
                 }
+                *::-webkit-scrollbar { width: 0 !important }
+                * { overflow: -moz-scrollbars-none; }
+                *  { -ms-overflow-style: none; }
                 html{
                     background-color: #f0f0f0 !important;
                 }
+
                 .main-component{
                     height: 100%;
                 }
