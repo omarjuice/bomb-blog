@@ -2,17 +2,29 @@ import React, { Component } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import UserPhoto from '../../../auth/UserPhoto';
 import { CREATE_REPLY } from '../../../../apollo/mutations';
-import { AUTHENTICATED, REPLIES, CURRENT_USER } from '../../../../apollo/queries';
+import { AUTHENTICATED, REPLIES, CURRENT_USER, COMMENTS } from '../../../../apollo/queries';
 import { renderModal } from '../../../../apollo/clientWrites';
 
-const update = id => {
+const update = (id, post_id) => {
     return (proxy, { data: { createReply } }) => {
-        const data = proxy.readQuery({ query: REPLIES, variables: { id } })
-        const { user } = proxy.readQuery({ query: CURRENT_USER })
-        user.isMe = true
-        data.comment.replies.push({ ...createReply, replier: user })
-        proxy.writeQuery({ query: REPLIES, variables: { id }, data })
+        {
+            const data = proxy.readQuery({ query: REPLIES, variables: { id } })
+            const { user } = proxy.readQuery({ query: CURRENT_USER })
+            user.isMe = true
+            data.comment.replies.push({ ...createReply, replier: user })
+            proxy.writeQuery({ query: REPLIES, variables: { id }, data })
+        }
+        {
+            const data = proxy.readQuery({ query: COMMENTS, variables: { id: post_id } })
+            data.post.comments.forEach(comment => {
+                if (comment.id === id) {
+                    comment.numReplies++
+                }
+            })
+            proxy.writeQuery({ query: COMMENTS, variables: { id: post_id }, data })
+        }
     }
+
 }
 class CreateReply extends Component {
     state = {
@@ -49,7 +61,7 @@ class CreateReply extends Component {
                     }
 
                     return (
-                        <Mutation mutation={CREATE_REPLY} update={update(this.props.commentId)}>
+                        <Mutation mutation={CREATE_REPLY} update={update(this.props.commentId, this.props.postId)}>
                             {(createReply, { loading, error }) => {
                                 return <article className="media">
                                     <figure className="media-left">

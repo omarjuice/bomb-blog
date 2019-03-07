@@ -139,7 +139,7 @@ class PostPage extends Component {
                                     <i className="fas fa-comment-dots fa-4x"></i>
                                 </span>
                             </a>
-                            {this.state.comments ? <Comments id={id} /> : <h1 className="title is-4 ">Comments: {numComments}</h1>}
+                            {this.state.comments ? <Comments id={id} author={author.id} /> : <h1 className="title is-4 ">Comments: {numComments}</h1>}
                         </div>
                     </div>
 

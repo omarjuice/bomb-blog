@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Link from 'next/link'
 import moment from 'moment'
 import DeleteReply from './DeleteReply';
 import UpdateReply from './UpdateReply';
@@ -21,7 +20,11 @@ class Reply extends Component {
                     <div className="content">
                         <LinkWrap profile={replier} >
                             <a>
-                                {replier.isMe ? <em>You</em> : <strong>{replier.username}</strong>}
+                                <span>
+                                    {replier.isMe ? <em>You</em> : <strong>{replier.username}</strong>}
+                                    {replier.id === this.props.commenter ? <span className="icon has-text-dark"><i className="fas fa-comment-alt"></i></span> : ''}
+                                    {replier.id === this.props.author ? <span className="icon has-text-dark"><i className="fas fa-pen-nib"></i></span> : ''}
+                                </span>
                             </a>
                         </LinkWrap>
                         <br />
@@ -35,7 +38,7 @@ class Reply extends Component {
                         </small>
                     </div>
                 </div>
-                {replier.isMe ? <DeleteReply commentId={comment_id} replyId={id} /> : ''}
+                {replier.isMe ? <DeleteReply postId={this.props.postId} commentId={comment_id} replyId={id} /> : ''}
             </article>
         );
     }

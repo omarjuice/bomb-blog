@@ -26,10 +26,10 @@ class Replies extends Component {
                     return (<div>
                         {data.comment.replies.map((reply) => {
                             return (
-                                <Reply key={reply.id} {...reply} />
+                                <Reply postId={this.props.postId} author={this.props.author} commenter={this.props.commenter} key={reply.id} {...reply} />
                             )
                         })}
-                        <CreateReply commentId={this.props.commentId} />
+                        <CreateReply postId={this.props.postId} commentId={this.props.commentId} />
                     </div>
                     )
                 }}

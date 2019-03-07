@@ -2,15 +2,26 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import Loading from '../../../meta/Loading';
 import ErrorIcon from '../../../meta/ErrorIcon';
-import { REPLIES } from '../../../../apollo/queries';
+import { REPLIES, COMMENTS } from '../../../../apollo/queries';
 import { DELETE_REPLY } from '../../../../apollo/mutations';
 
-const update = (id, reply_id) => {
+const update = (id, reply_id, post_id) => {
     return (proxy, { data: { deleteReply } }) => {
         if (!deleteReply) return
-        const data = proxy.readQuery({ query: REPLIES, variables: { id } })
-        data.comment.replies = data.comment.replies.filter(reply => reply.id !== reply_id)
-        proxy.writeQuery({ query: REPLIES, data })
+        {
+            const data = proxy.readQuery({ query: REPLIES, variables: { id } })
+            data.comment.replies = data.comment.replies.filter(reply => reply.id !== reply_id)
+            proxy.writeQuery({ query: REPLIES, data })
+        }
+        {
+            const data = proxy.readQuery({ query: COMMENTS, variables: { id: post_id } })
+            data.post.comments.forEach(comment => {
+                if (comment.id === id) {
+                    comment.numReplies--
+                }
+            })
+            proxy.writeQuery({ query: COMMENTS, variables: { id: post_id }, data })
+        }
     }
 
 }
@@ -35,7 +46,7 @@ class DeleteReply extends Component {
     render() {
         return (
             <div className="media-right">
-                <Mutation mutation={DELETE_REPLY} update={update(this.props.commentId, this.props.replyId)} >
+                <Mutation mutation={DELETE_REPLY} update={update(this.props.commentId, this.props.replyId, this.props.postId)} >
                     {(deleteReply, { error, data }) => {
                         if (error) return <ErrorIcon size="lg" />
                         if (data && data.deleteReply) {

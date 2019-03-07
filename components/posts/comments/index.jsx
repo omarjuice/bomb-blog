@@ -22,7 +22,7 @@ class Comments extends Component {
                                         <>
                                             <div className="is-size-5 font-1">Be the first to comment on this post!</div>
                                         </> : ''}
-                                    {data.post.comments.map((comment) => <Comment key={comment.id} {...comment} />)}
+                                    {data.post.comments.map((comment) => <Comment author={this.props.author} key={comment.id} {...comment} />)}
                                 </div>
                                 <hr />
                                 <CreateComment postId={this.props.id} />

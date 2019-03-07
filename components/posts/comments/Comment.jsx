@@ -34,7 +34,10 @@ class Comment extends Component {
                         : <div>
                             <LinkWrap profile={commenter}>
                                 <a>
-                                    {commenter.isMe ? <em>You</em> : <strong>{commenter.username}</strong>}
+                                    <span>
+                                        {commenter.isMe ? <em>You</em> : <strong>{commenter.username}</strong>}
+                                        {commenter.id === this.props.author ? <span className="icon has-text-dark"><i className="fas fa-pen-nib"></i></span> : ''}
+                                    </span>
                                 </a>
                             </LinkWrap>
                             <br />
@@ -76,7 +79,7 @@ class Comment extends Component {
 
                         </div>}
                 </div>
-                {this.state.replies ? <Replies commentId={id} /> : ''}
+                {this.state.replies ? <Replies postId={post_id} author={this.props.author} commenter={commenter.id} commentId={id} /> : ''}
             </div>
             {commenter.isMe ? <DeleteComment postId={post_id} commentId={id} /> : ''}
             <style jsx>{`
