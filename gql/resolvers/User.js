@@ -31,7 +31,7 @@ module.exports = {
         )
         ORDER BY created_at DESC
         LIMIT ?,?
-    `, [id, id, cursor, limit], null, true)
+    `, [id, id, cursor, limit])
         return { results, cursor: results.length < limit ? null : cursor + results.length }
     }
 }

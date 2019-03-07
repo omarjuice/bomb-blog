@@ -30,7 +30,7 @@ class SearchPage extends Component {
         let avgItemHeight = null
         const calcAvgItemHeight = (last, first, children) => {
             const height = (last.offsetTop - first.offsetTop) / (children.length - 2)
-            console.log('AVGHEIGHT, ', height);
+            // console.log('AVGHEIGHT, ', height);
             return height
         }
         return async ({ target: { scrollTop, lastElementChild, firstElementChild, children, scrollHeight, clientHeight } }) => {
@@ -39,7 +39,7 @@ class SearchPage extends Component {
                 avgItemHeight = calcAvgItemHeight(lastElementChild, firstElementChild, children)
             }
             const bool = scrollTop > scrollHeight - (avgItemHeight * (2 + clientHeight / avgItemHeight))
-            console.log(scrollTop, scrollHeight - (avgItemHeight * (2 + clientHeight / avgItemHeight)), bool, cursor);
+            // console.log(scrollTop, scrollHeight - (avgItemHeight * (2 + clientHeight / avgItemHeight)), bool, cursor);
             if (this.state.fetching) { return }
             if (bool) {
                 this.setState({ fetching: display }, async () => {

@@ -22,4 +22,4 @@ const queryDB = (query, obj = null, before = null, bool = false) => {
     })
 }
 
-module.exports = { queryDB }
+module.exports = { queryDB, db }

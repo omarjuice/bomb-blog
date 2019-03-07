@@ -16,7 +16,7 @@ module.exports = {
         GROUP BY followee_id
         )
         ORDER BY created_at DESC`
-        return await queryDB(query, [lastVisited, sessionUser, sessionUser], null, true)
+        return await queryDB(query, [lastVisited, sessionUser, sessionUser])
     },
     newComments: async ({ lastVisited }, _, { req }) => {
         if (!lastVisited) return []
@@ -30,7 +30,7 @@ module.exports = {
         WHERE posts.user_id = ? AND UNIX_TIMESTAMP(comments.created_at) > ? AND comments.user_id != ?
         ORDER BY comments.created_at DESC 
         `
-        return await queryDB(query, [sessionUser, lastVisited, sessionUser], null, true)
+        return await queryDB(query, [sessionUser, lastVisited, sessionUser])
     },
     newLikes: async ({ lastVisited }, _, { req, Loaders }) => {
         if (!lastVisited) return []
@@ -44,7 +44,7 @@ module.exports = {
         WHERE posts.user_id = ? AND UNIX_TIMESTAMP(likes.created_at) > ? AND likes.user_id != ?
         ORDER BY liked_at DESC
         `
-        const likes = await queryDB(query, [sessionUser, lastVisited, sessionUser], null, true)
+        const likes = await queryDB(query, [sessionUser, lastVisited, sessionUser])
 
         return await likes.map(async ({ liked_at, id, user_id, title, caption, created_at, last_updated, post_content, image, liker_id }) => {
             return {
@@ -68,7 +68,7 @@ module.exports = {
         WHERE comments.user_id=? AND UNIX_TIMESTAMP(comment_likes.created_at) > ? AND comment_likes.user_id != ?
         ORDER BY comment_likes.created_at DESC
         `
-        const likes = await queryDB(query, [sessionUser, lastVisited, sessionUser], null, true)
+        const likes = await queryDB(query, [sessionUser, lastVisited, sessionUser])
         return await likes.map(async ({ liked_at, id, user_id, comment_text, created_at, post_id, last_updated, liker_id }) => {
             return {
                 comment: {
@@ -91,7 +91,7 @@ module.exports = {
         WHERE comments.user_id = ? AND UNIX_TIMESTAMP(replies.created_at) > ? AND replies.user_id != ?
         ORDER BY replies.created_at DESC
         `
-        return await queryDB(query, [sessionUser, lastVisited, sessionUser], null, true)
+        return await queryDB(query, [sessionUser, lastVisited, sessionUser])
     },
     newFollowers: async ({ lastVisited }, _, { req }) => {
         if (!lastVisited) return []
@@ -105,7 +105,7 @@ module.exports = {
         WHERE follows.followee_id = ? AND UNIX_TIMESTAMP(follows.created_at) > ?
         ORDER BY followed_at DESC
         `
-        const followers = await queryDB(query, [sessionUser, lastVisited], null, true)
+        const followers = await queryDB(query, [sessionUser, lastVisited])
 
         return followers.map(({ followed_at, ...user }) => {
             return { user, followed_at }
@@ -121,7 +121,7 @@ module.exports = {
         WHERE featured=1 AND posts.user_id=? AND UNIX_TIMESTAMP(featured_at) > ?
         ORDER BY featured_at DESC
         `
-        const featuredPosts = await queryDB(query, [sessionUser, lastVisited], null, true)
+        const featuredPosts = await queryDB(query, [sessionUser, lastVisited])
         return featuredPosts.map(({ featured_at, ...post }) => { return { featured_at, post } })
     },
     appMessages: () => []

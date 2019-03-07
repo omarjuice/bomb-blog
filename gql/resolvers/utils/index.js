@@ -58,7 +58,6 @@ const storeCloud = ({ stream, type }) => {
 }
 const deleteCloud = path => {
     if (!/cloudinary/.test(path)) {
-        console.log('NOT CLOUD')
         return null
     }
     return new Promise((resolve, reject) => {

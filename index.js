@@ -5,13 +5,12 @@ const app = express()
 const { ApolloServer, makeExecutableSchema } = require('apollo-server-express')
 const { graphqlUploadExpress } = require('graphql-upload')
 const session = require('express-session')
-const MemoryStore = require('session-memory-store')(session);
+const MySQLStore = require('express-mysql-session')(session)
 const typeDefs = require('./gql/schema');
 const resolvers = require('./gql/resolvers')
 const applyLoaders = require('./gql/batch')
-const { queryDB } = require('./db/connect')
+const { queryDB, db } = require('./db/connect')
 const { database } = require('./config')
-require('mkdirp').sync('./static/uploads')
 const dev = process.env.NODE_ENV !== 'production'
 const test = process.env.NODE_ENV === 'test'
 let port = process.env.PORT
@@ -35,9 +34,9 @@ const initializeServer = (app, productionEnv = false) => {
                 app.use(graphqlUploadExpress({ maxFileSize: 10000000 }))
                 app.use(session({
                     name: 'blog-session',
-                    store: productionEnv ? new MemoryStore() : null,
+                    store: productionEnv ? new MySQLStore({ expiration: 1000 * 60 * 60 * 24 * 30 }, db) : null,
                     secret: process.env.SESSION_SECRET,
-                    resave: productionEnv,
+                    resave: false,
                     saveUninitialized: true,
                     cookie: {
                         secure: productionEnv,

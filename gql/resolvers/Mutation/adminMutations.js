@@ -7,7 +7,7 @@ module.exports = {
     featurePost: async (_, { id }, { req, Loaders }) => {
         const admin = authenticateAdmin(req.session)
         if (!admin) throw Errors.authorization.notAuthorized;
-        const { affectedRows } = await queryDB(`UPDATE posts SET featured=?, featured_at=NOW() WHERE id=?`, [true, id], null, true)
+        const { affectedRows } = await queryDB(`UPDATE posts SET featured=?, featured_at=NOW() WHERE id=?`, [true, id])
         if (affectedRows > 0) {
             Loaders.posts.byId.load(id)
                 .then(({ featured_at, ...post }) => {
@@ -20,7 +20,7 @@ module.exports = {
     unfeaturePost: async (_, { id }, { req, Loaders }) => {
         const admin = authenticateAdmin(req.session)
         if (!admin) throw Errors.authorization.notAuthorized
-        const { affectedRows } = await queryDB(`UPDATE posts SET featured=?, featured_at=NULL WHERE id=?`, [false, id], null, true)
+        const { affectedRows } = await queryDB(`UPDATE posts SET featured=?, featured_at=NULL WHERE id=?`, [false, id])
         return affectedRows > 0
     },
 }

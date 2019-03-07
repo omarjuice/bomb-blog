@@ -148,7 +148,7 @@ module.exports = {
             ON user_tags.tag_id=tags.id
         WHERE tags.id IN (?)
         GROUP BY tags.id
-        `, [keys], null, true)
+        `, [keys])
         const TagPopularities = tagPopularities.reduce((acc, { id, popularity }) => {
             acc[id] = popularity
             return acc

@@ -185,7 +185,6 @@ class WritePost extends Component {
             errors.image = 'Image too large'
         }
         if (!this.props.uploaded && imageType && (!upload.file || !upload.valid)) {
-            console.log(upload)
             errors.image = 'No valid file uploaded'
         }
         this.setState({ errors })
