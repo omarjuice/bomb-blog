@@ -40,7 +40,7 @@ class User extends Component {
                                 #greeting{
                                     position: relative;
                                     left: .5rem !important;
-                                }import LinkWrap from '../global/LinkWrap';
+                                };
 
                                 `}</style>
                             </div>

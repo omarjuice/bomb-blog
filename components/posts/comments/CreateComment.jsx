@@ -93,6 +93,7 @@ class CreateComment extends Component {
                                         <br />
 
                                     </div>
+
                                 </article>
                             )
                         }}

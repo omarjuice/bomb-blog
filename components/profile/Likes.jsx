@@ -58,7 +58,13 @@ class Likes extends Component {
                                                 <div className="media-content">
                                                     <div className="content">
                                                         <div>
-                                                            <LinkWrap post={{ id, title }}><a><strong className="font-1">{title} </strong></a></LinkWrap>
+                                                            <LinkWrap post={{ id, title }}>
+                                                                <a className="has-text-dark">
+                                                                    <strong className="font-1 is-size-5-mobile has-text-dark">
+                                                                        {title}
+                                                                    </strong>
+                                                                </a>
+                                                            </LinkWrap>
                                                             <br />
                                                             By <LinkWrap profile={author} >
                                                                 <a>
@@ -93,15 +99,6 @@ class Likes extends Component {
                                                             <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
                                                     </div>
                                                 </div>
-                                                <style jsx>{`
-                                                    small a:nth-of-type(1){
-                                                        margin-left: ${likesMargin}
-                                                    }
-                                                    small a:nth-of-type(2){
-                                                        margin-left: ${commentsMargin};
-                                                        margin-right: ${timeMargin}
-                                                    }
-                                                `}</style>
                                             </article>
                                         )
                                     })}

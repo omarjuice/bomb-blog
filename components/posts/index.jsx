@@ -84,7 +84,7 @@ class PostPage extends Component {
                                                                             <div className="column is-3">
                                                                                 <DeletePost userId={user_id} id={id} />
                                                                             </div>
-                                                                            <div className="column is-1"></div>
+                                                                            <div className="column is-1 is-hidden-desktop"></div>
                                                                             <div className="column is-3">
                                                                                 <Link href={{ pathname: '/posts/edit', query: { id } }}>
                                                                                     <button className="button is-success">
@@ -92,7 +92,6 @@ class PostPage extends Component {
                                                                                     </button>
                                                                                 </Link>
                                                                             </div>
-                                                                            <div className="column is-2"></div>
                                                                         </div>
                                                                     </> :
                                                                     <LinkWrap profile={postAuthor}><a>@{postAuthor.username}</a></LinkWrap>}

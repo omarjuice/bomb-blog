@@ -53,13 +53,18 @@ class UserPosts extends Component {
                                                 <div className="media-content">
                                                     <div className="content">
                                                         <div>
-                                                            <LinkWrap post={{ id, title }}><a><strong className="font-1">{title} </strong></a></LinkWrap>
+                                                            <LinkWrap post={{ id, title }}>
+                                                                <a className="has-text-dark">
+                                                                    <strong className="font-1 is-size-5-mobile">{
+                                                                        title}
+                                                                    </strong></a>
+                                                            </LinkWrap>
                                                             <br />
                                                             {caption}
                                                             <br />
                                                             {image ?
                                                                 <div className="columns is-centered is-mobile">
-                                                                    <div className="column is-full-mobile is-four-fifths-tablet is-two-thirds-desktop">
+                                                                    <div className="column is-full is-four-fifths-tablet is-two-thirds-desktop">
                                                                         <figure className="image is-256x256">
                                                                             <img src={image} alt="" />
                                                                         </figure>
@@ -84,12 +89,12 @@ class UserPosts extends Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="media-right columns is-multiline is-mobile is-centered">
-                                                    <div className="column is-half has-text-centered">
+                                                <div className="media-right has-text-centered">
+                                                    <div className="has-text-centered">
                                                         {iLike ? <UnlikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} /> :
                                                             <LikePost size="2x" postId={id} pageDetails={{ page: "profile", userId: this.props.userId }} />}
                                                     </div>
-                                                    {isMe ? <div className="column is-half has-text-centered edit">
+                                                    {isMe ? <div className="has-text-centered edit">
                                                         <Link href={{ pathname: '/posts/edit', query: { id } }}>
                                                             <button className="button is-success">
                                                                 <span className="icon"><i className="fas fa-pen"></i></span>
@@ -98,22 +103,6 @@ class UserPosts extends Component {
                                                     </div> : ''}
 
                                                 </div>
-                                                <style jsx>{`
-                                                    .edit{
-                                                        margin-top: .7rem;
-                                                    }
-                                                    small a:nth-of-type(1){
-                                                        margin-left: ${likesMargin}
-                                                    }
-                                                    small a:nth-of-type(2){
-                                                        margin-left: ${commentsMargin};
-                                                        margin-right: ${timeMargin}
-                                                    }
-                                                    .image.is-4by3{
-                                                        max-height: 8rem !important;
-                                                        
-                                                    }
-                                                `}</style>
                                             </article>
                                         )
                                     })}

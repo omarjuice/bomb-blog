@@ -41,7 +41,7 @@ module.exports = {
                 * 
             FROM replies 
             WHERE comment_id IN (?) 
-            ORDER BY created_at DESC
+            ORDER BY created_at
             `, [keys], null, bool)
         const CommentReplies = commentReplies.reduce((acc, reply) => {
             if (!reply) return acc;

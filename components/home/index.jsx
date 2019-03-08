@@ -253,10 +253,11 @@ class Home extends Component {
                         position: fixed;
                         top: 3.8rem;
                         z-index: 2;
+                        z-index: 10;
                     }
                     .tabs{
                         background-color: #f0f0f0;
-                        left: 0
+                        left: 0;
                     }
                     .tabs-toggle{
                         right: 1rem;
