@@ -4,7 +4,6 @@ import { LOGIN, authRefetch } from '../../apollo/mutations';
 import Loading from '../meta/Loading';
 import ErrorMessage from '../meta/ErrorMessage';
 import { renderModal, clearError } from '../../apollo/clientWrites';
-import BombSVG from '../svg/bomb';
 
 
 

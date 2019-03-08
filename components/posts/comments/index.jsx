@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
-import Loading from '../../meta/Loading';
 import ErrorIcon from '../../meta/ErrorIcon';
 import Comment from './Comment';
 import CreateComment from './CreateComment'

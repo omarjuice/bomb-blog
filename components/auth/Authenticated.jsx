@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import Logout from './Logout';
-import Loading from '../meta/Loading';
 import { AUTHENTICATED } from '../../apollo/queries';
 import { renderModal } from '../../apollo/clientWrites';
 class Authenticated extends Component {

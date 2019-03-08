@@ -4,7 +4,6 @@ import BombSVG from '../svg/bomb';
 import { shortenNumber } from '../../utils';
 import { renderModal, setSearch } from '../../apollo/clientWrites';
 import LinkWrap from '../global/LinkWrap';
-import LoadingMedia from '../meta/LoadingMedia';
 
 class Recent extends Component {
     render() {

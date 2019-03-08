@@ -5,9 +5,8 @@ import Panels from './Panels';
 import Details from './Details'
 import UserTags from './UserTags';
 import About from './About'
-import ErrorIcon from '../meta/ErrorIcon';
 import UploadImage from './UploadImage';
-import { USER_PROFILE, CURRENT_USER } from '../../apollo/queries';
+import { CURRENT_USER } from '../../apollo/queries';
 
 
 class ProfilePage extends Component {

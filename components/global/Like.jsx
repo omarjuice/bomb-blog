@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import { shortenNumber } from '../../utils';
-import Loading from '../meta/Loading';
 import ErrorIcon from '../meta/ErrorIcon';
 import LikePost from '../posts/LikePost';
 import UnlikePost from '../posts/UnlikePost';

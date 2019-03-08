@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import moment from 'moment'
-import Loading from '../meta/Loading';
 import Link from 'next/link';
 import LikePost from '../posts/LikePost';
 import UnlikePost from '../posts/UnlikePost';
