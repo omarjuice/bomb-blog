@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import marked from 'marked'
-marked.setOptions({
-    breaks: true,
-    sanitize: true,
-    gfm: true
-});
+import MarkdownIt from 'markdown-it'
+import markdownCenterText from 'markdown-it-center-text'
+const md = new MarkdownIt({
+    html: false
+}).use(markdownCenterText)
+
 class Preview extends Component {
     state = {
         head: true
@@ -23,7 +23,7 @@ class Preview extends Component {
                             </span>
                         </button>
                         {this.state.head ? this.props.children : ''}
-                        <div dangerouslySetInnerHTML={{ __html: marked.parse(body) }} className="content article-body markdown-body">
+                        <div dangerouslySetInnerHTML={{ __html: md.render(body) }} className="content article-body markdown-body">
                         </div>
                     </div>
                 </div>

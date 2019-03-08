@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import Loading from '../../../meta/Loading';
 import ErrorIcon from '../../../meta/ErrorIcon';
 import { REPLIES, COMMENTS } from '../../../../apollo/queries';
 import { DELETE_REPLY } from '../../../../apollo/mutations';

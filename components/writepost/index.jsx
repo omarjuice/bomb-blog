@@ -23,7 +23,8 @@ class WritePost extends Component {
             caption: null,
             tags: null,
             body: null
-        }
+        },
+        expanded: false
     }
     getTags = () => {
         return getMatches(this.state.tags || '#tag', tagRegex)
@@ -56,6 +57,11 @@ class WritePost extends Component {
                     break;
                 case 'bold':
                     stringToAdd += `**${fillText('bold text')}**`
+                    newSelectionStart += 2
+                    newSelectionEnd += stringToAdd.length - 2
+                    break;
+                case 'center':
+                    stringToAdd += `->${fillText('centered text')}<-`
                     newSelectionStart += 2
                     newSelectionEnd += stringToAdd.length - 2
                     break;
@@ -146,6 +152,9 @@ class WritePost extends Component {
         this.markdown.scrollTo(0, (numLinesToSelection / totalNumLines) * scrollHeight)
     }
     validate() {
+        this.setState({
+            expanded: false
+        })
         const { title, caption, tags, body, image, imageType, upload } = this.state
         const titleLen = title.length,
             captionLen = caption.length,
@@ -198,6 +207,11 @@ class WritePost extends Component {
     componentWillUnmount() {
         window.onbeforeunload = null
     }
+    toggleSize() {
+        this.setState({
+            expanded: !this.state.expanded
+        })
+    }
     render() {
         const tags = this.getTags(this.state.tags)
         return (
@@ -205,7 +219,7 @@ class WritePost extends Component {
                 <div className="columns is-centered is-multiline">
                     <div className={`column is-5-desktop is-10-tablet is-full-mobile has-text-centered ${this.state.preview ? 'is-hidden-touch' : ''}`}>
                         <form onSubmit={this.props.onSubmit(this.validate.bind(this))} className="form">
-                            <div className="field has-text-centered">
+                            <div className={`field has-text-centered ${this.state.expanded ? 'is-hidden' : ''}`}>
                                 <label className="label">Title</label>
                                 <div className="control">
                                     <input onChange={e => this.setState({ title: e.target.value, head: true, errors: { ...this.state.errors, title: null } })}
@@ -219,7 +233,7 @@ class WritePost extends Component {
                                     <span>{this.state.errors.title}</span>
                                 </p>
                             </div>
-                            <div className="field has-text-centered">
+                            <div className={`field has-text-centered ${this.state.expanded ? 'is-hidden' : ''}`}>
                                 <label className="label">Caption</label>
                                 <div className="control">
                                     <input onChange={e => this.setState({ caption: e.target.value, head: true, errors: { ...this.state.errors, caption: null } })}
@@ -232,7 +246,7 @@ class WritePost extends Component {
                                     <span>{this.state.errors.caption}</span>
                                 </p>
                             </div>
-                            <div className="field has-text-centered">
+                            <div className={`field has-text-centered ${this.state.expanded ? 'is-hidden' : ''}`}>
                                 <label className="label">Tags</label>
                                 <div className="control">
                                     <input onChange={e => { this.setState({ tags: e.target.value, head: true, errors: { ...this.state.errors, tags: null } }) }}
@@ -246,7 +260,7 @@ class WritePost extends Component {
                                 </p>
                             </div>
 
-                            <div className="field has-text-centered">
+                            <div className={`field has-text-centered ${this.state.expanded ? 'is-hidden' : ''}`}>
                                 <label className="label">Main Image</label>
                                 <div className="field has-addons has-addons-centered">
                                     <p className="control ">
@@ -300,14 +314,15 @@ class WritePost extends Component {
                                     <span>{this.state.errors.image}</span>
                                 </p>
                             </div>
+
                             <div className="card has-text-centered">
-                                <ToolBar modifyText={this.modifyText.bind('this')} />
+                                <ToolBar toggleSize={this.toggleSize.bind(this)} expanded={this.state.expanded} modifyText={this.modifyText.bind('this')} />
                                 <div className="field has-text-centered">
                                     <div className="control">
                                         <textarea onSelect={e => this.scrollmarkdown(e.target.selectionStart || 0)}
                                             onChange={(e) => this.setState({ body: e.target.value, errors: { ...this.state.errors, body: null } })} value={this.state.body}
                                             onKeyDown={e => { if (e.keyCode === 9) { this.modifyText('tab')(e) } }}
-                                            className={`textarea markdown-body ${this.state.errors.body ? 'is-primary' : ''}`}
+                                            className={`textarea ${this.state.errors.body ? 'is-primary' : ''}`}
                                             type="text"
                                             placeholder="Post text goes here" />
                                     </div>
@@ -353,7 +368,7 @@ class WritePost extends Component {
                         top: 1rem
                     }
                     .textarea{
-                        height: 40vh;
+                        height: ${this.state.expanded ? '80vh' : '40vh'};
                         font-size: 16px;
                     }
                     .preview{

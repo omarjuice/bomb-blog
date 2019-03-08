@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import Link from 'next/link';
-import marked from 'marked'
+import MarkdownIt from 'markdown-it'
+import markdownCenterText from 'markdown-it-center-text'
 import moment from 'moment'
 import ErrorIcon from '../meta/ErrorIcon';
 import Comments from './comments';
@@ -13,10 +14,10 @@ import FeaturePost from '../admin/FeaturePost';
 import { POST_AUTHOR } from '../../apollo/queries';
 import { setSearch } from '../../apollo/clientWrites';
 import LinkWrap from '../global/LinkWrap';
-marked.setOptions({
-    breaks: true,
-    sanitize: true
-})
+
+const md = new MarkdownIt({
+    html: false,
+}).use(markdownCenterText)
 
 class PostPage extends Component {
     state = {
@@ -125,7 +126,7 @@ class PostPage extends Component {
                                 {image ? <figure className="image is-128by128">
                                     <img src={image} alt="image" />
                                 </figure> : null}
-                                <div className="content article-body markdown-body" dangerouslySetInnerHTML={{ __html: marked.parse(post_content) }}>
+                                <div className="content article-body markdown-body" dangerouslySetInnerHTML={{ __html: md.render(post_content) }}>
 
                                 </div>
                             </div>

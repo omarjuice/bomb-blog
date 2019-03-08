@@ -48,6 +48,9 @@ class GlobalStyles extends Component {
                     margin: 0 auto;
                     padding: 45px;
                 }
+                .text-align-center{
+                    text-align: center
+                }
                 input[type="color"],
                 input[type="date"],
                 input[type="datetime"],
@@ -63,6 +66,7 @@ class GlobalStyles extends Component {
                 input[type="url"],
                 input[type="week"],
                 select:focus,
+                .input,
                 textarea {
                     font-size: 16px;
                 }

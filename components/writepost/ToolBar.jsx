@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 
 class ToolBar extends Component {
+
     render() {
         const { modifyText } = this.props
         return (<div>
             <header className="card-header has-background-black has-text-centered">
                 <div className="buttons">
+                    <a className="has-text-light" onClick={() => this.props.toggleSize()}><span className="icon is-large"><i className={`fas fa-lg fa-${!this.props.expanded ? 'expand' : 'compress'}-arrows-alt`}></i></span></a>
                     <a className="has-text-light" onClick={() => document.execCommand('undo')}><span className="icon is-large"><i className="fas fa-lg fa-undo"></i></span> </a>
                     <a className="has-text-light" onClick={() => document.execCommand('redo')}><span className="icon is-large"><i className="fas fa-lg fa-redo"></i></span> </a>
                     <div className="control has-icons-left select-container">
@@ -24,11 +26,11 @@ class ToolBar extends Component {
                             <i className="fas fa-lg fa-heading"></i>
                         </div>
                     </div>
-
                     <a className="has-text-light" onClick={modifyText('bold')}><span className="icon is-large"><i className="fas fa-lg fa-bold"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('italic')}><span className="icon is-large"><i className="fas fa-lg fa-italic"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('strike')}><span className="icon is-large"><i className="fas fa-lg fa-strikethrough"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('quote')}><span className="icon is-large"><i className="fas fa-lg fa-quote-left"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('center')}><span className="icon is-large"><i className="fas fa-lg fa-align-center"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </a>
