@@ -32,6 +32,7 @@ class UploadImage extends Component {
             e.preventDefault()
             if (image && this.state.valid) {
                 const { data } = await uploadImage({ variables: { image, type: 'profile' } })
+                console.log(data);
                 if (data && data.uploadImage) {
                     const photo_path = data.uploadImage
                     await client.mutate({ mutation: UPDATE_PROFILE, variables: { input: { photo_path } }, update })
@@ -73,6 +74,7 @@ class UploadImage extends Component {
         return (
             <Mutation mutation={UPLOAD_IMAGE}>
                 {(uploadImage, { error, loading, client }) => {
+                    console.log(error);
                     return (
                         <form onSubmit={this.onSubmit(uploadImage, client)} className="has-text-centered">
                             <div className="field has-addons has-addons-centered has-text-centered">
