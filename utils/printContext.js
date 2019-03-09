@@ -42,4 +42,4 @@ const printContext = (ctx) => {
         console.log(operationName, variables, moment(Date.now()).format('hh:mm:ss'))
     }
 }
-module.exports = { printContext }
+module.exports = printContext 

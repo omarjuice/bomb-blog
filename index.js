@@ -22,7 +22,7 @@ const schema = makeExecutableSchema({ typeDefs, resolvers })
 const apollo = new ApolloServer({
     schema, context: ctx => {
         if (dev || process.env.LOGGING === 'enabled') {
-            require('./file').printContext(ctx)
+            require('./utils/printContext')(ctx)
         }
         return applyLoaders(ctx)
     }, uploads: false
