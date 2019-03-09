@@ -7,7 +7,6 @@ import { renderModal } from '../../../../apollo/clientWrites';
 
 const update = (id, post_id) => {
     return (proxy, { data: { createReply } }) => {
-        console.log(createReply);
         {
             const data = proxy.readQuery({ query: REPLIES, variables: { id } })
             const { user } = proxy.readQuery({ query: CURRENT_USER })
