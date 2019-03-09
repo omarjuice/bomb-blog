@@ -8,7 +8,6 @@ seeddb.js
 markdown.js
 posts.json
 /static/uploads
-file.js
 .DS_Store
 dbtransfer.js
 db.js
