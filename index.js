@@ -30,6 +30,15 @@ const apollo = new ApolloServer({
 const initializeServer = (app, productionEnv = false) => {
     nextApp.prepare()
         .then(() => {
+            if (productionEnv) {
+                app.use((req, res, next) => {
+                    if (req.secure) {
+                        next();
+                    } else {
+                        res.redirect('https://' + req.headers.host + req.url);
+                    }
+                });
+            }
             app.use(graphqlUploadExpress({ maxFileSize: 10000000 }))
             app.use(session({
                 name: 'blog-session',
