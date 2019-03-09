@@ -1,8 +1,6 @@
 const cloudinary = require('cloudinary').v2
 const { PubSub } = require('apollo-server-express')
-const fs = require('fs')
 const dotenv = require('dotenv')
-const shortid = require('shortid')
 dotenv.load()
 const pubsub = new PubSub()
 const authenticate = (session) => {
@@ -50,7 +48,10 @@ const simplifyString = str => str.replace(/\s|\W/g, '').toLowerCase()
 const storeCloud = ({ stream, type }) => {
     return new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream({ tags: type, folder: process.env.CLOUD_FOLDER }, (err, image) => {
-            if (err) reject(err)
+            if (err) {
+                console.log('COUDINARY ERROR: ', err)
+                reject(err)
+            }
             resolve(image)
         });
         stream.pipe(uploadStream)
