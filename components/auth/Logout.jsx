@@ -9,9 +9,9 @@ class Logout extends Component {
     render() {
         return (
             <Mutation mutation={LOGOUT} refetchQueries={authRefetch}>
-                {(logout, { loading, error, data, client }) => {
+                {(logout, { loading, data }) => {
                     if (loading) return null
-                    if (!data) return (
+                    if (!data || !data.logout) return (
                         <>
                             <div className="navbar-item has-text-centered">
                                 <User deactivateMenu={this.props.deactivateMenu} />
@@ -21,7 +21,7 @@ class Logout extends Component {
                             </div>
                         </>
                     )
-                    return <p>{data.logout ? 'LOGGED OUT' : 'NOT LOGGED OUT'}</p>
+                    return <p></p>
                 }}
             </Mutation>
         );
