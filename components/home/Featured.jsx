@@ -25,7 +25,7 @@ class Featured extends Component {
                         <p>
                             <LinkWrap profile={post.author}>
                                 <a >
-                                    {post.author.username}
+                                    @{post.author.username}
                                 </a>
                             </LinkWrap>
                             <br />

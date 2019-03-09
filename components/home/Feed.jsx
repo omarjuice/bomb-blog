@@ -24,7 +24,7 @@ class Feed extends Component {
                                         <br />
                                         <LinkWrap profile={author} >
                                             <a>
-                                                {author.isMe ? <strong>You</strong> : <em>{author.username}</em>}
+                                                {author.isMe ? <strong>You</strong> : <em>@{author.username}</em>}
                                             </a>
                                         </LinkWrap>
                                     </div>
