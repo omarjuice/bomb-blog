@@ -20,7 +20,7 @@ class Notifications extends Component {
                     <div className="content">
                         <div>
                             <LinkWrap toggleModal={true} profile={commenter}>
-                                <strong>{commenter.username}</strong>
+                                <strong>@{commenter.username}</strong>
                             </LinkWrap> commented on your post:
                         <br />
                             <LinkWrap toggleModal={true} post={post}>
@@ -64,7 +64,7 @@ class Notifications extends Component {
                 <div className="media-content">
                     <div className="content">
                         <div>
-                            <LinkWrap toggleModal={true} profile={author} ><strong>{author.username}</strong></LinkWrap> posted:
+                            <LinkWrap toggleModal={true} profile={author} ><strong>@{author.username}</strong></LinkWrap> posted:
                             <br />
                             <LinkWrap toggleModal={true} post={{ id, title }}>
                                 <strong className="is-size-5"><em>{title}</em></strong>
@@ -107,7 +107,7 @@ class Notifications extends Component {
                     <div className="content">
                         <div>
                             <LinkWrap toggleModal={true} profile={user}>
-                                <strong>{user.username}</strong>
+                                <strong>@{user.username}</strong>
                             </LinkWrap> liked your post:
                         <br />
                             <LinkWrap toggleModal={true} post={post}>
@@ -147,7 +147,7 @@ class Notifications extends Component {
                     <div className="content">
                         <div>
                             <LinkWrap toggleModal={true} profile={user}>
-                                <strong>{user.username}</strong>
+                                <strong>@{user.username}</strong>
                             </LinkWrap> liked your comment:
                                             <br />
                             <div className="message is-dark">
@@ -197,7 +197,7 @@ class Notifications extends Component {
                     <div className="content">
                         <div>
                             <LinkWrap toggleModal={true} profile={replier}>
-                                <strong>{replier.username}</strong>
+                                <strong>@{replier.username}</strong>
                             </LinkWrap> replied to your comment:
                             <br />
                             <div className="media">
@@ -255,7 +255,7 @@ class Notifications extends Component {
                     <div className="content">
                         <div>
                             <LinkWrap toggleModal={true} profile={{ id, username }}>
-                                <strong>{username}</strong>
+                                <strong>@{username}</strong>
                             </LinkWrap> followed you
                             <br />
                             <p className="has-text-centered">
