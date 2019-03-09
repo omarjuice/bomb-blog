@@ -20,7 +20,7 @@ const nextApp = next({ dev, dir: __dirname })
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 const apollo = new ApolloServer({
     schema, context: ctx => {
-        if (dev) {
+        if (true) {
             require('./file').printContext(ctx)
         }
         return applyLoaders(ctx)

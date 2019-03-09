@@ -49,7 +49,6 @@ const storeCloud = ({ stream, type }) => {
     return new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream({ tags: type, folder: process.env.CLOUD_FOLDER }, (err, image) => {
             if (err) {
-                console.log('COUDINARY ERROR: ', err)
                 reject(err)
             }
             resolve(image)
