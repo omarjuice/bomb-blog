@@ -228,8 +228,8 @@ module.exports = gql`
       modTags: ModTags
   }
   input ModTags {
-    addTags: [String]!
-    deleteTags: [String]! 
+    addTags: [String]
+    deleteTags: [String]
   }
   input Register{
     username: String! 

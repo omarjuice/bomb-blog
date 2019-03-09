@@ -7,6 +7,7 @@ import { renderModal } from '../../../../apollo/clientWrites';
 
 const update = (id, post_id) => {
     return (proxy, { data: { createReply } }) => {
+        console.log(createReply);
         {
             const data = proxy.readQuery({ query: REPLIES, variables: { id } })
             const { user } = proxy.readQuery({ query: CURRENT_USER })
@@ -35,7 +36,21 @@ class CreateReply extends Component {
         return async e => {
             e.preventDefault()
             if (this.state.input.length < 1) return this.setState({ error: true })
-            await createReply({ variables: { comment_id: this.props.commentId, reply_text: this.state.input } })
+            const reply_text = this.state.input
+            await createReply({
+                variables: { comment_id: this.props.commentId, reply_text },
+                optimisticResponse: {
+                    __typename: "Mutation",
+                    createReply: {
+                        __typename: "Reply",
+                        id: 0,
+                        comment_id: this.props.commentId,
+                        reply_text,
+                        created_at: String(Date.now()),
+                        last_updated: null
+                    }
+                }
+            })
             this.setState({
                 input: ''
             })

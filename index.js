@@ -23,7 +23,6 @@ const apollo = new ApolloServer({
         if (dev) {
             require('./file').printContext(ctx)
         }
-
         return applyLoaders(ctx)
     }, uploads: false
 })

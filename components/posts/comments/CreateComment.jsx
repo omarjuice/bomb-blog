@@ -31,7 +31,27 @@ class CreateComment extends Component {
             const tags = getMatches(this.state.tagsText, tagRegex)
             const comment_text = this.state.input;
             if (comment_text.length < 1) return this.setState({ error: true });
-            await createComment({ variables: { post_id: this.props.postId, comment_text, tags } })
+            await createComment({
+                variables: { post_id: this.props.postId, comment_text, tags },
+                optimisticResponse: {
+                    __typename: "Mutation",
+                    createComment: {
+                        __typename: "Comment",
+                        id: 0,
+                        post_id: this.props.postId,
+                        created_at: String(Date.now()),
+                        last_updated: null,
+                        comment_text,
+                        tags: tags.map((tag, i) => {
+                            return {
+                                __typename: "Tag",
+                                id: i,
+                                tag_name: tag
+                            }
+                        })
+                    }
+                }
+            })
             this.setState({
                 input: '',
                 tagsText: ''

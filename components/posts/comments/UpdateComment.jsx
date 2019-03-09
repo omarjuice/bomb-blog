@@ -30,19 +30,42 @@ class UpdateComment extends Component {
             if (input.length < 1) {
                 return stopEdit()
             }
-            const modTags = tagsChange ? updateTags(this.props.initialTags, getMatches(this.state.tagsText, tagRegex)) : {};
-            await updateComment({ variables: { comment_id: this.props.commentId, comment_text: input, modTags } })
+
+            const matchedTags = getMatches(this.state.tagsText, tagRegex)
+            const optimisticTags = tagsChange ? matchedTags : this.props.initialTags
+            const modTags = tagsChange ? updateTags(this.props.initialTags, matchedTags) : {}
+            await updateComment({
+                mutation: UPDATE_COMMENT,
+                variables: { comment_id: this.props.commentId, comment_text: input, modTags },
+                optimisticResponse: {
+                    __typename: "Mutation",
+                    updateComment: {
+                        __typename: "Comment",
+                        id: this.props.commentId,
+                        comment_text: input,
+                        created_at: this.props.createdAt,
+                        last_updated: String(Date.now()),
+                        tags: optimisticTags.map((tag, i) => {
+                            return {
+                                __typename: "Tag",
+                                id: i,
+                                tag_name: tag
+                            }
+                        })
+                    }
+                }
+            }
+            )
             stopEdit()
         }
     }
-
     render() {
         return (
             <Mutation mutation={UPDATE_COMMENT} update={update(this.props.postId, this.props.commentId)}>
                 {(updateComment, { loading, error }) => {
+                    if (error) console.log(error);
                     return (
-
-                        <form action="" className="form" onSubmit={!loading && !error ? this.onSubmit(updateComment) : undefined}>
+                        <form className="form" onSubmit={!loading && !error ? this.onSubmit(updateComment) : undefined}>
                             <div className="field">
                                 <p className="control">
                                     <textarea onChange={e => this.setState({ input: e.target.value })}

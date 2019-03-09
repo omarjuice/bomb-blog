@@ -30,7 +30,8 @@ class Comment extends Component {
                         <UpdateComment postId={post_id} commentId={id}
                             stopEdit={() => this.setState({ editing: false })}
                             initialInput={comment_text}
-                            initialTags={tags.map(tag => tag.tag_name)} />
+                            initialTags={tags.map(tag => tag.tag_name)}
+                            createdAt={created_at} />
                         : <div>
                             <LinkWrap profile={commenter}>
                                 <a>
