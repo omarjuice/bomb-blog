@@ -7,7 +7,7 @@
   "description": "A blog app.",
   "main": "index.js",
   "scripts": {
-    "startdev": "export NODE_ENV=development && node index.js",
+    "startdev": "export NODE_ENV=development && HOST=0.0.0.0 && node index.js",
     "dev": "nodemon --exec npm run startdev",
     "build": "next build",
     "postinstall": "npm run build",
