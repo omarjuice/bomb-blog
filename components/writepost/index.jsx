@@ -123,6 +123,11 @@ class WritePost extends Component {
                     newSelectionStart += 13
                     newSelectionEnd += stringToAdd.length - 1
                     break;
+                case 'video':
+                    stringToAdd += `\n@[youtube](${fillText('youtube.com/video_url_goes_here')})`
+                    newSelectionStart += 13
+                    newSelectionEnd += stringToAdd.length - 1
+                    break;
                 case 'line':
                     stringToAdd += `\n *** \n`
                     newSelectionStart += stringToAdd.length

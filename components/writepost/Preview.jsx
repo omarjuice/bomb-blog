@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import MarkdownIt from 'markdown-it'
 import markdownCenterText from 'markdown-it-center-text'
+import markdownVideo from 'markdown-it-video'
 const md = new MarkdownIt({
     html: false
 }).use(markdownCenterText)
+    .use(markdownVideo, {
+        youtube: { width: '100%', height: 300 },
+        vimeo: { width: 500, height: 281 },
+        vine: { width: 600, height: 600, embed: 'simple' },
+        prezi: { width: 550, height: 400 }
+    })
 
 class Preview extends Component {
     state = {

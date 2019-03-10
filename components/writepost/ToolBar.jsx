@@ -34,6 +34,7 @@ class ToolBar extends Component {
                     <a className="has-text-light" onClick={modifyText('code')}><span className="icon is-large"><i className="fas fa-lg fa-code"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('link')}><span className="icon is-large"><i className="fas fa-lg fa-link"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('image')}><span className="icon is-large"><i className="fas fa-lg fa-image"></i></span> </a>
+                    <a className="has-text-light" onClick={modifyText('video')}><span className="icon is-large"><i className="fab fa-lg fa-youtube"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('ul')}><span className="icon is-large"><i className="fas fa-lg fa-list-ul"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('ol')}><span className="icon is-large"><i className="fas fa-lg fa-list-ol"></i></span> </a>
                     <a className="has-text-light" onClick={modifyText('line')}><span className="icon is-large"><i className="fas fa-lg fa-grip-lines"></i></span> </a>
