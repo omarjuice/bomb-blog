@@ -91,7 +91,7 @@ module.exports = {
                     await batchDeletes.tags.userTags(deleteTags, id)
                 }
             }
-            const [profile] = await queryDB(`SELECT * FROM profiles WHERE user_id= ?`, [id])
+            const profile = Loaders.profiles.byId.reload(id)
             return profile
         } else {
             throw Errors.database;

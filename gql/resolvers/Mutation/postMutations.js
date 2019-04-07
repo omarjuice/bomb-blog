@@ -78,7 +78,7 @@ module.exports = {
                 await batchInserts.tags.postTags(addTags, args.id)
             }
         }
-        const [newPost] = await queryDB(`SELECT * FROM posts WHERE id= ? `, [args.id]).catch(e => { throw Errors.database })
+        const newPost = await Loaders.posts.byId.reload(args.id)
         if (newPost) return newPost;
         throw Errors.posts.notFound
     },
