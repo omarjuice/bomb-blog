@@ -1,4 +1,4 @@
-const DataLoader = require('dataloader')
+const { Batch } = require('batch-boy')
 const users = require('./dbqueries/users')
 const posts = require('./dbqueries/posts')
 const comments = require('./dbqueries/comments')
@@ -12,58 +12,46 @@ const applyLoaders = (context) => {
     } catch (e) {
         id = null
     }
-    let cursor, limit;
-    try {
-        cursor = context.req.body.variables.input.cursor
-    } catch (e) {
-        cursor = null
-    }
-    try {
-        limit = context.req.body.variables.input.limit
-    } catch (e) {
-        limit = null
-    }
-
     context.Loaders = {
         users: {
-            byId: new DataLoader(keys => users.batchUsers(keys)),
-            followers: new DataLoader(keys => users.batchFollowers(keys)),
-            following: new DataLoader(keys => users.batchFollowing(keys)),
-            numFollowers: new DataLoader(keys => users.batchNumFollowers(keys)),
-            numFollowing: new DataLoader(keys => users.batchNumFollowing(keys)),
-            imFollowing: new DataLoader(keys => users.batchImFollowing(keys, id)),
-            followingMe: new DataLoader(keys => users.batchFollowingMe(keys, id)),
-            likedPosts: new DataLoader(keys => users.batchUserLikes(keys)),
+            byId: new Batch(keys => users.batchUsers(keys)),
+            followers: new Batch(keys => users.batchFollowers(keys)),
+            following: new Batch(keys => users.batchFollowing(keys)),
+            numFollowers: new Batch(keys => users.batchNumFollowers(keys)),
+            numFollowing: new Batch(keys => users.batchNumFollowing(keys)),
+            imFollowing: new Batch(keys => users.batchImFollowing(keys, id)),
+            followingMe: new Batch(keys => users.batchFollowingMe(keys, id)),
+            likedPosts: new Batch(keys => users.batchUserLikes(keys)),
         },
         posts: {
-            byId: new DataLoader(keys => posts.batchPosts(keys)),
-            byUserId: new DataLoader(keys => posts.batchPostsByUserId(keys)),
-            numLikes: new DataLoader(keys => posts.batchPostLikes(keys)),
-            comments: new DataLoader(keys => posts.batchComments(keys)),
-            numComments: new DataLoader(keys => posts.batchNumComments(keys)),
-            likers: new DataLoader(keys => posts.batchPostLikers(keys)),
-            iLike: new DataLoader(keys => posts.batchILikePost(keys, id))
+            byId: new Batch(keys => posts.batchPosts(keys)),
+            byUserId: new Batch(keys => posts.batchPostsByUserId(keys)),
+            numLikes: new Batch(keys => posts.batchPostLikes(keys)),
+            comments: new Batch(keys => posts.batchComments(keys)),
+            numComments: new Batch(keys => posts.batchNumComments(keys)),
+            likers: new Batch(keys => posts.batchPostLikers(keys)),
+            iLike: new Batch(keys => posts.batchILikePost(keys, id))
         },
         profiles: {
-            byId: new DataLoader(keys => users.batchProfiles(keys))
+            byId: new Batch(keys => users.batchProfiles(keys))
         },
         comments: {
-            byId: new DataLoader(keys => comments.batchCommentsById(keys)),
-            numLikes: new DataLoader(keys => comments.batchCommentLikes(keys)),
-            replies: new DataLoader(keys => comments.batchCommentReplies(keys)),
-            numReplies: new DataLoader(keys => comments.batchNumReplies(keys)),
-            likers: new DataLoader(keys => comments.batchCommentLikers(keys)),
-            iLike: new DataLoader(keys => comments.batchILikeComment(keys, id))
+            byId: new Batch(keys => comments.batchCommentsById(keys)),
+            numLikes: new Batch(keys => comments.batchCommentLikes(keys)),
+            replies: new Batch(keys => comments.batchCommentReplies(keys)),
+            numReplies: new Batch(keys => comments.batchNumReplies(keys)),
+            likers: new Batch(keys => comments.batchCommentLikers(keys)),
+            iLike: new Batch(keys => comments.batchILikeComment(keys, id))
         },
         tags: {
-            byId: new DataLoader(keys => tags.batchTags(keys)),
-            byPostId: new DataLoader(keys => tags.batchPostTags(keys)),
-            byCommentId: new DataLoader(keys => tags.batchCommentTags(keys)),
-            byUserId: new DataLoader(keys => tags.batchUserTags(keys)),
-            users: new DataLoader(keys => tags.batchTagUsers(keys)),
-            posts: new DataLoader(keys => tags.batchTagPosts(keys)),
-            comments: new DataLoader(keys => tags.batchTagComments(keys)),
-            popularity: new DataLoader(keys => tags.batchTagPopularity(keys))
+            byId: new Batch(keys => tags.batchTags(keys)),
+            byPostId: new Batch(keys => tags.batchPostTags(keys)),
+            byCommentId: new Batch(keys => tags.batchCommentTags(keys)),
+            byUserId: new Batch(keys => tags.batchUserTags(keys)),
+            users: new Batch(keys => tags.batchTagUsers(keys)),
+            posts: new Batch(keys => tags.batchTagPosts(keys)),
+            comments: new Batch(keys => tags.batchTagComments(keys)),
+            popularity: new Batch(keys => tags.batchTagPopularity(keys))
         }
     }
     context.batchInserts = {

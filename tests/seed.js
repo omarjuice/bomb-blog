@@ -5,7 +5,6 @@ const { database } = require('../config')
 const { userSchema, profileSchema, postSchema, likeSchema, commentSchema, commentLikeSchema,
     replySchema, tagSchema, postTagSchema, commentTagSchema, followSchema, userTagSchema, userSecretSchema } = require('../db/schema')
 const { queryDB } = require('../db/connect')
-const { randomMarkdown } = require('../markdown')
 
 
 const firstDate = process.env.NODE_ENV !== 'production' ? new Date(1000) : '2000-01-01T00:00:00.000Z'
