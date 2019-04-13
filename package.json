@@ -36,7 +36,7 @@
     "apollo-server-express": "^2.3.1",
     "apollo-upload-client": "^10.0.0",
     "axios": "^0.18.0",
-    "batch-boy": "^1.0.6",
+    "batch-boy": "^1.1.2",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.13.2",
     "dotenv": "^6.2.0",

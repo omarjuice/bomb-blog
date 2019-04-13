@@ -1,4 +1,4 @@
-const { Batch } = require('batch-boy')
+const Batcher = require('batch-boy')
 const users = require('./dbqueries/users')
 const posts = require('./dbqueries/posts')
 const comments = require('./dbqueries/comments')
@@ -14,44 +14,44 @@ const applyLoaders = (context) => {
     }
     context.Loaders = {
         users: {
-            byId: new Batch(keys => users.batchUsers(keys)),
-            followers: new Batch(keys => users.batchFollowers(keys)),
-            following: new Batch(keys => users.batchFollowing(keys)),
-            numFollowers: new Batch(keys => users.batchNumFollowers(keys)),
-            numFollowing: new Batch(keys => users.batchNumFollowing(keys)),
-            imFollowing: new Batch(keys => users.batchImFollowing(keys, id)),
-            followingMe: new Batch(keys => users.batchFollowingMe(keys, id)),
-            likedPosts: new Batch(keys => users.batchUserLikes(keys)),
+            byId: new Batcher(keys => users.batchUsers(keys)),
+            followers: new Batcher(keys => users.batchFollowers(keys)),
+            following: new Batcher(keys => users.batchFollowing(keys)),
+            numFollowers: new Batcher(keys => users.batchNumFollowers(keys)),
+            numFollowing: new Batcher(keys => users.batchNumFollowing(keys)),
+            imFollowing: new Batcher(keys => users.batchImFollowing(keys, id)),
+            followingMe: new Batcher(keys => users.batchFollowingMe(keys, id)),
+            likedPosts: new Batcher(keys => users.batchUserLikes(keys)),
         },
         posts: {
-            byId: new Batch(keys => posts.batchPosts(keys)),
-            byUserId: new Batch(keys => posts.batchPostsByUserId(keys)),
-            numLikes: new Batch(keys => posts.batchPostLikes(keys)),
-            comments: new Batch(keys => posts.batchComments(keys)),
-            numComments: new Batch(keys => posts.batchNumComments(keys)),
-            likers: new Batch(keys => posts.batchPostLikers(keys)),
-            iLike: new Batch(keys => posts.batchILikePost(keys, id))
+            byId: new Batcher(keys => posts.batchPosts(keys)),
+            byUserId: new Batcher(keys => posts.batchPostsByUserId(keys)),
+            numLikes: new Batcher(keys => posts.batchPostLikes(keys)),
+            comments: new Batcher(keys => posts.batchComments(keys)),
+            numComments: new Batcher(keys => posts.batchNumComments(keys)),
+            likers: new Batcher(keys => posts.batchPostLikers(keys)),
+            iLike: new Batcher(keys => posts.batchILikePost(keys, id))
         },
         profiles: {
-            byId: new Batch(keys => users.batchProfiles(keys))
+            byId: new Batcher(keys => users.batchProfiles(keys))
         },
         comments: {
-            byId: new Batch(keys => comments.batchCommentsById(keys)),
-            numLikes: new Batch(keys => comments.batchCommentLikes(keys)),
-            replies: new Batch(keys => comments.batchCommentReplies(keys)),
-            numReplies: new Batch(keys => comments.batchNumReplies(keys)),
-            likers: new Batch(keys => comments.batchCommentLikers(keys)),
-            iLike: new Batch(keys => comments.batchILikeComment(keys, id))
+            byId: new Batcher(keys => comments.batchCommentsById(keys)),
+            numLikes: new Batcher(keys => comments.batchCommentLikes(keys)),
+            replies: new Batcher(keys => comments.batchCommentReplies(keys)),
+            numReplies: new Batcher(keys => comments.batchNumReplies(keys)),
+            likers: new Batcher(keys => comments.batchCommentLikers(keys)),
+            iLike: new Batcher(keys => comments.batchILikeComment(keys, id))
         },
         tags: {
-            byId: new Batch(keys => tags.batchTags(keys)),
-            byPostId: new Batch(keys => tags.batchPostTags(keys)),
-            byCommentId: new Batch(keys => tags.batchCommentTags(keys)),
-            byUserId: new Batch(keys => tags.batchUserTags(keys)),
-            users: new Batch(keys => tags.batchTagUsers(keys)),
-            posts: new Batch(keys => tags.batchTagPosts(keys)),
-            comments: new Batch(keys => tags.batchTagComments(keys)),
-            popularity: new Batch(keys => tags.batchTagPopularity(keys))
+            byId: new Batcher(keys => tags.batchTags(keys)),
+            byPostId: new Batcher(keys => tags.batchPostTags(keys)),
+            byCommentId: new Batcher(keys => tags.batchCommentTags(keys)),
+            byUserId: new Batcher(keys => tags.batchUserTags(keys)),
+            users: new Batcher(keys => tags.batchTagUsers(keys)),
+            posts: new Batcher(keys => tags.batchTagPosts(keys)),
+            comments: new Batcher(keys => tags.batchTagComments(keys)),
+            popularity: new Batcher(keys => tags.batchTagPopularity(keys))
         }
     }
     context.batchInserts = {
