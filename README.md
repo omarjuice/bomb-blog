@@ -9,6 +9,10 @@ Users can create a profile and upload a photo. Users can follow each other
 and see each others profile.
 
 ***
+### Real-time notifications
+Users are notified when others follow them, or like/comment on one of their posts. They are also notified when people they are following have posted
+
+***
 ### Posts
 Users can make and posts using the built in Markdown editor. It is similar in style to this markdown, with a few extensions like centered text and video embedding.
 Users can like posts and comment on them. Comments can also be liked and replied to.
