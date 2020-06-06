@@ -33,7 +33,7 @@
     "apollo-link-http": "^1.5.11",
     "apollo-link-state": "^0.4.2",
     "apollo-link-ws": "^1.0.14",
-    "apollo-server-express": "^2.3.1",
+    "apollo-server-express": "^2.14.2",
     "apollo-upload-client": "^10.0.0",
     "axios": "^0.18.0",
     "batch-boy": "^1.1.2",
