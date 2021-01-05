@@ -35,7 +35,7 @@
     "apollo-link-ws": "^1.0.14",
     "apollo-server-express": "^2.3.1",
     "apollo-upload-client": "^10.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "batch-boy": "^1.1.2",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.13.2",
